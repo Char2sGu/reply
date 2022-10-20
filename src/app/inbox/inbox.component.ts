@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-inbox',
+  selector: 'rpl-inbox',
   templateUrl: './inbox.component.html',
   styleUrls: ['./inbox.component.scss'],
 })
