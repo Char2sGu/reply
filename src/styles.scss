@@ -1,7 +1,28 @@
+@use 'sass:map' as map;
 @use '@angular/material' as mat;
 @use '@angular/material/theming' as mat-theming;
 
-@include mat.core();
+@import 'https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap';
+
+// prettier-ignore
+$reply-typography-config: mat.define-typography-config(
+  $font-family:   '"Work Sans", sans-serif',
+  $display-4:     mat.define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
+  $display-3:     mat.define-typography-level(56px, 56px, 600, $letter-spacing: -0.02em),
+  $display-2:     mat.define-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
+  $display-1:     mat.define-typography-level(34px, 40px, 400),
+  $headline:      mat.define-typography-level(24px, 32px, 700),
+  $title:         mat.define-typography-level(20px, 32px, 500),
+  $subheading-2:  mat.define-typography-level(16px, 28px, 400),
+  $subheading-1:  mat.define-typography-level(15px, 24px, 500),
+  $body-2:        mat.define-typography-level(18px, 24px, 400),
+  $body-1:        mat.define-typography-level(14px, 20px, 400),
+  $caption:       mat.define-typography-level(12px, 20px, 400),
+  $button:        mat.define-typography-level(14px, 14px, 500),
+  $input:         mat.define-typography-level(inherit, 1.125, 400),
+);
+
+@include mat.core($reply-typography-config);
 
 $reply-primary-palette: (
   600: #4a6572,
@@ -38,5 +59,5 @@ body {
 }
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: map.get($reply-typography-config, 'font-family');
 }
