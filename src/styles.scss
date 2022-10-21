@@ -1,17 +1,31 @@
 @use '@angular/material' as mat;
+@use '@angular/material/theming' as mat-theming;
 
 @include mat.core();
 
-$reply-primary: mat.define-palette(mat.$indigo-palette);
-$reply-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-$reply-warn: mat.define-palette(mat.$red-palette);
+$reply-primary-palette: (
+  600: #4a6572,
+  700: #344955,
+  800: #232f34,
+  contrast: (
+    600: mat-theming.$light-primary-text,
+    700: mat-theming.$light-primary-text,
+    800: mat-theming.$light-primary-text,
+  ),
+);
+
+$reply-accent-palette: (
+  500: #f9aa33,
+  contrast: (
+    500: mat-theming.$dark-primary-text,
+  ),
+);
 
 $reply-theme: mat.define-light-theme(
   (
     color: (
-      primary: $reply-primary,
-      accent: $reply-accent,
-      warn: $reply-warn,
+      primary: mat.define-palette($reply-primary-palette, 700, 600, 800),
+      accent: mat.define-palette($reply-accent-palette, 500, 500, 500),
     ),
   )
 );
