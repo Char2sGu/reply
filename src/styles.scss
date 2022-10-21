@@ -53,10 +53,6 @@ $reply-theme: mat.define-light-theme(
 
 @include mat.all-component-themes($reply-theme);
 
-html,
-body {
-  height: 100%;
-}
 body {
   margin: 0;
   font-family: map.get($reply-typography-config, 'font-family');

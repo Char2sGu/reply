@@ -1,4 +1,49 @@
 :host {
-  display: block;
-  height: 100%;
+  display: grid;
+
+  column-gap: 8px;
+  grid-template-rows: 100vh;
+  grid-template-columns: 0px repeat(4, 1fr) 0px;
+  &.sm {
+    column-gap: 32px;
+    grid-template-columns: 0px repeat(8, 1fr) 0px;
+  }
+  &.md {
+    grid-template-columns: 0px repeat(12, 1fr) 0px;
+  }
+}
+
+.nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  :host-context(.sm) & {
+    position: initial;
+    grid-column: 1 / span 2;
+  }
+  :host-context(.md) & {
+    grid-column: 1 / span 2;
+  }
+  :host-context(.lg) & {
+    grid-column: 1 / span 4;
+  }
+
+  background-color: blue;
+}
+
+.main {
+  grid-column: 2 / span 4;
+  :host-context(.sm) & {
+    grid-column: span 7 / -2;
+  }
+  :host-context(.md) & {
+    grid-column: span 9 / -3;
+  }
+  :host-context(.lg) & {
+    grid-column: span 7 / -3;
+  }
+
+  background-color: red;
+  overflow-y: auto;
 }
