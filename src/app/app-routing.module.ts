@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, TitleStrategy } from '@angular/router';
-
-import { AppTitleStrategy } from './core/app.title-strategy';
+import {
+  DefaultTitleStrategy,
+  RouterModule,
+  RouterStateSnapshot,
+  Routes,
+  TitleStrategy,
+} from '@angular/router';
 
 const routes: Routes = [
   {
@@ -16,6 +20,13 @@ const routes: Routes = [
     redirectTo: 'inbox',
   },
 ];
+
+export class AppTitleStrategy extends DefaultTitleStrategy {
+  override buildTitle(snapshot: RouterStateSnapshot): string | undefined {
+    const title = super.buildTitle(snapshot);
+    return title && `${title} | Reply`;
+  }
+}
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
