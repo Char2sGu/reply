@@ -1,11 +1,8 @@
-@use 'sass:map' as map;
 @use '@angular/material' as mat;
 @use '@angular/material/theming' as mat-theming;
 
-@import 'https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap';
-
 // prettier-ignore
-$reply-typography-config: mat.define-typography-config(
+$typography-config: mat.define-typography-config(
   $font-family:   '"Work Sans", sans-serif',
   $display-4:     mat.define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
   $display-3:     mat.define-typography-level(56px, 56px, 600, $letter-spacing: -0.02em),
@@ -22,9 +19,7 @@ $reply-typography-config: mat.define-typography-config(
   $input:         mat.define-typography-level(inherit, 1.125, 400),
 );
 
-@include mat.core($reply-typography-config);
-
-$reply-primary-palette: (
+$primary-palette: (
   600: #4a6572,
   700: #344955,
   800: #232f34,
@@ -35,25 +30,18 @@ $reply-primary-palette: (
   ),
 );
 
-$reply-accent-palette: (
+$accent-palette: (
   500: #f9aa33,
   contrast: (
     500: mat-theming.$dark-primary-text,
   ),
 );
 
-$reply-theme: mat.define-light-theme(
+$theme: mat.define-light-theme(
   (
     color: (
-      primary: mat.define-palette($reply-primary-palette, 700, 600, 800),
-      accent: mat.define-palette($reply-accent-palette, 500, 500, 500),
+      primary: mat.define-palette($primary-palette, 700, 600, 800),
+      accent: mat.define-palette($accent-palette, 500, 500, 500),
     ),
   )
 );
-
-@include mat.all-component-themes($reply-theme);
-
-body {
-  margin: 0;
-  font-family: map.get($reply-typography-config, 'font-family');
-}

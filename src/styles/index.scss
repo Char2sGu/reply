@@ -1,0 +1,13 @@
+@use 'sass:map' as map;
+@use '@angular/material' as mat;
+@use 'theming' as theming;
+
+@import 'https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap';
+
+@include mat.core(theming.$typography-config);
+@include mat.all-component-themes(theming.$theme);
+
+body {
+  margin: 0;
+  font-family: map.get(theming.$typography-config, 'font-family');
+}
