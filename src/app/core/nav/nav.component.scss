@@ -1,3 +1,7 @@
+@use 'sass:map' as map;
+@use 'src/styles/theming' as theming;
+
 :host {
   display: block;
+  background-color: map.get(theming.$theme, 'color', 'primary', 'default');
 }

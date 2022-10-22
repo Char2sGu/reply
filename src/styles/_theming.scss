@@ -1,3 +1,4 @@
+@use 'sass:map' as map;
 @use '@angular/material' as mat;
 @use '@angular/material/theming' as mat-theming;
 
@@ -37,11 +38,16 @@ $accent-palette: (
   ),
 );
 
-$theme: mat.define-light-theme(
+$theme: map.deep-merge(
+  mat.define-light-theme(
+    $primary: mat.define-palette($primary-palette, 700, 600, 800),
+    $accent: mat.define-palette($accent-palette, 500, 500, 500),
+  ),
   (
     color: (
-      primary: mat.define-palette($primary-palette, 700, 600, 800),
-      accent: mat.define-palette($accent-palette, 500, 500, 500),
+      background: (
+        background: #edf0f2,
+      ),
     ),
   )
 );

@@ -1,5 +1,14 @@
+@use 'sass:map' as map;
+@use 'src/styles/theming' as theming;
+
 :host {
   display: grid;
+  background-color: map.get(
+    theming.$theme,
+    'color',
+    'background',
+    'background'
+  );
 
   column-gap: 8px;
   grid-template-rows: 100vh;
@@ -28,8 +37,6 @@
   :host-context(.lg) & {
     grid-column: 1 / span 4;
   }
-
-  background-color: blue;
 }
 
 .main {
@@ -44,6 +51,5 @@
     grid-column: span 7 / -3;
   }
 
-  background-color: red;
   overflow-y: auto;
 }
