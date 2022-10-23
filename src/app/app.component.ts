@@ -11,8 +11,8 @@ export class AppComponent {
   @HostBinding('class')
   breakpointMap = { sm: false, md: false, lg: false, xl: false };
 
-  constructor(private breakpointManager: BreakpointManager) {
-    this.breakpointManager.breakpoints$.subscribe((v) => {
+  constructor(breakpointManager: BreakpointManager) {
+    breakpointManager.breakpoints$.subscribe((v) => {
       this.breakpointMap = v;
     });
   }
