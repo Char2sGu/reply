@@ -32,6 +32,12 @@ import { BreakpointManager } from '../breakpoint.manager';
         animate(`200ms ${AnimationCurves.STANDARD_CURVE}`),
       ]),
     ]),
+    trigger('bottomMenu', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)' }),
+        animate(`200ms ${AnimationCurves.DECELERATION_CURVE}`),
+      ]),
+    ]),
   ],
 })
 export class NavComponent implements OnInit {
