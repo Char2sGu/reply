@@ -1,6 +1,17 @@
-<div class="heading">
-  <a mat-button class="logo" [routerLink]="'/'">
+<div class="constant-line">
+  <a
+    mat-button
+    class="logo"
+    [routerLink]="'/'"
+    (click)="bottomMenuOpen = !bottomMenuOpen"
+  >
     <div class="logo-content">
+      <mat-icon
+        class="logo-arrow"
+        fontSet="filled"
+        fontIcon="arrow_drop_up"
+        [@arrow]="bottomMenuOpen"
+      ></mat-icon>
       <mat-icon class="logo-icon" svgIcon="logo"></mat-icon>
       <span class="logo-text">Reply</span>
     </div>
