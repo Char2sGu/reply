@@ -1,6 +1,11 @@
+import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { BrowserModule } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  DomSanitizer,
+  SafeValue,
+} from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
@@ -12,18 +17,24 @@ import { NavComponent } from './core/nav/nav.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     AppRoutingModule,
     MatIconModule,
   ],
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: (iconRegistry: MatIconRegistry) => () =>
-        iconRegistry.setDefaultFontSetClass(
-          'material-icons-two-tone',
-          'mat-ligature-font',
-        ),
-      deps: [MatIconRegistry],
+      useFactory:
+        (iconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) => () => {
+          iconRegistry.setDefaultFontSetClass(
+            'material-icons-two-tone',
+            'mat-ligature-font',
+          );
+          const trusted = (v: string): SafeValue =>
+            domSanitizer.bypassSecurityTrustResourceUrl(v);
+          iconRegistry.addSvgIcon('logo', trusted('assets/logo.svg'));
+        },
+      deps: [MatIconRegistry, DomSanitizer],
       multi: true,
     },
   ],
