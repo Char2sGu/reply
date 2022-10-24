@@ -106,6 +106,9 @@ export class NavComponent implements OnInit, AfterViewInit {
         .centerHorizontally()
         .bottom('0'),
     });
+    this.bottomMenuOverlayRef
+      .backdropClick() // no need to unsubscribe as this component exists for the lifetime of the app
+      .subscribe(() => this.toggleBottomMenu());
     this.bottomMenuPortal = new TemplatePortal(
       this.bottomMenuTemplate,
       this.viewContainerRef,
