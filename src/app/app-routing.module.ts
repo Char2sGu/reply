@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import {
   DefaultTitleStrategy,
   RouterModule,
@@ -21,6 +21,7 @@ const routes: Routes = [
   },
 ];
 
+@Injectable()
 export class AppTitleStrategy extends DefaultTitleStrategy {
   override buildTitle(snapshot: RouterStateSnapshot): string | undefined {
     const title = super.buildTitle(snapshot);
