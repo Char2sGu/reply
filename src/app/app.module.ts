@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { MatRippleModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import {
   BrowserModule,
@@ -20,7 +20,7 @@ import { NavComponent } from './core/nav/nav.component';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    MatRippleModule,
+    MatButtonModule,
     MatIconModule,
   ],
   providers: [
