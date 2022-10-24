@@ -1,3 +1,5 @@
+import { OverlayModule } from '@angular/cdk/overlay';
+import { PortalModule } from '@angular/cdk/portal';
 import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,6 +22,8 @@ import { NavComponent } from './core/nav/nav.component';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    OverlayModule,
+    PortalModule,
     MatButtonModule,
     MatIconModule,
   ],

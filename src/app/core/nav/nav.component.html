@@ -1,14 +1,18 @@
 <div class="constant-line">
-  <button mat-button class="logo" (click)="bottomMenuOpen = !bottomMenuOpen">
+  <button mat-button class="logo" (click)="onLogoClick()">
     <div class="logo-content">
       <mat-icon
         class="logo-arrow"
         fontSet="filled"
         fontIcon="arrow_drop_up"
-        [@arrow]="bottomMenuOpen"
+        [@arrow]="!!bottomMenuOpened"
       ></mat-icon>
       <mat-icon class="logo-icon" svgIcon="logo"></mat-icon>
       <span class="logo-text">Reply</span>
     </div>
   </button>
 </div>
+
+<ng-template #menu>
+  <p>menu works!</p>
+</ng-template>
