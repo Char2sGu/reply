@@ -76,6 +76,7 @@ export class NavComponent implements OnInit, AfterViewInit {
   }
 
   private toggleBottomMenu(to = !this.bottomMenuOpened): void {
+    if (to === this.bottomMenuOpened) return;
     this.bottomMenuOpened = to;
     if (this.bottomMenuOpened)
       this.bottomMenuPortal.attach(this.bottomMenuOverlayRef);
