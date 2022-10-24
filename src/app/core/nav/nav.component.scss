@@ -5,26 +5,37 @@
   display: block;
   background-color: map.get(theming.$theme, 'color', 'primary', 'default');
   color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
-  padding: 16px;
+  padding: 8px 16px;
+  :host-context(.sm) {
+    padding: 8px 0px;
+  }
+  :host-context(.lg) {
+    padding: 8px 16px;
+  }
 }
 
-.logo {
+.heading {
   display: flex;
-  align-items: center;
-  gap: 8px;
   :host-context(.sm) & {
     justify-content: center;
   }
   :host-context(.lg) & {
     justify-content: initial;
   }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  user-select: none;
+  cursor: pointer;
 
   &-icon {
     width: 32px;
     height: 32px;
-    :host-context(.lg) & {
-      margin: 0 8px;
-    }
   }
   &-text {
     display: none;
