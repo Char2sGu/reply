@@ -5,9 +5,10 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { Overlay, OverlayContainer } from '@angular/cdk/overlay';
+import { Overlay, OverlayContainer, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   OnInit,
@@ -40,8 +41,10 @@ import { BreakpointManager } from '../breakpoint.manager';
     ]),
   ],
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, AfterViewInit {
   bottomMenuOpened = false;
+  bottomMenuOverlayRef!: OverlayRef;
+  bottomMenuPortal!: TemplatePortal;
   @ViewChild('bottomMenu') bottomMenuTemplate!: TemplateRef<unknown>;
 
   constructor(
@@ -56,6 +59,21 @@ export class NavComponent implements OnInit {
     this.subscribeBreakpointsToUpdateOverlayContainerStyles();
   }
 
+  ngAfterViewInit(): void {
+    this.bottomMenuOverlayRef = this.overlayManager.create({
+      hasBackdrop: true,
+      positionStrategy: this.overlayManager
+        .position()
+        .global()
+        .centerHorizontally()
+        .bottom('0'),
+    });
+    this.bottomMenuPortal = new TemplatePortal(
+      this.bottomMenuTemplate,
+      this.viewContainerRef,
+    );
+  }
+
   onLogoClick(): void {
     this.breakpointManager.breakpoints$
       .pipe(first())
@@ -63,19 +81,9 @@ export class NavComponent implements OnInit {
         const isPhone = !breakpoints['tablet-portrait'];
         if (!isPhone) return;
         this.bottomMenuOpened = !this.bottomMenuOpened;
-        const bottomMenuOverlay = this.overlayManager.create({
-          hasBackdrop: true,
-          positionStrategy: this.overlayManager
-            .position()
-            .global()
-            .centerHorizontally()
-            .bottom('0'),
-        });
-        const bottomMenuPortal = new TemplatePortal(
-          this.bottomMenuTemplate,
-          this.viewContainerRef,
-        );
-        bottomMenuOverlay.attach(bottomMenuPortal);
+        if (this.bottomMenuOpened)
+          this.bottomMenuPortal.attach(this.bottomMenuOverlayRef);
+        else this.bottomMenuPortal.detach();
       });
   }
 
