@@ -10,10 +10,10 @@ export class BreakpointManager {
 
   constructor(private observer: BreakpointObserver) {
     this.config = {
-      sm: '(min-width: 600px)',
-      md: '(min-width: 905px)',
-      lg: '(min-width: 1240px)',
-      xl: '(min-width: 1440px)',
+      ['tablet-portrait']: '(min-width: 600px)',
+      ['tablet-landscape']: '(min-width: 905px)',
+      ['laptop']: '(min-width: 1240px)',
+      ['desktop']: '(min-width: 1440px)',
     };
     this.breakpoints$ = this.observer.observe(Object.values(this.config)).pipe(
       map((state) => this.parseState(state)),
@@ -32,6 +32,10 @@ export class BreakpointManager {
   }
 }
 
-export type BreakpointName = 'sm' | 'md' | 'lg' | 'xl';
+export type BreakpointName =
+  | 'tablet-portrait'
+  | 'tablet-landscape'
+  | 'laptop'
+  | 'desktop';
 export type BreakpointConfig = Record<BreakpointName, string>;
 export type BreakpointMap = Record<BreakpointName, boolean>;

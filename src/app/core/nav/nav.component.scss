@@ -8,22 +8,22 @@
   background-color: map.get(theming.$theme, 'color', 'primary', 'default');
   color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
   padding: 0px 16px;
-  :host-context(.sm) {
+  :host-context(.tablet-portrait) {
     height: unset;
     display: block;
     padding: 8px 0px;
   }
-  :host-context(.lg) {
+  :host-context(.laptop) {
     padding: 8px 16px;
   }
 }
 
 .heading {
   display: flex;
-  :host-context(.sm) & {
+  :host-context(.tablet-portrait) & {
     justify-content: center;
   }
-  :host-context(.lg) & {
+  :host-context(.laptop) & {
     justify-content: initial;
   }
 }
@@ -37,7 +37,7 @@
     align-items: center;
     gap: 16px;
     padding: 8px 16px;
-    :host-context(.sm) & {
+    :host-context(.tablet-portrait) & {
       padding: 16px 16px;
     }
   }
@@ -49,7 +49,7 @@
     display: none;
     font-size: 20px;
     text-transform: uppercase;
-    :host-context(.lg) & {
+    :host-context(.laptop) & {
       display: initial;
     }
   }

@@ -1,6 +1,6 @@
 import { Component, HostBinding } from '@angular/core';
 
-import { BreakpointManager } from './core/breakpoint.manager';
+import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
 
 @Component({
   selector: 'rpl-root',
@@ -9,7 +9,12 @@ import { BreakpointManager } from './core/breakpoint.manager';
 })
 export class AppComponent {
   @HostBinding('class')
-  breakpointMap = { sm: false, md: false, lg: false, xl: false };
+  breakpointMap: BreakpointMap = {
+    ['tablet-portrait']: false,
+    ['tablet-landscape']: false,
+    ['laptop']: false,
+    ['desktop']: false,
+  };
 
   constructor(breakpointManager: BreakpointManager) {
     breakpointManager.breakpoints$.subscribe((v) => {

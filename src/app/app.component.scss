@@ -13,11 +13,11 @@
   column-gap: 8px;
   grid-template-rows: 100vh;
   grid-template-columns: 0px repeat(4, 1fr) 0px;
-  &.sm {
+  &.tablet-portrait {
     column-gap: 32px;
     grid-template-columns: 0px repeat(8, 1fr) 0px;
   }
-  &.md {
+  &.tablet-landscape {
     grid-template-columns: 0px repeat(12, 1fr) 0px;
   }
 }
@@ -27,27 +27,27 @@
   left: 0;
   right: 0;
   bottom: 0;
-  :host-context(.sm) & {
+  :host-context(.tablet-portrait) & {
     position: initial;
     grid-column: 1 / span 2;
   }
-  :host-context(.md) & {
+  :host-context(.tablet-landscape) & {
     grid-column: 1 / span 2;
   }
-  :host-context(.lg) & {
+  :host-context(.laptop) & {
     grid-column: 1 / span 4;
   }
 }
 
 .main {
   grid-column: 2 / span 4;
-  :host-context(.sm) & {
+  :host-context(.tablet-portrait) & {
     grid-column: span 7 / -2;
   }
-  :host-context(.md) & {
+  :host-context(.tablet-landscape) & {
     grid-column: span 9 / -3;
   }
-  :host-context(.lg) & {
+  :host-context(.laptop) & {
     grid-column: span 7 / -3;
   }
 
