@@ -60,18 +60,7 @@ export class NavComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.bottomMenuOverlayRef = this.overlayManager.create({
-      hasBackdrop: true,
-      positionStrategy: this.overlayManager
-        .position()
-        .global()
-        .centerHorizontally()
-        .bottom('0'),
-    });
-    this.bottomMenuPortal = new TemplatePortal(
-      this.bottomMenuTemplate,
-      this.viewContainerRef,
-    );
+    this.initializeBottomMenu();
   }
 
   onLogoClick(): void {
@@ -80,11 +69,15 @@ export class NavComponent implements OnInit, AfterViewInit {
       .subscribe((breakpoints) => {
         const isPhone = !breakpoints['tablet-portrait'];
         if (!isPhone) return;
-        this.bottomMenuOpened = !this.bottomMenuOpened;
-        if (this.bottomMenuOpened)
-          this.bottomMenuPortal.attach(this.bottomMenuOverlayRef);
-        else this.bottomMenuPortal.detach();
+        this.toggleBottomMenu();
       });
+  }
+
+  private toggleBottomMenu(): void {
+    this.bottomMenuOpened = !this.bottomMenuOpened;
+    if (this.bottomMenuOpened)
+      this.bottomMenuPortal.attach(this.bottomMenuOverlayRef);
+    else this.bottomMenuPortal.detach();
   }
 
   private subscribeBreakpointsToUpdateOverlayContainerStyles(): void {
@@ -102,5 +95,20 @@ export class NavComponent implements OnInit, AfterViewInit {
           overlayContainer.style.overflow = '';
         }
       });
+  }
+
+  private initializeBottomMenu(): void {
+    this.bottomMenuOverlayRef = this.overlayManager.create({
+      hasBackdrop: true,
+      positionStrategy: this.overlayManager
+        .position()
+        .global()
+        .centerHorizontally()
+        .bottom('0'),
+    });
+    this.bottomMenuPortal = new TemplatePortal(
+      this.bottomMenuTemplate,
+      this.viewContainerRef,
+    );
   }
 }
