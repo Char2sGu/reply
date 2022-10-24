@@ -23,11 +23,13 @@
 }
 
 .nav {
+  height: 56px;
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
   :host-context(.sm) & {
+    height: initial;
     position: initial;
     grid-column: 1 / span 2;
   }

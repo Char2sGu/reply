@@ -2,11 +2,13 @@
 @use 'src/styles/theming' as theming;
 
 :host {
-  display: block;
+  display: flex;
+  align-items: center;
   background-color: map.get(theming.$theme, 'color', 'primary', 'default');
   color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
-  padding: 8px 16px;
+  padding: 0px 16px;
   :host-context(.sm) {
+    display: block;
     padding: 8px 0px;
   }
   :host-context(.lg) {
@@ -32,7 +34,10 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 16px;
+    padding: 8px 16px;
+    :host-context(.sm) & {
+      padding: 16px 16px;
+    }
   }
   &-icon {
     width: 32px;
