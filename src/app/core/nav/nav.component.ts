@@ -19,7 +19,10 @@ import {
 import { AnimationCurves } from '@angular/material/core';
 import { delay, first } from 'rxjs';
 
-import { BreakpointManager } from '../breakpoint.manager';
+import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
+
+// There is no need to unsubscribe in this file as this component exists for
+// the lifetime of the app.
 
 @Component({
   selector: 'rpl-nav',
@@ -67,26 +70,24 @@ export class NavComponent implements OnInit, AfterViewInit {
     this.breakpointManager.breakpoints$
       .pipe(first())
       .subscribe((breakpoints) => {
-        const isPhone = !breakpoints['tablet-portrait'];
-        if (!isPhone) return;
+        if (!isPhone(breakpoints)) return;
         this.toggleBottomMenu();
       });
   }
 
-  private toggleBottomMenu(): void {
-    this.bottomMenuOpened = !this.bottomMenuOpened;
+  private toggleBottomMenu(to = !this.bottomMenuOpened): void {
+    this.bottomMenuOpened = to;
     if (this.bottomMenuOpened)
       this.bottomMenuPortal.attach(this.bottomMenuOverlayRef);
     else this.bottomMenuPortal.detach();
   }
 
   private subscribeBreakpointsToUpdateOverlayContainerStyles(): void {
-    this.breakpointManager.breakpoints$ // no need to unsubscribe as this component exists for the lifetime of the app
+    this.breakpointManager.breakpoints$
       .pipe(delay(0)) // wait for DOM update
       .subscribe((breakpoints) => {
-        const isPhone = !breakpoints['tablet-portrait'];
         const overlayContainer = this.overlayContainerRef.getContainerElement();
-        if (isPhone) {
+        if (isPhone(breakpoints)) {
           const navHeight = this.elementRef.nativeElement.offsetHeight;
           overlayContainer.style.height = `calc(100% - ${navHeight}px)`;
           overlayContainer.style.overflow = 'hidden';
@@ -107,11 +108,19 @@ export class NavComponent implements OnInit, AfterViewInit {
         .bottom('0'),
     });
     this.bottomMenuOverlayRef
-      .backdropClick() // no need to unsubscribe as this component exists for the lifetime of the app
-      .subscribe(() => this.toggleBottomMenu());
+      .backdropClick()
+      .subscribe(() => this.toggleBottomMenu(false));
     this.bottomMenuPortal = new TemplatePortal(
       this.bottomMenuTemplate,
       this.viewContainerRef,
     );
+
+    this.breakpointManager.breakpoints$.subscribe((breakpoints) => {
+      if (!isPhone(breakpoints)) this.toggleBottomMenu(false);
+    });
   }
+}
+
+function isPhone(breakpoints: BreakpointMap): boolean {
+  return !breakpoints['tablet-portrait'];
 }
