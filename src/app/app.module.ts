@@ -28,10 +28,17 @@ import { NavComponent } from './core/nav/nav.component';
       provide: APP_INITIALIZER,
       useFactory:
         (iconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) => () => {
-          iconRegistry.setDefaultFontSetClass(
-            'material-icons-two-tone',
-            'mat-ligature-font',
+          iconRegistry.setDefaultFontSetClass();
+
+          iconRegistry.registerFontClassAlias(
+            'filled',
+            'material-icons mat-ligature-font',
           );
+          iconRegistry.registerFontClassAlias(
+            'two-tone',
+            'material-icons-two-tone mat-ligature-font',
+          );
+
           const trusted = (v: string): SafeValue =>
             domSanitizer.bypassSecurityTrustResourceUrl(v);
           iconRegistry.addSvgIcon('logo', trusted('assets/logo.svg'));

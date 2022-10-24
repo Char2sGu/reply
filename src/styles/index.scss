@@ -3,7 +3,7 @@
 @use 'theming' as theming;
 
 @import 'https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap';
-@import 'https://fonts.googleapis.com/icon?family=Material+Icons+Two+Tone';
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Two+Tone';
 
 @include mat.core(theming.$typography-config);
 @include mat.all-component-themes(theming.$theme);
