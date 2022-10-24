@@ -2,12 +2,14 @@
 @use 'src/styles/theming' as theming;
 
 :host {
+  height: 56px;
   display: flex;
   align-items: center;
   background-color: map.get(theming.$theme, 'color', 'primary', 'default');
   color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
   padding: 0px 16px;
   :host-context(.sm) {
+    height: unset;
     display: block;
     padding: 8px 0px;
   }
