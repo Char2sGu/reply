@@ -12,13 +12,26 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  :host-context(.sm) & {
+    justify-content: center;
+  }
+  :host-context(.lg) & {
+    justify-content: initial;
+  }
+
   &-icon {
     width: 32px;
     height: 32px;
-    margin: 0 8px;
+    :host-context(.lg) & {
+      margin: 0 8px;
+    }
   }
   &-text {
+    display: none;
     font-size: 20px;
     text-transform: uppercase;
+    :host-context(.lg) & {
+      display: initial;
+    }
   }
 }
