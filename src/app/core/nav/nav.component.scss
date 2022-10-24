@@ -1,12 +1,16 @@
 @use 'sass:map' as map;
 @use 'src/styles/theming' as theming;
 
+@mixin container-colors() {
+  background-color: map.get(theming.$theme, 'color', 'primary', 'default');
+  color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
+}
+
 :host {
+  @include container-colors();
   height: 56px;
   display: flex;
   align-items: center;
-  background-color: map.get(theming.$theme, 'color', 'primary', 'default');
-  color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
   padding: 0px 4px;
   :host-context(.tablet-portrait) {
     height: unset;
@@ -58,4 +62,12 @@
       text-transform: uppercase;
     }
   }
+}
+
+.bottom-menu {
+  @include container-colors();
+  width: 100vw;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  padding: 48px 32px;
 }

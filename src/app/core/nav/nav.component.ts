@@ -5,16 +5,18 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { OverlayContainer } from '@angular/cdk/overlay';
+import { Overlay, OverlayContainer } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 import {
   Component,
   ElementRef,
   OnInit,
   TemplateRef,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
-import { delay } from 'rxjs';
+import { delay, first } from 'rxjs';
 
 import { BreakpointManager } from '../breakpoint.manager';
 
@@ -34,12 +36,14 @@ import { BreakpointManager } from '../breakpoint.manager';
 })
 export class NavComponent implements OnInit {
   bottomMenuOpened = false;
-  @ViewChild('menu') menuTemplate!: TemplateRef<unknown>;
+  @ViewChild('bottomMenu') bottomMenuTemplate!: TemplateRef<unknown>;
 
   constructor(
     private breakpointManager: BreakpointManager,
     private overlayContainerRef: OverlayContainer,
+    private overlayManager: Overlay,
     private elementRef: ElementRef<HTMLElement>,
+    private viewContainerRef: ViewContainerRef,
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +51,26 @@ export class NavComponent implements OnInit {
   }
 
   onLogoClick(): void {
-    this.bottomMenuOpened = !this.bottomMenuOpened;
+    this.breakpointManager.breakpoints$
+      .pipe(first())
+      .subscribe((breakpoints) => {
+        const isPhone = !breakpoints['tablet-portrait'];
+        if (!isPhone) return;
+        this.bottomMenuOpened = !this.bottomMenuOpened;
+        const bottomMenuOverlay = this.overlayManager.create({
+          hasBackdrop: true,
+          positionStrategy: this.overlayManager
+            .position()
+            .global()
+            .centerHorizontally()
+            .bottom('0'),
+        });
+        const bottomMenuPortal = new TemplatePortal(
+          this.bottomMenuTemplate,
+          this.viewContainerRef,
+        );
+        bottomMenuOverlay.attach(bottomMenuPortal);
+      });
   }
 
   private subscribeBreakpointsToUpdateOverlayContainerStyles(): void {
