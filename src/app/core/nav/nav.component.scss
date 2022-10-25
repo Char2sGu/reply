@@ -121,6 +121,7 @@ $accent-color: map.get(theming.$theme, 'color', 'accent', 'default');
 .bottom-menu {
   @include container-colors();
   width: 100vw;
+  height: 50vh;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   padding: 32px 8px;

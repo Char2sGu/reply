@@ -51,6 +51,10 @@ import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
         style({ transform: 'translateY(100%)' }),
         animate(`200ms ${AnimationCurves.DECELERATION_CURVE}`),
       ]),
+      transition(':leave', [
+        animate(`200ms ${AnimationCurves.ACCELERATION_CURVE}`),
+        style({ transform: 'translateY(100%)' }),
+      ]),
     ]),
   ],
 })
