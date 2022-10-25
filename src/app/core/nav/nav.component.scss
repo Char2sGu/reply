@@ -12,23 +12,48 @@
   display: flex;
   align-items: center;
   padding: 0px 4px;
+  position: relative;
   :host-context(.tablet-portrait) {
     height: unset;
-    display: block;
+    flex-direction: column;
+    gap: 16px;
     padding: 8px 0px;
   }
   :host-context(.laptop) {
+    align-items: flex-start;
     padding: 8px 16px;
   }
 }
 
-.primary-line {
-  display: flex;
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  box-shadow: none !important;
+
+  position: absolute;
+  left: calc(50% - 28px);
+  top: -28px;
+
   :host-context(.tablet-portrait) & {
-    justify-content: center;
+    position: unset;
   }
+
   :host-context(.laptop) & {
-    justify-content: initial;
+    width: unset;
+    padding: 0 18px;
+  }
+
+  .text {
+    display: none;
+    :host-context(.laptop) & {
+      display: initial;
+      margin: 0 16px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
   }
 }
 
@@ -68,6 +93,9 @@
   display: none;
   :host-context(.tablet-portrait) & {
     display: initial;
+  }
+  :host-context(.laptop) & {
+    width: 100%;
   }
 }
 

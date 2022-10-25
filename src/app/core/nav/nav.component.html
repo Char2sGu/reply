@@ -1,17 +1,20 @@
-<div class="primary-line">
-  <button mat-button class="logo" (click)="onLogoClick()">
-    <div class="logo-content">
-      <mat-icon
-        class="logo-arrow"
-        fontSet="filled"
-        fontIcon="arrow_drop_up"
-        [@arrow]="!!bottomMenuOpened"
-      ></mat-icon>
-      <mat-icon class="logo-icon" svgIcon="logo"></mat-icon>
-      <span class="logo-text">Reply</span>
-    </div>
-  </button>
-</div>
+<button mat-button class="logo" (click)="onLogoClick()">
+  <div class="logo-content">
+    <mat-icon
+      class="logo-arrow"
+      fontSet="filled"
+      fontIcon="arrow_drop_up"
+      [@arrow]="!!bottomMenuOpened"
+    ></mat-icon>
+    <mat-icon class="logo-icon" svgIcon="logo"></mat-icon>
+    <span class="logo-text">Reply</span>
+  </div>
+</button>
+
+<button mat-fab class="fab">
+  <mat-icon class="icon" fontSet="filled" fontIcon="edit"></mat-icon>
+  <span class="text">Compose</span>
+</button>
 
 <div class="side-menu">
   <ng-container [ngTemplateOutlet]="menuContent"></ng-container>
