@@ -93,8 +93,6 @@
   display: none;
   :host-context(.tablet-portrait) & {
     display: initial;
-  }
-  :host-context(.laptop) & {
     width: 100%;
   }
 }
