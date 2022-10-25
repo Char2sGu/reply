@@ -80,36 +80,30 @@
 }
 
 .menu-content {
-  ::ng-deep {
-    .mat-list-item {
-      color: inherit;
-      :host-context(.tablet-portrait) & {
-        border-radius: initial; // TODO
-      }
+  &-item {
+    color: inherit;
+    &.active {
+      color: map.get(theming.$theme, 'color', 'accent', 'default');
+    }
 
+    ::ng-deep {
       .mat-list-item-content {
         padding: 0 16px;
         :host-context(.tablet-portrait) & {
           padding: initial;
-          border-radius: inherit;
           justify-content: center;
         }
         :host-context(.laptop) & {
           padding: 0 16px;
         }
+      }
 
-        .mat-ripple {
-          :host-context(.tablet-portrait) & {
-            border-radius: inherit;
-          }
+      .mat-list-text {
+        :host-context(.tablet-portrait) & {
+          display: none;
         }
-        .mat-list-text {
-          :host-context(.tablet-portrait) & {
-            display: none;
-          }
-          :host-context(.laptop) & {
-            display: initial;
-          }
+        :host-context(.laptop) & {
+          display: initial;
         }
       }
     }
