@@ -1,9 +1,18 @@
 @use 'sass:map' as map;
+@use 'sass:color' as color;
 @use 'src/styles/theming' as theming;
 
+$primary-color: map.get(theming.$theme, 'color', 'primary', 'default');
+$primary-contrast-color: map.get(
+  theming.$theme,
+  'color',
+  'primary',
+  'default-contrast'
+);
+
 @mixin container-colors() {
-  background-color: map.get(theming.$theme, 'color', 'primary', 'default');
-  color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
+  background-color: $primary-color;
+  color: color.change($primary-contrast-color, $alpha: 0.87);
 }
 
 :host {
@@ -94,6 +103,16 @@
   :host-context(.tablet-portrait) & {
     display: initial;
     width: 100%;
+  }
+}
+
+.divider {
+  display: none;
+  :host-context(.laptop) & {
+    display: initial;
+    width: calc(100% - 32px);
+    margin: 0 16px;
+    border-top: 1px solid color.change($primary-contrast-color, $alpha: 0.12);
   }
 }
 
