@@ -1,4 +1,4 @@
-<div class="constant-line">
+<div class="primary-line">
   <button mat-button class="logo" (click)="onLogoClick()">
     <div class="logo-content">
       <mat-icon
@@ -13,8 +13,34 @@
   </button>
 </div>
 
+<div class="side-menu">
+  <ng-container [ngTemplateOutlet]="menuContent"></ng-container>
+</div>
+
 <ng-template #bottomMenu>
   <div class="bottom-menu" @bottomMenu style="height: 400px">
-    Bottom menu works!
+    <ng-container [ngTemplateOutlet]="menuContent"></ng-container>
   </div>
+</ng-template>
+
+<ng-template #menuContent>
+  <mat-nav-list class="menu-content">
+    <a
+      mat-list-item
+      *ngFor="
+        let item of [
+          { text: 'Inbox', icon: 'inbox', link: '/inbox' },
+          { text: 'Starred', icon: 'star', link: '/' },
+          { text: 'Sent', icon: 'send', link: '/' },
+          { text: 'Trash', icon: 'delete', link: '/' },
+          { text: 'Spam', icon: 'info', link: '/' },
+          { text: 'Drafts', icon: 'email', link: '/' }
+        ]
+      "
+      [routerLink]="item.link"
+    >
+      <mat-icon matListIcon fontSet="filled" [fontIcon]="item.icon"></mat-icon>
+      <div matLine>{{ item.text }}</div>
+    </a>
+  </mat-nav-list>
 </ng-template>

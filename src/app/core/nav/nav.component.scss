@@ -22,7 +22,7 @@
   }
 }
 
-.constant-line {
+.primary-line {
   display: flex;
   :host-context(.tablet-portrait) & {
     justify-content: center;
@@ -64,10 +64,54 @@
   }
 }
 
+.side-menu {
+  display: none;
+  :host-context(.tablet-portrait) & {
+    display: initial;
+  }
+}
+
 .bottom-menu {
   @include container-colors();
   width: 100vw;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   padding: 48px 32px;
+}
+
+.menu-content {
+  ::ng-deep {
+    .mat-list-item {
+      color: inherit;
+      :host-context(.tablet-portrait) & {
+        border-radius: initial; // TODO
+      }
+
+      .mat-list-item-content {
+        padding: 0 16px;
+        :host-context(.tablet-portrait) & {
+          padding: initial;
+          border-radius: inherit;
+          justify-content: center;
+        }
+        :host-context(.laptop) & {
+          padding: 0 16px;
+        }
+
+        .mat-ripple {
+          :host-context(.tablet-portrait) & {
+            border-radius: inherit;
+          }
+        }
+        .mat-list-text {
+          :host-context(.tablet-portrait) & {
+            display: none;
+          }
+          :host-context(.laptop) & {
+            display: initial;
+          }
+        }
+      }
+    }
+  }
 }

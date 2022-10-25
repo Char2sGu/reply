@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import {
   BrowserModule,
   DomSanitizer,
@@ -26,6 +27,7 @@ import { NavComponent } from './core/nav/nav.component';
     PortalModule,
     MatButtonModule,
     MatIconModule,
+    MatListModule,
   ],
   providers: [
     {
