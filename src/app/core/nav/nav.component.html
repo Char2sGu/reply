@@ -23,7 +23,12 @@
 <div class="divider"></div>
 
 <ng-template #bottomMenu>
-  <div class="bottom-menu" @bottomMenu>
+  <div
+    class="bottom-menu"
+    (pandown)="onBottomMenuPanDown()"
+    (panup)="onBottomMenuPanUp()"
+    [@bottomMenu]="bottomMenuExpanded && 'expanded'"
+  >
     <ng-container [ngTemplateOutlet]="menuContent"></ng-container>
   </div>
 </ng-template>

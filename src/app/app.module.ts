@@ -1,3 +1,5 @@
+import 'hammerjs';
+
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 import { HttpClientModule } from '@angular/common/http';
@@ -9,6 +11,7 @@ import { MatListModule } from '@angular/material/list';
 import {
   BrowserModule,
   DomSanitizer,
+  HammerModule,
   SafeValue,
 } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,6 +25,7 @@ import { NavComponent } from './core/nav/nav.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HammerModule,
     HttpClientModule,
     AppRoutingModule,
     OverlayModule,

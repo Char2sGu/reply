@@ -46,6 +46,7 @@ import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
         style({ transform: 'scale(0.01)' }),
       ]),
     ]),
+    // TODO: Leaving animation looks weird if expanded.
     trigger('bottomMenu', [
       transition(':enter', [
         style({ transform: 'translateY(100%)' }),
@@ -55,14 +56,19 @@ import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
         animate(`200ms ${AnimationCurves.ACCELERATION_CURVE}`),
         style({ transform: 'translateY(100%)' }),
       ]),
+      state('expanded', style({ height: 'calc(100vh - 54px - 32px * 2)' })), // values from style sheet
+      transition('* => expanded', [
+        animate(`300ms ${AnimationCurves.DECELERATION_CURVE}`),
+      ]),
     ]),
   ],
 })
 export class NavComponent implements OnInit, AfterViewInit {
   bottomMenuOpened = false;
-  bottomMenuOverlayRef!: OverlayRef;
-  bottomMenuPortal!: TemplatePortal;
-  @ViewChild('bottomMenu') bottomMenuTemplate!: TemplateRef<unknown>;
+  bottomMenuExpanded = false;
+  private bottomMenuOverlayRef!: OverlayRef;
+  private bottomMenuPortal!: TemplatePortal;
+  @ViewChild('bottomMenu') private bottomMenuTemplate!: TemplateRef<unknown>;
 
   constructor(
     private breakpointManager: BreakpointManager,
@@ -89,12 +95,27 @@ export class NavComponent implements OnInit, AfterViewInit {
       });
   }
 
-  private toggleBottomMenu(to = !this.bottomMenuOpened): void {
+  onBottomMenuPanDown(): void {
+    if (!this.bottomMenuOpened) return;
+    this.toggleBottomMenu(false);
+  }
+
+  onBottomMenuPanUp(): void {
+    if (!this.bottomMenuOpened) return;
+    this.bottomMenuExpanded = true;
+  }
+
+  toggleBottomMenu(to = !this.bottomMenuOpened): void {
     if (to === this.bottomMenuOpened) return;
-    this.bottomMenuOpened = to;
-    if (this.bottomMenuOpened)
+    if (to === true) {
+      this.bottomMenuOpened = true;
+      this.bottomMenuExpanded = false;
       this.bottomMenuPortal.attach(this.bottomMenuOverlayRef);
-    else this.bottomMenuPortal.detach();
+    } else {
+      this.bottomMenuPortal.detach();
+      this.bottomMenuOpened = false;
+      this.bottomMenuExpanded = false;
+    }
   }
 
   private subscribeBreakpointsToUpdateOverlayContainerStyles(): void {
