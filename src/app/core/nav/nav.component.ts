@@ -36,6 +36,16 @@ import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
         animate(`200ms ${AnimationCurves.STANDARD_CURVE}`),
       ]),
     ]),
+    trigger('fab', [
+      transition(':enter', [
+        style({ transform: 'scale(0.01)' }),
+        animate(`200ms ${AnimationCurves.STANDARD_CURVE}`),
+      ]),
+      transition(':leave', [
+        animate(`200ms ${AnimationCurves.STANDARD_CURVE}`),
+        style({ transform: 'scale(0.01)' }),
+      ]),
+    ]),
     trigger('bottomMenu', [
       transition(':enter', [
         style({ transform: 'translateY(100%)' }),

@@ -11,7 +11,7 @@
   </div>
 </button>
 
-<button mat-fab class="fab">
+<button mat-fab class="fab" *ngIf="!bottomMenuOpened" @fab>
   <mat-icon class="icon" fontSet="filled" fontIcon="edit"></mat-icon>
   <span class="text">Compose</span>
 </button>

@@ -9,6 +9,7 @@ $primary-contrast-color: map.get(
   'primary',
   'default-contrast'
 );
+$accent-color: map.get(theming.$theme, 'color', 'accent', 'default');
 
 @mixin container-colors() {
   background-color: $primary-color;
@@ -22,6 +23,7 @@ $primary-contrast-color: map.get(
   align-items: center;
   padding: 0px 4px;
   position: relative;
+  z-index: 2000; // make nav on top of overlay
   :host-context(.tablet-portrait) {
     height: unset;
     flex-direction: column;
@@ -128,7 +130,7 @@ $primary-contrast-color: map.get(
   &-item {
     color: inherit;
     &.active {
-      color: map.get(theming.$theme, 'color', 'accent', 'default');
+      color: $accent-color;
     }
 
     ::ng-deep {
