@@ -46,12 +46,12 @@ import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
         style({ transform: 'scale(0.01)' }),
       ]),
     ]),
-    // TODO: Leaving animation looks weird if expanded.
     trigger('bottomMenu', [
       transition(':enter', [
         style({ transform: 'translateY(100%)' }),
         animate(`200ms ${AnimationCurves.DECELERATION_CURVE}`),
       ]),
+      // TODO: animation looks weird when expanded.
       transition(':leave', [
         animate(`200ms ${AnimationCurves.ACCELERATION_CURVE}`),
         style({ transform: 'translateY(100%)' }),
