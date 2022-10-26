@@ -17,3 +17,7 @@ a {
   color: currentColor;
   text-decoration: initial;
 }
+
+mat-icon {
+  transform: translateY(-1px); // bug fix
+}

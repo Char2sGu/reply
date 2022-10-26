@@ -1,15 +1,29 @@
-<button mat-button class="logo" (click)="onLogoClick()">
-  <div class="logo-content">
-    <mat-icon
-      class="logo-arrow"
-      fontSet="filled"
-      fontIcon="arrow_drop_up"
-      [@arrow]="!!bottomMenuOpened"
-    ></mat-icon>
-    <mat-icon class="logo-icon" svgIcon="logo"></mat-icon>
-    <span class="logo-text">Reply</span>
+<div class="primary-line">
+  <div class="group">
+    <button mat-button class="logo" (click)="onLogoClick()">
+      <div class="logo-content">
+        <mat-icon
+          class="logo-arrow"
+          fontSet="filled"
+          fontIcon="arrow_drop_up"
+          [@arrow]="!!bottomMenuOpened"
+        ></mat-icon>
+        <mat-icon class="logo-icon" svgIcon="logo"></mat-icon>
+        <span class="logo-text">Reply</span>
+      </div>
+    </button>
   </div>
-</button>
+  <div class="group">
+    <img
+      class="avatar"
+      src="https://xsgames.co/randomusers/avatar.php?g=male"
+      alt="Avatar"
+    />
+    <button mat-icon-button class="settings-button">
+      <mat-icon fontSet="filled" fontIcon="settings"></mat-icon>
+    </button>
+  </div>
+</div>
 
 <button mat-fab class="fab" *ngIf="!bottomMenuOpened" @fab>
   <mat-icon class="icon" fontSet="filled" fontIcon="edit"></mat-icon>

@@ -36,6 +36,38 @@ $accent-color: map.get(theming.$theme, 'color', 'accent', 'default');
   }
 }
 
+.primary-line {
+  display: flex;
+  align-items: center;
+  :host-context(.laptop) & {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .avatar {
+    display: none;
+    :host-context(.laptop) & {
+      display: initial;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+  }
+
+  .settings-button {
+    display: none;
+    :host-context(.laptop) & {
+      display: initial;
+    }
+  }
+}
+
 .fab {
   width: 56px;
   height: 56px;
