@@ -31,7 +31,7 @@
 </button>
 
 <div class="side-menu">
-  <ng-container [ngTemplateOutlet]="menuContent"></ng-container>
+  <rpl-nav-menu></rpl-nav-menu>
 </div>
 
 <div class="divider"></div>
@@ -43,30 +43,6 @@
     (panup)="onBottomMenuPanUp()"
     [@bottomMenu]="bottomMenuExpanded && 'expanded'"
   >
-    <ng-container [ngTemplateOutlet]="menuContent"></ng-container>
+    <rpl-nav-menu></rpl-nav-menu>
   </div>
-</ng-template>
-
-<ng-template #menuContent>
-  <mat-nav-list class="menu-content">
-    <a
-      mat-list-item
-      class="menu-content-item"
-      *ngFor="
-        let item of [
-          { text: 'Inbox', icon: 'inbox', link: '/inbox' },
-          { text: 'Starred', icon: 'star', link: '/todo' },
-          { text: 'Sent', icon: 'send', link: '/todo' },
-          { text: 'Trash', icon: 'delete', link: '/todo' },
-          { text: 'Spam', icon: 'info', link: '/todo' },
-          { text: 'Drafts', icon: 'email', link: '/todo' }
-        ]
-      "
-      [routerLink]="item.link"
-      routerLinkActive="active"
-    >
-      <mat-icon matListIcon fontSet="filled" [fontIcon]="item.icon"></mat-icon>
-      <div matLine>{{ item.text }}</div>
-    </a>
-  </mat-nav-list>
 </ng-template>

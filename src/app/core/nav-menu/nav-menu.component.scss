@@ -1,0 +1,35 @@
+@use 'sass:map' as map;
+@use 'src/styles/theming' as theming;
+
+:host {
+  display: block;
+}
+
+.item {
+  color: inherit;
+  &.active {
+    color: map.get(theming.$theme, 'color', 'accent', 'default');
+  }
+
+  ::ng-deep {
+    .mat-list-item-content {
+      padding: 0 16px;
+      :host-context(.tablet-portrait) & {
+        padding: initial;
+        justify-content: center;
+      }
+      :host-context(.laptop) & {
+        padding: 0 16px;
+      }
+    }
+
+    .mat-list-text {
+      :host-context(.tablet-portrait) & {
+        display: none;
+      }
+      :host-context(.laptop) & {
+        display: initial;
+      }
+    }
+  }
+}

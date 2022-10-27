@@ -9,7 +9,6 @@ $primary-contrast-color: map.get(
   'primary',
   'default-contrast'
 );
-$accent-color: map.get(theming.$theme, 'color', 'accent', 'default');
 
 @mixin container-colors() {
   background-color: $primary-color;
@@ -157,35 +156,4 @@ $accent-color: map.get(theming.$theme, 'color', 'accent', 'default');
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   padding: 32px 8px;
-}
-
-.menu-content {
-  &-item {
-    color: inherit;
-    &.active {
-      color: $accent-color;
-    }
-
-    ::ng-deep {
-      .mat-list-item-content {
-        padding: 0 16px;
-        :host-context(.tablet-portrait) & {
-          padding: initial;
-          justify-content: center;
-        }
-        :host-context(.laptop) & {
-          padding: 0 16px;
-        }
-      }
-
-      .mat-list-text {
-        :host-context(.tablet-portrait) & {
-          display: none;
-        }
-        :host-context(.laptop) & {
-          display: initial;
-        }
-      }
-    }
-  }
 }
