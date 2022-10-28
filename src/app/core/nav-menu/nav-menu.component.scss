@@ -1,5 +1,13 @@
 @use 'sass:map' as map;
+@use 'sass:color' as color;
 @use 'src/styles/theming' as theming;
+
+$primary-contrast-color: map.get(
+  theming.$theme,
+  'color',
+  'primary',
+  'default-contrast'
+);
 
 :host {
   display: block;
@@ -31,5 +39,19 @@
         display: initial;
       }
     }
+  }
+}
+
+.divider {
+  width: 60%;
+  margin: 16px 20px;
+  border-top: 1px solid color.change($primary-contrast-color, $alpha: 0.12);
+  :host-context(.tablet-portrait) & {
+    display: none;
+  }
+  :host-context(.laptop) & {
+    display: block;
+    width: calc(100% - 32px);
+    margin: 16px auto;
   }
 }
