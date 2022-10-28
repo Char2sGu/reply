@@ -166,10 +166,46 @@ $primary-text-color: color.change($primary-contrast-color, $alpha: 0.87);
 
 .bottom-menu {
   width: 100vw;
-  height: 50vh;
+  height: 60vh;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  padding: 32px 8px;
   background-color: $primary-color;
   color: $primary-text-color;
+  overflow: hidden;
+
+  .avatar-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    $background-color: map.get(theming.$theme, 'color', 'primary', 'darker');
+
+    .bar-background {
+      height: 20px;
+      width: 100%;
+      background-color: $background-color;
+    }
+
+    .wrapper-background {
+      $svgPath: 'M26.5 17C20.5 6.5 8.5 0.5 0 0.5H103C94.5 0.5 82.5 6.5 76.5 17C70.5 27.5 64.5 35 51.5 35C38.5 35 32.5 27.5 26.5 17Z';
+      width: 103px;
+      height: 35px;
+      clip-path: path($svgPath);
+      background-color: $background-color;
+      transform: translateY(-1px); // remove white gap
+    }
+
+    .avatar {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateY(-50%) translateX(-50%);
+    }
+  }
+
+  .content {
+    width: calc(100% - 8px * 2);
+    margin: 0 auto;
+  }
 }

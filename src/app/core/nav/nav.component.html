@@ -46,6 +46,13 @@
     (panup)="onBottomMenuPanUp()"
     [@bottomMenu]="bottomMenuExpanded && 'expanded'"
   >
-    <rpl-nav-menu></rpl-nav-menu>
+    <div class="avatar-bar">
+      <div class="bar-background"></div>
+      <div class="wrapper-background"></div>
+      <rpl-nav-avatar class="avatar"></rpl-nav-avatar>
+    </div>
+    <div class="content">
+      <rpl-nav-menu></rpl-nav-menu>
+    </div>
   </div>
 </ng-template>

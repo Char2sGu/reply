@@ -70,7 +70,7 @@ const CLIP_PATH_CLIPPED =
         animate(`200ms ${AnimationCurves.ACCELERATION_CURVE}`),
         style({ transform: 'translateY(100%)' }),
       ]),
-      state('expanded', style({ height: 'calc(100vh - 54px - 32px * 2)' })), // values from style sheet
+      state('expanded', style({ height: 'calc(100vh - 54px)' })), // values from style sheet
       transition('* => expanded', [
         animate(`300ms ${AnimationCurves.DECELERATION_CURVE}`),
       ]),
