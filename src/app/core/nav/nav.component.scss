@@ -24,7 +24,6 @@ $primary-text-color: color.change($primary-contrast-color, $alpha: 0.87);
     flex-direction: column;
     gap: 16px;
     padding: 8px 0;
-    background-color: $primary-color;
   }
   :host-context(.laptop) & {
     align-items: flex-start;
@@ -32,16 +31,25 @@ $primary-text-color: color.change($primary-contrast-color, $alpha: 0.87);
   }
 }
 
-.clipped-background {
+.background {
   position: absolute;
+  top: 0;
   left: 0;
   right: 0;
-  top: 0;
   bottom: 0;
   background-color: $primary-color;
   z-index: -1;
-  :host-context(.tablet-portrait) & {
+
+  &.regular {
     display: none;
+    :host-context(.tablet-portrait) & {
+      display: initial;
+    }
+  }
+  &.clipped {
+    :host-context(.tablet-portrait) & {
+      display: none;
+    }
   }
 }
 

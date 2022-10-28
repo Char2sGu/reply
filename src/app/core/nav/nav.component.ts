@@ -35,12 +35,12 @@ const CLIP_PATH_CLIPPED =
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
   animations: [
-    trigger('clippedBackground', [
+    trigger('background', [
       state('regular', style({ clipPath: CLIP_PATH_REGULAR })),
       state('clipped', style({ clipPath: CLIP_PATH_CLIPPED })),
       transition(
         'regular <=> clipped',
-        animate(`200ms ${AnimationCurves.STANDARD_CURVE}`),
+        animate(`300ms ${AnimationCurves.STANDARD_CURVE}`),
       ),
     ]),
     trigger('arrow', [
@@ -53,10 +53,10 @@ const CLIP_PATH_CLIPPED =
     trigger('fab', [
       transition(':enter', [
         style({ transform: 'scale(0.01)' }),
-        animate(`200ms ${AnimationCurves.STANDARD_CURVE}`),
+        animate(`300ms ${AnimationCurves.STANDARD_CURVE}`),
       ]),
       transition(':leave', [
-        animate(`200ms ${AnimationCurves.STANDARD_CURVE}`),
+        animate(`300ms ${AnimationCurves.STANDARD_CURVE}`),
         style({ transform: 'scale(0.01)' }),
       ]),
     ]),
@@ -78,6 +78,7 @@ const CLIP_PATH_CLIPPED =
   ],
 })
 export class NavComponent implements OnInit, AfterViewInit {
+  bottomMenuToggling = false;
   bottomMenuOpened = false;
   bottomMenuExpanded = false;
   private bottomMenuOverlayRef!: OverlayRef;
@@ -119,19 +120,24 @@ export class NavComponent implements OnInit, AfterViewInit {
     this.bottomMenuExpanded = true;
   }
 
-  toggleBottomMenu(to = !this.bottomMenuOpened): void {
+  async toggleBottomMenu(to = !this.bottomMenuOpened): Promise<void> {
     if (to === this.bottomMenuOpened) return;
+
+    if (this.bottomMenuToggling) return;
+    this.bottomMenuToggling = true;
     if (to === true) {
       this.bottomMenuOpened = true;
       this.bottomMenuExpanded = false;
       this.bottomMenuPortal.attach(this.bottomMenuOverlayRef);
     } else {
       this.bottomMenuPortal.detach();
-      setTimeout(() => {
-        this.bottomMenuExpanded = false;
-        this.bottomMenuOpened = false;
-      }, 200);
+      await new Promise((r) => {
+        setTimeout(r, 200); // delay for animation
+      });
+      this.bottomMenuExpanded = false;
+      this.bottomMenuOpened = false;
     }
+    this.bottomMenuToggling = false;
   }
 
   private subscribeBreakpointsToUpdateOverlayContainerStyles(): void {
