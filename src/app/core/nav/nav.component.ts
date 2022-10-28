@@ -65,14 +65,9 @@ const CLIP_PATH_CLIPPED =
         style({ transform: 'translateY(100%)' }),
         animate(`200ms ${AnimationCurves.DECELERATION_CURVE}`),
       ]),
-      // TODO: animation looks weird when expanded.
       transition(':leave', [
         animate(`200ms ${AnimationCurves.ACCELERATION_CURVE}`),
         style({ transform: 'translateY(100%)' }),
-      ]),
-      state('expanded', style({ height: 'calc(100vh - 54px)' })), // values from style sheet
-      transition('* => expanded', [
-        animate(`300ms ${AnimationCurves.DECELERATION_CURVE}`),
       ]),
     ]),
   ],

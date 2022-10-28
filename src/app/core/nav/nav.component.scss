@@ -1,6 +1,7 @@
 @use 'sass:map' as map;
 @use 'sass:color' as color;
 @use 'src/styles/theming' as theming;
+@use 'src/styles/animation-curves' as animation-curves;
 
 $primary-color: map.get(theming.$theme, 'color', 'primary', 'default');
 $primary-contrast-color: map.get(
@@ -172,6 +173,15 @@ $primary-text-color: color.change($primary-contrast-color, $alpha: 0.87);
   background-color: $primary-color;
   color: $primary-text-color;
   overflow: hidden;
+
+  // Use style sheet instead of animation engine here because the animation
+  // engine is unable to preserve the state of a component in the :leave
+  // animation
+  &.expanded {
+    height: calc(100vh - 54px);
+  }
+
+  transition: height 300ms animation-curves.$deceleration;
 
   .avatar-bar {
     display: flex;

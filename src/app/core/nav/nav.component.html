@@ -42,9 +42,10 @@
 <ng-template #bottomMenu>
   <div
     class="bottom-menu"
+    [class.expanded]="bottomMenuExpanded"
     (pandown)="onBottomMenuPanDown()"
     (panup)="onBottomMenuPanUp()"
-    [@bottomMenu]="bottomMenuExpanded && 'expanded'"
+    @bottomMenu
   >
     <div class="avatar-bar">
       <div class="bar-background"></div>
