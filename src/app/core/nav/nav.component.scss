@@ -71,9 +71,6 @@ $primary-text-color: color.change($primary-contrast-color, $alpha: 0.87);
     display: none;
     :host-context(.laptop) & {
       display: initial;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
     }
   }
 

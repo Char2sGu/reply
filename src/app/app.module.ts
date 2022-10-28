@@ -19,10 +19,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NavComponent } from './core/nav/nav.component';
+import { NavAvatarComponent } from './core/nav-avatar/nav-avatar.component';
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
 
 @NgModule({
-  declarations: [AppComponent, NavComponent, NavMenuComponent],
+  declarations: [
+    AppComponent,
+    NavComponent,
+    NavMenuComponent,
+    NavAvatarComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
