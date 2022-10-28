@@ -39,7 +39,7 @@ import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
     trigger('fab', [
       transition(':enter', [
         style({ transform: 'scale(0.01)' }),
-        animate(`200ms ${AnimationCurves.STANDARD_CURVE}`),
+        animate(`200ms 200ms ${AnimationCurves.STANDARD_CURVE}`),
       ]),
       transition(':leave', [
         animate(`200ms ${AnimationCurves.STANDARD_CURVE}`),
@@ -113,8 +113,8 @@ export class NavComponent implements OnInit, AfterViewInit {
       this.bottomMenuPortal.attach(this.bottomMenuOverlayRef);
     } else {
       this.bottomMenuPortal.detach();
-      this.bottomMenuOpened = false;
       this.bottomMenuExpanded = false;
+      this.bottomMenuOpened = false;
     }
   }
 

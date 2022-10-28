@@ -28,7 +28,7 @@
   right: 0;
   bottom: 0;
   :host-context(.tablet-portrait) & {
-    position: initial;
+    position: relative;
     grid-column: 1 / span 2;
   }
   :host-context(.tablet-landscape) & {
