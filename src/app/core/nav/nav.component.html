@@ -1,4 +1,7 @@
-<div class="background" [class.dented]="!bottomMenuOpened"></div>
+<div
+  class="clipped-background"
+  [@clippedBackground]="bottomMenuOpened ? 'regular' : 'clipped'"
+></div>
 
 <div class="primary-line">
   <div class="group">

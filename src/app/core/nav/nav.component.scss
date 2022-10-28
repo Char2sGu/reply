@@ -1,7 +1,6 @@
 @use 'sass:map' as map;
 @use 'sass:color' as color;
 @use 'src/styles/theming' as theming;
-@use './clip-path' as clip-path;
 
 $primary-color: map.get(theming.$theme, 'color', 'primary', 'default');
 $primary-contrast-color: map.get(
@@ -20,34 +19,29 @@ $primary-text-color: color.change($primary-contrast-color, $alpha: 0.87);
   position: relative;
   z-index: 2000; // make nav on top of overlay
   color: $primary-text-color;
-  :host-context(.tablet-portrait) {
+  :host-context(.tablet-portrait) & {
     height: unset;
     flex-direction: column;
     gap: 16px;
     padding: 8px 0;
+    background-color: $primary-color;
   }
-  :host-context(.laptop) {
+  :host-context(.laptop) & {
     align-items: flex-start;
     padding: 8px 16px;
   }
 }
 
-.background {
+.clipped-background {
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-  clip-path: clip-path.$regular;
   background-color: $primary-color;
   z-index: -1;
-  transition: clip-path 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  &.dented {
-    clip-path: clip-path.$dented;
-    transition: clip-path 200ms 200ms cubic-bezier(0.4, 0, 0.2, 1);
-    :host-context(.tablet-portrait) & {
-      clip-path: clip-path.$regular;
-    }
+  :host-context(.tablet-portrait) & {
+    display: none;
   }
 }
 
