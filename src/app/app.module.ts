@@ -48,14 +48,9 @@ import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
       useFactory:
         (iconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) => () => {
           iconRegistry.setDefaultFontSetClass();
-
           iconRegistry.registerFontClassAlias(
             'filled',
             'material-icons mat-ligature-font',
-          );
-          iconRegistry.registerFontClassAlias(
-            'two-tone',
-            'material-icons-two-tone mat-ligature-font',
           );
 
           const trusted = (v: string): SafeValue =>
