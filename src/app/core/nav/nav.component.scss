@@ -165,11 +165,7 @@ $primary-text-color: color.change(
 }
 
 .side-menu {
-  display: none;
-  :host-context(.tablet-portrait) & {
-    display: initial;
-    width: 100%;
-  }
+  width: 100%;
 }
 
 .bottom-menu {

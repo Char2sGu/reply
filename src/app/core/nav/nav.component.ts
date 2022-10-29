@@ -81,7 +81,7 @@ export class NavComponent implements OnInit, AfterViewInit {
   @ViewChild('bottomMenu') private bottomMenuTemplate!: TemplateRef<unknown>;
 
   constructor(
-    private breakpointManager: BreakpointManager,
+    public breakpointManager: BreakpointManager,
     private overlayContainerRef: OverlayContainer,
     private overlayManager: Overlay,
     private elementRef: ElementRef<HTMLElement>,
