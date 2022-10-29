@@ -1,9 +1,7 @@
 <ng-container *ngIf="breakpointManager.breakpoints$ | async as breakpoints">
-  <div class="background regular"></div>
-
   <div
-    class="background clipped"
-    [@background]="bottomMenuOpened ? 'regular' : 'clipped'"
+    class="background"
+    [class.clipped]="!breakpoints['tablet-portrait'] && !bottomMenuOpened"
   ></div>
 
   <div class="content">
