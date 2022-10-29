@@ -5,36 +5,38 @@
   [@background]="bottomMenuOpened ? 'regular' : 'clipped'"
 ></div>
 
-<div class="primary-line">
-  <div class="group">
-    <button mat-button class="logo" (click)="onLogoClick()">
-      <div class="logo-content">
-        <mat-icon
-          class="logo-arrow"
-          fontSet="filled"
-          fontIcon="arrow_drop_up"
-          [@arrow]="!!bottomMenuOpened"
-        ></mat-icon>
-        <mat-icon class="logo-icon" svgIcon="logo"></mat-icon>
-        <span class="logo-text">Reply</span>
-      </div>
-    </button>
+<div class="content">
+  <div class="primary-line">
+    <div class="group">
+      <button mat-button class="logo" (click)="onLogoClick()">
+        <div class="logo-content">
+          <mat-icon
+            class="logo-arrow"
+            fontSet="filled"
+            fontIcon="arrow_drop_up"
+            [@arrow]="!!bottomMenuOpened"
+          ></mat-icon>
+          <mat-icon class="logo-icon" svgIcon="logo"></mat-icon>
+          <span class="logo-text">Reply</span>
+        </div>
+      </button>
+    </div>
+    <div class="group">
+      <rpl-nav-avatar class="avatar"></rpl-nav-avatar>
+      <button mat-icon-button class="settings-button">
+        <mat-icon fontSet="filled" fontIcon="settings"></mat-icon>
+      </button>
+    </div>
   </div>
-  <div class="group">
-    <rpl-nav-avatar class="avatar"></rpl-nav-avatar>
-    <button mat-icon-button class="settings-button">
-      <mat-icon fontSet="filled" fontIcon="settings"></mat-icon>
-    </button>
+
+  <button mat-fab class="fab" *ngIf="!bottomMenuOpened" @fab>
+    <mat-icon class="icon" fontSet="filled" fontIcon="edit"></mat-icon>
+    <span class="text">Compose</span>
+  </button>
+
+  <div class="side-menu">
+    <rpl-nav-menu></rpl-nav-menu>
   </div>
-</div>
-
-<button mat-fab class="fab" *ngIf="!bottomMenuOpened" @fab>
-  <mat-icon class="icon" fontSet="filled" fontIcon="edit"></mat-icon>
-  <span class="text">Compose</span>
-</button>
-
-<div class="side-menu">
-  <rpl-nav-menu></rpl-nav-menu>
 </div>
 
 <ng-template #bottomMenu>

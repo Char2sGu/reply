@@ -2,13 +2,6 @@
 @use 'sass:color' as color;
 @use 'src/styles/theming' as theming;
 
-$primary-contrast-color: map.get(
-  theming.$theme,
-  'color',
-  'primary',
-  'default-contrast'
-);
-
 :host {
   display: block;
 }
@@ -45,13 +38,28 @@ $primary-contrast-color: map.get(
 .divider {
   width: 60%;
   margin: 16px 20px;
-  border-top: 1px solid color.change($primary-contrast-color, $alpha: 0.12);
-  :host-context(.tablet-portrait) & {
-    display: none;
-  }
+  border-top: 1px solid
+    color.change(
+      map.get(theming.$theme, 'color', 'primary', 'default-contrast'),
+      $alpha:
+        color.alpha(map.get(theming.$theme, 'color', 'foreground', 'divider'))
+    );
   :host-context(.laptop) & {
     display: block;
     width: calc(100% - 32px);
     margin: 16px auto;
   }
+}
+
+.subheader {
+  margin: 0 20px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: color.change(
+    map.get(theming.$theme, 'color', 'primary', 'default-contrast'),
+    $alpha:
+      color.alpha(
+        map.get(theming.$theme, 'color', 'foreground', 'secondary-text')
+      )
+  );
 }

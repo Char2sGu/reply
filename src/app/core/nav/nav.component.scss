@@ -10,29 +10,21 @@ $primary-contrast-color: map.get(
   'primary',
   'default-contrast'
 );
-$primary-text-color: color.change($primary-contrast-color, $alpha: 0.87);
+$primary-text-color: color.change(
+  $primary-contrast-color,
+  $alpha: color.alpha(map.get(theming.$theme, 'color', 'foreground', 'text'))
+);
 
 :host {
   height: 56px;
-  display: flex;
-  align-items: center;
-  padding: 0 4px;
   position: relative;
   z-index: 2000; // make nav on top of overlay
-  color: $primary-text-color;
   :host-context(.tablet-portrait) & {
     height: unset;
-    flex-direction: column;
-    gap: 16px;
-    padding: 8px 0;
-  }
-  :host-context(.laptop) & {
-    align-items: flex-start;
-    padding: 8px 16px;
   }
 }
 
-.background {
+:host > .background {
   position: absolute;
   top: 0;
   left: 0;
@@ -51,6 +43,31 @@ $primary-text-color: color.change($primary-contrast-color, $alpha: 0.87);
     :host-context(.tablet-portrait) & {
       display: none;
     }
+  }
+}
+
+:host > .content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  color: $primary-text-color;
+
+  :host-context(.tablet-portrait) & {
+    flex-direction: column;
+    gap: 16px;
+    padding: 8px 0;
+  }
+
+  :host-context(.laptop) & {
+    align-items: flex-start;
+    padding: 8px 16px;
+    overflow: auto;
   }
 }
 
@@ -169,6 +186,7 @@ $primary-text-color: color.change($primary-contrast-color, $alpha: 0.87);
   // animation
   &.expanded {
     height: calc(100vh - 54px);
+    overflow: auto; // TODO: check scroll availability
   }
 
   transition: height 300ms animation-curves.$deceleration;
