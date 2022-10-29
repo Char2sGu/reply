@@ -4,6 +4,7 @@
 
 :host {
   display: block;
+  user-select: none;
 }
 
 .item {
@@ -52,7 +53,7 @@
 }
 
 .subheader {
-  margin: 0 20px;
+  margin: 12px 20px;
   font-size: 12px;
   text-transform: uppercase;
   color: color.change(
