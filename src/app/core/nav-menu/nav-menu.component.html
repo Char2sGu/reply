@@ -8,14 +8,14 @@
         { text: 'Starred', icon: 'star', link: '/todo' },
         { text: 'Sent', icon: 'send', link: '/todo' },
         { text: 'Trash', icon: 'delete', link: '/todo' },
-        { text: 'Spam', icon: 'info', link: '/todo' },
-        { text: 'Drafts', icon: 'email', link: '/todo' }
+        { text: 'Spam', icon: 'report', link: '/todo' },
+        { text: 'Drafts', icon: 'drafts', link: '/todo' }
       ]
     "
     [routerLink]="item.link"
     routerLinkActive="active"
   >
-    <mat-icon matListIcon fontSet="filled" [fontIcon]="item.icon"></mat-icon>
+    <mat-icon matListIcon [svgIcon]="item.icon"></mat-icon>
     <div matLine>{{ item.text }}</div>
   </a>
 </mat-nav-list>

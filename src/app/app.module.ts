@@ -60,7 +60,9 @@ import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
 
           const trusted = (v: string): SafeValue =>
             domSanitizer.bypassSecurityTrustResourceUrl(v);
+
           iconRegistry.addSvgIcon('logo', trusted('assets/logo.svg'));
+          iconRegistry.addSvgIconSet(trusted('assets/icons.svg'));
         },
       deps: [MatIconRegistry, DomSanitizer],
       multi: true,
