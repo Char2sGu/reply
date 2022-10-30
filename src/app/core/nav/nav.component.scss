@@ -24,6 +24,26 @@ $primary-text-color: color.change(
   }
 }
 
+:host {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: transparent;
+  }
+  &:hover {
+    ::-webkit-scrollbar-thumb {
+      background-color: color.change(
+        $primary-contrast-color,
+        $alpha:
+          color.alpha(map.get(theming.$theme, 'color', 'foreground', 'divider'))
+      );
+    }
+  }
+}
+
 :host > .background {
   position: absolute;
   top: 0;
