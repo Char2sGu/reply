@@ -2,3 +2,6 @@
 <main class="main">
   <router-outlet></router-outlet>
 </main>
+<div class="actions" *ngIf="breakpointMap['tablet-portrait']">
+  <rpl-search-button></rpl-search-button>
+</div>

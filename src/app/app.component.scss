@@ -58,3 +58,16 @@
     grid-column: span 7 / -3;
   }
 }
+
+.actions {
+  :host-context(.tablet-portrait) & {
+    position: absolute;
+    top: 16px;
+    right: 0px;
+  }
+  :host-context(.tablet-landscape) & {
+    position: initial;
+    grid-column: -3 / -2;
+    padding: 16px 0;
+  }
+}
