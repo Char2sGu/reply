@@ -20,11 +20,13 @@
           </div>
         </button>
       </div>
-      <div class="group">
-        <rpl-nav-avatar class="avatar"></rpl-nav-avatar>
-        <button mat-icon-button class="settings-button">
-          <mat-icon fontSet="filled" fontIcon="settings"></mat-icon>
-        </button>
+      <div class="group" *ngIf="breakpoints['laptop']">
+        <rpl-nav-avatar></rpl-nav-avatar>
+        <rpl-settings-button></rpl-settings-button>
+      </div>
+      <div class="group" *ngIf="!breakpoints['tablet-portrait']">
+        <rpl-settings-button *ngIf="bottomMenuOpened"></rpl-settings-button>
+        <rpl-search-button *ngIf="!bottomMenuOpened"></rpl-search-button>
       </div>
     </div>
 

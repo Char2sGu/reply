@@ -91,31 +91,21 @@ $primary-text-color: color.change(
 }
 
 .primary-line {
+  width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  :host-context(.tablet-portrait) & {
+    width: unset;
+  }
   :host-context(.laptop) & {
     width: 100%;
-    justify-content: space-between;
   }
 
   .group {
     display: flex;
     align-items: center;
     gap: 4px;
-  }
-
-  .avatar {
-    display: none;
-    :host-context(.laptop) & {
-      display: initial;
-    }
-  }
-
-  .settings-button {
-    display: none;
-    :host-context(.laptop) & {
-      display: initial;
-    }
   }
 }
 

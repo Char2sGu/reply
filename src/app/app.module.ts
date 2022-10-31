@@ -20,6 +20,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { NavComponent } from './core/nav/nav.component';
 import { NavAvatarComponent } from './core/nav-avatar/nav-avatar.component';
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
+import { SearchButtonComponent } from './core/search-button/search-button.component';
+import { SettingsButtonComponent } from './core/settings-button/settings-button.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
     NavComponent,
     NavMenuComponent,
     NavAvatarComponent,
+    SearchButtonComponent,
+    SettingsButtonComponent,
   ],
   imports: [
     BrowserModule,
