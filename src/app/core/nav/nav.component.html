@@ -24,7 +24,11 @@
         <rpl-nav-avatar></rpl-nav-avatar>
         <rpl-settings-button></rpl-settings-button>
       </div>
-      <div class="group" *ngIf="!breakpoints['tablet-portrait']">
+      <div
+        class="group"
+        *ngIf="!breakpoints['tablet-portrait']"
+        [@bottomActions]="bottomMenuOpened"
+      >
         <rpl-settings-button *ngIf="bottomMenuOpened"></rpl-settings-button>
         <rpl-search-button *ngIf="!bottomMenuOpened"></rpl-search-button>
       </div>

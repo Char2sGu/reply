@@ -18,6 +18,7 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { delay, first } from 'rxjs';
+import { FadeThroughAnimation } from 'src/app/shared/animations';
 
 import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
 
@@ -55,6 +56,9 @@ import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
         animate(`200ms ${AnimationCurves.ACCELERATION_CURVE}`),
         style({ transform: 'translateY(100%)' }),
       ]),
+    ]),
+    trigger('bottomActions', [
+      transition('* => *', [FadeThroughAnimation.apply()]),
     ]),
   ],
 })
