@@ -40,8 +40,8 @@
 }
 
 .main {
-  grid-column: 2 / span 4;
-  padding: 4px 0;
+  grid-column: 1 / -1;
+  padding: 4px 4px;
   overflow-y: auto;
   :host-context(.tablet-portrait) & {
     grid-column: span 7 / -2;
