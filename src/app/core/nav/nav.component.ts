@@ -58,7 +58,7 @@ import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
       ]),
     ]),
     trigger('bottomActions', [
-      transition('* => *', [FadeThroughAnimation.apply()]),
+      transition('false <=> true', [FadeThroughAnimation.apply()]),
     ]),
   ],
 })
