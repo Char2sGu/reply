@@ -1,6 +1,7 @@
 @use 'sass:map' as map;
 @use 'sass:color' as color;
 @use 'src/styles/theming' as theming;
+@use 'src/styles/scrollbar' as scrollbar;
 @use 'src/styles/animation-curves' as animation-curves;
 
 $primary-color: map.get(theming.$theme, 'color', 'primary', 'default');
@@ -21,26 +22,6 @@ $primary-text-color: color.change(
   z-index: 2000; // make nav on top of overlay
   :host-context(.tablet-portrait) & {
     height: unset;
-  }
-}
-
-:host {
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: transparent;
-  }
-  &:hover {
-    ::-webkit-scrollbar-thumb {
-      background-color: color.change(
-        $primary-contrast-color,
-        $alpha:
-          color.alpha(map.get(theming.$theme, 'color', 'foreground', 'divider'))
-      );
-    }
   }
 }
 
@@ -76,6 +57,14 @@ $primary-text-color: color.change(
   align-items: center;
   padding: 0 4px;
   color: $primary-text-color;
+
+  @include scrollbar.scrollbar(
+    color.change(
+      $primary-contrast-color,
+      $alpha:
+        color.alpha(map.get(theming.$theme, 'color', 'foreground', 'divider'))
+    )
+  );
 
   :host-context(.tablet-portrait) & {
     flex-direction: column;
