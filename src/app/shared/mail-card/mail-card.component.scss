@@ -1,0 +1,56 @@
+@use 'sass:map' as map;
+@use 'sass:color' as color;
+@use '@angular/material' as mat;
+@use 'src/styles/theming' as theming;
+
+:host {
+  display: block;
+  padding: 24px;
+  background-color: map.get(theming.$theme, 'color', 'background', 'card');
+  cursor: pointer;
+  position: relative;
+}
+
+%position-background {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+%single-line-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.overlay {
+  @extend %position-background;
+  background-color: map.get(theming.$theme, 'color', 'foreground', 'base');
+  opacity: 0;
+  :host:hover & {
+    opacity: color.alpha(
+      map.get(theming.$theme, 'color', 'background', 'hover')
+    );
+  }
+}
+
+.ripple {
+  @extend %position-background;
+  z-index: 1;
+}
+
+.subtitle {
+  @extend %single-line-text;
+  margin-bottom: 0;
+}
+
+.title {
+  @extend %single-line-text;
+  margin-bottom: 8px;
+}
+
+.overview {
+  @extend %single-line-text;
+}
