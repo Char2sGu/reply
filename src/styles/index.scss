@@ -21,3 +21,7 @@ a {
 mat-icon {
   transform: translateY(-1px); // bug fix
 }
+
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
