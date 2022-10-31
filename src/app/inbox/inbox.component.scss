@@ -1,7 +1,3 @@
 :host {
   display: block;
-  padding: 4px 0;
-  :host-context(.tablet-portrait) & {
-    padding: 32px 0;
-  }
 }
