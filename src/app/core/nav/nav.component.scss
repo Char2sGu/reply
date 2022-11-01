@@ -219,15 +219,15 @@ $primary-text-color: color.change(
     $background-color: map.get(theming.$theme, 'color', 'primary', 'darker');
 
     .bar-background {
-      height: 20px;
+      height: 16px;
       width: 100%;
       background-color: $background-color;
     }
 
     .wrapper-background {
-      $svgPath: 'M26.5 17C20.5 6.5 8.5 0.5 0 0.5H103C94.5 0.5 82.5 6.5 76.5 17C70.5 27.5 64.5 35 51.5 35C38.5 35 32.5 27.5 26.5 17Z';
-      width: 103px;
-      height: 35px;
+      $svgPath: 'M0 0C8.5 0 29.5 0 40 13C50.5 26 58.5 36.5 76.5 36.5C94.5 36.5 102.5 26 113 13C123.5 0 144.5 0 153 0H0Z';
+      width: 153px;
+      height: 37px;
       clip-path: path($svgPath);
       background-color: $background-color;
       transform: translateY(-1px); // remove white gap
@@ -236,7 +236,7 @@ $primary-text-color: color.change(
     .avatar {
       position: absolute;
       left: 50%;
-      top: 48%;
+      top: 50%;
       transform: translateY(-50%) translateX(-50%);
     }
   }
