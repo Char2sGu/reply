@@ -11,13 +11,14 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
   OnInit,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
-import { delay, first } from 'rxjs';
+import { delay, filter, first, switchMap } from 'rxjs';
 import { FadeThroughAnimation } from 'src/app/shared/animations';
 
 import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
@@ -63,6 +64,9 @@ import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
   ],
 })
 export class NavComponent implements OnInit, AfterViewInit {
+  logoClick$ = new EventEmitter();
+
+  bottomMenuPan$ = new EventEmitter<'up' | 'down'>();
   bottomMenuToggling = false;
   bottomMenuOpened = false;
   bottomMenuExpanded = false;
@@ -79,30 +83,26 @@ export class NavComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.subscribeBreakpointsToUpdateOverlayContainerStyles();
-  }
-
-  ngAfterViewInit(): void {
-    this.initializeBottomMenu();
-  }
-
-  onLogoClick(): void {
-    this.breakpointManager.breakpoints$
-      .pipe(first())
-      .subscribe((breakpoints) => {
-        if (!isPhone(breakpoints)) return;
+    this.logoClick$
+      .pipe(
+        switchMap(() => this.breakpointManager.breakpoints$.pipe(first())),
+        filter((breakpoints) => isPhone(breakpoints)),
+      )
+      .subscribe(() => {
         this.toggleBottomMenu();
+      });
+
+    this.bottomMenuPan$
+      .pipe(filter(() => this.bottomMenuOpened))
+      .subscribe((direction) => {
+        if (direction === 'up') this.bottomMenuExpanded = true;
+        else this.toggleBottomMenu(false);
       });
   }
 
-  onBottomMenuPanDown(): void {
-    if (!this.bottomMenuOpened) return;
-    this.toggleBottomMenu(false);
-  }
-
-  onBottomMenuPanUp(): void {
-    if (!this.bottomMenuOpened) return;
-    this.bottomMenuExpanded = true;
+  ngAfterViewInit(): void {
+    this.setupOverlayContainer();
+    this.setupBottomMenu();
   }
 
   async toggleBottomMenu(to = !this.bottomMenuOpened): Promise<void> {
@@ -125,7 +125,7 @@ export class NavComponent implements OnInit, AfterViewInit {
     this.bottomMenuToggling = false;
   }
 
-  private subscribeBreakpointsToUpdateOverlayContainerStyles(): void {
+  private setupOverlayContainer(): void {
     this.breakpointManager.breakpoints$
       .pipe(delay(0)) // wait for DOM update
       .subscribe((breakpoints) => {
@@ -141,7 +141,7 @@ export class NavComponent implements OnInit, AfterViewInit {
       });
   }
 
-  private initializeBottomMenu(): void {
+  private setupBottomMenu(): void {
     this.bottomMenuOverlayRef = this.overlayManager.create({
       hasBackdrop: true,
       positionStrategy: this.overlayManager

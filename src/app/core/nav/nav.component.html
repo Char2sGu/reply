@@ -7,7 +7,7 @@
   <div class="content">
     <div class="primary-line">
       <div class="group">
-        <button mat-button class="logo" (click)="onLogoClick()">
+        <button mat-button class="logo" (click)="logoClick$.emit()">
           <div class="logo-content">
             <mat-icon
               class="logo-arrow"
@@ -48,8 +48,8 @@
     <div
       class="bottom-menu"
       [class.expanded]="bottomMenuExpanded"
-      (pandown)="onBottomMenuPanDown()"
-      (panup)="onBottomMenuPanUp()"
+      (panup)="bottomMenuPan$.emit('up')"
+      (pandown)="bottomMenuPan$.emit('down')"
       @bottomMenu
     >
       <div class="avatar-bar">
