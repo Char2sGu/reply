@@ -92,7 +92,6 @@
     "no-sequences": "error",
     "no-throw-literal": "error",
     "prefer-promise-reject-errors": "error",
-    "no-unneeded-ternary": "error",
     "@typescript-eslint/no-unused-expressions": "error",
     "no-useless-call": "error",
     "no-useless-escape": "error",
