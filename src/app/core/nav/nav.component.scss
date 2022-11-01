@@ -50,6 +50,9 @@ $primary-text-color: color.change(
 
   :host.unfavored & {
     transform: translateY($heightOnPhone);
+    :host-context(.tablet-portrait) & {
+      transform: unset;
+    }
   }
 }
 
@@ -101,6 +104,9 @@ $primary-text-color: color.change(
 
   :host.unfavored & {
     transform: translateY($heightOnPhone);
+    :host-context(.tablet-portrait) & {
+      transform: unset;
+    }
   }
 
   .group {
