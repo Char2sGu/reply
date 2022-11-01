@@ -42,8 +42,7 @@
   border-top: 1px solid
     color.change(
       map.get(theming.$theme, 'color', 'primary', 'default-contrast'),
-      $alpha:
-        color.alpha(map.get(theming.$theme, 'color', 'foreground', 'divider'))
+      $alpha: 0.12
     );
   :host-context(.laptop) & {
     display: block;
@@ -58,9 +57,6 @@
   text-transform: uppercase;
   color: color.change(
     map.get(theming.$theme, 'color', 'primary', 'default-contrast'),
-    $alpha:
-      color.alpha(
-        map.get(theming.$theme, 'color', 'foreground', 'secondary-text')
-      )
+    $alpha: map.get(theming.$theme, 'opacity', 'text', 'secondary')
   );
 }

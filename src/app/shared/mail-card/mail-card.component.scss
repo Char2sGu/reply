@@ -1,6 +1,5 @@
 @use 'sass:map' as map;
 @use 'sass:color' as color;
-@use '@angular/material' as mat;
 @use 'src/styles/theming' as theming;
 
 :host {
@@ -33,9 +32,7 @@
   background-color: map.get(theming.$theme, 'color', 'foreground', 'base');
   opacity: 0;
   :host:hover & {
-    opacity: color.alpha(
-      map.get(theming.$theme, 'color', 'background', 'hover')
-    );
+    opacity: map.get(theming.$theme, 'opacity', 'overlay', 'hover');
   }
 }
 

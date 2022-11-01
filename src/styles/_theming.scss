@@ -1,9 +1,11 @@
 @use 'sass:map' as map;
+@use 'sass:color' as color;
 @use '@angular/material' as mat;
 @use '@angular/material/theming' as mat-theming;
 
+// https://m2.material.io/design/material-studies/reply.html#typography
 // prettier-ignore
-$typography-config: mat.define-typography-config(
+$-typography-config: mat.define-typography-config(
   $font-family:   '"Work Sans", sans-serif',
   $display-4:     mat.define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
   $display-3:     mat.define-typography-level(56px, 56px, 600, $letter-spacing: -0.02em),
@@ -20,34 +22,59 @@ $typography-config: mat.define-typography-config(
   $input:         mat.define-typography-level(inherit, 1.125, 400),
 );
 
-$primary-palette: (
+// https://m2.material.io/design/material-studies/reply.html#color
+$-primary-palette: (
   600: #4a6572,
   700: #344955,
   800: #232f34,
   contrast: (
-    600: mat-theming.$light-primary-text,
-    700: mat-theming.$light-primary-text,
-    800: mat-theming.$light-primary-text,
+    600: rgb(255 255 255 / 0.87),
+    700: rgb(255 255 255 / 0.87),
+    800: rgb(255 255 255 / 0.87),
   ),
 );
-
-$accent-palette: (
+$-accent-palette: (
   500: #f9aa33,
   contrast: (
-    500: mat-theming.$dark-primary-text,
+    500: rgb(0 0 0 / 0.87),
   ),
 );
 
 $theme: map.deep-merge(
   mat.define-light-theme(
-    $primary: mat.define-palette($primary-palette, 700, 600, 800),
-    $accent: mat.define-palette($accent-palette, 500, 500, 500),
+    $primary: mat.define-palette($-primary-palette, 700, 600, 800),
+    $accent: mat.define-palette($-accent-palette, 500, 500, 500),
   ),
   (
-    color: (
-      background: (
-        background: #edf0f2,
+    'color': (
+      'background': (
+        'background': #edf0f2,
       ),
+    ),
+    'opacity': (
+      // https://m2.material.io/design/color/text-legibility.html
+      'text':
+        (
+          'primary': 0.87,
+          'secondary': 0.6,
+          'disabled': 0.38,
+        ),
+      // https://m2.material.io/design/interaction/states.html
+      'overlay':
+        (
+          'enabled': 0,
+          'hover': 0.04,
+          'focus': 0.12,
+          'selected': 0.08,
+          'activated': 0.12,
+          'pressed': 0.12,
+          'dragged': 0.08,
+        ),
     ),
   )
 );
+
+@mixin material-styles() {
+  @include mat.core($-typography-config);
+  @include mat.all-component-themes($theme);
+}

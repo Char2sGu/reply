@@ -1,12 +1,9 @@
-@use 'sass:map' as map;
-@use '@angular/material' as mat;
 @use 'theming' as theming;
 
 @import 'https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;900&display=swap';
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 
-@include mat.core(theming.$typography-config);
-@include mat.all-component-themes(theming.$theme);
+@include theming.material-styles();
 
 body {
   margin: 0;
