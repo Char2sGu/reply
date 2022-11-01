@@ -5,10 +5,13 @@
 
 :host {
   display: block;
-  padding: 24px;
+  padding: 16px;
   background-color: map.get(theming.$theme, 'color', 'background', 'card');
   cursor: pointer;
   position: relative;
+  :host-context(.tablet-portrait) & {
+    padding: 24px;
+  }
 }
 
 %position-background {
