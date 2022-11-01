@@ -13,17 +13,26 @@ import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
   ],
 })
 export class AppComponent {
-  @HostBinding('class')
-  breakpointMap: BreakpointMap = {
+  @HostBinding('class') breakpointMap: BreakpointMap = {
     ['tablet-portrait']: false,
     ['tablet-landscape']: false,
     ['laptop']: false,
     ['desktop']: false,
   };
 
+  contentFavored = false;
+
   constructor(breakpointManager: BreakpointManager) {
     breakpointManager.breakpoints$.subscribe((v) => {
       this.breakpointMap = v;
     });
+  }
+
+  onContentScrollUp(): void {
+    this.contentFavored = false;
+  }
+
+  onContentScrollDown(): void {
+    this.contentFavored = true;
   }
 }

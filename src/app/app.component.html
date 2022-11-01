@@ -1,5 +1,9 @@
 <rpl-nav class="nav" @enterRemoved></rpl-nav>
-<main class="main">
+<main
+  class="content"
+  (scrollUp)="onContentScrollUp()"
+  (scrollDown)="onContentScrollDown()"
+>
   <router-outlet></router-outlet>
 </main>
 <div class="actions" *ngIf="breakpointMap['tablet-portrait']">

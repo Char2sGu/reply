@@ -22,6 +22,7 @@ import { NavAvatarComponent } from './core/nav-avatar/nav-avatar.component';
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
 import { SearchButtonComponent } from './core/search-button/search-button.component';
 import { SettingsButtonComponent } from './core/settings-button/settings-button.component';
+import { DirectionalScrollEventsDirective } from './shared/directional-scroll-events/directional-scroll-events.directive';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { SettingsButtonComponent } from './core/settings-button/settings-button.
     NavAvatarComponent,
     SearchButtonComponent,
     SettingsButtonComponent,
+    DirectionalScrollEventsDirective,
   ],
   imports: [
     BrowserModule,

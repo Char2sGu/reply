@@ -12,6 +12,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostBinding,
   OnInit,
   TemplateRef,
   ViewChild,
@@ -19,6 +20,7 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { delay, filter, first, switchMap } from 'rxjs';
+import { AppComponent } from 'src/app/app.component';
 import { FadeThroughAnimation } from 'src/app/shared/animations';
 
 import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
@@ -74,8 +76,13 @@ export class NavComponent implements OnInit, AfterViewInit {
   private bottomMenuPortal!: TemplatePortal;
   @ViewChild('bottomMenu') private bottomMenuTemplate!: TemplateRef<unknown>;
 
+  @HostBinding('class.unfavored') get unfavored(): boolean {
+    return this.appComponent.contentFavored;
+  }
+
   constructor(
     public breakpointManager: BreakpointManager,
+    private appComponent: AppComponent,
     private overlayContainerRef: OverlayContainer,
     private overlayManager: Overlay,
     private elementRef: ElementRef<HTMLElement>,
