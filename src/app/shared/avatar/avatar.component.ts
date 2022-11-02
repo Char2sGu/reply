@@ -22,7 +22,7 @@ export class AvatarComponent implements OnInit {
       const options = [
         'https://xsgames.co/randomusers/avatar.php?g=male',
         'https://xsgames.co/randomusers/avatar.php?g=female',
-        'assets/delivery.png',
+        'assets/express.png',
       ];
       const index = Math.floor(Math.random() * options.length);
       this.src = options[index];
