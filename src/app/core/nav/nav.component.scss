@@ -7,6 +7,7 @@
 $heightOnPhone: 56px;
 
 :host {
+  display: block;
   height: $heightOnPhone;
   position: relative;
   z-index: 2000; // make nav on top of overlay
