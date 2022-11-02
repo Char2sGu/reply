@@ -1,9 +1,33 @@
-<div class="overlay"></div>
-<div class="ripple" matRipple></div>
-<h5 class="subtitle"><span>Ali Corners</span> - <span>4 hrs ago</span></h5>
-<h1 class="title">Brunch this weekend?</h1>
-<div class="overview">
-  I'll be in your neighborhood doing errands and was hoping to catch you for a
-  coffee this Saturday. If you don't have anything scheduled, it would be great
-  to see you! It feels like its been forever.
-</div>
+<ng-container *ngIf="breakpointManager.breakpoints$ | async as breakpoints">
+  <div class="overlay"></div>
+  <div class="ripple" matRipple></div>
+  <div class="headline">
+    <div class="titles">
+      <h5 class="subtitle">
+        <span>Ali Corners</span> - <span>4 hrs ago</span>
+      </h5>
+      <h1 class="title">Brunch this weekend?</h1>
+    </div>
+    <div class="actions">
+      <ng-container *ngIf="breakpoints['tablet-landscape']">
+        <button mat-icon-button>
+          <mat-icon svgIcon="star"></mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon svgIcon="delete"></mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
+        </button>
+      </ng-container>
+      <button mat-icon-button>
+        <rpl-avatar [size]="40"></rpl-avatar>
+      </button>
+    </div>
+  </div>
+  <div class="overview">
+    I'll be in your neighborhood doing errands and was hoping to catch you for a
+    coffee this Saturday. If you don't have anything scheduled, it would be
+    great to see you! It feels like its been forever.
+  </div>
+</ng-container>

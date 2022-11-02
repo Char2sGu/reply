@@ -38,17 +38,24 @@
 
 .ripple {
   @extend %position-background;
-  z-index: 1;
 }
 
-.subtitle {
-  @extend %single-line-text;
-  margin-bottom: 0;
-}
+.headline {
+  display: flex;
+  justify-content: space-between;
 
-.title {
-  @extend %single-line-text;
-  margin-bottom: 8px;
+  .titles {
+    width: 0;
+    flex-grow: 1;
+    .subtitle {
+      @extend %single-line-text;
+      margin-bottom: 0;
+    }
+    .title {
+      @extend %single-line-text;
+      margin-bottom: 8px;
+    }
+  }
 }
 
 .overview {
