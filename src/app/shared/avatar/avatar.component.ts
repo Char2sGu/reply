@@ -12,7 +12,20 @@ export class AvatarComponent implements OnInit {
   @HostBinding('style.height.px')
   size?: number;
 
+  @Input()
+  src?: string;
+
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (!this.src) {
+      const options = [
+        'https://xsgames.co/randomusers/avatar.php?g=male',
+        'https://xsgames.co/randomusers/avatar.php?g=female',
+        'assets/delivery.png',
+      ];
+      const index = Math.floor(Math.random() * options.length);
+      this.src = options[index];
+    }
+  }
 }
