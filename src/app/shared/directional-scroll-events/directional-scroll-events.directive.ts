@@ -9,6 +9,7 @@ import { bufferCount, map, startWith, Subject } from 'rxjs';
 
 @Directive({
   selector: '[scrollUp],[scrollDown]',
+  standalone: true,
 })
 export class DirectionalScrollEventsDirective {
   @Output() scrollDown = new EventEmitter();

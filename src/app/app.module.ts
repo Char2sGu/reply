@@ -18,10 +18,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NavComponent } from './core/nav/nav.component';
-import { NavAvatarComponent } from './core/nav-avatar/nav-avatar.component';
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
 import { SearchButtonComponent } from './core/search-button/search-button.component';
 import { SettingsButtonComponent } from './core/settings-button/settings-button.component';
+import { AvatarComponent } from './shared/avatar/avatar.component';
 import { DirectionalScrollEventsDirective } from './shared/directional-scroll-events/directional-scroll-events.directive';
 
 @NgModule({
@@ -29,10 +29,8 @@ import { DirectionalScrollEventsDirective } from './shared/directional-scroll-ev
     AppComponent,
     NavComponent,
     NavMenuComponent,
-    NavAvatarComponent,
     SearchButtonComponent,
     SettingsButtonComponent,
-    DirectionalScrollEventsDirective,
   ],
   imports: [
     BrowserModule,
@@ -45,6 +43,8 @@ import { DirectionalScrollEventsDirective } from './shared/directional-scroll-ev
     MatButtonModule,
     MatIconModule,
     MatListModule,
+    AvatarComponent,
+    DirectionalScrollEventsDirective,
   ],
   providers: [
     {
