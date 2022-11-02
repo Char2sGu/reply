@@ -19,13 +19,8 @@ export class AvatarComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.src) {
-      const options = [
-        'https://xsgames.co/randomusers/avatar.php?g=male',
-        'https://xsgames.co/randomusers/avatar.php?g=female',
-        'assets/express.png',
-      ];
-      const index = Math.floor(Math.random() * options.length);
-      this.src = options[index];
+      const num = Math.floor(Math.random() * 6);
+      this.src = `assets/avatar-${num ? `${num}.jpg` : 'express.png'}`;
     }
   }
 }
