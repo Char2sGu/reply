@@ -15,8 +15,10 @@ a {
   text-decoration: initial;
 }
 
-mat-icon {
-  transform: translateY(-1px); // bug fix
+// bug fix
+.mat-icon-button .mat-button-wrapper {
+  display: inline-block;
+  transform: translateY(-2px);
 }
 
 * {
