@@ -1,14 +1,6 @@
-@use 'sass:map' as map;
-@use 'src/styles/theming' as theming;
-@use 'src/styles/scrollbar' as scrollbar;
-
 :host {
   display: block;
   padding: 4px 4px;
-  overflow-y: auto;
-  @include scrollbar.scrollbar(
-    map.get(theming.$theme, 'color', 'foreground', 'divider')
-  );
   :host-context(.tablet-portrait) & {
     padding: 32px 0;
   }
