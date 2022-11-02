@@ -1,6 +1,5 @@
 @use 'sass:map' as map;
 @use 'src/styles/theming' as theming;
-@use 'src/styles/scrollbar' as scrollbar;
 
 :host {
   display: grid;
@@ -42,14 +41,8 @@
 
 .content {
   grid-column: 1 / -1;
-  padding: 4px 4px;
-  overflow-y: auto;
   :host-context(.tablet-portrait) & {
     grid-column: span 7 / -2;
-    padding: 32px 0;
-    @include scrollbar.scrollbar(
-      map.get(theming.$theme, 'color', 'foreground', 'divider')
-    );
   }
   :host-context(.tablet-landscape) & {
     grid-column: span 9 / -3;

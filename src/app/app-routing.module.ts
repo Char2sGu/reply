@@ -9,15 +9,14 @@ import {
 
 const routes: Routes = [
   {
-    path: 'inbox',
-    title: 'Inbox',
-    loadChildren: () =>
-      import('./inbox/inbox.module').then((m) => m.InboxModule),
-  },
-  {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'inbox',
+    redirectTo: 'mails',
+  },
+  {
+    path: 'mails',
+    loadChildren: () =>
+      import('./mails/mails.module').then((m) => m.MailsModule),
   },
 ];
 
