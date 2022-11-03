@@ -20,10 +20,10 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { delay, filter, first, switchMap } from 'rxjs';
-import { AppComponent } from 'src/app/app.component';
 import { FadeThroughAnimation } from 'src/app/shared/animations';
 
 import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
+import { Layout } from '../layout.service';
 
 // There is no need to unsubscribe in this file as this component exists for
 // the lifetime of the app.
@@ -77,12 +77,12 @@ export class NavComponent implements OnInit, AfterViewInit {
   @ViewChild('bottomMenu') private bottomMenuTemplate!: TemplateRef<unknown>;
 
   @HostBinding('class.unfavored') get unfavored(): boolean {
-    return this.appComponent.contentFavored;
+    return this.layout.contentFavored;
   }
 
   constructor(
     public breakpointManager: BreakpointManager,
-    private appComponent: AppComponent,
+    private layout: Layout,
     private overlayContainerRef: OverlayContainer,
     private overlayManager: Overlay,
     private elementRef: ElementRef<HTMLElement>,

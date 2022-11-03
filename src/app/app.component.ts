@@ -2,6 +2,7 @@ import { transition, trigger } from '@angular/animations';
 import { Component, HostBinding } from '@angular/core';
 
 import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
+import { Layout } from './core/layout.service';
 
 @Component({
   selector: 'rpl-root',
@@ -20,19 +21,17 @@ export class AppComponent {
     ['desktop']: false,
   };
 
-  contentFavored = false;
-
-  constructor(breakpointManager: BreakpointManager) {
+  constructor(breakpointManager: BreakpointManager, private layout: Layout) {
     breakpointManager.breakpoints$.subscribe((v) => {
       this.breakpointMap = v;
     });
   }
 
   onContentScrollUp(): void {
-    this.contentFavored = false;
+    this.layout.contentFavored = false;
   }
 
   onContentScrollDown(): void {
-    this.contentFavored = true;
+    this.layout.contentFavored = true;
   }
 }
