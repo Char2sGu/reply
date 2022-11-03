@@ -1,5 +1,9 @@
 <ng-container *ngIf="breakpointManager.breakpoints$ | async as breakpoints">
-  <div class="content">
+  <div
+    class="content"
+    (scrollUp)="layout.contentFavored = false"
+    (scrollDown)="layout.contentFavored = true"
+  >
     <rpl-mail-card-list></rpl-mail-card-list>
   </div>
   <div class="actions" *ngIf="breakpoints['tablet-portrait']">

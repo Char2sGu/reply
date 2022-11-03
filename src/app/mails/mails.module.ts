@@ -5,6 +5,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 
 import { AvatarComponent } from '../shared/avatar/avatar.component';
+import { DirectionalScrollEventsDirective } from '../shared/directional-scroll-events/directional-scroll-events.directive';
 import { SearchButtonComponent } from '../shared/search-button/search-button.component';
 import { MailCardComponent } from './mail-card/mail-card.component';
 import { MailCardListComponent } from './mail-card-list/mail-card-list.component';
@@ -20,6 +21,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     MatRippleModule,
     MatIconModule,
     AvatarComponent,
+    DirectionalScrollEventsDirective,
     SearchButtonComponent,
   ],
 })

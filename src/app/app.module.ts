@@ -20,7 +20,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { NavComponent } from './core/nav/nav.component';
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
 import { AvatarComponent } from './shared/avatar/avatar.component';
-import { DirectionalScrollEventsDirective } from './shared/directional-scroll-events/directional-scroll-events.directive';
 import { SearchButtonComponent } from './shared/search-button/search-button.component';
 import { SettingsButtonComponent } from './shared/settings-button/settings-button.component';
 
@@ -38,7 +37,6 @@ import { SettingsButtonComponent } from './shared/settings-button/settings-butto
     MatIconModule,
     MatListModule,
     AvatarComponent,
-    DirectionalScrollEventsDirective,
     SearchButtonComponent,
     SettingsButtonComponent,
   ],
