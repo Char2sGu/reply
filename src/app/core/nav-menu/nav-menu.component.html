@@ -5,19 +5,19 @@
       class="item"
       *ngFor="
         let item of [
-          { text: 'Inbox', icon: 'inbox', link: 'inbox' },
-          { text: 'Starred', icon: 'star', link: 'starred' },
-          { text: 'Sent', icon: 'send', link: 'sent' },
-          { text: 'Trash', icon: 'delete', link: 'trash' },
-          { text: 'Spam', icon: 'report', link: 'spam' },
-          { text: 'Drafts', icon: 'drafts', link: 'drafts' }
+          { name: 'Inbox', icon: 'inbox' },
+          { name: 'Starred', icon: 'star' },
+          { name: 'Sent', icon: 'send' },
+          { name: 'Trash', icon: 'delete' },
+          { name: 'Spam', icon: 'report' },
+          { name: 'Drafts', icon: 'drafts' }
         ]
       "
-      routerLink="/mails/{{ item.link }}"
+      routerLink="/mailboxes/{{ item.name }}/mails"
       routerLinkActive="active"
     >
       <mat-icon matListIcon [svgIcon]="item.icon"></mat-icon>
-      <div matLine>{{ item.text }}</div>
+      <div matLine>{{ item.name }}</div>
     </a>
 
     <ng-container
@@ -32,15 +32,15 @@
         class="item"
         *ngFor="
           let item of [
-            { text: 'Receipts', link: 'Receipts' },
-            { text: 'Pine Elementary', link: 'Pine Elementary' },
-            { text: 'Taxes', link: 'Taxes' },
-            { text: 'Vacation', link: 'Vacation' },
-            { text: 'Mortgage', link: 'Mortgage' },
-            { text: 'Freelance', link: 'Freelance' }
+            { name: 'Receipts' },
+            { name: 'Pine Elementary' },
+            { name: 'Taxes' },
+            { name: 'Vacation' },
+            { name: 'Mortgage' },
+            { name: 'Freelance' }
           ]
         "
-        routerLink="/mails/folder/{{ item.link }}"
+        routerLink="/mailboxes/{{ item.name }}/mails"
         routerLinkActive="active"
       >
         <mat-icon
@@ -48,7 +48,7 @@
           fontSet="filled"
           fontIcon="folder_open"
         ></mat-icon>
-        <div matLine>{{ item.text }}</div>
+        <div matLine>{{ item.name }}</div>
       </a>
     </ng-container>
   </mat-nav-list>

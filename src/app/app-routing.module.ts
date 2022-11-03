@@ -11,10 +11,10 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'mails',
+    redirectTo: 'mailboxes/Inbox/mails',
   },
   {
-    path: 'mails',
+    path: 'mailboxes/:mailboxName/mails',
     loadChildren: () =>
       import('./mails/mails.module').then((m) => m.MailsModule),
   },
