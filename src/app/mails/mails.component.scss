@@ -1,7 +1,43 @@
+@use 'sass:map' as map;
+@use 'src/styles/theming' as theming;
+@use 'src/styles/scrollbar' as scrollbar;
+
 :host {
-  display: block;
+  display: contents;
+}
+
+.content {
+  grid-column: 1 / -1;
+  :host-context(.tablet-portrait) & {
+    grid-column: span 7 / -2;
+  }
+  :host-context(.tablet-landscape) & {
+    grid-column: span 9 / -3;
+  }
+  :host-context(.laptop) & {
+    grid-column: span 7 / -3;
+  }
+
   padding: 4px 4px;
   :host-context(.tablet-portrait) & {
     padding: 32px 0;
+  }
+
+  overflow-y: auto;
+  @include scrollbar.scrollbar(
+    map.get(theming.$theme, 'color', 'foreground', 'divider')
+  );
+}
+
+.actions {
+  :host-context(.tablet-portrait) & {
+    position: absolute;
+    top: 16px;
+    right: 0px;
+  }
+  :host-context(.tablet-landscape) & {
+    position: initial;
+    grid-column: -3 / -2;
+    padding: 16px 0;
   }
 }

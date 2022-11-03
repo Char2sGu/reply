@@ -24,3 +24,9 @@ a {
 * {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
+// Prevent <router-outlet> elements from interfering the layout because they
+// can be blocks in certain layouts.
+router-outlet {
+  display: none;
+}

@@ -6,7 +6,6 @@ import {
   Routes,
 } from '@angular/router';
 
-import { MailCardListComponent } from './mail-card-list/mail-card-list.component';
 import { MailsComponent } from './mails.component';
 
 @Injectable({ providedIn: 'root' })
@@ -28,24 +27,18 @@ export class MailFolderRouteTitleResolver implements Resolve<string> {
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
+    redirectTo: 'inbox',
+  },
+  {
+    path: ':categoryName',
     component: MailsComponent,
-    children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'inbox',
-      },
-      {
-        path: ':categoryName',
-        component: MailCardListComponent,
-        title: MailCategoryRouteTitleResolver,
-      },
-      {
-        path: 'folder/:folderName',
-        component: MailCardListComponent,
-        title: MailFolderRouteTitleResolver,
-      },
-    ],
+    title: MailCategoryRouteTitleResolver,
+  },
+  {
+    path: 'folder/:folderName',
+    component: MailsComponent,
+    title: MailFolderRouteTitleResolver,
   },
 ];
 
