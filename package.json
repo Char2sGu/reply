@@ -25,6 +25,7 @@
     "@angular/router": "^14.2.0",
     "hammerjs": "^2.0.8",
     "rxjs": "~7.5.0",
+    "timeago.js": "^4.0.2",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
