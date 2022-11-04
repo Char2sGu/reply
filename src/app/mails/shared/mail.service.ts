@@ -8,10 +8,13 @@ import { MAILS } from './mails';
   providedIn: 'root',
 })
 export class MailService {
-  mails$: Observable<Mail[]> = of(MAILS);
   private mailsRead = new WeakSet<Mail>();
 
   constructor() {}
+
+  getMailsByMailbox(mailboxName: string): Observable<Mail[]> {
+    return mailboxName === 'Inbox' ? of(MAILS) : of([]);
+  }
 
   markMailAsRead(mail: Mail): void {
     this.mailsRead.add(mail);

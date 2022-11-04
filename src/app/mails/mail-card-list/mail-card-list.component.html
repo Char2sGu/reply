@@ -1,3 +1,6 @@
-<a *ngFor="let mail of mails; trackBy: mailTracker" routerLink="{{ mail.id }}">
+<a
+  *ngFor="let mail of mails$ | async; trackBy: mailTracker"
+  routerLink="{{ mail.id }}"
+>
   <rpl-mail-card [mail]="mail"></rpl-mail-card>
 </a>

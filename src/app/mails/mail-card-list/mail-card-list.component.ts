@@ -1,7 +1,9 @@
 import { Component, OnInit, TrackByFunction } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 
 import { Mail } from '../shared/mail.model';
-import { MAILS } from '../shared/mails';
+import { MailService } from '../shared/mail.service';
 
 @Component({
   selector: 'rpl-mail-card-list',
@@ -9,10 +11,18 @@ import { MAILS } from '../shared/mails';
   styleUrls: ['./mail-card-list.component.scss'],
 })
 export class MailCardListComponent implements OnInit {
-  mails: Mail[] = MAILS;
+  mails$!: Observable<Mail[]>;
   mailTracker: TrackByFunction<Mail> = (_, mail) => mail.id;
 
-  constructor() {}
+  constructor(
+    private route: ActivatedRoute,
+    private mailService: MailService,
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      const mailboxName = params['mailboxName'];
+      this.mails$ = this.mailService.getMailsByMailbox(mailboxName);
+    });
+  }
 }
