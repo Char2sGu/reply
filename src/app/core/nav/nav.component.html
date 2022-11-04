@@ -21,9 +21,7 @@
         </button>
       </div>
       <div class="group" *ngIf="breakpoints['laptop']">
-        <button mat-icon-button>
-          <rpl-avatar [size]="32"></rpl-avatar>
-        </button>
+        <rpl-nav-avatar-button></rpl-nav-avatar-button>
         <rpl-settings-button></rpl-settings-button>
       </div>
       <div
@@ -57,9 +55,7 @@
       <div class="avatar-bar">
         <div class="bar-background"></div>
         <div class="wrapper-background"></div>
-        <button mat-icon-button class="avatar">
-          <rpl-avatar [size]="32"></rpl-avatar>
-        </button>
+        <rpl-nav-avatar-button class="avatar"></rpl-nav-avatar-button>
       </div>
       <div class="content">
         <rpl-nav-menu></rpl-nav-menu>
