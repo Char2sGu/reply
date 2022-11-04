@@ -1,3 +1,16 @@
 :host {
   display: contents;
 }
+
+.content {
+  grid-column: 1 / -1;
+  :host-context(.tablet-portrait) & {
+    grid-column: span 7 / -2;
+  }
+  :host-context(.tablet-landscape) & {
+    grid-column: span 11 / -2;
+  }
+  :host-context(.laptop) & {
+    grid-column: span 9 / -2;
+  }
+}
