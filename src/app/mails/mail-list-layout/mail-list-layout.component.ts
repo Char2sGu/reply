@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs';
 import { BreakpointManager } from 'src/app/core/breakpoint.manager';
 import { Layout } from 'src/app/core/layout.service';
 
@@ -8,9 +10,13 @@ import { Layout } from 'src/app/core/layout.service';
   styleUrls: ['./mail-list-layout.component.scss'],
 })
 export class MailListLayoutComponent implements OnInit {
+  breakpoints$ = this.breakpointManager.breakpoints$;
+  mailboxName$ = this.route.params.pipe(map((params) => params['mailboxName']));
+
   constructor(
-    public breakpointManager: BreakpointManager,
     public layout: Layout,
+    private route: ActivatedRoute,
+    private breakpointManager: BreakpointManager,
   ) {}
 
   ngOnInit(): void {}
