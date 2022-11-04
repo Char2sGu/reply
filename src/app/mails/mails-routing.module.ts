@@ -10,7 +10,9 @@ import { MailDetailLayoutComponent } from './mail-detail-layout/mail-detail-layo
 import { MailListLayoutComponent } from './mail-list-layout/mail-list-layout.component';
 import { MailsComponent } from './mails.component';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class MailboxRouteTitleResolver implements Resolve<string> {
   resolve(route: ActivatedRouteSnapshot): string {
     return route.params['mailboxName'];

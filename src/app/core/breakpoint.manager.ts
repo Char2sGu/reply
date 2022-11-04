@@ -2,7 +2,9 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 import { map, Observable, shareReplay } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class BreakpointManager {
   readonly breakpoints$: Observable<BreakpointMap>;
 
