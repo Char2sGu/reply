@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TrackByFunction } from '@angular/core';
 
 import { Mail } from '../shared/mail.model';
 import { MAILS } from '../shared/mails';
@@ -10,6 +10,7 @@ import { MAILS } from '../shared/mails';
 })
 export class MailCardListComponent implements OnInit {
   mails: Mail[] = MAILS;
+  mailTracker: TrackByFunction<Mail> = (_, mail) => mail.id;
 
   constructor() {}
 

@@ -1,1 +1,4 @@
-<rpl-mail-card *ngFor="let mail of mails" [mail]="mail"></rpl-mail-card>
+<rpl-mail-card
+  *ngFor="let mail of mails; trackBy: mailTracker"
+  [mail]="mail"
+></rpl-mail-card>
