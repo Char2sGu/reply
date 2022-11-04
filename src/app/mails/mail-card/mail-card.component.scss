@@ -53,7 +53,7 @@
     }
     .title {
       @extend %single-line-text;
-      margin-bottom: 8px;
+      margin-bottom: 0;
     }
   }
 
@@ -61,10 +61,13 @@
     display: flex;
     gap: 8px;
     .avatar-button {
-      width: 40px;
-      height: 40px;
       :host:hover & {
         background-color: #ffffff;
+      }
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
       }
     }
   }
@@ -72,4 +75,7 @@
 
 .overview {
   @extend %single-line-text;
+  margin-top: 8px;
+  height: map.get(theming.$typography-config, 'body-1', 'line-height');
+  white-space: pre;
 }

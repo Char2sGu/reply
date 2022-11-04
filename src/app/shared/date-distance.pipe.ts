@@ -24,6 +24,8 @@ timeago.register(
     ][index] as [string, string],
 );
 
+// TODO: fix the locale not working problem
+
 @Pipe({
   name: 'dateDistance',
   standalone: true,

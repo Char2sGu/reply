@@ -4,9 +4,10 @@
   <div class="headline">
     <div class="titles">
       <h5 class="subtitle">
-        <span>Ali Corners</span> - <span>4 hrs ago</span>
+        <span>{{ mail.sender.name }}</span> -
+        <span>{{ mail.sentAt | dateDistance }}</span>
       </h5>
-      <h1 class="title">Brunch this weekend?</h1>
+      <h1 class="title">{{ mail.subject }}</h1>
     </div>
     <div class="actions">
       <ng-container *ngIf="breakpoints['tablet-landscape']">
@@ -21,13 +22,12 @@
         </button>
       </ng-container>
       <button mat-icon-button class="avatar-button">
-        <rpl-avatar [size]="40"></rpl-avatar>
+        <img
+          [src]="mail.sender.avatarUrl ?? 'assets/avatar-express.png'"
+          alt="Avatar"
+        />
       </button>
     </div>
   </div>
-  <div class="overview">
-    I'll be in your neighborhood doing errands and was hoping to catch you for a
-    coffee this Saturday. If you don't have anything scheduled, it would be
-    great to see you! It feels like its been forever.
-  </div>
+  <div class="overview" *ngIf="mail.content">{{ mail.content }}</div>
 </ng-container>
