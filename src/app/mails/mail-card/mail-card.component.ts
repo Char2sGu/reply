@@ -37,6 +37,5 @@ export class MailCardComponent implements OnInit {
 
   @HostListener('click') onClick(): void {
     this.anchorElementRef.nativeElement.click();
-    this.mailService.markMailAsRead(this.mail);
   }
 }

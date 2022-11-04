@@ -3,6 +3,9 @@
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+
   grid-column: 1 / -1;
   :host-context(.tablet-portrait) & {
     grid-column: span 7 / -2;
@@ -13,4 +16,8 @@
   :host-context(.laptop) & {
     grid-column: span 9 / -2;
   }
+}
+
+rpl-mail {
+  flex-grow: 1;
 }

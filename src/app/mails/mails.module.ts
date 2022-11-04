@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { DateDistancePipe } from '../shared/date-distance.pipe';
 import { DirectionalScrollEventsDirective } from '../shared/directional-scroll-events.directive';
 import { SearchButtonComponent } from '../shared/search-button/search-button.component';
+import { MailComponent } from './mail/mail.component';
 import { MailCardComponent } from './mail-card/mail-card.component';
 import { MailCardListComponent } from './mail-card-list/mail-card-list.component';
 import { MailDetailLayoutComponent } from './mail-detail-layout/mail-detail-layout.component';
@@ -21,6 +22,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     MailDetailLayoutComponent,
     MailCardComponent,
     MailCardListComponent,
+    MailComponent,
   ],
   imports: [
     CommonModule,
