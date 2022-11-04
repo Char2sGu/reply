@@ -54,12 +54,20 @@
     .title {
       @extend %single-line-text;
       margin-bottom: 0;
+      :host.read & {
+        color: map.get(theming.$theme, 'color', 'foreground', 'secondary-text');
+      }
     }
   }
 
   .actions {
     display: flex;
     gap: 8px;
+    mat-icon {
+      :host.read & {
+        color: map.get(theming.$theme, 'color', 'foreground', 'secondary-text');
+      }
+    }
     .avatar-button {
       :host:hover & {
         background-color: #ffffff;

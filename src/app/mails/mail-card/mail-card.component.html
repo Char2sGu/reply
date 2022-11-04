@@ -1,4 +1,4 @@
-<ng-container *ngIf="breakpointManager.breakpoints$ | async as breakpoints">
+<ng-container *ngIf="breakpoints$ | async as breakpoints">
   <div class="overlay"></div>
   <div class="ripple" matRipple></div>
   <div class="headline">
@@ -29,5 +29,5 @@
       </button>
     </div>
   </div>
-  <div class="overview" *ngIf="mail.content">{{ mail.content }}</div>
+  <div class="overview" *ngIf="!isRead">{{ mail.content }}</div>
 </ng-container>
