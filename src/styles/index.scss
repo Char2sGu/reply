@@ -13,6 +13,9 @@ body {
 a {
   color: currentColor;
   text-decoration: initial;
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 // bug fix

@@ -7,9 +7,11 @@
         <span>{{ mail.sender.name }}</span> -
         <span>{{ mail.sentAt | dateDistance }}</span>
       </h5>
-      <h1 class="title">{{ mail.subject }}</h1>
+      <h1 class="title">
+        <a routerLink="./{{ mail.id }}" #anchor>{{ mail.subject }}</a>
+      </h1>
     </div>
-    <div class="actions">
+    <div class="actions" (click)="$event.stopPropagation()">
       <ng-container *ngIf="breakpoints['tablet-landscape']">
         <button mat-icon-button>
           <mat-icon svgIcon="star"></mat-icon>

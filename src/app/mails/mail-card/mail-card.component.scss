@@ -57,6 +57,9 @@
       :host.read & {
         color: map.get(theming.$theme, 'color', 'foreground', 'secondary-text');
       }
+      a:focus {
+        text-decoration: underline;
+      }
     }
   }
 

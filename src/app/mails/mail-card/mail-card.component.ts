@@ -1,9 +1,11 @@
 import {
   Component,
+  ElementRef,
   HostBinding,
   HostListener,
   Input,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { BreakpointManager } from 'src/app/core/breakpoint.manager';
 
@@ -24,6 +26,8 @@ export class MailCardComponent implements OnInit {
     return this.mailService.isMailRead(this.mail);
   }
 
+  @ViewChild('anchor') private anchorElementRef!: ElementRef<HTMLAnchorElement>;
+
   constructor(
     private breakpointManager: BreakpointManager,
     private mailService: MailService,
@@ -32,6 +36,7 @@ export class MailCardComponent implements OnInit {
   ngOnInit(): void {}
 
   @HostListener('click') onClick(): void {
+    this.anchorElementRef.nativeElement.click();
     this.mailService.markMailAsRead(this.mail);
   }
 }
