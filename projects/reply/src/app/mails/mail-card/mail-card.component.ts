@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { BreakpointManager } from 'src/app/core/breakpoint.manager';
+import { BreakpointManager } from 'projects/reply/src/app/core/breakpoint.manager';
 
 import { Mail } from '../shared/mail.model';
 import { MailService } from '../shared/mail.service';

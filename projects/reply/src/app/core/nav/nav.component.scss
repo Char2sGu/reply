@@ -1,8 +1,8 @@
 @use 'sass:map' as map;
 @use 'sass:color' as color;
-@use 'src/styles/theming' as theming;
-@use 'src/styles/scrollbar' as scrollbar;
-@use 'src/styles/animation-curves' as animation-curves;
+@use 'projects/reply/src/styles/theming' as theming;
+@use 'projects/reply/src/styles/scrollbar' as scrollbar;
+@use 'projects/reply/src/styles/animation-curves' as animation-curves;
 
 $heightOnPhone: 56px;
 

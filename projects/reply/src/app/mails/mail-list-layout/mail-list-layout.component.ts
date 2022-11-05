@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BreakpointManager } from 'projects/reply/src/app/core/breakpoint.manager';
+import { Layout } from 'projects/reply/src/app/core/layout.service';
 import { map } from 'rxjs';
-import { BreakpointManager } from 'src/app/core/breakpoint.manager';
-import { Layout } from 'src/app/core/layout.service';
 
 @Component({
   selector: 'rpl-mail-list-layout',

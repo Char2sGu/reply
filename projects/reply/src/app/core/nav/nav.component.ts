@@ -19,8 +19,8 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
+import { FadeThroughAnimation } from 'projects/reply/src/app/shared/animations';
 import { delay, filter, first, switchMap } from 'rxjs';
-import { FadeThroughAnimation } from 'src/app/shared/animations';
 
 import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
 import { Layout } from '../layout.service';

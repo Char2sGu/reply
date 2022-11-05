@@ -10,7 +10,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:wsl": "CHROME_BIN=\"/mnt/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe\" TEMP=\"C:/temp\" npm test",
-    "format": "prettier --write \"{*,src/**/*}.{html,css,less,scss,sass,ts,js,json,md}\" && eslint \"src/**/*.ts\" --cache --fix"
+    "format": "prettier --write \"{*,projects/**/*}.{html,css,less,scss,sass,ts,js,json,md}\" && eslint \"projects/**/*.ts\" --cache --fix"
   },
   "private": true,
   "dependencies": {

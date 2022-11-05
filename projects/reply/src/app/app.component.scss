@@ -1,5 +1,5 @@
 @use 'sass:map' as map;
-@use 'src/styles/theming' as theming;
+@use 'projects/reply/src/styles/theming' as theming;
 
 :host {
   display: grid;
