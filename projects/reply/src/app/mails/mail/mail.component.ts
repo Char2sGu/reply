@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { first, Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 import { Mail } from '../core/mail.model';
 import { MailService } from '../core/mail.service';
@@ -9,6 +14,7 @@ import { MailService } from '../core/mail.service';
   selector: 'rpl-mail',
   templateUrl: './mail.component.html',
   styleUrls: ['./mail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailComponent implements OnInit {
   mail$!: Observable<Mail>;
@@ -16,15 +22,16 @@ export class MailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private mailService: MailService,
+    private changeDetector: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       const mailId: string = params['mailId'];
-      this.mail$ = this.mailService.getMailById(mailId);
-      this.mail$.pipe(first()).subscribe((mail) => {
-        this.mailService.markMailAsRead(mail);
-      });
+      this.mail$ = this.mailService
+        .getMailById(mailId)
+        .pipe(tap((mail) => this.mailService.markMailAsRead(mail)));
+      this.changeDetector.detectChanges();
     });
   }
 }

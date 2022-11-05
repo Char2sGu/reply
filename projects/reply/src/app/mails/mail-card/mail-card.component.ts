@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostBinding,
@@ -17,6 +18,7 @@ import { MailService } from '../core/mail.service';
   selector: 'rpl-mail-card',
   templateUrl: './mail-card.component.html',
   styleUrls: ['./mail-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailCardComponent implements OnInit {
   @Input() mail!: Mail;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { BreakpointManager } from '../breakpoint.manager';
 
@@ -6,6 +6,7 @@ import { BreakpointManager } from '../breakpoint.manager';
   selector: 'rpl-nav-menu',
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavMenuComponent implements OnInit {
   constructor(public breakpointManager: BreakpointManager) {}

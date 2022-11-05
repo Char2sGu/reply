@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 
@@ -9,6 +9,7 @@ import { Layout } from '@/app/core/layout.service';
   selector: 'rpl-mail-list-layout',
   templateUrl: './mail-list-layout.component.html',
   styleUrls: ['./mail-list-layout.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailListLayoutComponent implements OnInit {
   breakpoints$ = this.breakpointManager.breakpoints$;

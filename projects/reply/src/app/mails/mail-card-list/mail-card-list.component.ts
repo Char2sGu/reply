@@ -1,4 +1,10 @@
-import { Component, OnInit, TrackByFunction } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TrackByFunction,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -9,6 +15,7 @@ import { MailService } from '../core/mail.service';
   selector: 'rpl-mail-card-list',
   templateUrl: './mail-card-list.component.html',
   styleUrls: ['./mail-card-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailCardListComponent implements OnInit {
   mails$!: Observable<Mail[]>;
@@ -17,12 +24,14 @@ export class MailCardListComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private mailService: MailService,
+    private changeDetector: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       const mailboxName = params['mailboxName'];
       this.mails$ = this.mailService.getMailsByMailbox(mailboxName);
+      this.changeDetector.detectChanges();
     });
   }
 }

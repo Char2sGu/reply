@@ -9,6 +9,8 @@ import { Overlay, OverlayContainer, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -33,6 +35,7 @@ import { Layout } from '../layout.service';
   selector: 'rpl-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('arrow', [
       state('true', style({ transform: 'rotate(180deg)' })),
@@ -88,6 +91,7 @@ export class NavComponent implements OnInit, AfterViewInit {
     private overlayManager: Overlay,
     private elementRef: ElementRef<HTMLElement>,
     private viewContainerRef: ViewContainerRef,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -129,6 +133,7 @@ export class NavComponent implements OnInit, AfterViewInit {
       });
       this.bottomMenuExpanded = false;
       this.bottomMenuOpened = false;
+      this.changeDetectorRef.detectChanges();
     }
     this.bottomMenuToggling = false;
   }
