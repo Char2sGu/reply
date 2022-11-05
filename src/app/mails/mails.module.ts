@@ -4,9 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 
+import { ScrollingModule } from '../scrolling/scrolling.module';
 import { DateDistancePipe } from '../shared/date-distance.pipe';
-import { ScrollDirectionDirective } from '../shared/scroll-direction.directive';
-import { ScrollStateDirective } from '../shared/scrolling-state.directive';
 import { SearchButtonComponent } from '../shared/search-button/search-button.component';
 import { MailComponent } from './mail/mail.component';
 import { MailCardComponent } from './mail-card/mail-card.component';
@@ -31,9 +30,8 @@ import { MailsRoutingModule } from './mails-routing.module';
     MatButtonModule,
     MatRippleModule,
     MatIconModule,
+    ScrollingModule,
     DateDistancePipe,
-    ScrollDirectionDirective,
-    ScrollStateDirective,
     SearchButtonComponent,
   ],
 })

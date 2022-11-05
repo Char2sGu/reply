@@ -20,7 +20,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { NavComponent } from './core/nav/nav.component';
 import { NavAvatarButtonComponent } from './core/nav-avatar-button/nav-avatar-button.component';
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
-import { ScrollStateDirective } from './shared/scrolling-state.directive';
+import { ScrollingModule } from './scrolling/scrolling.module';
 import { SearchButtonComponent } from './shared/search-button/search-button.component';
 import { SettingsButtonComponent } from './shared/settings-button/settings-button.component';
 
@@ -44,7 +44,7 @@ import { SettingsButtonComponent } from './shared/settings-button/settings-butto
     MatListModule,
     SearchButtonComponent,
     SettingsButtonComponent,
-    ScrollStateDirective,
+    ScrollingModule,
   ],
   providers: [
     {

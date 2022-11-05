@@ -21,7 +21,6 @@ import {
 
 @Directive({
   selector: '[scrolling],[scrollStart],[scrollStop]',
-  standalone: true,
 })
 export class ScrollStateDirective {
   @Input('scrolling') className?: string;
