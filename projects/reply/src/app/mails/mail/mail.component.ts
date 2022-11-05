@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { first, Observable } from 'rxjs';
 
-import { Mail } from '../shared/mail.model';
-import { MailService } from '../shared/mail.service';
+import { Mail } from '../core/mail.model';
+import { MailService } from '../core/mail.service';
 
 @Component({
   selector: 'rpl-mail',

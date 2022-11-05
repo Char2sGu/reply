@@ -21,7 +21,7 @@ import {
 import { AnimationCurves } from '@angular/material/core';
 import { delay, filter, first, switchMap } from 'rxjs';
 
-import { FadeThroughAnimation } from '@/app/shared/animations';
+import { FadeThroughAnimation } from '@/app/core/animations';
 
 import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
 import { Layout } from '../layout.service';

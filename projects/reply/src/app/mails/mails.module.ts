@@ -5,8 +5,8 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ScrollingModule } from '@reply/scrolling';
 
-import { DateDistancePipe } from '../shared/date-distance.pipe';
-import { SearchButtonComponent } from '../shared/search-button/search-button.component';
+import { DateDistancePipe } from '../standalone/date-distance.pipe';
+import { SearchButtonComponent } from '../standalone/search-button/search-button.component';
 import { MailComponent } from './mail/mail.component';
 import { MailCardComponent } from './mail-card/mail-card.component';
 import { MailCardListComponent } from './mail-card-list/mail-card-list.component';

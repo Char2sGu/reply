@@ -10,8 +10,8 @@ import {
 
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
 
-import { Mail } from '../shared/mail.model';
-import { MailService } from '../shared/mail.service';
+import { Mail } from '../core/mail.model';
+import { MailService } from '../core/mail.service';
 
 @Component({
   selector: 'rpl-mail-card',

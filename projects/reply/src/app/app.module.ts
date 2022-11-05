@@ -21,8 +21,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { NavComponent } from './core/nav/nav.component';
 import { NavAvatarButtonComponent } from './core/nav-avatar-button/nav-avatar-button.component';
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
-import { SearchButtonComponent } from './shared/search-button/search-button.component';
-import { SettingsButtonComponent } from './shared/settings-button/settings-button.component';
+import { SearchButtonComponent } from './standalone/search-button/search-button.component';
+import { SettingsButtonComponent } from './standalone/settings-button/settings-button.component';
 
 @NgModule({
   declarations: [
