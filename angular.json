@@ -28,6 +28,9 @@
               "projects/reply/src/assets"
             ],
             "styles": ["projects/reply/src/styles/index.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["projects/reply/src"]
+            },
             "scripts": []
           },
           "configurations": {

@@ -1,4 +1,4 @@
-import { Contact } from 'projects/reply/src/app/shared/contact.model';
+import { Contact } from '@/app/shared/contact.model';
 
 export interface Mail {
   id: string;

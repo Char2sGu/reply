@@ -1,7 +1,7 @@
 @use 'sass:map' as map;
 @use 'sass:color' as color;
-@use 'projects/reply/src/styles/theming' as theming;
-@use 'projects/reply/src/styles/scrollbar' as scrollbar;
+@use 'styles/theming' as theming;
+@use 'styles/scrollbar' as scrollbar;
 
 :host {
   display: contents;
