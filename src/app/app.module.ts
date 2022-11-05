@@ -14,13 +14,13 @@ import {
   SafeValue,
 } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ScrollingModule } from '@reply/scrolling';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NavComponent } from './core/nav/nav.component';
 import { NavAvatarButtonComponent } from './core/nav-avatar-button/nav-avatar-button.component';
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
-import { ScrollingModule } from './scrolling/scrolling.module';
 import { SearchButtonComponent } from './shared/search-button/search-button.component';
 import { SettingsButtonComponent } from './shared/settings-button/settings-button.component';
 

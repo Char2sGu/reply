@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { ScrollingModule } from '@reply/scrolling';
 
-import { ScrollingModule } from '../scrolling/scrolling.module';
 import { DateDistancePipe } from '../shared/date-distance.pipe';
 import { SearchButtonComponent } from '../shared/search-button/search-button.component';
 import { MailComponent } from './mail/mail.component';
