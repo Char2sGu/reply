@@ -19,6 +19,8 @@ import {
   timer,
 } from 'rxjs';
 
+import { ScrollingModuleConfig } from './scrolling.module-config';
+
 @Directive({
   selector: '[scrolling],[scrollStart],[scrollStop]',
 })
@@ -31,10 +33,18 @@ export class ScrollStateDirective {
 
   private scroll$ = new Subject<null>();
 
-  constructor(private renderer: Renderer2, private elementRef: ElementRef) {
+  constructor(
+    private config: ScrollingModuleConfig,
+    private renderer: Renderer2,
+    private elementRef: ElementRef,
+  ) {
     this.scrolling$ = this.scroll$.pipe(
       switchMap(() =>
-        timer(500).pipe(ignoreElements(), startWith(true), endWith(false)),
+        timer(this.config.scrollStopDelay).pipe(
+          ignoreElements(),
+          startWith(true),
+          endWith(false),
+        ),
       ),
       distinctUntilChanged(),
       shareReplay(1),

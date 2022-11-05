@@ -5,7 +5,7 @@ import {
   HostListener,
   Output,
 } from '@angular/core';
-import { bufferCount, map, startWith, Subject } from 'rxjs';
+import { map, pairwise, startWith, Subject } from 'rxjs';
 
 @Directive({
   selector: '[scrollUp],[scrollDown]',
@@ -17,7 +17,7 @@ export class ScrollDirectionDirective {
   private scrollTop$ = new Subject<number>();
   private scrollTopDiff$ = this.scrollTop$.pipe(
     startWith(0),
-    bufferCount(2),
+    pairwise(),
     map(([prev, curr]) => curr - prev),
   );
 

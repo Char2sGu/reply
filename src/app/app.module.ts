@@ -42,9 +42,9 @@ import { SettingsButtonComponent } from './shared/settings-button/settings-butto
     MatButtonModule,
     MatIconModule,
     MatListModule,
+    ScrollingModule.forRoot(),
     SearchButtonComponent,
     SettingsButtonComponent,
-    ScrollingModule,
   ],
   providers: [
     {
