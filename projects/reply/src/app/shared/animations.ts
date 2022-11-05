@@ -125,6 +125,7 @@ export class SharedAxisAnimation extends Animation {
     ]),
   ]);
 
+  // eslint-disable-next-line max-lines-per-function
   static override apply(
     axis: 'x' | 'y' | 'z',
     mode: 'forward' | 'backward',
