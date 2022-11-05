@@ -1,4 +1,6 @@
-@mixin scrollbar($color) {
+@use 'sass:color' as color;
+
+@mixin scrollbar($regular-color, $hover-color, $activation-selector) {
   &::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -7,7 +9,10 @@
     border-radius: 4px;
     background-color: transparent;
   }
-  &:hover::-webkit-scrollbar-thumb {
-    background-color: $color;
+  &#{$activation-selector}::-webkit-scrollbar-thumb {
+    background-color: $regular-color;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: $hover-color;
   }
 }

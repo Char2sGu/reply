@@ -11,7 +11,7 @@ import { bufferCount, map, startWith, Subject } from 'rxjs';
   selector: '[scrollUp],[scrollDown]',
   standalone: true,
 })
-export class DirectionalScrollEventsDirective {
+export class ScrollDirectionDirective {
   @Output() scrollDown = new EventEmitter();
   @Output() scrollUp = new EventEmitter();
 

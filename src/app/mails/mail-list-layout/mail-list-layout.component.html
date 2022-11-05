@@ -3,6 +3,7 @@
     class="content"
     (scrollUp)="layout.contentFavored = false"
     (scrollDown)="layout.contentFavored = true"
+    scrolling="scrolling"
   >
     <rpl-mail-card-list #list></rpl-mail-card-list>
     <div *ngIf="!(list.mails$ | async)?.length" class="empty-prompt">

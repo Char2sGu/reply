@@ -1,4 +1,5 @@
 @use 'sass:map' as map;
+@use 'sass:color' as color;
 @use 'src/styles/theming' as theming;
 @use 'src/styles/scrollbar' as scrollbar;
 
@@ -28,7 +29,17 @@
   overflow-y: auto;
 
   @include scrollbar.scrollbar(
-    map.get(theming.$theme, 'color', 'foreground', 'divider')
+    $regular-color:
+      color.change(
+        map.get(theming.$theme, 'color', 'foreground', 'base'),
+        $alpha: 0.12
+      ),
+    $hover-color:
+      color.change(
+        map.get(theming.$theme, 'color', 'foreground', 'base'),
+        $alpha: 0.4
+      ),
+    $activation-selector: '.scrolling'
   );
 
   .empty-prompt {

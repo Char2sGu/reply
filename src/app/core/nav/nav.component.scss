@@ -58,10 +58,17 @@ $heightOnPhone: 56px;
   color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
 
   @include scrollbar.scrollbar(
-    color.change(
-      map.get(theming.$theme, 'color', 'primary', 'default-contrast'),
-      $alpha: 0.12
-    )
+    $regular-color:
+      color.change(
+        map.get(theming.$theme, 'color', 'primary', 'default-contrast'),
+        $alpha: 0.12
+      ),
+    $hover-color:
+      color.change(
+        map.get(theming.$theme, 'color', 'primary', 'default-contrast'),
+        $alpha: 0.3
+      ),
+    $activation-selector: '.scrolling'
   );
 
   :host-context(.tablet-portrait) & {
