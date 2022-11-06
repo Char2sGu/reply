@@ -1,5 +1,5 @@
 <ng-container *ngIf="breakpoints$ | async as breakpoints">
-  <div
+  <rpl-content
     class="content"
     (scrollUp)="layout.contentFavored = false"
     (scrollDown)="layout.contentFavored = true"
@@ -11,7 +11,7 @@
         Empty in {{ mailboxName }}
       </ng-container>
     </div>
-  </div>
+  </rpl-content>
   <div class="actions" *ngIf="breakpoints['tablet-portrait']">
     <rpl-search-button></rpl-search-button>
   </div>

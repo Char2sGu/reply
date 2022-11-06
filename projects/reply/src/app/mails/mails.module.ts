@@ -5,6 +5,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ScrollingModule } from '@reply/scrolling';
 
+import { ContentComponent } from '../standalone/content/content.component';
 import { DateDistancePipe } from '../standalone/date-distance.pipe';
 import { SearchButtonComponent } from '../standalone/search-button/search-button.component';
 import { MailComponent } from './mail/mail.component';
@@ -35,6 +36,7 @@ import { AvatarUrlDefaultPipe } from './shared/avatar-url-default.pipe';
     ScrollingModule,
     DateDistancePipe,
     SearchButtonComponent,
+    ContentComponent,
   ],
 })
 export class MailsModule {}

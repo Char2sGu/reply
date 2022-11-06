@@ -28,8 +28,7 @@ import { FadeThroughAnimation } from '@/app/core/animations';
 import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
 import { Layout } from '../layout.service';
 
-// There is no need to unsubscribe in this file as this component exists for
-// the lifetime of the app.
+// TODO: dispose bottom menu on navigation
 
 @Component({
   selector: 'rpl-nav',
