@@ -1,3 +1,8 @@
+@use 'sass:map' as map;
+@use 'sass:color' as color;
+@use 'styles/theming' as theming;
+@use 'styles/scrollbar' as scrollbar;
+
 :host {
   display: block;
 }
@@ -5,4 +10,17 @@
 .wrapper {
   height: 100%;
   overflow-y: auto;
+  @include scrollbar.scrollbar(
+    $regular-color:
+      color.change(
+        map.get(theming.$theme, 'color', 'foreground', 'base'),
+        $alpha: 0.12
+      ),
+    $hover-color:
+      color.change(
+        map.get(theming.$theme, 'color', 'foreground', 'base'),
+        $alpha: 0.4
+      ),
+    $activation-selector: '.scrolling'
+  );
 }
