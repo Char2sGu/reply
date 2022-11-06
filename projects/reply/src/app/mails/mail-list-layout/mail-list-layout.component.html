@@ -5,7 +5,7 @@
     (scrollDown)="layout.contentFavored = true"
     scrolling="scrolling"
   >
-    <rpl-mail-card-list #list></rpl-mail-card-list>
+    <rpl-mail-card-list class="list" #list></rpl-mail-card-list>
     <div *ngIf="!(list.mails$ | async)?.length" class="empty-prompt">
       <ng-container *ngIf="mailboxName$ | async as mailboxName">
         Empty in {{ mailboxName }}

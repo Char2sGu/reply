@@ -16,9 +16,11 @@
     grid-column: span 7 / -3;
   }
 
-  padding: 4px 4px;
-  :host-context(.tablet-portrait) & {
-    padding: 32px 0;
+  .list {
+    margin: 4px 4px;
+    :host-context(.tablet-portrait) & {
+      margin: 32px 0;
+    }
   }
 
   .empty-prompt {
