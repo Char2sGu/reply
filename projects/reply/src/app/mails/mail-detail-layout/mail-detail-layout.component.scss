@@ -14,3 +14,8 @@ rpl-content {
     grid-column: span 9 / -2;
   }
 }
+
+rpl-mail {
+  margin: 4px;
+  min-height: calc(100% - 4px * 2);
+}

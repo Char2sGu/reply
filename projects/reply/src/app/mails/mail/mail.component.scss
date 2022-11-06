@@ -3,9 +3,12 @@
 
 :host {
   display: block;
-  margin: 4px;
-  padding: 16px;
   background-color: map.get(theming.$theme, 'color', 'background', 'card');
+}
+
+.wrapper {
+  height: 100%;
+  padding: 16px;
 }
 
 .title-line {

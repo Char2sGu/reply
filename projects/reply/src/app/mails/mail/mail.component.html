@@ -1,25 +1,27 @@
 <ng-container *ngIf="mail$ | async as mail">
-  <div class="title-line">
-    <h1 class="mat-display-1">{{ mail.subject }}</h1>
-    <button mat-icon-button routerLink="..">
-      <mat-icon fontSet="filled" fontIcon="expand_more"></mat-icon>
-    </button>
-  </div>
+  <div class="wrapper">
+    <div class="title-line">
+      <h1 class="mat-display-1">{{ mail.subject }}</h1>
+      <button mat-icon-button routerLink="..">
+        <mat-icon fontSet="filled" fontIcon="expand_more"></mat-icon>
+      </button>
+    </div>
 
-  <div class="info-line">
-    <div class="left-group">
-      <div class="mat-body-1">
-        <span>{{ mail.sender.name }}</span> -
-        <span>{{ mail.sentAt | dateDistance }}</span>
+    <div class="info-line">
+      <div class="left-group">
+        <div class="mat-body-1">
+          <span>{{ mail.sender.name }}</span> -
+          <span>{{ mail.sentAt | dateDistance }}</span>
+        </div>
+        <div class="mat-small">
+          <span>To me</span>
+        </div>
       </div>
-      <div class="mat-small">
-        <span>To me</span>
+      <div class="right-group">
+        <img [src]="mail.sender.avatarUrl | avatarUrlDefault" alt="Avatar" />
       </div>
     </div>
-    <div class="right-group">
-      <img [src]="mail.sender.avatarUrl | avatarUrlDefault" alt="Avatar" />
-    </div>
-  </div>
 
-  <div class="content">{{ mail.content }}</div>
+    <div class="content">{{ mail.content }}</div>
+  </div>
 </ng-container>
