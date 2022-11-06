@@ -3,6 +3,37 @@
 
 :host {
   display: block;
-  padding: 24px;
+  margin: 4px;
+  padding: 16px;
   background-color: map.get(theming.$theme, 'color', 'background', 'card');
+}
+
+.title-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  h1 {
+    margin-bottom: 0;
+  }
+}
+
+.info-line {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  .left-group {
+    flex-grow: 1;
+  }
+  .right-group {
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+  }
+}
+
+.content {
+  margin-top: 16px;
+  white-space: pre-line;
 }
