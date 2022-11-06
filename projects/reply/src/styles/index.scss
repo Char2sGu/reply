@@ -18,8 +18,9 @@ a {
   }
 }
 
-// bug fix
-.mat-icon-button .mat-button-wrapper {
+// Fix material button content positioning
+.mat-icon-button .mat-button-wrapper,
+.mat-fab .mat-button-wrapper {
   display: inline-block;
   transform: translateY(-2px);
 }
@@ -29,7 +30,7 @@ a {
 }
 
 // Prevent <router-outlet> elements from interfering the layout because they
-// can be blocks in certain layouts.
+// can be "blocks" in certain layouts although they should be "inline".
 router-outlet {
   display: none;
 }
