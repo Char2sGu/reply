@@ -6,6 +6,8 @@ import {
   OnInit,
 } from '@angular/core';
 
+import { LayoutConfig } from '../layout.config';
+
 @Component({
   selector: 'rpl-nav-floating-action-button',
   templateUrl: './nav-floating-action-button.component.html',
@@ -15,7 +17,7 @@ import {
 export class NavFloatingActionButtonComponent implements OnInit {
   @Input() @HostBinding('class.expanded') expanded = false;
 
-  constructor() {}
+  constructor(public layoutConfig: LayoutConfig) {}
 
   ngOnInit(): void {}
 }

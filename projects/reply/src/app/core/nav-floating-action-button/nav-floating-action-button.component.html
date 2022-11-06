@@ -1,4 +1,12 @@
-<button mat-fab>
-  <mat-icon class="icon" fontSet="filled" fontIcon="edit"></mat-icon>
-  <span class="text" *ngIf="expanded">Compose</span>
-</button>
+<ng-container *ngIf="layoutConfig.value$ | async as layoutConfig">
+  <button mat-fab [routerLink]="layoutConfig.navFabConfig.link">
+    <mat-icon
+      class="icon"
+      fontSet="filled"
+      [fontIcon]="layoutConfig.navFabConfig.icon"
+    ></mat-icon>
+    <span class="text" *ngIf="expanded">
+      {{ layoutConfig.navFabConfig.text }}
+    </span>
+  </button>
+</ng-container>
