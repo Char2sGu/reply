@@ -1,3 +1,8 @@
+@use 'sass:map' as map;
+@use 'sass:color' as color;
+@use 'styles/theming' as theming;
+@use 'styles/scrollbar' as scrollbar;
+
 :host {
   display: contents;
 }
@@ -16,6 +21,22 @@
   :host-context(.laptop) & {
     grid-column: span 9 / -2;
   }
+
+  overflow-y: auto;
+
+  @include scrollbar.scrollbar(
+    $regular-color:
+      color.change(
+        map.get(theming.$theme, 'color', 'foreground', 'base'),
+        $alpha: 0.12
+      ),
+    $hover-color:
+      color.change(
+        map.get(theming.$theme, 'color', 'foreground', 'base'),
+        $alpha: 0.4
+      ),
+    $activation-selector: '.scrolling'
+  );
 }
 
 rpl-mail {
