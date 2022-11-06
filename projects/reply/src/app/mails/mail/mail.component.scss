@@ -9,6 +9,9 @@
 .wrapper {
   height: 100%;
   padding: 16px;
+  :host-context(.tablet-portrait) & {
+    padding: 32px 16px;
+  }
 }
 
 .title-line {
