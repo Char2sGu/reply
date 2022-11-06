@@ -106,14 +106,17 @@
           "options": {
             "main": "projects/reply/src/test.ts",
             "polyfills": "projects/reply/src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
+            "tsConfig": "projects/reply/tsconfig.spec.json",
+            "karmaConfig": "projects/reply/karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/reply/src/favicon.ico",
               "projects/reply/src/assets"
             ],
-            "styles": ["projects/reply/src/styles.scss"],
+            "styles": ["projects/reply/src/styles/index.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["projects/reply/src"]
+            },
             "scripts": []
           }
         }
