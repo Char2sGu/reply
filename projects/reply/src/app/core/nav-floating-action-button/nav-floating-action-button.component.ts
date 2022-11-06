@@ -1,3 +1,4 @@
+import { transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 
+import { FadeThroughAnimation } from '../animations';
 import { LayoutConfig } from '../layout.config';
 
 @Component({
@@ -13,6 +15,14 @@ import { LayoutConfig } from '../layout.config';
   templateUrl: './nav-floating-action-button.component.html',
   styleUrls: ['./nav-floating-action-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    // TODO: fix the element position offset
+    trigger('fadeThrough', [
+      transition(':enter', []),
+      transition(':leave', []),
+      transition('* => *', [FadeThroughAnimation.apply()]),
+    ]),
+  ],
 })
 export class NavFloatingActionButtonComponent implements OnInit {
   @Input() @HostBinding('class.expanded') expanded = false;

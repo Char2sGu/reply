@@ -44,14 +44,11 @@ export class PreserveChildRoutesAnimation extends Animation {
 export class FadeThroughAnimation extends Animation {
   static override content: AnimationReferenceMetadata = animation([
     MaterialPatchesAnimation.apply(),
-    style({ position: 'relative', width: '*', height: '*' }),
-    query(':enter, :leave', [
-      style({ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }),
-    ]),
     group([
       query(
         ':leave',
         [
+          style({ position: 'absolute' }),
           PreserveChildRoutesAnimation.apply(),
           style({ opacity: 1 }),
           animate(
