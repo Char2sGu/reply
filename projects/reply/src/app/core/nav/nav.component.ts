@@ -26,7 +26,7 @@ import { delay, filter, first, switchMap } from 'rxjs';
 import { FadeThroughAnimation } from '@/app/core/animations';
 
 import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
-import { Layout } from '../layout.service';
+import { LayoutConfig } from '../layout.config';
 
 // TODO: dispose bottom menu on navigation
 
@@ -85,7 +85,7 @@ export class NavComponent implements OnInit, AfterViewInit {
 
   constructor(
     public breakpointManager: BreakpointManager,
-    private layout: Layout,
+    private layout: LayoutConfig,
     private overlayContainerRef: OverlayContainer,
     private overlayManager: Overlay,
     private elementRef: ElementRef<HTMLElement>,

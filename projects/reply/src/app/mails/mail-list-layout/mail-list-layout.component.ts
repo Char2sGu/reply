@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
-import { Layout } from '@/app/core/layout.service';
+import { LayoutConfig } from '@/app/core/layout.config';
 
 @Component({
   selector: 'rpl-mail-list-layout',
@@ -16,7 +16,7 @@ export class MailListLayoutComponent implements OnInit {
   mailboxName$ = this.route.params.pipe(map((params) => params['mailboxName']));
 
   constructor(
-    public layout: Layout,
+    public layout: LayoutConfig,
     private route: ActivatedRoute,
     private breakpointManager: BreakpointManager,
   ) {}

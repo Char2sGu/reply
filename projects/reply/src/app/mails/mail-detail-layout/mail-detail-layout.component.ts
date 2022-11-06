@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
-import { Layout } from '@/app/core/layout.service';
+import { LayoutConfig } from '@/app/core/layout.config';
 
 @Component({
   selector: 'rpl-mail-detail-layout',
@@ -9,7 +9,7 @@ import { Layout } from '@/app/core/layout.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailDetailLayoutComponent implements OnInit {
-  constructor(public layout: Layout) {}
+  constructor(public layout: LayoutConfig) {}
 
   ngOnInit(): void {}
 }
