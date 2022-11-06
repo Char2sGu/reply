@@ -20,6 +20,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NavComponent } from './core/nav/nav.component';
 import { NavAvatarButtonComponent } from './core/nav-avatar-button/nav-avatar-button.component';
+import { NavFloatingActionButtonComponent } from './core/nav-floating-action-button/nav-floating-action-button.component';
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
 import { SearchButtonComponent } from './standalone/search-button/search-button.component';
 import { SettingsButtonComponent } from './standalone/settings-button/settings-button.component';
@@ -30,6 +31,7 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
     NavComponent,
     NavMenuComponent,
     NavAvatarButtonComponent,
+    NavFloatingActionButtonComponent,
   ],
   imports: [
     BrowserModule,

@@ -112,13 +112,10 @@ $heightOnPhone: 56px;
 }
 
 .fab {
-  $diameter: 56px;
-  width: $diameter;
-  height: $diameter;
-  border-radius: calc($diameter / 2);
-  box-shadow: none !important;
-
   position: absolute;
+
+  // TODO: dirty implementation
+  $diameter: 56px;
   left: calc(50% - calc($diameter / 2));
   bottom: calc(100% - calc($diameter / 2));
 
@@ -128,25 +125,8 @@ $heightOnPhone: 56px;
     position: unset;
   }
 
-  :host-context(.laptop) & {
-    width: unset;
-    padding: 0 18px;
-  }
-
   :host.unfavored & {
     bottom: 8px;
-  }
-
-  .text {
-    display: none;
-    :host-context(.laptop) & {
-      display: initial;
-      margin: 0 16px;
-      font-size: 16px;
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
   }
 }
 

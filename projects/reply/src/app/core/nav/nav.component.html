@@ -34,10 +34,12 @@
       </div>
     </div>
 
-    <button mat-fab class="fab" *ngIf="!bottomMenuOpened" @fab>
-      <mat-icon class="icon" fontSet="filled" fontIcon="edit"></mat-icon>
-      <span class="text">Compose</span>
-    </button>
+    <rpl-nav-floating-action-button
+      class="fab"
+      *ngIf="!bottomMenuOpened"
+      [expanded]="breakpoints['laptop']"
+      @fab
+    ></rpl-nav-floating-action-button>
 
     <div class="side-menu" *ngIf="breakpoints['tablet-portrait']">
       <rpl-nav-menu></rpl-nav-menu>
