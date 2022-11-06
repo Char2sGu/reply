@@ -8,6 +8,7 @@ import { ScrollingModule } from '@reply/scrolling';
 import { ContentComponent } from '../standalone/content/content.component';
 import { DateDistancePipe } from '../standalone/date-distance.pipe';
 import { SearchButtonComponent } from '../standalone/search-button/search-button.component';
+import { AvatarUrlDefaultPipe } from './core/avatar-url-default.pipe';
 import { MailComponent } from './mail/mail.component';
 import { MailCardComponent } from './mail-card/mail-card.component';
 import { MailCardListComponent } from './mail-card-list/mail-card-list.component';
@@ -15,7 +16,6 @@ import { MailDetailLayoutComponent } from './mail-detail-layout/mail-detail-layo
 import { MailListLayoutComponent } from './mail-list-layout/mail-list-layout.component';
 import { MailsComponent } from './mails.component';
 import { MailsRoutingModule } from './mails-routing.module';
-import { AvatarUrlDefaultPipe } from './shared/avatar-url-default.pipe';
 
 @NgModule({
   declarations: [
