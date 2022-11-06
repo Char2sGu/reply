@@ -14,6 +14,7 @@ import { MailDetailLayoutComponent } from './mail-detail-layout/mail-detail-layo
 import { MailListLayoutComponent } from './mail-list-layout/mail-list-layout.component';
 import { MailsComponent } from './mails.component';
 import { MailsRoutingModule } from './mails-routing.module';
+import { AvatarUrlDefaultPipe } from './shared/avatar-url-default.pipe';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     MailCardComponent,
     MailCardListComponent,
     MailComponent,
+    AvatarUrlDefaultPipe,
   ],
   imports: [
     CommonModule,

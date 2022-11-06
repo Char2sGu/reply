@@ -24,10 +24,7 @@
         </button>
       </ng-container>
       <button mat-icon-button class="avatar-button">
-        <img
-          [src]="mail.sender.avatarUrl ?? 'assets/avatar-express.png'"
-          alt="Avatar"
-        />
+        <img [src]="mail.sender.avatarUrl | avatarUrlDefault" alt="Avatar" />
       </button>
     </div>
   </div>
