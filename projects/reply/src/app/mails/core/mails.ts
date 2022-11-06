@@ -10,7 +10,7 @@ export const MAILS: Mail[] = [
       name: 'Google Express',
       email: '',
     },
-    recipient: { name: '', email: '' },
+    recipients: [],
     content: `
 Cucumber Mask Facial has shipped.
 
@@ -29,7 +29,7 @@ As always, thank you for shopping with us and we hope you love our specially for
       email: '',
       avatarUrl: 'assets/avatar-2.jpg',
     },
-    recipient: { name: '', email: '' },
+    recipients: [],
     content: `
 I'll be in your neighborhood doing errands and was hoping to catch you for a coffee this Saturday. If you don't have anything scheduled, it would be great to see you! It feels like its been forever.
 
@@ -50,7 +50,7 @@ Ali
       email: '',
       avatarUrl: 'assets/avatar-3.jpg',
     },
-    recipient: { name: '', email: '' },
+    recipients: [],
     content: `
 Here are some great shots from my trip...
 `.trim(),
@@ -65,7 +65,7 @@ Here are some great shots from my trip...
       email: '',
       avatarUrl: 'assets/avatar-4.jpg',
     },
-    recipient: { name: '', email: '' },
+    recipients: [],
     content: `
 Thought we might be able to go over some details about our upcoming vacation.
 
@@ -84,7 +84,7 @@ Maybe we can jump on the phone later today if you have a second.
       email: '',
       avatarUrl: 'assets/avatar-5.jpg',
     },
-    recipient: { name: '', email: '' },
+    recipients: [],
     content: `
 Hi friends,
 
@@ -103,7 +103,7 @@ Anyway, it turns out she is on the organizing committee for the high school reun
       email: '',
       avatarUrl: 'assets/avatar-6.jpg',
     },
-    recipient: { name: '', email: '' },
+    recipients: [],
     content: `
 Raspberry Pie: We should make this pie recipe tonight! The filling is very quick to put together.
 `.trim(),
