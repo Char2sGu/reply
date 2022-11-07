@@ -2,6 +2,7 @@ import {
   animate,
   animateChild,
   query,
+  stagger,
   state,
   style,
   transition,
@@ -24,8 +25,6 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { delay, filter, first, switchMap } from 'rxjs';
-
-import { FadeThroughAnimation } from '@/app/core/animations';
 
 import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
 import { LayoutConfig } from '../layout.config';
@@ -57,7 +56,17 @@ import { LayoutConfig } from '../layout.config';
       ]),
     ]),
     trigger('bottomActions', [
-      transition('false <=> true', [FadeThroughAnimation.apply()]),
+      transition('* => *', [
+        query(':enter', [
+          style({ transform: 'scale(72%)', opacity: 0 }),
+          stagger('40ms', [
+            animate(
+              `210ms 90ms ${AnimationCurves.DECELERATION_CURVE}`,
+              style({ transform: 'scale(1)', opacity: 1 }),
+            ),
+          ]),
+        ]),
+      ]),
     ]),
   ],
 })

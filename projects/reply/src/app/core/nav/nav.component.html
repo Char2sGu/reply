@@ -25,16 +25,21 @@
           <rpl-nav-avatar-button></rpl-nav-avatar-button>
           <rpl-settings-button></rpl-settings-button>
         </div>
-        <div
-          class="group"
-          *ngIf="!breakpoints['tablet-portrait']"
-          [@bottomActions]="bottomMenuOpened"
-        >
-          <rpl-settings-button *ngIf="bottomMenuOpened"></rpl-settings-button>
+        <div class="group" *ngIf="!breakpoints['tablet-portrait']">
           <ng-container
-            [cdkPortalOutlet]="layoutConfig.navBottomActionsPortal"
-            *ngIf="!bottomMenuOpened"
-          ></ng-container>
+            *ngIf="
+              bottomMenuOpened
+                ? settingsButtonPortal
+                : layoutConfig.navBottomActionsPortal as portal
+            "
+          >
+            <div class="wrapper" [@bottomActions]="portal">
+              <ng-container [cdkPortalOutlet]="portal"></ng-container>
+            </div>
+          </ng-container>
+          <ng-template cdkPortal #settingsButtonPortal="cdkPortal">
+            <rpl-settings-button></rpl-settings-button>
+          </ng-template>
         </div>
       </div>
 
