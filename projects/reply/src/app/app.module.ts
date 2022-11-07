@@ -14,8 +14,10 @@ import {
   SafeValue,
 } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { ScrollingModule } from '@reply/scrolling';
 
+import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NavComponent } from './core/nav/nav.component';
@@ -37,6 +39,12 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
     HammerModule,
     HttpClientModule,
     AppRoutingModule,

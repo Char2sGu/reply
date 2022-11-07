@@ -42,13 +42,16 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/reply/src/favicon.ico",
-              "projects/reply/src/assets"
+              "projects/reply/src/assets",
+              "projects/reply/src/manifest.webmanifest"
             ],
             "styles": ["projects/reply/src/styles/index.scss"],
             "stylePreprocessorOptions": {
               "includePaths": ["projects/reply/src"]
             },
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "projects/reply/ngsw-config.json"
           },
           "configurations": {
             "production": {
@@ -111,7 +114,8 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/reply/src/favicon.ico",
-              "projects/reply/src/assets"
+              "projects/reply/src/assets",
+              "projects/reply/src/manifest.webmanifest"
             ],
             "styles": ["projects/reply/src/styles/index.scss"],
             "stylePreprocessorOptions": {
