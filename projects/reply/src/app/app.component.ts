@@ -21,8 +21,10 @@ export class AppComponent {
     ['desktop']: false,
   };
 
-  constructor(breakpointManager: BreakpointManager) {
-    breakpointManager.breakpoints$.subscribe((v) => {
+  breakpoints$ = this.breakpointManager.breakpoints$;
+
+  constructor(private breakpointManager: BreakpointManager) {
+    this.breakpointManager.breakpoints$.subscribe((v) => {
       this.breakpointMap = v;
     });
   }

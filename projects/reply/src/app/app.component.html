@@ -1,6 +1,8 @@
-<rpl-nav
-  *ngIf="breakpointMap['tablet-portrait']"
-  [mode]="breakpointMap['laptop'] ? 'drawer' : 'rail'"
-  @nav
-></rpl-nav>
-<router-outlet></router-outlet>
+<ng-container *ngIf="breakpoints$ | async as breakpoints">
+  <rpl-nav
+    *ngIf="breakpoints['tablet-portrait']"
+    [mode]="breakpoints['laptop'] ? 'drawer' : 'rail'"
+    @nav
+  ></rpl-nav>
+  <router-outlet></router-outlet>
+</ng-container>
