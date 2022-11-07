@@ -28,6 +28,7 @@ import { delay, filter, first, switchMap } from 'rxjs';
 
 import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
 import { LayoutConfig } from '../layout.config';
+import { RouterStatus } from '../router-status.state';
 
 // TODO: dispose bottom menu on navigation
 
@@ -91,6 +92,7 @@ export class NavComponent implements OnInit, AfterViewInit {
 
   constructor(
     public layoutConfig: LayoutConfig,
+    private routerStatus: RouterStatus,
     private breakpointManager: BreakpointManager,
     private overlayContainerRef: OverlayContainer,
     private overlayManager: Overlay,
@@ -170,6 +172,9 @@ export class NavComponent implements OnInit, AfterViewInit {
     });
     this.bottomMenuOverlayRef
       .backdropClick()
+      .subscribe(() => this.toggleBottomMenu(false));
+    this.routerStatus.navigating$
+      .pipe(filter((navigating) => navigating))
       .subscribe(() => this.toggleBottomMenu(false));
     this.bottomMenuPortal = new TemplatePortal(
       this.bottomMenuTemplate,
