@@ -16,7 +16,6 @@ import { LayoutConfig } from '../layout.config';
   styleUrls: ['./nav-floating-action-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-    // TODO: fix the element position offset
     trigger('fadeThrough', [
       transition(':enter', []),
       transition(':leave', []),

@@ -73,8 +73,3 @@ $theme: map.deep-merge(
     ),
   )
 );
-
-@mixin material-styles() {
-  @include mat.core($typography-config);
-  @include mat.all-component-themes($theme);
-}

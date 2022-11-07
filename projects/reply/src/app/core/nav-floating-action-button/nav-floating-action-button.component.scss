@@ -15,6 +15,10 @@
   }
 }
 
+.icon {
+  line-height: 0; // height would go wrong if line-height is not set to 0
+}
+
 .text {
   margin: 0 16px;
   font-size: 16px;

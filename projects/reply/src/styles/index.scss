@@ -1,9 +1,11 @@
+@use '@angular/material' as mat;
 @use 'theming' as theming;
 
 @import 'https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;900&display=swap';
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 
-@include theming.material-styles();
+@include mat.core(theming.$typography-config);
+@include mat.all-component-themes(theming.$theme);
 
 body {
   margin: 0;
@@ -19,10 +21,15 @@ a {
 }
 
 // Fix material button content positioning
-.mat-icon-button .mat-button-wrapper,
-.mat-fab .mat-button-wrapper {
+.mat-icon-button .mat-button-wrapper {
   display: inline-block;
   transform: translateY(-2px);
+}
+.mat-fab .mat-button-wrapper {
+  height: 100%;
+  display: inline-flex !important;
+  align-items: center;
+  padding: initial !important;
 }
 
 * {

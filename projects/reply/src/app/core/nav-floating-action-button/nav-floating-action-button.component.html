@@ -1,12 +1,13 @@
 <ng-container *ngIf="layoutConfig.value$ | async as layoutConfig">
   <ng-container *ngIf="layoutConfig.navFabConfig as config">
-    <a mat-fab [routerLink]="config.link" [@fadeThrough]="config">
-      <mat-icon
-        class="icon"
-        *rplReattachOnChange="config"
-        fontSet="filled"
-        [fontIcon]="config.icon"
-      ></mat-icon>
+    <a mat-fab [routerLink]="config.link">
+      <span class="icon" [@fadeThrough]="config">
+        <mat-icon
+          *rplReattachOnChange="config"
+          fontSet="filled"
+          [fontIcon]="config.icon"
+        ></mat-icon
+      ></span>
       <span class="text">
         {{ config.text }}
       </span>
