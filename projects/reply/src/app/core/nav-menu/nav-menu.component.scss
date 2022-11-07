@@ -7,7 +7,7 @@
   user-select: none;
 }
 
-.item {
+[mat-list-item] {
   color: inherit;
   &.active {
     color: map.get(theming.$theme, 'color', 'accent', 'default');
@@ -16,21 +16,15 @@
   ::ng-deep {
     .mat-list-item-content {
       padding: 0 16px;
-      :host-context(.tablet-portrait) & {
+      :not(:host.expanded) & {
         padding: initial;
         justify-content: center;
-      }
-      :host-context(.laptop) & {
-        padding: 0 16px;
       }
     }
 
     .mat-list-text {
-      :host-context(.tablet-portrait) & {
+      :not(:host.expanded) & {
         display: none;
-      }
-      :host-context(.laptop) & {
-        display: initial;
       }
     }
   }

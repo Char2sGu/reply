@@ -1,6 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-
-import { BreakpointManager } from '../breakpoint.manager';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Input,
+  OnInit,
+} from '@angular/core';
 
 @Component({
   selector: 'rpl-nav-menu',
@@ -9,7 +13,9 @@ import { BreakpointManager } from '../breakpoint.manager';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavMenuComponent implements OnInit {
-  constructor(public breakpointManager: BreakpointManager) {}
+  @Input() @HostBinding('class.expanded') expanded = true;
+
+  constructor() {}
 
   ngOnInit(): void {}
 }
