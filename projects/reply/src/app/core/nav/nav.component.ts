@@ -56,6 +56,8 @@ import { LayoutConfig } from '../layout.config';
       ]),
     ]),
     trigger('bottomActions', [
+      transition(':enter', []),
+      transition(':leave', []),
       transition('* => *', [
         query(':enter', [
           style({ transform: 'scale(72%)', opacity: 0 }),
