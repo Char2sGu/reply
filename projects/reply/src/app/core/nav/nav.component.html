@@ -51,9 +51,11 @@
         @fab
       ></rpl-nav-floating-action-button>
 
-      <div class="side-menu" *ngIf="breakpoints['tablet-portrait']">
-        <rpl-nav-menu [expanded]="breakpoints['laptop']"></rpl-nav-menu>
-      </div>
+      <rpl-nav-menu
+        class="menu"
+        *ngIf="breakpoints['tablet-portrait']"
+        [expanded]="breakpoints['laptop']"
+      ></rpl-nav-menu>
     </div>
 
     <ng-template #bottomMenu>

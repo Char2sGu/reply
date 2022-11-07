@@ -16,16 +16,18 @@ $heightOnPhone: 56px;
   }
 }
 
-.background {
+%fill-host {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+.background {
+  @extend %fill-host;
   background-color: map.get(theming.$theme, 'color', 'primary', 'default');
   z-index: -1;
-  transition: clip-path 300ms animation-curves.$standard,
-    transform 200ms animation-curves.$standard;
 
   // Use style sheet rather than animation engine here because the clip-path
   // property is so long that it pollutes the DOM tree.
@@ -43,15 +45,13 @@ $heightOnPhone: 56px;
       transform: unset;
     }
   }
+
+  transition: clip-path 300ms animation-curves.$standard,
+    transform 200ms animation-curves.$standard;
 }
 
-:host > .content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
+.content {
+  @extend %fill-host;
   display: flex;
   align-items: center;
   padding: 0 4px;
@@ -130,6 +130,6 @@ $heightOnPhone: 56px;
   }
 }
 
-.side-menu {
+.menu {
   width: 100%;
 }
