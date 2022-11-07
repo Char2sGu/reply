@@ -13,12 +13,16 @@
     width: unset;
     padding: 0 18px;
   }
+}
 
-  .text {
-    margin: 0 16px;
-    font-size: 16px;
-    font-weight: 900;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+.text {
+  margin: 0 16px;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  :not(:host.expanded) & {
+    display: none;
   }
 }
