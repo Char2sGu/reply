@@ -62,6 +62,8 @@ import { LayoutConfig } from '../layout.config';
   ],
 })
 export class NavComponent implements OnInit, AfterViewInit {
+  breakpoints$ = this.breakpointManager.breakpoints$;
+
   logoClick$ = new EventEmitter();
 
   bottomMenuPan$ = new EventEmitter<'up' | 'down'>();
@@ -73,12 +75,12 @@ export class NavComponent implements OnInit, AfterViewInit {
   @ViewChild('bottomMenu') private bottomMenuTemplate!: TemplateRef<unknown>;
 
   @HostBinding('class.unfavored') get unfavored(): boolean {
-    return this.layout.contentFavored;
+    return this.layoutConfig.contentFavored;
   }
 
   constructor(
-    public breakpointManager: BreakpointManager,
-    private layout: LayoutConfig,
+    public layoutConfig: LayoutConfig,
+    private breakpointManager: BreakpointManager,
     private overlayContainerRef: OverlayContainer,
     private overlayManager: Overlay,
     private elementRef: ElementRef<HTMLElement>,

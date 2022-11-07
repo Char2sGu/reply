@@ -1,9 +1,14 @@
+import { TemplatePortal } from '@angular/cdk/portal';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
@@ -19,10 +24,14 @@ import { MailService } from '../core/mail.service';
   styleUrls: ['./mail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MailComponent implements OnInit, OnDestroy {
+export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   mail$!: Observable<Mail>;
 
   private navFabConfigBackup = { ...this.layoutConfig.navFabConfig };
+
+  @ViewChild('bottomActions')
+  private bottomActionsTemplate!: TemplateRef<unknown>;
+  private bottomActionsPortalBackup = this.layoutConfig.navBottomActionsPortal;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,14 +39,10 @@ export class MailComponent implements OnInit, OnDestroy {
     private layoutConfig: LayoutConfig,
     private mailService: MailService,
     private changeDetector: ChangeDetectorRef,
+    private viewContainer: ViewContainerRef,
   ) {}
 
   ngOnInit(): void {
-    this.layoutConfig.navFabConfig = {
-      text: 'Reply',
-      icon: 'reply_all',
-      link: `${this.router.url}/reply`,
-    };
     this.route.params.subscribe((params) => {
       const mailId: string = params['mailId'];
       this.mail$ = this.mailService
@@ -47,7 +52,20 @@ export class MailComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.layoutConfig.navFabConfig = {
+      text: 'Reply',
+      icon: 'reply_all',
+      link: `${this.router.url}/reply`,
+    };
+    this.layoutConfig.navBottomActionsPortal = new TemplatePortal(
+      this.bottomActionsTemplate,
+      this.viewContainer,
+    );
+  }
+
   ngOnDestroy(): void {
     this.layoutConfig.navFabConfig = this.navFabConfigBackup;
+    this.layoutConfig.navBottomActionsPortal = this.bottomActionsPortalBackup;
   }
 }

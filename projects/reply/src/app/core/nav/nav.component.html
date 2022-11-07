@@ -1,67 +1,72 @@
-<ng-container *ngIf="breakpointManager.breakpoints$ | async as breakpoints">
-  <div
-    class="background"
-    [class.clipped]="!breakpoints['tablet-portrait'] && !bottomMenuOpened"
-  ></div>
-
-  <div class="content" scrolling="scrolling">
-    <div class="primary-line">
-      <div class="group">
-        <button mat-button class="logo" (click)="logoClick$.emit()">
-          <div class="logo-content">
-            <mat-icon
-              class="logo-arrow"
-              fontSet="filled"
-              fontIcon="arrow_drop_up"
-              [@arrow]="!!bottomMenuOpened"
-            ></mat-icon>
-            <mat-icon class="logo-icon" svgIcon="logo"></mat-icon>
-            <span class="logo-text">Reply</span>
-          </div>
-        </button>
-      </div>
-      <div class="group" *ngIf="breakpoints['laptop']">
-        <rpl-nav-avatar-button></rpl-nav-avatar-button>
-        <rpl-settings-button></rpl-settings-button>
-      </div>
-      <div
-        class="group"
-        *ngIf="!breakpoints['tablet-portrait']"
-        [@bottomActions]="bottomMenuOpened"
-      >
-        <rpl-settings-button *ngIf="bottomMenuOpened"></rpl-settings-button>
-        <rpl-search-button *ngIf="!bottomMenuOpened"></rpl-search-button>
-      </div>
-    </div>
-
-    <rpl-nav-floating-action-button
-      class="fab"
-      *ngIf="!bottomMenuOpened"
-      [expanded]="breakpoints['laptop']"
-      @fab
-    ></rpl-nav-floating-action-button>
-
-    <div class="side-menu" *ngIf="breakpoints['tablet-portrait']">
-      <rpl-nav-menu></rpl-nav-menu>
-    </div>
-  </div>
-
-  <ng-template #bottomMenu>
+<ng-container *ngIf="breakpoints$ | async as breakpoints">
+  <ng-container *ngIf="layoutConfig.value$ | async as layoutConfig">
     <div
-      class="bottom-menu"
-      [class.expanded]="bottomMenuExpanded"
-      (panup)="bottomMenuPan$.emit('up')"
-      (pandown)="bottomMenuPan$.emit('down')"
-      @bottomMenu
-    >
-      <div class="avatar-bar">
-        <div class="bar-background"></div>
-        <div class="wrapper-background"></div>
-        <rpl-nav-avatar-button class="avatar"></rpl-nav-avatar-button>
+      class="background"
+      [class.clipped]="!breakpoints['tablet-portrait'] && !bottomMenuOpened"
+    ></div>
+
+    <div class="content" scrolling="scrolling">
+      <div class="primary-line">
+        <div class="group">
+          <button mat-button class="logo" (click)="logoClick$.emit()">
+            <div class="logo-content">
+              <mat-icon
+                class="logo-arrow"
+                fontSet="filled"
+                fontIcon="arrow_drop_up"
+                [@arrow]="!!bottomMenuOpened"
+              ></mat-icon>
+              <mat-icon class="logo-icon" svgIcon="logo"></mat-icon>
+              <span class="logo-text">Reply</span>
+            </div>
+          </button>
+        </div>
+        <div class="group" *ngIf="breakpoints['laptop']">
+          <rpl-nav-avatar-button></rpl-nav-avatar-button>
+          <rpl-settings-button></rpl-settings-button>
+        </div>
+        <div
+          class="group"
+          *ngIf="!breakpoints['tablet-portrait']"
+          [@bottomActions]="bottomMenuOpened"
+        >
+          <rpl-settings-button *ngIf="bottomMenuOpened"></rpl-settings-button>
+          <ng-container
+            [cdkPortalOutlet]="layoutConfig.navBottomActionsPortal"
+            *ngIf="!bottomMenuOpened"
+          ></ng-container>
+        </div>
       </div>
-      <div class="content">
+
+      <rpl-nav-floating-action-button
+        class="fab"
+        *ngIf="!bottomMenuOpened"
+        [expanded]="breakpoints['laptop']"
+        @fab
+      ></rpl-nav-floating-action-button>
+
+      <div class="side-menu" *ngIf="breakpoints['tablet-portrait']">
         <rpl-nav-menu></rpl-nav-menu>
       </div>
     </div>
-  </ng-template>
+
+    <ng-template #bottomMenu>
+      <div
+        class="bottom-menu"
+        [class.expanded]="bottomMenuExpanded"
+        (panup)="bottomMenuPan$.emit('up')"
+        (pandown)="bottomMenuPan$.emit('down')"
+        @bottomMenu
+      >
+        <div class="avatar-bar">
+          <div class="bar-background"></div>
+          <div class="wrapper-background"></div>
+          <rpl-nav-avatar-button class="avatar"></rpl-nav-avatar-button>
+        </div>
+        <div class="content">
+          <rpl-nav-menu></rpl-nav-menu>
+        </div>
+      </div>
+    </ng-template>
+  </ng-container>
 </ng-container>
