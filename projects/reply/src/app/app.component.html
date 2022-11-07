@@ -1,4 +1,2 @@
-<rpl-nav class="nav" @enterRemoved></rpl-nav>
-<main class="content">
-  <router-outlet></router-outlet>
-</main>
+<rpl-nav *ngIf="breakpointMap['tablet-portrait']" @nav></rpl-nav>
+<router-outlet></router-outlet>

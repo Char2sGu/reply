@@ -1,0 +1,6 @@
+<ng-container *ngIf="breakpoints$ | async as breakpoints">
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+  <rpl-nav *ngIf="!breakpoints['tablet-portrait']"></rpl-nav>
+</ng-container>

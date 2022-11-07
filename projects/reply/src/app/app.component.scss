@@ -22,23 +22,12 @@
   }
 }
 
-.nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  :host-context(.tablet-portrait) & {
-    position: relative;
-    grid-column: 1 / span 2;
-  }
+rpl-nav {
+  grid-column: 1 / span 2;
   :host-context(.tablet-landscape) & {
     grid-column: 1 / span 2;
   }
   :host-context(.laptop) & {
     grid-column: 1 / span 4;
   }
-}
-
-.content {
-  display: contents;
 }

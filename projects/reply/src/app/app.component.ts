@@ -9,8 +9,8 @@ import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-    // remove entering animations of all child elements of the target
-    trigger('enterRemoved', [transition(':enter', [])]),
+    // remove the initial entering animations of nav elements
+    trigger('nav', [transition(':enter', [])]),
   ],
 })
 export class AppComponent {

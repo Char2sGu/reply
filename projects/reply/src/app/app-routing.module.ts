@@ -7,6 +7,8 @@ import {
   TitleStrategy,
 } from '@angular/router';
 
+import { FoundationComponent } from './core/foundation/foundation.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -14,9 +16,15 @@ const routes: Routes = [
     redirectTo: 'mailboxes/Inbox/mails',
   },
   {
-    path: 'mailboxes/:mailboxName/mails',
-    loadChildren: () =>
-      import('./mails/mails.module').then((m) => m.MailsModule),
+    path: '',
+    component: FoundationComponent,
+    children: [
+      {
+        path: 'mailboxes/:mailboxName/mails',
+        loadChildren: () =>
+          import('./mails/mails.module').then((m) => m.MailsModule),
+      },
+    ],
   },
 ];
 
