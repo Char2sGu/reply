@@ -26,6 +26,10 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: '**',
+    redirectTo: 'mailboxes/Inbox/mails',
+  },
 ];
 
 @Injectable()
