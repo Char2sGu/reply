@@ -1,2 +1,6 @@
-<rpl-nav *ngIf="breakpointMap['tablet-portrait']" @nav></rpl-nav>
+<rpl-nav
+  *ngIf="breakpointMap['tablet-portrait']"
+  [mode]="breakpointMap['laptop'] ? 'drawer' : 'rail'"
+  @nav
+></rpl-nav>
 <router-outlet></router-outlet>

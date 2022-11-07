@@ -18,6 +18,7 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding,
+  Input,
   OnInit,
   TemplateRef,
   ViewChild,
@@ -25,9 +26,8 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { Router } from '@angular/router';
-import { delay, filter, first, switchMap } from 'rxjs';
+import { BehaviorSubject, delay, filter, first, switchMap } from 'rxjs';
 
-import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
 import { LayoutConfig } from '../layout.config';
 import { RouterStatus } from '../router-status.state';
 
@@ -75,7 +75,13 @@ import { RouterStatus } from '../router-status.state';
   ],
 })
 export class NavComponent implements OnInit, AfterViewInit {
-  breakpoints$ = this.breakpointManager.breakpoints$;
+  // prettier-ignore
+  @Input() set mode(value: NavMode) { this.mode$.next(value) }
+  mode$ = new BehaviorSubject<NavMode>('drawer');
+  @HostBinding('class') get modeClassBinding(): Record<string, boolean> {
+    const name = `mode-${this.mode$.getValue()}`;
+    return { [name]: true };
+  }
 
   logoClick$ = new EventEmitter();
 
@@ -95,7 +101,6 @@ export class NavComponent implements OnInit, AfterViewInit {
     public layoutConfig: LayoutConfig,
     private router: Router,
     private routerStatus: RouterStatus,
-    private breakpointManager: BreakpointManager,
     private overlayContainerRef: OverlayContainer,
     private overlayManager: Overlay,
     private elementRef: ElementRef<HTMLElement>,
@@ -106,8 +111,8 @@ export class NavComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.logoClick$
       .pipe(
-        switchMap(() => this.breakpointManager.breakpoints$.pipe(first())),
-        filter((breakpoints) => isPhone(breakpoints)),
+        switchMap(() => this.mode$.pipe(first())),
+        filter((mode) => mode === 'bar'),
       )
       .subscribe(() => {
         this.toggleBottomMenu();
@@ -157,11 +162,11 @@ export class NavComponent implements OnInit, AfterViewInit {
   }
 
   private setupOverlayContainer(): void {
-    this.breakpointManager.breakpoints$
+    this.mode$
       .pipe(delay(0)) // wait for DOM update
-      .subscribe((breakpoints) => {
+      .subscribe((mode) => {
         const overlayContainer = this.overlayContainerRef.getContainerElement();
-        if (isPhone(breakpoints)) {
+        if (mode === 'bar') {
           const navHeight = this.elementRef.nativeElement.offsetHeight;
           overlayContainer.style.height = `calc(100% - ${navHeight}px)`;
           overlayContainer.style.overflow = 'hidden';
@@ -184,20 +189,18 @@ export class NavComponent implements OnInit, AfterViewInit {
     this.bottomMenuOverlayRef
       .backdropClick()
       .subscribe(() => this.toggleBottomMenu(false));
-    this.routerStatus.navigating$
-      .pipe(filter((navigating) => navigating))
-      .subscribe(() => this.toggleBottomMenu(false));
     this.bottomMenuPortal = new TemplatePortal(
       this.bottomMenuTemplate,
       this.viewContainerRef,
     );
 
-    this.breakpointManager.breakpoints$.subscribe((breakpoints) => {
-      if (!isPhone(breakpoints)) this.toggleBottomMenu(false);
+    this.routerStatus.navigating$
+      .pipe(filter((navigating) => navigating))
+      .subscribe(() => this.toggleBottomMenu(false));
+    this.mode$.subscribe((mode) => {
+      if (mode !== 'bar') this.toggleBottomMenu(false);
     });
   }
 }
 
-function isPhone(breakpoints: BreakpointMap): boolean {
-  return !breakpoints['tablet-portrait'];
-}
+export type NavMode = 'drawer' | 'rail' | 'bar';
