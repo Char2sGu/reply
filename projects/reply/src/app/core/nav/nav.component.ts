@@ -138,7 +138,9 @@ export class NavComponent implements OnInit, AfterViewInit {
       // Perform a navigation so that the user can close the bottom menu by
       // clicking the back button of the browser because the bottom menu
       // will be closed on navigation.
-      this.router.navigate([this.router.url], { fragment: 'bottom-menu' });
+      const urlTree = this.router.parseUrl(this.router.url);
+      urlTree.fragment = 'bottom-menu';
+      this.router.navigateByUrl(urlTree);
     } else {
       this.bottomMenuPortal.detach();
       await new Promise((r) => {
@@ -147,7 +149,9 @@ export class NavComponent implements OnInit, AfterViewInit {
       this.bottomMenuExpanded = false;
       this.bottomMenuOpened = false;
       this.changeDetectorRef.detectChanges();
-      this.router.navigate([this.router.url], { fragment: undefined });
+      const urlTree = this.router.parseUrl(this.router.url);
+      urlTree.fragment = null;
+      this.router.navigateByUrl(urlTree);
     }
     this.bottomMenuToggling = false;
   }
