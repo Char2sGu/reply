@@ -13,7 +13,7 @@ import { LayoutConfig } from '@/app/core/layout.config';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContentComponent implements OnInit {
-  constructor(public layout: LayoutConfig) {}
+  constructor(public layoutConfig: LayoutConfig) {}
 
   ngOnInit(): void {}
 }
