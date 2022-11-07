@@ -1,0 +1,29 @@
+:host {
+  display: inline-block;
+  border-radius: 16px;
+}
+
+[mat-button] {
+  border-radius: inherit;
+  padding: initial;
+
+  .wrapper {
+    display: flex;
+    align-items: center;
+    padding: 16px 16px;
+    :host.dense & {
+      padding: 4px 16px;
+    }
+  }
+
+  .icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .text {
+    margin-left: 16px;
+    font-size: 20px;
+    text-transform: uppercase;
+  }
+}

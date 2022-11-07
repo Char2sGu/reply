@@ -8,18 +8,19 @@
     <div class="content" scrolling="scrolling">
       <div class="primary-line">
         <div class="group">
-          <button mat-button class="logo" (click)="logoClick$.emit()">
-            <div class="logo-content">
-              <mat-icon
-                class="logo-arrow"
-                fontSet="filled"
-                fontIcon="arrow_drop_up"
-                [@arrow]="!!bottomMenuOpened"
-              ></mat-icon>
-              <mat-icon class="logo-icon" svgIcon="logo"></mat-icon>
-              <span class="logo-text">Reply</span>
-            </div>
-          </button>
+          <rpl-nav-logo-button
+            [indicator]="!breakpoints['tablet-portrait'] ? arrow : undefined"
+            [dense]="!breakpoints['tablet-portrait']"
+            [expanded]="breakpoints['laptop']"
+            (click)="logoClick$.emit()"
+          ></rpl-nav-logo-button>
+          <ng-template #arrow>
+            <mat-icon
+              fontSet="filled"
+              fontIcon="arrow_drop_up"
+              [@arrow]="!!bottomMenuOpened"
+            ></mat-icon>
+          </ng-template>
         </div>
         <div class="group" *ngIf="breakpoints['laptop']">
           <rpl-nav-avatar-button></rpl-nav-avatar-button>

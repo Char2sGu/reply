@@ -23,6 +23,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { NavComponent } from './core/nav/nav.component';
 import { NavAvatarButtonComponent } from './core/nav-avatar-button/nav-avatar-button.component';
 import { NavFloatingActionButtonComponent } from './core/nav-floating-action-button/nav-floating-action-button.component';
+import { NavLogoButtonComponent } from './core/nav-logo-button/nav-logo-button.component';
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
 import { ReattachOnChangeDirective } from './standalone/reattach-on-change.directive';
 import { SearchButtonComponent } from './standalone/search-button/search-button.component';
@@ -32,6 +33,7 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
   declarations: [
     AppComponent,
     NavComponent,
+    NavLogoButtonComponent,
     NavMenuComponent,
     NavAvatarButtonComponent,
     NavFloatingActionButtonComponent,

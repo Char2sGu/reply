@@ -130,38 +130,6 @@ $heightOnPhone: 56px;
   }
 }
 
-.logo {
-  border-radius: 16px;
-  padding: initial;
-
-  &-content {
-    display: flex;
-    align-items: center;
-    padding: 4px 16px;
-    :host-context(.tablet-portrait) & {
-      padding: 16px 16px;
-    }
-  }
-  &-arrow {
-    :host-context(.tablet-portrait) & {
-      display: none;
-    }
-  }
-  &-icon {
-    width: 32px;
-    height: 32px;
-  }
-  &-text {
-    display: none;
-    :host-context(.laptop) & {
-      display: initial;
-      margin-left: 16px;
-      font-size: 20px;
-      text-transform: uppercase;
-    }
-  }
-}
-
 .side-menu {
   width: 100%;
 }

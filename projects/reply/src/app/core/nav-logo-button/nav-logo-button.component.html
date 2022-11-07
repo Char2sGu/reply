@@ -1,0 +1,10 @@
+<button mat-button class="logo">
+  <div class="wrapper">
+    <ng-container
+      *ngIf="indicator"
+      [ngTemplateOutlet]="indicator"
+    ></ng-container>
+    <mat-icon class="icon" svgIcon="logo"></mat-icon>
+    <span class="text" *ngIf="expanded">Reply</span>
+  </div>
+</button>
