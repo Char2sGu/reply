@@ -24,6 +24,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
+import { Router } from '@angular/router';
 import { delay, filter, first, switchMap } from 'rxjs';
 
 import { BreakpointManager, BreakpointMap } from '../breakpoint.manager';
@@ -92,6 +93,7 @@ export class NavComponent implements OnInit, AfterViewInit {
 
   constructor(
     public layoutConfig: LayoutConfig,
+    private router: Router,
     private routerStatus: RouterStatus,
     private breakpointManager: BreakpointManager,
     private overlayContainerRef: OverlayContainer,
@@ -133,14 +135,19 @@ export class NavComponent implements OnInit, AfterViewInit {
       this.bottomMenuOpened = true;
       this.bottomMenuExpanded = false;
       this.bottomMenuPortal.attach(this.bottomMenuOverlayRef);
+      // Perform a navigation so that the user can close the bottom menu by
+      // clicking the back button of the browser because the bottom menu
+      // will be closed on navigation.
+      this.router.navigate([this.router.url], { fragment: 'bottom-menu' });
     } else {
       this.bottomMenuPortal.detach();
       await new Promise((r) => {
-        setTimeout(r, 200); // delay for animation
+        setTimeout(r, 200); // delay for animation for better visuals
       });
       this.bottomMenuExpanded = false;
       this.bottomMenuOpened = false;
       this.changeDetectorRef.detectChanges();
+      this.router.navigate([this.router.url], { fragment: undefined });
     }
     this.bottomMenuToggling = false;
   }
