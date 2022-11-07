@@ -1,4 +1,4 @@
-import { transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +6,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
+import { AnimationCurves } from '@angular/material/core';
 
 import { FadeThroughAnimation } from '../animations';
 import { LayoutConfig } from '../layout.config';
@@ -16,7 +17,17 @@ import { LayoutConfig } from '../layout.config';
   styleUrls: ['./nav-floating-action-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-    trigger('fadeThrough', [
+    trigger('host', [
+      transition(':enter', [
+        style({ transform: 'scale(0.01)' }),
+        animate(`300ms ${AnimationCurves.STANDARD_CURVE}`),
+      ]),
+      transition(':leave', [
+        animate(`300ms ${AnimationCurves.STANDARD_CURVE}`),
+        style({ transform: 'scale(0.01)' }),
+      ]),
+    ]),
+    trigger('icon', [
       transition(':enter', []),
       transition(':leave', []),
       transition('* => *', [FadeThroughAnimation.apply()]),

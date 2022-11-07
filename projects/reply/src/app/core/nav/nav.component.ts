@@ -1,5 +1,7 @@
 import {
   animate,
+  animateChild,
+  query,
   state,
   style,
   transition,
@@ -43,16 +45,7 @@ import { LayoutConfig } from '../layout.config';
         animate(`200ms ${AnimationCurves.STANDARD_CURVE}`),
       ]),
     ]),
-    trigger('fab', [
-      transition(':enter', [
-        style({ transform: 'scale(0.01)' }),
-        animate(`300ms ${AnimationCurves.STANDARD_CURVE}`),
-      ]),
-      transition(':leave', [
-        animate(`300ms ${AnimationCurves.STANDARD_CURVE}`),
-        style({ transform: 'scale(0.01)' }),
-      ]),
-    ]),
+    trigger('fab', [transition(':leave', [query('@*', animateChild())])]),
     trigger('bottomMenu', [
       transition(':enter', [
         style({ transform: 'translateY(100%)' }),
