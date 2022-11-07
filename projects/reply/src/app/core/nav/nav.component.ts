@@ -61,7 +61,7 @@ import { RouterStatus } from '../router-status.state';
       transition(':leave', []),
       transition('* => *', [
         query(':enter', [
-          style({ transform: 'scale(72%)', opacity: 0 }),
+          style({ transform: 'scale(92%)', opacity: 0 }),
           stagger('40ms', [
             animate(
               `210ms 90ms ${AnimationCurves.DECELERATION_CURVE}`,
