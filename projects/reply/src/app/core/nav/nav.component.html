@@ -57,22 +57,12 @@
     </div>
 
     <ng-template #bottomMenu>
-      <div
-        class="bottom-menu"
-        [class.expanded]="bottomMenuExpanded"
+      <rpl-nav-bottom-menu
+        [expanded]="bottomMenuExpanded"
         (panup)="bottomMenuPan$.emit('up')"
         (pandown)="bottomMenuPan$.emit('down')"
         @bottomMenu
-      >
-        <div class="avatar-bar">
-          <div class="bar-background"></div>
-          <div class="wrapper-background"></div>
-          <rpl-nav-avatar-button class="avatar"></rpl-nav-avatar-button>
-        </div>
-        <div class="content">
-          <rpl-nav-menu></rpl-nav-menu>
-        </div>
-      </div>
+      ></rpl-nav-bottom-menu>
     </ng-template>
   </ng-container>
 </ng-container>
