@@ -7,4 +7,5 @@ export interface Mail {
   recipients: Contact[];
   sentAt: Date;
   content: string;
+  mailboxName: string;
 }

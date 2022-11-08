@@ -46,7 +46,7 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.route.params.subscribe((params) => {
       const mailId: string = params['mailId'];
       this.mail$ = this.mailService
-        .getMailById(mailId)
+        .getMail$ById(mailId)
         .pipe(tap((mail) => this.mailService.markMailAsRead(mail)));
       this.changeDetector.detectChanges();
     });

@@ -19,6 +19,7 @@ Keep an eye out for a package to arrive between this Thursday and next Tuesday. 
 As always, thank you for shopping with us and we hope you love our specially formulated Cucumber Mask!
 `.trim(),
     sentAt: dayjs().subtract(15, 'minutes').toDate(),
+    mailboxName: 'Inbox',
   },
 
   {
@@ -40,6 +41,7 @@ Talk to you soon,
 Ali
 `.trim(),
     sentAt: dayjs().subtract(4, 'hours').toDate(),
+    mailboxName: 'Inbox',
   },
 
   {
@@ -55,6 +57,7 @@ Ali
 Here are some great shots from my trip...
 `.trim(),
     sentAt: dayjs().subtract(5, 'hours').toDate(),
+    mailboxName: 'Inbox',
   },
 
   {
@@ -74,6 +77,7 @@ I've been doing a bit of research and have come across a few paces in Northern B
 Maybe we can jump on the phone later today if you have a second.
 `.trim(),
     sentAt: dayjs().subtract(9, 'hours').toDate(),
+    mailboxName: 'Inbox',
   },
 
   {
@@ -93,6 +97,7 @@ I was at the grocery store on Sunday night.. when I ran into Genie Williams! I a
 Anyway, it turns out she is on the organizing committee for the high school reunion this fall. I don't know if you were planning on going or not, but she could definitely use our help in trying to track down lots of missing alums. If you can make it, we're doing a little phone-tree party at her place next Saturday, hoping that if we can find one person, a few more will...
 `.trim(),
     sentAt: dayjs().subtract(12, 'hours').toDate(),
+    mailboxName: 'Inbox',
   },
 
   {
@@ -108,5 +113,6 @@ Anyway, it turns out she is on the organizing committee for the high school reun
 Raspberry Pie: We should make this pie recipe tonight! The filling is very quick to put together.
 `.trim(),
     sentAt: dayjs().subtract(18, 'hours').toDate(),
+    mailboxName: 'Inbox',
   },
 ];

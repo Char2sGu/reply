@@ -30,7 +30,7 @@ export class MailCardListComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       const mailboxName = params['mailboxName'];
-      this.mails$ = this.mailService.getMailsByMailbox(mailboxName);
+      this.mails$ = this.mailService.getMails$ByMailbox(mailboxName);
       this.changeDetector.detectChanges();
     });
   }

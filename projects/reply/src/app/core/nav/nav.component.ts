@@ -79,7 +79,7 @@ export class NavComponent implements OnInit, AfterViewInit {
   @Input() set mode(value: NavMode) { this.mode$.next(value) }
   mode$ = new BehaviorSubject<NavMode>('drawer');
   @HostBinding('class') get modeClassBinding(): Record<string, boolean> {
-    const name = `mode-${this.mode$.getValue()}`;
+    const name = `mode-${this.mode$.value}`;
     return { [name]: true };
   }
 
