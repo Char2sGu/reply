@@ -3,6 +3,7 @@
 
 :host {
   display: grid;
+
   background-color: map.get(
     theming.$theme,
     'color',
@@ -20,6 +21,8 @@
   &.tablet-landscape {
     grid-template-columns: 0px repeat(12, 1fr) 0px;
   }
+
+  overflow: hidden; // animations might cause overflow
 }
 
 rpl-nav {
