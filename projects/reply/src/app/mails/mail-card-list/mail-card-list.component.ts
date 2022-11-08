@@ -7,9 +7,8 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
+import { FlipScopeConfig } from '@reply/flip';
 import { Observable } from 'rxjs';
-
-import { FlipScopeConfig } from '@/app/flip/flip-scope.directive';
 
 import { Mail } from '../core/mail.model';
 import { MailService } from '../core/mail.service';

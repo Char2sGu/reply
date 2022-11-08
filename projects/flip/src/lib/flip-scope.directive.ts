@@ -14,10 +14,10 @@ import { filter, takeUntil, tap } from 'rxjs';
 import { FlipItemDirective } from './flip-item.directive';
 
 @Directive({
-  selector: '[rplFlipScope]',
+  selector: '[libFlipScope]',
 })
 export class FlipScopeDirective implements OnInit, OnDestroy {
-  @Input('rplFlipScope') config: FlipScopeConfig = {};
+  @Input('libFlipScope') config: FlipScopeConfig = {};
 
   @Input() set autoFlipOn(value: unknown) {
     this.autoFlip = true;

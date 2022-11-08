@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { FlipItemDirective } from './flip-item.directive';
@@ -11,7 +10,6 @@ import { FlipScopeDirective } from './flip-scope.directive';
  */
 @NgModule({
   declarations: [FlipItemDirective, FlipScopeDirective],
-  imports: [CommonModule],
   exports: [FlipItemDirective, FlipScopeDirective],
 })
 export class FlipModule {}

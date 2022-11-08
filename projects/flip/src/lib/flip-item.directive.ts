@@ -1,20 +1,12 @@
-import {
-  Directive,
-  ElementRef,
-  Host,
-  HostBinding,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Directive, ElementRef, Host, HostBinding, Input } from '@angular/core';
 
 import { FlipScopeDirective } from './flip-scope.directive';
 
 @Directive({
-  selector: '[rplFlipItem]',
+  selector: '[libFlipItem]',
 })
-export class FlipItemDirective implements OnInit, OnDestroy {
-  @Input('rplFlipItem') @HostBinding('attr.data-flip-key') key =
+export class FlipItemDirective {
+  @Input('libFlipItem') @HostBinding('attr.data-flip-key') key =
     this.getDefaultKey();
 
   constructor(

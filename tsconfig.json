@@ -19,7 +19,8 @@
     "importHelpers": true,
     "paths": {
       "@/*": ["projects/reply/src/*"],
-      "@reply/scrolling": ["dist/scrolling"]
+      "@reply/scrolling": ["dist/scrolling"],
+      "@reply/flip": ["dist/flip"]
     },
     "target": "es2020",
     "module": "es2020",
