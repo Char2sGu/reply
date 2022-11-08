@@ -1,6 +1,7 @@
 import { Injectable, NgModule } from '@angular/core';
 import {
   DefaultTitleStrategy,
+  PreloadAllModules,
   RouterModule,
   RouterStateSnapshot,
   Routes,
@@ -51,7 +52,9 @@ export class AppTitleStrategy extends DefaultTitleStrategy {
 }
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+  ],
   exports: [RouterModule],
   providers: [{ provide: TitleStrategy, useClass: AppTitleStrategy }],
 })
