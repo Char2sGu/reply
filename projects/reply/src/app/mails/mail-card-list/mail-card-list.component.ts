@@ -30,7 +30,10 @@ export class MailCardListComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       const mailboxName = params['mailboxName'];
-      this.mails$ = this.mailService.getMails$ByMailbox(mailboxName);
+      this.mails$ =
+        mailboxName === 'Starred'
+          ? this.mailService.getMailsStarred$()
+          : this.mailService.getMails$ByMailbox(mailboxName);
       this.changeDetector.detectChanges();
     });
   }

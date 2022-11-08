@@ -24,16 +24,14 @@
 
     <div class="content">{{ mail.content }}</div>
   </div>
-</ng-container>
 
-<ng-template #bottomActions>
-  <button mat-icon-button>
-    <mat-icon svgIcon="star"></mat-icon>
-  </button>
-  <button mat-icon-button>
-    <mat-icon svgIcon="delete"></mat-icon>
-  </button>
-  <button mat-icon-button>
-    <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
-  </button>
-</ng-template>
+  <ng-template #bottomActions>
+    <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
+    <button mat-icon-button>
+      <mat-icon svgIcon="delete"></mat-icon>
+    </button>
+    <button mat-icon-button>
+      <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
+    </button>
+  </ng-template>
+</ng-container>

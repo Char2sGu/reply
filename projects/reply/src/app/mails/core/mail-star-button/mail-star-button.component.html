@@ -1,0 +1,8 @@
+<button
+  mat-icon-button
+  [disabled]="busy$ | async"
+  [color]="(active$ | async) ? 'accent' : undefined"
+  (click)="click$.emit()"
+>
+  <mat-icon svgIcon="star"></mat-icon>
+</button>
