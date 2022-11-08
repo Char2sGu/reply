@@ -41,7 +41,7 @@ export class MailCardListComponent implements OnInit {
         mailboxName === 'Starred'
           ? this.mailService.getMailsStarred$()
           : this.mailService.getMails$ByMailbox(mailboxName);
-      this.changeDetector.detectChanges();
+      this.changeDetector.markForCheck();
     });
   }
 }

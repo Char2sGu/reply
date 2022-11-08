@@ -48,7 +48,7 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mail$ = this.mailService
         .getMail$ById(mailId)
         .pipe(tap((mail) => this.mailService.markMailAsRead(mail)));
-      this.changeDetector.detectChanges();
+      this.changeDetector.markForCheck();
     });
   }
 

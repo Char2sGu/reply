@@ -165,7 +165,7 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
       });
       this.bottomMenuExpanded = false;
       this.bottomMenuOpened = false;
-      this.changeDetectorRef.detectChanges();
+      this.changeDetectorRef.markForCheck();
       const urlTree = this.router.parseUrl(this.router.url);
       urlTree.fragment = null;
       this.router.navigateByUrl(urlTree);
