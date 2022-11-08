@@ -20,11 +20,14 @@ export class FlipScopeDirective implements OnInit, OnDestroy {
   @Input('libFlipScope') config?: FlipScopeConfig = {};
 
   @Input() set flipOn(value: unknown) {
+    if (!this.initialized) return;
     this.flipOnNextEvent = true;
+    this.save();
   }
 
   items = new Map<FlipItemDirective, HTMLElement>();
 
+  private initialized = false;
   private flipController!: FlipController;
   private flipOnNextEvent = false;
   private destroy$ = new EventEmitter();
@@ -40,6 +43,7 @@ export class FlipScopeDirective implements OnInit, OnDestroy {
       selector: () => [...this.items.values()],
       ...this.config,
     });
+
     // FLIP must be triggered after the DOM is updated and before it is
     // rendered. NgZone seems to be the only choice for the requirement.
     this.ngZone.onStable
@@ -49,6 +53,8 @@ export class FlipScopeDirective implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(() => this.flip());
+
+    this.initialized = true;
   }
 
   ngOnDestroy(): void {
