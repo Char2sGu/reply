@@ -17,7 +17,7 @@ import { FlipItemDirective } from './flip-item.directive';
   selector: '[libFlipScope]',
 })
 export class FlipScopeDirective implements OnInit, OnDestroy {
-  @Input('libFlipScope') config: FlipScopeConfig = {};
+  @Input('libFlipScope') config?: FlipScopeConfig = {};
 
   @Input() set autoFlipOn(value: unknown) {
     this.autoFlip = true;
