@@ -9,6 +9,7 @@ import { ContentComponent } from '../standalone/content/content.component';
 import { DateDistancePipe } from '../standalone/date-distance.pipe';
 import { SearchButtonComponent } from '../standalone/search-button/search-button.component';
 import { AvatarUrlDefaultPipe } from './core/avatar-url-default.pipe';
+import { MailDeleteButtonComponent } from './core/mail-delete-button/mail-delete-button.component';
 import { MailStarButtonComponent } from './core/mail-star-button/mail-star-button.component';
 import { MailComponent } from './mail/mail.component';
 import { MailCardComponent } from './mail-card/mail-card.component';
@@ -28,6 +29,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     MailComponent,
     AvatarUrlDefaultPipe,
     MailStarButtonComponent,
+    MailDeleteButtonComponent,
   ],
   imports: [
     CommonModule,
