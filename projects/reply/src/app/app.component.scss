@@ -23,6 +23,7 @@
 }
 
 rpl-nav {
+  grid-row: 1;
   grid-column: 1 / span 2;
   :host-context(.tablet-landscape) & {
     grid-column: 1 / span 2;

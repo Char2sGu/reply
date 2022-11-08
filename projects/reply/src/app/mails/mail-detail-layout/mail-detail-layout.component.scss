@@ -3,6 +3,7 @@
 }
 
 rpl-content {
+  grid-row: 1;
   grid-column: 1 / -1;
   :host-context(.tablet-portrait) & {
     grid-column: span 7 / -2;
