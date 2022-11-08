@@ -44,6 +44,10 @@ export class MailService {
     );
   }
 
+  deleteMail(mailId: Mail['id']): void {
+    this.mails$.next(this.mails$.value.filter((mail) => mail.id !== mailId));
+  }
+
   markMailAsRead(mail: Mail): void {
     this.mailsRead$.value.add(mail);
     this.mailsRead$.next(this.mailsRead$.value);

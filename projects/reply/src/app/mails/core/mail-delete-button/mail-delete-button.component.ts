@@ -24,7 +24,9 @@ export class MailDeleteButtonComponent implements OnInit {
 
   ngOnInit(): void {
     this.click$.subscribe(() => {
-      this.mailService.updateMail(this.mail.id, { mailboxName: 'Trash' });
+      if (this.mail.mailboxName === 'Trash')
+        this.mailService.deleteMail(this.mail.id);
+      else this.mailService.updateMail(this.mail.id, { mailboxName: 'Trash' });
     });
   }
 }
