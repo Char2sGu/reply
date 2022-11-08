@@ -66,7 +66,7 @@
   .actions {
     display: flex;
     gap: 8px;
-    mat-icon {
+    > * {
       :host.read & {
         color: map.get(theming.$theme, 'color', 'foreground', 'secondary-text');
       }
@@ -74,11 +74,6 @@
     .avatar-button {
       :host:hover & {
         background-color: #ffffff;
-      }
-      img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
       }
     }
   }
