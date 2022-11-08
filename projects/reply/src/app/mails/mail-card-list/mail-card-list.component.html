@@ -1,5 +1,5 @@
 <ng-container *ngIf="mails$ | async as mails">
-  <div class="wrapper" [libFlipScope]="flipConfig" [autoFlipOn]="mails">
+  <div class="wrapper" [libFlipScope]="flipConfig" [flipOn]="mails">
     <rpl-mail-card
       *ngFor="let mail of mails; let index = index; trackBy: mailTracker"
       [mail]="mail"

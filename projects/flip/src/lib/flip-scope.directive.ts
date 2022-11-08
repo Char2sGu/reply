@@ -19,14 +19,14 @@ import { FlipItemDirective } from './flip-item.directive';
 export class FlipScopeDirective implements OnInit, OnDestroy {
   @Input('libFlipScope') config?: FlipScopeConfig = {};
 
-  @Input() set autoFlipOn(value: unknown) {
-    this.autoFlip = true;
+  @Input() set flipOn(value: unknown) {
+    this.flipOnNextEvent = true;
   }
-  private autoFlip = false;
 
   items = new Map<FlipItemDirective, HTMLElement>();
 
   private flipController!: FlipController;
+  private flipOnNextEvent = false;
   private destroy$ = new EventEmitter();
 
   constructor(
@@ -44,12 +44,13 @@ export class FlipScopeDirective implements OnInit, OnDestroy {
     // rendered. NgZone seems to be the only choice for the requirement.
     this.ngZone.onStable
       .pipe(
-        filter(() => this.autoFlip),
-        tap(() => (this.autoFlip = false)),
+        filter(() => this.flipOnNextEvent),
+        tap(() => (this.flipOnNextEvent = false)),
         takeUntil(this.destroy$),
       )
       .subscribe(() => this.flip());
   }
+
   ngOnDestroy(): void {
     this.destroy$.emit();
   }
@@ -57,6 +58,7 @@ export class FlipScopeDirective implements OnInit, OnDestroy {
   save(): void {
     this.flipController.read();
   }
+
   flip(): void {
     this.flipController.flip();
   }
