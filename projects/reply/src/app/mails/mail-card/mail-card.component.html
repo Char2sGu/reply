@@ -20,7 +20,7 @@
         </button>
       </ng-container>
       <button mat-icon-button class="avatar-button">
-        <img [src]="mail.sender.avatarUrl | avatarUrlDefault" alt="Avatar" />
+        <rpl-mail-avatar [src]="mail.sender.avatarUrl"></rpl-mail-avatar>
       </button>
     </div>
   </div>
