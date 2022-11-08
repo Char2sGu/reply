@@ -5,6 +5,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ScrollingModule } from '@reply/scrolling';
 
+import { FlipModule } from '../flip/flip.module';
 import { ContentComponent } from '../standalone/content/content.component';
 import { DateDistancePipe } from '../standalone/date-distance.pipe';
 import { SearchButtonComponent } from '../standalone/search-button/search-button.component';
@@ -38,6 +39,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     MatRippleModule,
     MatIconModule,
     ScrollingModule,
+    FlipModule,
     DateDistancePipe,
     SearchButtonComponent,
     ContentComponent,
