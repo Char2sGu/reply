@@ -19,6 +19,7 @@ import {
   EventEmitter,
   HostBinding,
   Input,
+  OnDestroy,
   OnInit,
   TemplateRef,
   ViewChild,
@@ -26,12 +27,17 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, delay, filter, first, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  delay,
+  filter,
+  first,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 
 import { LayoutConfig } from '../layout.config';
 import { RouterStatus } from '../router-status.state';
-
-// TODO: dispose bottom menu on navigation
 
 @Component({
   selector: 'rpl-nav',
@@ -74,7 +80,7 @@ import { RouterStatus } from '../router-status.state';
     ]),
   ],
 })
-export class NavComponent implements OnInit, AfterViewInit {
+export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   // prettier-ignore
   @Input() set mode(value: NavMode) { this.mode$.next(value) }
   mode$ = new BehaviorSubject<NavMode>('drawer');
@@ -96,6 +102,8 @@ export class NavComponent implements OnInit, AfterViewInit {
   @HostBinding('class.unfavored') get unfavored(): boolean {
     return this.layoutConfig.contentFavored;
   }
+
+  destroy$ = new EventEmitter();
 
   constructor(
     public layoutConfig: LayoutConfig,
@@ -129,6 +137,10 @@ export class NavComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.setupOverlayContainer();
     this.setupBottomMenu();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.emit();
   }
 
   async toggleBottomMenu(to = !this.bottomMenuOpened): Promise<void> {
@@ -195,8 +207,12 @@ export class NavComponent implements OnInit, AfterViewInit {
     );
 
     this.routerStatus.navigating$
-      .pipe(filter((navigating) => navigating))
+      .pipe(
+        filter((navigating) => navigating),
+        takeUntil(this.destroy$),
+      )
       .subscribe(() => this.toggleBottomMenu(false));
+
     this.mode$.subscribe((mode) => {
       if (mode !== 'bar') this.toggleBottomMenu(false);
     });
