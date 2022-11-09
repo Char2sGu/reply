@@ -3,7 +3,9 @@
 @use 'styles/theming' as theming;
 
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   width: 100vw;
   height: 60vh;
   border-top-left-radius: 12px;
@@ -17,7 +19,7 @@
   // animation
   &.expanded {
     height: calc(100vh - 54px);
-    overflow-y: auto; // TODO: check scroll availability
+    overflow-y: auto;
   }
 
   transition: height 300ms animation-curves.$deceleration;
@@ -52,7 +54,6 @@
   }
 
   .content {
-    width: calc(100% - 8px * 2);
-    margin: 0 auto;
+    margin: 0 8px;
   }
 }

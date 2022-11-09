@@ -111,7 +111,7 @@ $heightInModeBar: 56px;
 .fab {
   position: absolute;
 
-  // TODO: dirty implementation
+  // TODO: cleaner implementation
   $diameter: 56px;
   left: calc(50% - calc($diameter / 2));
   bottom: calc(100% - calc($diameter / 2));

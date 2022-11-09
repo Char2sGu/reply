@@ -61,6 +61,7 @@
     <ng-template #bottomMenu>
       <rpl-nav-bottom-menu
         [expanded]="bottomMenuExpanded"
+        [style.touch-action]="bottomMenuExpanded ? 'pan-down' : 'none'"
         (panup)="bottomMenuPan$.emit('up')"
         (pandown)="bottomMenuPan$.emit('down')"
         @bottomMenu
