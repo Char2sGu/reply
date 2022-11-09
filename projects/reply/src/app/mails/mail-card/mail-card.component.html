@@ -1,28 +1,30 @@
 <ng-container *ngIf="breakpoints$ | async as breakpoints">
-  <div class="overlay"></div>
-  <div class="ripple" matRipple></div>
-  <div class="headline">
-    <div class="titles">
-      <h5 class="subtitle">
-        <span>{{ mail.sender.name }}</span> -
-        <span>{{ mail.sentAt | dateDistance }}</span>
-      </h5>
-      <h1 class="title">
-        <a routerLink="./{{ mail.id }}" #anchor>{{ mail.subject }}</a>
-      </h1>
-    </div>
-    <div class="actions" (click)="$event.stopPropagation()">
-      <ng-container *ngIf="breakpoints['tablet-landscape']">
-        <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
-        <rpl-mail-delete-button [mail]="mail"></rpl-mail-delete-button>
-        <button mat-icon-button>
-          <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
+  <ng-container *ngIf="mailSender$ | async as mailSender">
+    <div class="overlay"></div>
+    <div class="ripple" matRipple></div>
+    <div class="headline">
+      <div class="titles">
+        <h5 class="subtitle">
+          <span>{{ mailSender.name }}</span> -
+          <span>{{ mail.sentAt | dateDistance }}</span>
+        </h5>
+        <h1 class="title">
+          <a routerLink="./{{ mail.id }}" #anchor>{{ mail.subject }}</a>
+        </h1>
+      </div>
+      <div class="actions" (click)="$event.stopPropagation()">
+        <ng-container *ngIf="breakpoints['tablet-landscape']">
+          <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
+          <rpl-mail-delete-button [mail]="mail"></rpl-mail-delete-button>
+          <button mat-icon-button>
+            <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
+          </button>
+        </ng-container>
+        <button mat-icon-button class="avatar-button">
+          <rpl-mail-avatar [src]="mailSender.avatarUrl"></rpl-mail-avatar>
         </button>
-      </ng-container>
-      <button mat-icon-button class="avatar-button">
-        <rpl-mail-avatar [src]="mail.sender.avatarUrl"></rpl-mail-avatar>
-      </button>
+      </div>
     </div>
-  </div>
-  <div class="overview" *ngIf="!isRead">{{ mail.content }}</div>
+    <div class="overview" *ngIf="!isRead">{{ mail.content }}</div>
+  </ng-container>
 </ng-container>

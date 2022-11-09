@@ -1,38 +1,40 @@
 <ng-container *ngIf="mail$ | async as mail">
-  <div class="wrapper">
-    <div class="title-line">
-      <h1 class="mat-display-1">{{ mail.subject }}</h1>
-      <a mat-icon-button routerLink="..">
-        <mat-icon fontSet="filled" fontIcon="expand_more"></mat-icon>
-      </a>
-    </div>
+  <ng-container *ngIf="mailSender$ | async as mailSender">
+    <div class="wrapper">
+      <div class="title-line">
+        <h1 class="mat-display-1">{{ mail.subject }}</h1>
+        <a mat-icon-button routerLink="..">
+          <mat-icon fontSet="filled" fontIcon="expand_more"></mat-icon>
+        </a>
+      </div>
 
-    <div class="info-line">
-      <div class="left-group">
-        <div class="mat-body-1">
-          <span>{{ mail.sender.name }}</span> -
-          <span>{{ mail.sentAt | dateDistance }}</span>
+      <div class="info-line">
+        <div class="left-group">
+          <div class="mat-body-1">
+            <span>{{ mailSender.name }}</span> -
+            <span>{{ mail.sentAt | dateDistance }}</span>
+          </div>
+          <div class="mat-small">
+            <span>To me</span>
+          </div>
         </div>
-        <div class="mat-small">
-          <span>To me</span>
+        <div class="right-group">
+          <rpl-mail-avatar [src]="mailSender.avatarUrl"></rpl-mail-avatar>
         </div>
       </div>
-      <div class="right-group">
-        <rpl-mail-avatar [src]="mail.sender.avatarUrl"></rpl-mail-avatar>
-      </div>
+
+      <div class="content">{{ mail.content }}</div>
     </div>
 
-    <div class="content">{{ mail.content }}</div>
-  </div>
-
-  <ng-template #bottomActions>
-    <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
-    <rpl-mail-delete-button
-      [mail]="mail"
-      routerLink=".."
-    ></rpl-mail-delete-button>
-    <button mat-icon-button>
-      <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
-    </button>
-  </ng-template>
+    <ng-template #bottomActions>
+      <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
+      <rpl-mail-delete-button
+        [mail]="mail"
+        routerLink=".."
+      ></rpl-mail-delete-button>
+      <button mat-icon-button>
+        <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
+      </button>
+    </ng-template>
+  </ng-container>
 </ng-container>

@@ -6,11 +6,8 @@ export const MAILS: Mail[] = [
   {
     id: '1',
     subject: 'Package shipped!',
-    sender: {
-      name: 'Google Express',
-      email: '',
-    },
-    recipients: [],
+    sender: '1',
+    recipients: ['user'],
     content: `
 Cucumber Mask Facial has shipped.
 
@@ -25,12 +22,8 @@ As always, thank you for shopping with us and we hope you love our specially for
   {
     id: '2',
     subject: 'Brunch this weekend?',
-    sender: {
-      name: 'Ali Connors',
-      email: '',
-      avatarUrl: 'assets/avatar-2.jpg',
-    },
-    recipients: [],
+    sender: '2',
+    recipients: ['user'],
     content: `
 I'll be in your neighborhood doing errands and was hoping to catch you for a coffee this Saturday. If you don't have anything scheduled, it would be great to see you! It feels like its been forever.
 
@@ -47,12 +40,8 @@ Ali
   {
     id: '3',
     subject: 'Bonjour from Paris',
-    sender: {
-      name: 'Allison Trabucco',
-      email: '',
-      avatarUrl: 'assets/avatar-3.jpg',
-    },
-    recipients: [],
+    sender: '3',
+    recipients: ['user'],
     content: `
 Here are some great shots from my trip...
 `.trim(),
@@ -63,12 +52,8 @@ Here are some great shots from my trip...
   {
     id: '4',
     subject: 'Brazil trip',
-    sender: {
-      name: 'Trevor Hansen',
-      email: '',
-      avatarUrl: 'assets/avatar-4.jpg',
-    },
-    recipients: [],
+    sender: '4',
+    recipients: ['user'],
     content: `
 Thought we might be able to go over some details about our upcoming vacation.
 
@@ -83,12 +68,8 @@ Maybe we can jump on the phone later today if you have a second.
   {
     id: '5',
     subject: 'High school reunion?',
-    sender: {
-      name: 'Trevor Hansen',
-      email: '',
-      avatarUrl: 'assets/avatar-5.jpg',
-    },
-    recipients: [],
+    sender: '4',
+    recipients: ['user'],
     content: `
 Hi friends,
 
@@ -103,12 +84,8 @@ Anyway, it turns out she is on the organizing committee for the high school reun
   {
     id: '6',
     subject: 'Recipe to try',
-    sender: {
-      name: 'Britta Holt',
-      email: '',
-      avatarUrl: 'assets/avatar-6.jpg',
-    },
-    recipients: [],
+    sender: '5',
+    recipients: ['user'],
     content: `
 Raspberry Pie: We should make this pie recipe tonight! The filling is very quick to put together.
 `.trim(),

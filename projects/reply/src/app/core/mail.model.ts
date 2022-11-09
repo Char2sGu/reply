@@ -1,10 +1,10 @@
-import { Contact } from '@/app/core/contact.model';
+import { Contact } from './contact.model';
 
 export interface Mail {
   id: string;
   subject: string;
-  sender: Contact;
-  recipients: Contact[];
+  sender: Contact['id'];
+  recipients: Contact['id'][];
   sentAt: Date;
   content: string;
   mailboxName: string;

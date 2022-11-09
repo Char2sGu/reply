@@ -11,8 +11,10 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 
+import { Contact } from '@/app/core/contact.model';
+import { ContactService } from '@/app/core/contact.service';
 import { LayoutConfig } from '@/app/core/layout.config';
 
 import { Mail } from '../../core/mail.model';
@@ -26,6 +28,7 @@ import { MailService } from '../../core/mail.service';
 })
 export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   mail$!: Observable<Mail>;
+  mailSender$!: Observable<Contact>;
 
   private navFabConfigBackup = { ...this.layoutConfig.navFabConfig };
 
@@ -38,6 +41,7 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private layoutConfig: LayoutConfig,
     private mailService: MailService,
+    private contactService: ContactService,
     private changeDetector: ChangeDetectorRef,
     private viewContainer: ViewContainerRef,
   ) {}
@@ -48,6 +52,9 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mail$ = this.mailService
         .getMail$ById(mailId)
         .pipe(tap((mail) => this.mailService.markMailAsRead(mail)));
+      this.mailSender$ = this.mail$.pipe(
+        switchMap((mail) => this.contactService.getContact$ById(mail.sender)),
+      );
       this.changeDetector.markForCheck();
     });
   }
