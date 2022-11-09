@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, filter, map, Observable } from 'rxjs';
 
 import { Mail } from './mail.model';
-import { MAILS } from './mails.mock';
+import { MAILS } from './mail.records';
 
 @Injectable({
   providedIn: 'root',

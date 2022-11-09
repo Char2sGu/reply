@@ -10,8 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 import { FlipScopeConfig } from '@reply/flip';
 import { Observable } from 'rxjs';
 
-import { Mail } from '../core/mail.model';
-import { MailService } from '../core/mail.service';
+import { Mail } from '../../core/mail.model';
+import { MailService } from '../../core/mail.service';
 
 @Component({
   selector: 'rpl-mail-card-list',

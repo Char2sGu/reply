@@ -15,8 +15,8 @@ import { Observable, tap } from 'rxjs';
 
 import { LayoutConfig } from '@/app/core/layout.config';
 
-import { Mail } from '../core/mail.model';
-import { MailService } from '../core/mail.service';
+import { Mail } from '../../core/mail.model';
+import { MailService } from '../../core/mail.service';
 
 @Component({
   selector: 'rpl-mail',

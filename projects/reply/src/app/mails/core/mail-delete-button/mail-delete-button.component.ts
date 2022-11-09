@@ -6,8 +6,8 @@ import {
   OnInit,
 } from '@angular/core';
 
-import { Mail } from '../mail.model';
-import { MailService } from '../mail.service';
+import { Mail } from '../../../core/mail.model';
+import { MailService } from '../../../core/mail.service';
 
 @Component({
   selector: 'rpl-mail-delete-button',
