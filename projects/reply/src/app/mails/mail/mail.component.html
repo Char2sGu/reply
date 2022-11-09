@@ -27,7 +27,10 @@
 
   <ng-template #bottomActions>
     <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
-    <rpl-mail-delete-button [mail]="mail"></rpl-mail-delete-button>
+    <rpl-mail-delete-button
+      [mail]="mail"
+      routerLink=".."
+    ></rpl-mail-delete-button>
     <button mat-icon-button>
       <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
     </button>
