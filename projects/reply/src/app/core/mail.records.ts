@@ -69,7 +69,7 @@ Maybe we can jump on the phone later today if you have a second.
     id: '5',
     subject: 'High school reunion?',
     sender: '4',
-    recipients: ['user'],
+    recipients: ['user', '2', '3'],
     content: `
 Hi friends,
 

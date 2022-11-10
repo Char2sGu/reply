@@ -11,8 +11,9 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, switchMap, tap } from 'rxjs';
+import { combineLatest, map, Observable, switchMap, tap } from 'rxjs';
 
+import { AuthService } from '@/app/core/auth.service';
 import { Contact } from '@/app/core/contact.model';
 import { ContactService } from '@/app/core/contact.service';
 import { LayoutConfig } from '@/app/core/layout.config';
@@ -29,6 +30,7 @@ import { MailService } from '../../core/mail.service';
 export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   mail$!: Observable<Mail>;
   mailSender$!: Observable<Contact>;
+  mailRecipientNames$!: Observable<string[]>;
 
   private navFabConfigBackup = { ...this.layoutConfig.navFabConfig };
 
@@ -40,6 +42,7 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private layoutConfig: LayoutConfig,
+    private authService: AuthService,
     private mailService: MailService,
     private contactService: ContactService,
     private changeDetector: ChangeDetectorRef,
@@ -49,12 +52,38 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       const mailId: string = params['mailId'];
+
+      // TODO: cleaner implementation
+
       this.mail$ = this.mailService
         .getMail$ById(mailId)
         .pipe(tap((mail) => this.mailService.markMailAsRead(mail)));
+
       this.mailSender$ = this.mail$.pipe(
         switchMap((mail) => this.contactService.getContact$ById(mail.sender)),
       );
+
+      const mailRecipients$ = this.mail$.pipe(
+        switchMap((mail) =>
+          combineLatest(
+            mail.recipients.map((id) =>
+              this.contactService.getContact$ById(id),
+            ),
+          ),
+        ),
+      );
+
+      this.mailRecipientNames$ = combineLatest([
+        mailRecipients$,
+        this.authService.getUser$(),
+      ]).pipe(
+        map(([recipients, user]) =>
+          recipients
+            .map((item) => (item.id === user.id ? 'me' : item.name))
+            .sort((a, b) => (a === 'me' ? -1 : a.localeCompare(b))),
+        ),
+      );
+
       this.changeDetector.markForCheck();
     });
   }

@@ -8,6 +8,7 @@ import { ScrollingModule } from '@reply/scrolling';
 
 import { ContentComponent } from '../standalone/content/content.component';
 import { DateDistancePipe } from '../standalone/date-distance.pipe';
+import { ReadableStringsPipe } from '../standalone/readable-strings.pipe';
 import { ReattachOnChangeDirective } from '../standalone/reattach-on-change.directive';
 import { SearchButtonComponent } from '../standalone/search-button/search-button.component';
 import { MailAvatarComponent } from './core/mail-avatar/mail-avatar.component';
@@ -44,6 +45,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     DateDistancePipe,
     SearchButtonComponent,
     ContentComponent,
+    ReadableStringsPipe,
     ReattachOnChangeDirective,
   ],
 })
