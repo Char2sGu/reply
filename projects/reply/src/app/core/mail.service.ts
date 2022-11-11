@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, filter, map, Observable } from 'rxjs';
 
 import { Mail } from './mail.model';
@@ -9,8 +9,11 @@ import { MAILS } from './mail.records';
 })
 export class MailService {
   private mails$ = new BehaviorSubject(MAILS);
-  private mailsRead$ = new BehaviorSubject(new WeakSet<Mail>());
-  private mailsStarred$ = new BehaviorSubject(new WeakSet<Mail>());
+
+  private mailsRead = new WeakSet<Mail>();
+  private mailsReadChangeUpdate$ = new EventEmitter();
+  private mailsStarred = new WeakSet<Mail>();
+  private mailsStarredUpdate$ = new EventEmitter();
 
   constructor() {}
 
@@ -28,7 +31,7 @@ export class MailService {
   }
 
   getMailsStarred$(): Observable<Mail[]> {
-    return combineLatest([this.mails$, this.mailsStarred$]).pipe(
+    return combineLatest([this.mails$, this.mailsStarredUpdate$]).pipe(
       map(([mails, mailsStarred]) =>
         mails.filter((mail) => mailsStarred.has(mail)),
       ),
@@ -49,28 +52,32 @@ export class MailService {
   }
 
   markMailAsRead(mail: Mail): void {
-    this.mailsRead$.value.add(mail);
-    this.mailsRead$.next(this.mailsRead$.value);
+    this.mailsRead.add(mail);
+    this.mailsReadChangeUpdate$.emit();
+  }
+  markMailAsNotRead(mail: Mail): void {
+    this.mailsRead.delete(mail);
+    this.mailsReadChangeUpdate$.emit();
   }
   isMailRead(mail: Mail): boolean {
-    return this.mailsRead$.value.has(mail);
+    return this.mailsRead.has(mail);
   }
   isMailRead$(mail: Mail): Observable<boolean> {
-    return this.mailsRead$.pipe(map((set) => set.has(mail)));
+    return this.mailsReadChangeUpdate$.pipe(map((set) => set.has(mail)));
   }
 
   markMailAsStarred(mail: Mail): void {
-    this.mailsStarred$.value.add(mail);
-    this.mailsStarred$.next(this.mailsStarred$.value);
+    this.mailsStarred.add(mail);
+    this.mailsStarredUpdate$.emit();
   }
   markMailAsNotStarred(mail: Mail): void {
-    this.mailsStarred$.value.delete(mail);
-    this.mailsStarred$.next(this.mailsStarred$.value);
+    this.mailsStarred.delete(mail);
+    this.mailsStarredUpdate$.emit();
   }
   isMailStarred(mail: Mail): boolean {
-    return this.mailsStarred$.value.has(mail);
+    return this.mailsStarred.has(mail);
   }
   isMailStarred$(mail: Mail): Observable<boolean> {
-    return this.mailsStarred$.pipe(map((set) => set.has(mail)));
+    return this.mailsStarredUpdate$.pipe(map((set) => set.has(mail)));
   }
 }
