@@ -21,7 +21,7 @@ export const CONTACTS: Contact[] = [
   },
   {
     id: '3',
-    name: 'Allison Trabucco',
+    name: 'Sandra Adams',
     email: '',
     avatarUrl: 'assets/avatar-3.jpg',
   },
@@ -36,5 +36,17 @@ export const CONTACTS: Contact[] = [
     name: 'Britta Holt',
     email: '',
     avatarUrl: 'assets/avatar-5.jpg',
+  },
+  {
+    id: '6',
+    name: 'Josh Dillinger',
+    email: '',
+    avatarUrl: 'assets/avatar-6.jpg',
+  },
+  {
+    id: '7',
+    name: 'Google Play',
+    email: '',
+    avatarUrl: undefined,
   },
 ];

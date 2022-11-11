@@ -6,7 +6,7 @@
       <div class="titles">
         <h5 class="subtitle">
           <span>{{ mailSender.name }}</span> -
-          <span>{{ mail.sentAt | dateDistance }}</span>
+          <span>{{ mail.sentAt | readableDate }}</span>
         </h5>
         <h1 class="title">
           <a routerLink="./{{ mail.id }}" #anchor>{{ mail.subject }}</a>

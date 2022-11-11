@@ -7,7 +7,7 @@ import { FlipModule } from '@reply/flip';
 import { ScrollingModule } from '@reply/scrolling';
 
 import { ContentComponent } from '../standalone/content/content.component';
-import { DateDistancePipe } from '../standalone/date-distance.pipe';
+import { ReadableDatePipe } from '../standalone/readable-date.pipe';
 import { ReadableStringsPipe } from '../standalone/readable-strings.pipe';
 import { ReattachOnChangeDirective } from '../standalone/reattach-on-change.directive';
 import { SearchButtonComponent } from '../standalone/search-button/search-button.component';
@@ -42,9 +42,9 @@ import { MailsRoutingModule } from './mails-routing.module';
     MatIconModule,
     FlipModule,
     ScrollingModule,
-    DateDistancePipe,
     SearchButtonComponent,
     ContentComponent,
+    ReadableDatePipe,
     ReadableStringsPipe,
     ReattachOnChangeDirective,
   ],

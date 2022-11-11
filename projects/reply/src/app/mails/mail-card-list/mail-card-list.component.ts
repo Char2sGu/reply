@@ -8,7 +8,7 @@ import {
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
 import { FlipScopeConfig } from '@reply/flip';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { Mail } from '../../core/mail.model';
 import { MailService } from '../../core/mail.service';
@@ -37,10 +37,17 @@ export class MailCardListComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       const mailboxName = params['mailboxName'];
-      this.mails$ =
+
+      this.mails$ = (
         mailboxName === 'Starred'
           ? this.mailService.getMailsStarred$()
-          : this.mailService.getMails$ByMailbox(mailboxName);
+          : this.mailService.getMails$ByMailbox(mailboxName)
+      ).pipe(
+        map((mails) =>
+          mails.sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime()),
+        ),
+      );
+
       this.changeDetector.markForCheck();
     });
   }

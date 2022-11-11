@@ -13,7 +13,7 @@
           <div class="left-group">
             <div class="mat-body-1">
               <span>{{ mailSender.name }}</span> -
-              <span>{{ mail.sentAt | dateDistance }}</span>
+              <span>{{ mail.sentAt | readableDate }}</span>
             </div>
             <div class="mat-small">
               <span>To {{ mailRecipientNames | readableStrings }}</span>
