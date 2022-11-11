@@ -15,7 +15,6 @@ import { Contact } from '@/app/core/contact.model';
 import { ContactService } from '@/app/core/contact.service';
 
 import { Mail } from '../../core/mail.model';
-import { MailService } from '../../core/mail.service';
 
 @Component({
   selector: 'rpl-mail-card',
@@ -29,15 +28,14 @@ export class MailCardComponent implements OnInit {
   breakpoints$ = this.breakpointManager.breakpoints$;
   mailSender$!: Observable<Contact>;
 
-  @HostBinding('class.read') get isRead(): boolean {
-    return this.mailService.isMailRead(this.mail);
+  @HostBinding('class.read') get mailIsRead(): boolean {
+    return this.mail.isRead;
   }
 
   @ViewChild('anchor') private anchorElementRef!: ElementRef<HTMLAnchorElement>;
 
   constructor(
     private breakpointManager: BreakpointManager,
-    private mailService: MailService,
     private contactService: ContactService,
   ) {}
 

@@ -7,5 +7,7 @@ export interface Mail {
   recipients: Contact['id'][];
   sentAt: Date;
   content: string;
+  isStarred: boolean;
+  isRead: boolean;
   mailboxName: string;
 }

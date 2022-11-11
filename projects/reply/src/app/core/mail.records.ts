@@ -16,6 +16,8 @@ Keep an eye out for a package to arrive between this Thursday and next Tuesday. 
 As always, thank you for shopping with us and we hope you love our specially formulated Cucumber Mask!
 `.trim(),
     sentAt: dayjs().subtract(15, 'minutes').toDate(),
+    isStarred: false,
+    isRead: false,
     mailboxName: 'Inbox',
   },
 
@@ -34,6 +36,8 @@ Talk to you soon,
 Ali
 `.trim(),
     sentAt: dayjs().subtract(25, 'minutes').toDate(),
+    isStarred: false,
+    isRead: false,
     mailboxName: 'Inbox',
   },
 
@@ -46,6 +50,8 @@ Ali
 Here are some great shots from my trip...
 `.trim(),
     sentAt: dayjs().subtract(6, 'hours').toDate(),
+    isStarred: false,
+    isRead: false,
     mailboxName: 'Inbox',
   },
 
@@ -62,6 +68,8 @@ I was at the grocery store on Sunday night.. when I ran into Genie Williams! I a
 Anyway, it turns out she is on the organizing committee for the high school reunion this fall. I don't know if you were planning on going or not, but she could definitely use our help in trying to track down lots of missing alums. If you can make it, we're doing a little phone-tree party at her place next Saturday, hoping that if we can find one person, a few more will...
 `.trim(),
     sentAt: dayjs().subtract(12, 'hours').toDate(),
+    isStarred: true,
+    isRead: false,
     mailboxName: 'Inbox',
   },
 
@@ -74,6 +82,8 @@ Anyway, it turns out she is on the organizing committee for the high school reun
 Raspberry Pie: We should make this pie recipe tonight! The filling is very quick to put together.
 `.trim(),
     sentAt: dayjs().subtract(18, 'hours').toDate(),
+    isStarred: false,
+    isRead: true,
     mailboxName: 'Inbox',
   },
 
@@ -90,6 +100,8 @@ A Parent Teacher Conference is planned for your child on Tuesday, March 3rd at 3
 Please contact the school if you have any questions.
 `.trim(),
     sentAt: dayjs().subtract(1, 'month').subtract(28, 'day').toDate(),
+    isStarred: true,
+    isRead: true,
     mailboxName: 'Inbox',
   },
 
@@ -106,6 +118,8 @@ I've been doing a bit of research and have come across a few paces in Northern B
 Maybe we can jump on the phone later today if you have a second.
   `.trim(),
     sentAt: dayjs().subtract(9, 'hours').toDate(),
+    isStarred: false,
+    isRead: true,
     mailboxName: 'Inbox',
   },
 
@@ -118,6 +132,8 @@ Maybe we can jump on the phone later today if you have a second.
 Your package has been delivered to the target address. For more information, please visit our official website.
   `.trim(),
     sentAt: dayjs().subtract(15, 'hours').toDate(),
+    isStarred: false,
+    isRead: false,
     mailboxName: 'Inbox',
   },
 
@@ -132,6 +148,8 @@ Your update is now live on the Play Store and available for your alpha users to 
 Your alpha testers will be automatically notified. If you'd rather send them a link directly, go to your Google Play Console and follow the instructions for obtaining an open alpha testing link.
 `.trim(),
     sentAt: dayjs().subtract(1, 'year').subtract(10, 'days').toDate(),
+    isStarred: false,
+    isRead: false,
     mailboxName: 'Trash',
   },
 ];

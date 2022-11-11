@@ -5,7 +5,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { BehaviorSubject, filter, Observable, tap } from 'rxjs';
+import { BehaviorSubject, filter, tap } from 'rxjs';
 
 import { Mail } from '../../../core/mail.model';
 import { MailService } from '../../../core/mail.service';
@@ -21,20 +21,18 @@ export class MailStarButtonComponent implements OnInit {
 
   click$ = new EventEmitter();
   busy$ = new BehaviorSubject(false);
-  active$!: Observable<boolean>;
 
   constructor(private mailService: MailService) {}
 
   ngOnInit(): void {
-    this.active$ = this.mailService.isMailStarred$(this.mail);
     this.click$
       .pipe(
         filter(() => !this.busy$.value),
         tap(() => this.busy$.next(true)),
         tap(() => {
-          if (this.mailService.isMailStarred(this.mail))
-            this.mailService.markMailAsNotStarred(this.mail);
-          else this.mailService.markMailAsStarred(this.mail);
+          if (this.mail.isStarred)
+            this.mailService.updateMail(this.mail.id, { isStarred: false });
+          else this.mailService.updateMail(this.mail.id, { isStarred: true });
         }),
         tap(() => this.busy$.next(false)),
       )
