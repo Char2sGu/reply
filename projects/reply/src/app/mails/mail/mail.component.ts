@@ -16,7 +16,7 @@ import { combineLatest, map, Observable, switchMap, tap } from 'rxjs';
 import { AuthService } from '@/app/core/auth.service';
 import { Contact } from '@/app/core/contact.model';
 import { ContactService } from '@/app/core/contact.service';
-import { LayoutConfig } from '@/app/core/layout.config';
+import { LayoutContext } from '@/app/core/layout.context';
 
 import { Mail } from '../../core/mail.model';
 import { MailService } from '../../core/mail.service';
@@ -32,16 +32,16 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   mailSender$!: Observable<Contact>;
   mailRecipientNames$!: Observable<string[]>;
 
-  private navFabConfigBackup = { ...this.layoutConfig.navFabConfig };
+  private navFabConfigBackup = { ...this.layoutContext.navFabConfig };
 
   @ViewChild('bottomActions')
   private bottomActionsTemplate!: TemplateRef<unknown>;
-  private bottomActionsPortalBackup = this.layoutConfig.navBottomActionsPortal;
+  private bottomActionsPortalBackup = this.layoutContext.navBottomActionsPortal;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private layoutConfig: LayoutConfig,
+    private layoutContext: LayoutContext,
     private authService: AuthService,
     private mailService: MailService,
     private contactService: ContactService,
@@ -92,19 +92,19 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.layoutConfig.navFabConfig = {
+    this.layoutContext.navFabConfig = {
       text: 'Reply',
       icon: 'reply_all',
       link: `${this.router.url}/reply`,
     };
-    this.layoutConfig.navBottomActionsPortal = new TemplatePortal(
+    this.layoutContext.navBottomActionsPortal = new TemplatePortal(
       this.bottomActionsTemplate,
       this.viewContainer,
     );
   }
 
   ngOnDestroy(): void {
-    this.layoutConfig.navFabConfig = this.navFabConfigBackup;
-    this.layoutConfig.navBottomActionsPortal = this.bottomActionsPortalBackup;
+    this.layoutContext.navFabConfig = this.navFabConfigBackup;
+    this.layoutContext.navBottomActionsPortal = this.bottomActionsPortalBackup;
   }
 }

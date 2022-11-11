@@ -15,7 +15,7 @@ import { RouterStatus } from './router-status.state';
 @Injectable({
   providedIn: 'root',
 })
-export class LayoutConfig {
+export class LayoutContext {
   contentFavored;
   navFabConfig;
   navBottomActionsPortal: Portal<unknown>;

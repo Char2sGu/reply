@@ -1,5 +1,5 @@
 <ng-container *ngIf="mode$ | async as mode">
-  <ng-container *ngIf="layoutConfig.value$ | async as layoutConfig">
+  <ng-container *ngIf="layoutContext.value$ | async as layoutContext">
     <div
       class="background"
       [class.clipped]="mode === 'bar' && !bottomMenuOpened"
@@ -31,7 +31,7 @@
             *ngIf="
               bottomMenuOpened
                 ? settingsButtonPortal
-                : layoutConfig.navBottomActionsPortal as portal
+                : layoutContext.navBottomActionsPortal as portal
             "
           >
             <div class="wrapper" [@bottomActions]="portal">

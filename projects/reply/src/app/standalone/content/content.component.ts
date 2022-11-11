@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ScrollingModule } from '@reply/scrolling';
 
-import { LayoutConfig } from '@/app/core/layout.config';
+import { LayoutContext } from '@/app/core/layout.context';
 
 @Component({
   selector: 'rpl-content',
@@ -13,7 +13,7 @@ import { LayoutConfig } from '@/app/core/layout.config';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContentComponent implements OnInit {
-  constructor(public layoutConfig: LayoutConfig) {}
+  constructor(public layoutContext: LayoutContext) {}
 
   ngOnInit(): void {}
 }

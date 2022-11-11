@@ -1,5 +1,5 @@
-<ng-container *ngIf="layoutConfig.value$ | async as layoutConfig">
-  <ng-container *ngIf="layoutConfig.navFabConfig as config">
+<ng-container *ngIf="layoutContext.value$ | async as layoutContext">
+  <ng-container *ngIf="layoutContext.navFabConfig as config">
     <a mat-fab [routerLink]="config.link" @host>
       <span class="icon" [@icon]="config.icon">
         <mat-icon

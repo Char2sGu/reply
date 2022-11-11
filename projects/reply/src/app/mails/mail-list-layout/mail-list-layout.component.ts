@@ -12,7 +12,7 @@ import { filter, map, takeUntil } from 'rxjs';
 
 import { FadeThroughAnimation } from '@/app/core/animations';
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
-import { LayoutConfig } from '@/app/core/layout.config';
+import { LayoutContext } from '@/app/core/layout.context';
 import { RouterStatus } from '@/app/core/router-status.state';
 
 @Component({
@@ -35,7 +35,7 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
   destroy$ = new EventEmitter();
 
   constructor(
-    public layout: LayoutConfig,
+    public layout: LayoutContext,
     private route: ActivatedRoute,
     private routerStatus: RouterStatus,
     private breakpointManager: BreakpointManager,

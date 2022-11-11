@@ -9,7 +9,7 @@ import {
 import { AnimationCurves } from '@angular/material/core';
 
 import { FadeThroughAnimation } from '../animations';
-import { LayoutConfig } from '../layout.config';
+import { LayoutContext } from '../layout.context';
 
 @Component({
   selector: 'rpl-nav-floating-action-button',
@@ -37,7 +37,7 @@ import { LayoutConfig } from '../layout.config';
 export class NavFloatingActionButtonComponent implements OnInit {
   @Input() @HostBinding('class.expanded') expanded = false;
 
-  constructor(public layoutConfig: LayoutConfig) {}
+  constructor(public layoutContext: LayoutContext) {}
 
   ngOnInit(): void {}
 }

@@ -36,7 +36,7 @@ import {
   takeUntil,
 } from 'rxjs';
 
-import { LayoutConfig } from '../layout.config';
+import { LayoutContext } from '../layout.context';
 import { RouterStatus } from '../router-status.state';
 
 @Component({
@@ -100,13 +100,13 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('bottomMenu') private bottomMenuTemplate!: TemplateRef<unknown>;
 
   @HostBinding('class.unfavored') get unfavored(): boolean {
-    return this.layoutConfig.contentFavored;
+    return this.layoutContext.contentFavored;
   }
 
   destroy$ = new EventEmitter();
 
   constructor(
-    public layoutConfig: LayoutConfig,
+    public layoutContext: LayoutContext,
     private router: Router,
     private routerStatus: RouterStatus,
     private overlayContainerRef: OverlayContainer,
