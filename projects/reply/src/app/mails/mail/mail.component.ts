@@ -83,7 +83,11 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
         map(([recipients, user]) =>
           recipients
             .map((item) => (item.id === user.id ? 'me' : item.name))
-            .sort((a, b) => (a === 'me' ? -1 : a.localeCompare(b))),
+            .sort((a, b) => {
+              if (a === 'me') return -Infinity;
+              if (b === 'me') return Infinity;
+              return a.localeCompare(b);
+            }),
         ),
       );
 
