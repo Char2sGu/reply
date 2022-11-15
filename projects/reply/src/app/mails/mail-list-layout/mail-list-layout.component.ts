@@ -7,14 +7,13 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, takeUntil } from 'rxjs';
 
 import { FadeThroughAnimation } from '@/app/core/animations';
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
 import { LayoutContext } from '@/app/core/layout.context';
 import { MailboxContext } from '@/app/core/mailbox.context';
-import { RouterStatus } from '@/app/core/router-status.state';
 
 @Component({
   selector: 'rpl-mail-list-layout',
@@ -38,8 +37,8 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
   constructor(
     public layoutContext: LayoutContext,
     private mailboxContext: MailboxContext,
+    private router: Router,
     private route: ActivatedRoute,
-    private routerStatus: RouterStatus,
     private breakpointManager: BreakpointManager,
     private changeDetector: ChangeDetectorRef,
   ) {}
@@ -49,9 +48,9 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
       (mailboxName) => (this.mailboxContext.current = mailboxName),
     );
 
-    this.routerStatus.navigating$
+    this.router.events
       .pipe(
-        filter((navigating) => !navigating),
+        filter((event) => event instanceof NavigationEnd),
         takeUntil(this.destroy$),
       )
       .subscribe(() => this.changeDetector.markForCheck());

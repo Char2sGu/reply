@@ -1,10 +1,9 @@
 import { transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ChildrenOutletContexts } from '@angular/router';
+import { ChildrenOutletContexts, NavigationEnd, Router } from '@angular/router';
 import { filter, map, Observable, startWith } from 'rxjs';
 
 import { SharedAxisAnimation } from '../core/animations';
-import { RouterStatus } from '../core/router-status.state';
 
 @Component({
   selector: 'rpl-mails',
@@ -32,13 +31,13 @@ export class MailsComponent implements OnInit {
   childRouteLayoutType$!: Observable<string>;
 
   constructor(
-    private routerStatus: RouterStatus,
+    private router: Router,
     private childRouteOutletContexts: ChildrenOutletContexts,
   ) {}
 
   ngOnInit(): void {
-    this.childRouteLayoutType$ = this.routerStatus.navigating$.pipe(
-      filter((navigating) => !navigating),
+    this.childRouteLayoutType$ = this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
       startWith(this.getChildRouteLayoutType()),
       map(() => this.getChildRouteLayoutType()),
     );

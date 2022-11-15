@@ -26,7 +26,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import {
   BehaviorSubject,
   delay,
@@ -37,7 +37,6 @@ import {
 } from 'rxjs';
 
 import { LayoutContext } from '../layout.context';
-import { RouterStatus } from '../router-status.state';
 
 @Component({
   selector: 'rpl-nav',
@@ -108,7 +107,6 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public layoutContext: LayoutContext,
     private router: Router,
-    private routerStatus: RouterStatus,
     private overlayContainerRef: OverlayContainer,
     private overlayManager: Overlay,
     private elementRef: ElementRef<HTMLElement>,
@@ -206,9 +204,9 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
       this.viewContainerRef,
     );
 
-    this.routerStatus.navigating$
+    this.router.events
       .pipe(
-        filter((navigating) => navigating),
+        filter((event) => event instanceof NavigationStart),
         takeUntil(this.destroy$),
       )
       .subscribe(() => this.toggleBottomMenu(false));
