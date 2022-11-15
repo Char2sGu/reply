@@ -9,6 +9,7 @@ import { MatListModule } from '@angular/material/list';
 
 import { ContactRefPipe } from '../standalone/contact-ref.pipe';
 import { ContentComponent } from '../standalone/content/content.component';
+import { HeaderComponent } from '../standalone/header/header.component';
 import { ReadableDatePipe } from '../standalone/readable-date.pipe';
 import { SearchComponent } from './search.component';
 import { SearchResultListComponent } from './search-result-list/search-result-list.component';
@@ -27,6 +28,7 @@ import { SearchRoutingModule } from './search-routing.module';
     MatListModule,
     ContentComponent,
     ContactRefPipe,
+    HeaderComponent,
     ReadableDatePipe,
   ],
 })

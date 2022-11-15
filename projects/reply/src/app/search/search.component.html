@@ -1,5 +1,5 @@
 <ng-container *ngIf="mails$ | async as mails">
-  <div ngForm class="search-bar">
+  <rpl-header ngForm class="search-bar">
     <a mat-icon-button [routerLink]="backUrl$ | async">
       <mat-icon fontSet="filled" fontIcon="arrow_back"></mat-icon>
     </a>
@@ -13,7 +13,7 @@
     <button mat-icon-button>
       <mat-icon fontSet="filled" fontIcon="mic"></mat-icon>
     </button>
-  </div>
+  </rpl-header>
 
   <rpl-content class="search-result">
     <rpl-search-result-list [mails]="mails"></rpl-search-result-list>

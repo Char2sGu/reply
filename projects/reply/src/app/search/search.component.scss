@@ -23,13 +23,6 @@
 }
 
 .search-bar {
-  height: 68px;
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
-  border-bottom: 1px solid
-    map.get(theming.$theme, 'color', 'foreground', 'divider');
-
   input {
     width: 0;
     flex-grow: 1;
