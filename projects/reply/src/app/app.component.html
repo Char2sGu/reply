@@ -4,5 +4,7 @@
     [mode]="breakpoints['laptop'] ? 'drawer' : 'rail'"
     @nav
   ></rpl-nav>
-  <router-outlet></router-outlet>
+  <div class="wrapper" [@wrapper]="getRouteComponentName()">
+    <router-outlet></router-outlet>
+  </div>
 </ng-container>
