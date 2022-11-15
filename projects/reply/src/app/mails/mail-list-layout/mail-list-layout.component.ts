@@ -13,6 +13,7 @@ import { filter, map, takeUntil } from 'rxjs';
 import { FadeThroughAnimation } from '@/app/core/animations';
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
 import { LayoutContext } from '@/app/core/layout.context';
+import { MailboxContext } from '@/app/core/mailbox.context';
 import { RouterStatus } from '@/app/core/router-status.state';
 
 @Component({
@@ -35,7 +36,8 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
   destroy$ = new EventEmitter();
 
   constructor(
-    public layout: LayoutContext,
+    public layoutContext: LayoutContext,
+    private mailboxContext: MailboxContext,
     private route: ActivatedRoute,
     private routerStatus: RouterStatus,
     private breakpointManager: BreakpointManager,
@@ -43,6 +45,10 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.mailboxName$.subscribe(
+      (mailboxName) => (this.mailboxContext.current = mailboxName),
+    );
+
     this.routerStatus.navigating$
       .pipe(
         filter((navigating) => !navigating),

@@ -5,8 +5,8 @@
         class="content"
         *rplReattachOnChange="mailboxName"
         scrolling="scrolling"
-        (scrollUp)="layout.contentFavored = false"
-        (scrollDown)="layout.contentFavored = true"
+        (scrollUp)="layoutContext.contentFavored = false"
+        (scrollDown)="layoutContext.contentFavored = true"
       >
         <rpl-mail-card-list class="list" #list></rpl-mail-card-list>
         <div class="empty-prompt" *ngIf="!(list.mails$ | async)?.length">

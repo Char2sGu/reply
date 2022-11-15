@@ -1,6 +1,6 @@
 <ng-container *ngIf="mails$ | async as mails">
   <div ngForm class="search-bar">
-    <a mat-icon-button routerLink="/">
+    <a mat-icon-button [routerLink]="backUrl$ | async">
       <mat-icon fontSet="filled" fontIcon="arrow_back"></mat-icon>
     </a>
     <input
