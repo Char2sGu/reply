@@ -40,9 +40,7 @@ export class MailCardListComponent implements OnInit {
 
       this.mails$ = (
         mailboxName === 'Starred'
-          ? this.mailService
-              .getMails$()
-              .pipe(map((mails) => mails.filter((mail) => mail.isStarred)))
+          ? this.mailService.getMails$Starred()
           : this.mailService.getMails$ByMailbox(mailboxName)
       ).pipe(
         map((mails) =>

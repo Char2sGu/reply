@@ -12,10 +12,6 @@ export class MailService {
 
   constructor() {}
 
-  getMails$(): Observable<Mail[]> {
-    return this.mails$;
-  }
-
   getMail$ById(mailId: Mail['id']): Observable<Mail> {
     return this.mails$.pipe(
       map((mails) => mails.find((mail) => mail.id === mailId)),
@@ -26,6 +22,24 @@ export class MailService {
   getMails$ByMailbox(mailboxName: string): Observable<Mail[]> {
     return this.mails$.pipe(
       map((mails) => mails.filter((mail) => mail.mailboxName === mailboxName)),
+    );
+  }
+
+  getMails$Starred(): Observable<Mail[]> {
+    return this.mails$.pipe(
+      map((mails) => mails.filter((mail) => mail.isStarred)),
+    );
+  }
+
+  getMails$ByKeywords(keywords: string[]): Observable<Mail[]> {
+    return this.mails$.pipe(
+      map((mails) =>
+        mails.filter((mail) =>
+          keywords.some((keyword) =>
+            mail.subject.toLowerCase().includes(keyword.toLowerCase()),
+          ),
+        ),
+      ),
     );
   }
 

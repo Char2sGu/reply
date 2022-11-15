@@ -3,6 +3,9 @@
 @use 'styles/theming' as theming;
 
 :host {
+  display: flex;
+  flex-direction: column;
+
   grid-row: 1;
   grid-column: 1 / -1;
   :host-context(.tablet-portrait) & {
@@ -32,4 +35,9 @@
     flex-grow: 1;
     @include mat.typography-level(theming.$typography-config, 'body-2');
   }
+}
+
+.search-result {
+  height: 0;
+  flex-grow: 1;
 }

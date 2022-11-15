@@ -1,12 +1,21 @@
-<div class="search-bar">
-  <a mat-icon-button>
-    <mat-icon fontSet="filled" fontIcon="arrow_back"></mat-icon>
-  </a>
-  <input type="text" placeholder="Search emails" />
-  <button mat-icon-button>
-    <mat-icon fontSet="filled" fontIcon="mic"></mat-icon>
-  </button>
-</div>
-<div class="search-result">
-  <rpl-search-result-list></rpl-search-result-list>
-</div>
+<ng-container *ngIf="mails$ | async as mails">
+  <div ngForm class="search-bar">
+    <a mat-icon-button routerLink="/">
+      <mat-icon fontSet="filled" fontIcon="arrow_back"></mat-icon>
+    </a>
+    <input
+      name="search"
+      type="text"
+      placeholder="Search emails"
+      [ngModel]="searchText$.value"
+      (ngModelChange)="searchText$.next($event)"
+    />
+    <button mat-icon-button>
+      <mat-icon fontSet="filled" fontIcon="mic"></mat-icon>
+    </button>
+  </div>
+
+  <rpl-content class="search-result">
+    <rpl-search-result-list [mails]="mails"></rpl-search-result-list>
+  </rpl-content>
+</ng-container>
