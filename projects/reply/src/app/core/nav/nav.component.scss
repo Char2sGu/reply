@@ -106,6 +106,14 @@ $heightInModeBar: 56px;
     align-items: center;
     gap: 4px;
   }
+
+  rpl-nav-logo-button {
+    margin-left: 16px;
+    :host.mode-rail &,
+    :host.mode-drawer & {
+      margin-left: initial;
+    }
+  }
 }
 
 .fab {
