@@ -2,10 +2,20 @@
   <ng-container
     *ngIf="
       layoutContext.navFabConfig ??
-      { text: 'Compose', icon: editIconTemplate, link: '/compose' } as config
+      {
+        text: 'Compose',
+        icon: editIconTemplate,
+        link: '/compose',
+        linkParams: {}
+      } as config
     "
   >
-    <a mat-fab [routerLink]="config.link" @host>
+    <a
+      mat-fab
+      [routerLink]="config.link"
+      [queryParams]="config.linkParams"
+      @host
+    >
       <span class="icon" [@icon]="config.icon">
         <ng-container [ngTemplateOutlet]="config.icon"></ng-container>
       </span>

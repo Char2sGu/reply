@@ -8,7 +8,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, Observable, switchMap, tap } from 'rxjs';
 
 import { AuthService } from '@/app/core/auth.service';
@@ -40,7 +40,6 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private layoutContext: LayoutContext,
     private authService: AuthService,
     private mailService: MailService,
@@ -98,7 +97,8 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.layoutContext.navFabConfig = {
       text: 'Reply',
       icon: this.navFabIconTemplate,
-      link: `${this.router.url}/reply`,
+      link: '/compose',
+      linkParams: { reply: this.route.snapshot.params['mailId'] },
     };
     this.layoutContext.navBottomActions = this.navBottomActionsTemplate;
   }

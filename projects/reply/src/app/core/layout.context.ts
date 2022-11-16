@@ -1,5 +1,5 @@
 import { Injectable, TemplateRef } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { NavigationStart, Params, Router } from '@angular/router';
 import { filter } from 'rxjs';
 
 import { Reactive } from '../common/reactive';
@@ -25,4 +25,5 @@ export interface LayoutNavFabConfig {
   text: string;
   icon: TemplateRef<never>;
   link: string;
+  linkParams?: Params;
 }
