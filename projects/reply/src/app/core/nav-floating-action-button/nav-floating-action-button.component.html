@@ -1,16 +1,23 @@
 <ng-container *ngIf="layoutContext.value$ | async as layoutContext">
-  <ng-container *ngIf="layoutContext.navFabConfig as config">
+  <ng-container
+    *ngIf="
+      layoutContext.navFabConfig ??
+      { text: 'Compose', icon: null, link: '/compose' } as config
+    "
+  >
     <a mat-fab [routerLink]="config.link" @host>
       <span class="icon" [@icon]="config.icon">
-        <mat-icon
-          *rplReattachOnChange="config"
-          fontSet="filled"
-          [fontIcon]="config.icon"
-        ></mat-icon
-      ></span>
+        <ng-container *ngIf="config.icon; else editIconTemplate">
+          <ng-container [cdkPortalOutlet]="config.icon"></ng-container>
+        </ng-container>
+      </span>
       <span class="text">
         {{ config.text }}
       </span>
     </a>
   </ng-container>
 </ng-container>
+
+<ng-template #editIconTemplate>
+  <mat-icon fontSet="filled" fontIcon="edit"></mat-icon>
+</ng-template>

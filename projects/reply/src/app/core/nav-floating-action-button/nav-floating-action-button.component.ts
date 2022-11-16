@@ -28,8 +28,7 @@ import { LayoutContext } from '../layout.context';
       ]),
     ]),
     trigger('icon', [
-      transition(':enter', []),
-      transition(':leave', []),
+      transition(':enter, :leave', []),
       transition('* => *', [FadeThroughAnimation.apply()]),
     ]),
   ],

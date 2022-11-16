@@ -32,7 +32,9 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   mailSender$!: Observable<Contact>;
   mailRecipientNames$!: Observable<string[]>;
 
-  private navFabConfigBackup = { ...this.layoutContext.navFabConfig };
+  @ViewChild('replyIcon')
+  private navFabIconTemplate!: TemplateRef<never>;
+  private navFabConfigBackup = this.layoutContext.navFabConfig;
 
   @ViewChild('bottomActions')
   private bottomActionsTemplate!: TemplateRef<unknown>;
@@ -98,7 +100,7 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.layoutContext.navFabConfig = {
       text: 'Reply',
-      icon: 'reply_all',
+      icon: new TemplatePortal(this.navFabIconTemplate, this.viewContainer),
       link: `${this.router.url}/reply`,
     };
     this.layoutContext.navBottomActionsPortal = new TemplatePortal(
