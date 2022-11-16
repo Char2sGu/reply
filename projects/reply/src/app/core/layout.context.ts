@@ -8,7 +8,7 @@ import { Reactive } from '../common/reactive';
   providedIn: 'root',
 })
 export class LayoutContext extends Reactive {
-  contentFavored: boolean = false;
+  contentFavored = false;
 
   navFabConfig?: LayoutNavFabConfig;
   navBottomActions?: TemplateRef<never>;

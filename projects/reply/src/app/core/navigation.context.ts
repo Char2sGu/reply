@@ -5,6 +5,7 @@ import { Reactive } from '@/app/common/reactive';
 @Injectable({
   providedIn: 'root',
 })
-export class MailboxContext extends Reactive {
-  current?: string;
+export class NavigationContext extends Reactive {
+  latestMailboxUrl?: string;
+  latestMailboxIndex?: number;
 }

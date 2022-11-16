@@ -1,6 +1,9 @@
-<ng-container ngForm>
+<ng-container
+  *ngIf="navigationContext.value$ | async as navigationContext"
+  ngForm
+>
   <rpl-header class="subject-line">
-    <a mat-icon-button [routerLink]="backUrl$ | async">
+    <a mat-icon-button [routerLink]="navigationContext.latestMailboxUrl ?? '/'">
       <mat-icon fontSet="filled" fontIcon="close"></mat-icon>
     </a>
     <input

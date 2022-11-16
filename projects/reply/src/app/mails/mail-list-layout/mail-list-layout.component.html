@@ -1,21 +1,26 @@
 <ng-container *ngIf="breakpoints$ | async as breakpoints">
-  <ng-container *ngIf="mailboxName$ | async as mailboxName">
-    <div class="content-wrapper" [@content]="mailboxName">
-      <rpl-content
-        class="content"
-        *rplReattachOnChange="mailboxName"
-        scrolling="scrolling"
-        (scrollUp)="layoutContext.contentFavored = false"
-        (scrollDown)="layoutContext.contentFavored = true"
+  <ng-container *ngIf="navigationContext.value$ | async as navigationContext">
+    <ng-container *ngIf="mailboxName$ | async as mailboxName">
+      <div
+        class="content-wrapper"
+        [@content]="navigationContext.latestMailboxIndex"
       >
-        <rpl-mail-card-list class="list" #list></rpl-mail-card-list>
-        <div class="empty-prompt" *ngIf="!(list.mails$ | async)?.length">
-          Empty in {{ mailboxName }}
-        </div>
-      </rpl-content>
-    </div>
-    <div class="actions" *ngIf="breakpoints['tablet-portrait']">
-      <rpl-search-button></rpl-search-button>
-    </div>
+        <rpl-content
+          class="content"
+          *rplReattachOnChange="mailboxName"
+          scrolling="scrolling"
+          (scrollUp)="layoutContext.contentFavored = false"
+          (scrollDown)="layoutContext.contentFavored = true"
+        >
+          <rpl-mail-card-list class="list" #list></rpl-mail-card-list>
+          <div class="empty-prompt" *ngIf="!(list.mails$ | async)?.length">
+            Empty in {{ mailboxName }}
+          </div>
+        </rpl-content>
+      </div>
+      <div class="actions" *ngIf="breakpoints['tablet-portrait']">
+        <rpl-search-button></rpl-search-button>
+      </div>
+    </ng-container>
   </ng-container>
 </ng-container>

@@ -1,21 +1,26 @@
-<ng-container *ngIf="mails$ | async as mails">
-  <rpl-header ngForm class="search-bar">
-    <a mat-icon-button [routerLink]="backUrl$ | async">
-      <mat-icon fontSet="filled" fontIcon="arrow_back"></mat-icon>
-    </a>
-    <input
-      name="search"
-      type="text"
-      placeholder="Search emails"
-      [ngModel]="searchText$.value"
-      (ngModelChange)="searchText$.next($event)"
-    />
-    <button mat-icon-button>
-      <mat-icon fontSet="filled" fontIcon="mic"></mat-icon>
-    </button>
-  </rpl-header>
+<ng-container *ngIf="navigationContext.value$ | async as navigationContext">
+  <ng-container *ngIf="mails$ | async as mails">
+    <rpl-header ngForm class="search-bar">
+      <a
+        mat-icon-button
+        [routerLink]="navigationContext.latestMailboxUrl ?? '/'"
+      >
+        <mat-icon fontSet="filled" fontIcon="arrow_back"></mat-icon>
+      </a>
+      <input
+        name="search"
+        type="text"
+        placeholder="Search emails"
+        [ngModel]="searchText$.value"
+        (ngModelChange)="searchText$.next($event)"
+      />
+      <button mat-icon-button>
+        <mat-icon fontSet="filled" fontIcon="mic"></mat-icon>
+      </button>
+    </rpl-header>
 
-  <rpl-content class="search-result">
-    <rpl-search-result-list [mails]="mails"></rpl-search-result-list>
-  </rpl-content>
+    <rpl-content class="search-result">
+      <rpl-search-result-list [mails]="mails"></rpl-search-result-list>
+    </rpl-content>
+  </ng-container>
 </ng-container>

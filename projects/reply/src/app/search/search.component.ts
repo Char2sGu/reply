@@ -9,7 +9,7 @@ import {
   switchMap,
 } from 'rxjs';
 
-import { MailboxContext } from '../core/mailbox.context';
+import { NavigationContext } from '../core/navigation.context';
 import { Mail } from '../data/mail.model';
 import { MailService } from '../data/mail.service';
 
@@ -20,20 +20,15 @@ import { MailService } from '../data/mail.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent implements OnInit {
-  backUrl$!: Observable<string>;
   searchText$ = new BehaviorSubject('');
   mails$!: Observable<Mail[]>;
 
   constructor(
-    private mailboxContext: MailboxContext,
+    public navigationContext: NavigationContext,
     private mailService: MailService,
   ) {}
 
   ngOnInit(): void {
-    this.backUrl$ = this.mailboxContext.value$.pipe(
-      map((context) => context.current),
-      map((mailbox) => (mailbox ? `/mailboxes/${mailbox}/mails` : '/')),
-    );
     this.mails$ = concat(
       this.searchText$.pipe(first()),
       this.searchText$.pipe(debounceTime(200)),

@@ -1,4 +1,4 @@
-import { transition, trigger } from '@angular/animations';
+import { query, style, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -10,10 +10,10 @@ import {
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, takeUntil } from 'rxjs';
 
-import { FadeThroughAnimation } from '@/app/core/animations';
+import { SharedAxisAnimation } from '@/app/core/animations';
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
 import { LayoutContext } from '@/app/core/layout.context';
-import { MailboxContext } from '@/app/core/mailbox.context';
+import { NavigationContext } from '@/app/core/navigation.context';
 
 @Component({
   selector: 'rpl-mail-list-layout',
@@ -23,8 +23,14 @@ import { MailboxContext } from '@/app/core/mailbox.context';
   animations: [
     // TODO: shared axis animation
     trigger('content', [
-      transition(':enter, :leave', []),
-      transition('* => *', [FadeThroughAnimation.apply()]),
+      transition(':increment', [
+        query(':leave', style({ position: 'absolute' })),
+        SharedAxisAnimation.apply('y', 'forward'),
+      ]),
+      transition(':decrement', [
+        query(':leave', style({ position: 'absolute' })),
+        SharedAxisAnimation.apply('y', 'backward'),
+      ]),
     ]),
   ],
 })
@@ -36,7 +42,7 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
 
   constructor(
     public layoutContext: LayoutContext,
-    private mailboxContext: MailboxContext,
+    public navigationContext: NavigationContext,
     private router: Router,
     private route: ActivatedRoute,
     private breakpointManager: BreakpointManager,
@@ -44,10 +50,6 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.mailboxName$.subscribe(
-      (mailboxName) => (this.mailboxContext.current = mailboxName),
-    );
-
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),

@@ -9,10 +9,13 @@
         { name: 'Trash', icon: 'delete' },
         { name: 'Spam', icon: 'report' },
         { name: 'Drafts', icon: 'drafts' }
-      ]
+      ];
+      let index = index
     "
-    routerLink="/mailboxes/{{ item.name }}/mails"
+    [routerLink]="getMailboxUrl(item.name)"
     routerLinkActive="active"
+    (isActiveChange)="$event && onItemActive(item.name, index)"
+    (click)="onItemActive(item.name, index)"
   >
     <mat-icon matListIcon [svgIcon]="item.icon"></mat-icon>
     <div matLine>{{ item.name }}</div>
@@ -33,10 +36,13 @@
           { name: 'Vacation' },
           { name: 'Mortgage' },
           { name: 'Freelance' }
-        ]
+        ];
+        let index = index
       "
-      routerLink="/mailboxes/{{ item.name }}/mails"
+      [routerLink]="getMailboxUrl(item.name)"
       routerLinkActive="active"
+      (isActiveChange)="$event && onItemActive(item.name, index + 6)"
+      (click)="onItemActive(item.name, index + 6)"
     >
       <mat-icon matListIcon fontSet="filled" fontIcon="folder_open"></mat-icon>
       <div matLine>{{ item.name }}</div>
