@@ -1,4 +1,3 @@
-import { TemplatePortal } from '@angular/cdk/portal';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -8,7 +7,6 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, map, Observable, switchMap, tap } from 'rxjs';
@@ -37,8 +35,8 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   private navFabConfigBackup = this.layoutContext.navFabConfig;
 
   @ViewChild('bottomActions')
-  private bottomActionsTemplate!: TemplateRef<unknown>;
-  private bottomActionsPortalBackup = this.layoutContext.navBottomActionsPortal;
+  private navBottomActionsTemplate!: TemplateRef<never>;
+  private navBottomActionsBackup = this.layoutContext.navBottomActions;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,7 +46,6 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
     private mailService: MailService,
     private contactService: ContactService,
     private changeDetector: ChangeDetectorRef,
-    private viewContainer: ViewContainerRef,
   ) {}
 
   ngOnInit(): void {
@@ -100,17 +97,14 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.layoutContext.navFabConfig = {
       text: 'Reply',
-      icon: new TemplatePortal(this.navFabIconTemplate, this.viewContainer),
+      icon: this.navFabIconTemplate,
       link: `${this.router.url}/reply`,
     };
-    this.layoutContext.navBottomActionsPortal = new TemplatePortal(
-      this.bottomActionsTemplate,
-      this.viewContainer,
-    );
+    this.layoutContext.navBottomActions = this.navBottomActionsTemplate;
   }
 
   ngOnDestroy(): void {
     this.layoutContext.navFabConfig = this.navFabConfigBackup;
-    this.layoutContext.navBottomActionsPortal = this.bottomActionsPortalBackup;
+    this.layoutContext.navBottomActions = this.navBottomActionsBackup;
   }
 }

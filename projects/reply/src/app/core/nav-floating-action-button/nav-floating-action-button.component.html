@@ -2,14 +2,12 @@
   <ng-container
     *ngIf="
       layoutContext.navFabConfig ??
-      { text: 'Compose', icon: null, link: '/compose' } as config
+      { text: 'Compose', icon: editIconTemplate, link: '/compose' } as config
     "
   >
     <a mat-fab [routerLink]="config.link" @host>
       <span class="icon" [@icon]="config.icon">
-        <ng-container *ngIf="config.icon; else editIconTemplate">
-          <ng-container [cdkPortalOutlet]="config.icon"></ng-container>
-        </ng-container>
+        <ng-container [ngTemplateOutlet]="config.icon"></ng-container>
       </span>
       <span class="text">
         {{ config.text }}

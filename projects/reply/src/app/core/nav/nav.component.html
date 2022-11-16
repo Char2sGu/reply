@@ -30,21 +30,21 @@
           <ng-container
             *ngIf="
               bottomMenuOpened
-                ? settingsButtonPortal
-                : layoutContext.navBottomActionsPortal ??
-                  searchButtonPortal as bottomActionsPortal
+                ? settingsButtonTemplate
+                : layoutContext.navBottomActions ??
+                  searchButtonTemplate as bottomActionsTemplate
             "
           >
-            <div class="wrapper" [@bottomActions]="bottomActionsPortal">
+            <div class="wrapper" [@bottomActions]="bottomActionsTemplate">
               <ng-container
-                [cdkPortalOutlet]="bottomActionsPortal"
+                [ngTemplateOutlet]="bottomActionsTemplate"
               ></ng-container>
             </div>
           </ng-container>
-          <ng-template cdkPortal #settingsButtonPortal="cdkPortal">
+          <ng-template #settingsButtonTemplate>
             <rpl-settings-button></rpl-settings-button>
           </ng-template>
-          <ng-template cdkPortal #searchButtonPortal="cdkPortal">
+          <ng-template #searchButtonTemplate>
             <rpl-search-button></rpl-search-button>
           </ng-template>
         </div>

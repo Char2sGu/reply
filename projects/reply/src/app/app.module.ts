@@ -1,7 +1,6 @@
 import 'hammerjs';
 
 import { OverlayModule } from '@angular/cdk/overlay';
-import { PortalModule } from '@angular/cdk/portal';
 import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -59,7 +58,6 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
     HttpClientModule,
     AppRoutingModule,
     OverlayModule,
-    PortalModule,
     MatButtonModule,
     MatIconModule,
     MatListModule,

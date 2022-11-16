@@ -1,5 +1,4 @@
-import { Portal } from '@angular/cdk/portal';
-import { Injectable } from '@angular/core';
+import { Injectable, TemplateRef } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { filter } from 'rxjs';
 
@@ -12,7 +11,7 @@ export class LayoutContext extends Reactive {
   contentFavored: boolean = false;
 
   navFabConfig?: LayoutNavFabConfig;
-  navBottomActionsPortal?: Portal<unknown>;
+  navBottomActions?: TemplateRef<never>;
 
   constructor(router: Router) {
     super();
@@ -24,6 +23,6 @@ export class LayoutContext extends Reactive {
 
 export interface LayoutNavFabConfig {
   text: string;
-  icon: Portal<unknown>;
+  icon: TemplateRef<never>;
   link: string;
 }
