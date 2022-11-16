@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
+
+import { MailboxContext } from '../core/mailbox.context';
 
 @Component({
   selector: 'rpl-compose',
@@ -12,7 +14,14 @@ export class ComposeComponent implements OnInit {
   senderEmail$ = new BehaviorSubject(0);
   content$ = new BehaviorSubject('');
 
-  constructor() {}
+  backUrl$!: Observable<string>;
 
-  ngOnInit(): void {}
+  constructor(private mailboxContext: MailboxContext) {}
+
+  ngOnInit(): void {
+    this.backUrl$ = this.mailboxContext.value$.pipe(
+      map((context) => context.current),
+      map((mailbox) => (mailbox ? `/mailboxes/${mailbox}/mails` : '/')),
+    );
+  }
 }

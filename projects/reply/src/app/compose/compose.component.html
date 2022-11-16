@@ -1,8 +1,8 @@
 <ng-container ngForm>
   <rpl-header class="subject-line">
-    <button mat-icon-button>
+    <a mat-icon-button [routerLink]="backUrl$ | async">
       <mat-icon fontSet="filled" fontIcon="close"></mat-icon>
-    </button>
+    </a>
     <input
       name="subject"
       type="text"
