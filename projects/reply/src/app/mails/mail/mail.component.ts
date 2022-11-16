@@ -12,12 +12,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, map, Observable, switchMap, tap } from 'rxjs';
 
 import { AuthService } from '@/app/core/auth.service';
-import { Contact } from '@/app/core/contact.model';
-import { ContactService } from '@/app/core/contact.service';
 import { LayoutContext } from '@/app/core/layout.context';
+import { Contact } from '@/app/data/contact.model';
+import { ContactService } from '@/app/data/contact.service';
 
-import { Mail } from '../../core/mail.model';
-import { MailService } from '../../core/mail.service';
+import { Mail } from '../../data/mail.model';
+import { MailService } from '../../data/mail.service';
 
 @Component({
   selector: 'rpl-mail',

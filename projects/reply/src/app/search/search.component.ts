@@ -9,9 +9,9 @@ import {
   switchMap,
 } from 'rxjs';
 
-import { Mail } from '../core/mail.model';
-import { MailService } from '../core/mail.service';
 import { MailboxContext } from '../core/mailbox.context';
+import { Mail } from '../data/mail.model';
+import { MailService } from '../data/mail.service';
 
 @Component({
   selector: 'rpl-search',

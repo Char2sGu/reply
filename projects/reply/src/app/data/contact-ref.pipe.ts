@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Contact } from '../core/contact.model';
-import { ContactService } from '../core/contact.service';
+import { Contact } from './contact.model';
+import { ContactService } from './contact.service';
 
 @Pipe({
   name: 'contactRef',

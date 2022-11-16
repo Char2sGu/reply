@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 
-import { ContactRefPipe } from '../standalone/contact-ref.pipe';
+import { ContactRefPipe } from '../data/contact-ref.pipe';
 import { ContentComponent } from '../standalone/content/content.component';
 import { HeaderComponent } from '../standalone/header/header.component';
 import { ReadableDatePipe } from '../standalone/readable-date.pipe';

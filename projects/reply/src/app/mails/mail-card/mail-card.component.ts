@@ -11,10 +11,10 @@ import {
 import { Observable } from 'rxjs';
 
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
-import { Contact } from '@/app/core/contact.model';
-import { ContactService } from '@/app/core/contact.service';
+import { Contact } from '@/app/data/contact.model';
+import { ContactService } from '@/app/data/contact.service';
 
-import { Mail } from '../../core/mail.model';
+import { Mail } from '../../data/mail.model';
 
 @Component({
   selector: 'rpl-mail-card',

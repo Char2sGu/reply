@@ -7,7 +7,7 @@ import {
 import dayjs from 'dayjs';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
-import { Mail } from '@/app/core/mail.model';
+import { Mail } from '@/app/data/mail.model';
 
 @Component({
   selector: 'rpl-search-result-list',

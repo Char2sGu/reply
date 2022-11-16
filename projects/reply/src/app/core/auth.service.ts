@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Contact } from './contact.model';
-import { ContactService } from './contact.service';
+import { Contact } from '../data/contact.model';
+import { ContactService } from '../data/contact.service';
 
 @Injectable({
   providedIn: 'root',
