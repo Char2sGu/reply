@@ -31,6 +31,10 @@ import { ReattachOnChangeDirective } from './standalone/reattach-on-change.direc
 import { SearchButtonComponent } from './standalone/search-button/search-button.component';
 import { SettingsButtonComponent } from './standalone/settings-button/settings-button.component';
 
+// TODO: attachment
+// TODO: image
+// TODO: schedule
+
 @NgModule({
   declarations: [
     AppComponent,

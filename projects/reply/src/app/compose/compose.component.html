@@ -1,0 +1,62 @@
+<ng-container ngForm>
+  <rpl-header class="subject-line">
+    <button mat-icon-button>
+      <mat-icon fontSet="filled" fontIcon="close"></mat-icon>
+    </button>
+    <input
+      name="subject"
+      type="text"
+      placeholder="Subject"
+      [ngModel]="subject$.value"
+      (ngModelChange)="subject$.next($event)"
+    />
+    <button mat-icon-button>
+      <mat-icon svgIcon="send"></mat-icon>
+    </button>
+  </rpl-header>
+
+  <div class="sender-line">
+    <mat-form-field>
+      <mat-select
+        name="senderEmail"
+        [ngModel]="senderEmail$.value"
+        (ngModelChange)="senderEmail$.next($event)"
+      >
+        <mat-option
+          *ngFor="
+            let email of ['AngularFan@gmail.com', 'MaterialFan@gmail.com'];
+            let index = index
+          "
+          [value]="index"
+        >
+          {{ email }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="recipient-line">
+    <mat-chip-list>
+      <mat-chip>
+        <img matChipAvatar src="/assets/avatar-1.jpg" alt="Avatar" />
+        <span>Recipient1</span>
+      </mat-chip>
+      <mat-chip>
+        <img matChipAvatar src="/assets/avatar-2.jpg" alt="Avatar" />
+        <span>Recipient2</span>
+      </mat-chip>
+    </mat-chip-list>
+    <button mat-icon-button>
+      <mat-icon fontSet="filled" fontIcon="add_circle_outline"></mat-icon>
+    </button>
+  </div>
+
+  <div class="content-section">
+    <textarea
+      name="content"
+      placeholder="New Message..."
+      [ngModel]="content$.value"
+      (ngModelChange)="content$.next($event)"
+    ></textarea>
+  </div>
+</ng-container>

@@ -31,6 +31,11 @@ const routes: Routes = [
     path: '',
     children: [
       {
+        path: 'compose',
+        loadChildren: () =>
+          import('./compose/compose.module').then((m) => m.ComposeModule),
+      },
+      {
         path: 'search',
         loadChildren: () =>
           import('./search/search.module').then((m) => m.SearchModule),
