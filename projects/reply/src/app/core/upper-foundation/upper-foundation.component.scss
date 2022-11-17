@@ -20,6 +20,4 @@ main {
 
   background-color: map.get(theming.$theme, 'color', 'background', 'card');
   color: map.get(theming.$theme, 'color', 'foreground', 'text');
-
-  z-index: 3000; // cover the nav (2000)
 }
