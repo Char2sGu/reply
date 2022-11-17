@@ -1,9 +1,9 @@
 <ng-container *ngIf="breakpoints$ | async as breakpoints">
-  <rpl-nav
+  <rpl-side-nav
     *ngIf="breakpoints['tablet-portrait']"
-    [mode]="breakpoints['laptop'] ? 'drawer' : 'rail'"
+    [expanded]="breakpoints['laptop']"
     @nav
-  ></rpl-nav>
+  ></rpl-side-nav>
   <div class="wrapper" [@wrapper]="getChildRouteAnimationId()">
     <router-outlet></router-outlet>
   </div>

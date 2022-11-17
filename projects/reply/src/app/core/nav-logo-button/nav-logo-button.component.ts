@@ -16,7 +16,7 @@ import {
 export class NavLogoButtonComponent implements OnInit {
   @Input() indicator?: TemplateRef<unknown>;
   @Input() @HostBinding('class.dense') dense = false;
-  @Input() expanded = true;
+  @Input() expanded = false;
 
   constructor() {}
 

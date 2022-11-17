@@ -11,14 +11,12 @@ import {
 import { Overlay, OverlayContainer, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   HostBinding,
-  Input,
   OnDestroy,
   OnInit,
   TemplateRef,
@@ -27,21 +25,14 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { NavigationStart, Router } from '@angular/router';
-import {
-  BehaviorSubject,
-  delay,
-  filter,
-  first,
-  switchMap,
-  takeUntil,
-} from 'rxjs';
+import { filter, takeUntil } from 'rxjs';
 
 import { LayoutContext } from '../layout.context';
 
 @Component({
-  selector: 'rpl-nav',
-  templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.scss'],
+  selector: 'rpl-bottom-nav',
+  templateUrl: './bottom-nav.component.html',
+  styleUrls: ['./bottom-nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('arrow', [
@@ -79,15 +70,7 @@ import { LayoutContext } from '../layout.context';
     ]),
   ],
 })
-export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
-  // prettier-ignore
-  @Input() set mode(value: NavMode) { this.mode$.next(value) }
-  mode$ = new BehaviorSubject<NavMode>('drawer');
-  @HostBinding('class') get modeClassBinding(): Record<string, boolean> {
-    const name = `mode-${this.mode$.value}`;
-    return { [name]: true };
-  }
-
+export class BottomNavComponent implements OnInit, OnDestroy {
   logoClick$ = new EventEmitter();
 
   bottomMenuPan$ = new EventEmitter<'up' | 'down'>();
@@ -102,7 +85,7 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.layoutContext.contentFavored;
   }
 
-  destroy$ = new EventEmitter();
+  private destroy$ = new EventEmitter();
 
   constructor(
     public layoutContext: LayoutContext,
@@ -115,14 +98,9 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.logoClick$
-      .pipe(
-        switchMap(() => this.mode$.pipe(first())),
-        filter((mode) => mode === 'bar'),
-      )
-      .subscribe(() => {
-        this.toggleBottomMenu();
-      });
+    this.logoClick$.subscribe(() => {
+      this.toggleBottomMenu();
+    });
 
     this.bottomMenuPan$
       .pipe(filter(() => this.bottomMenuOpened))
@@ -172,19 +150,14 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private setupOverlayContainer(): void {
-    this.mode$
-      .pipe(delay(0)) // wait for DOM update
-      .subscribe((mode) => {
-        const overlayContainer = this.overlayContainerRef.getContainerElement();
-        if (mode === 'bar') {
-          const navHeight = this.elementRef.nativeElement.offsetHeight;
-          overlayContainer.style.height = `calc(100% - ${navHeight}px)`;
-          overlayContainer.style.overflow = 'hidden';
-        } else {
-          overlayContainer.style.height = '';
-          overlayContainer.style.overflow = '';
-        }
-      });
+    const overlayContainer = this.overlayContainerRef.getContainerElement();
+    const height = this.elementRef.nativeElement.offsetHeight;
+    overlayContainer.style.height = `calc(100% - ${height}px)`;
+    overlayContainer.style.overflow = 'hidden';
+    this.destroy$.subscribe(() => {
+      overlayContainer.style.height = '';
+      overlayContainer.style.overflow = '';
+    });
   }
 
   private setupBottomMenu(): void {
@@ -211,10 +184,8 @@ export class NavComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(() => this.toggleBottomMenu(false));
 
-    this.mode$.subscribe((mode) => {
-      if (mode !== 'bar') this.toggleBottomMenu(false);
+    this.destroy$.subscribe(() => {
+      this.toggleBottomMenu(false);
     });
   }
 }
-
-export type NavMode = 'drawer' | 'rail' | 'bar';

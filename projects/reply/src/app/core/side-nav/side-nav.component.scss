@@ -1,0 +1,61 @@
+@use 'sass:map' as map;
+@use 'sass:color' as color;
+@use 'styles/theming' as theming;
+@use 'styles/scrollbar' as scrollbar;
+@use 'styles/animation-curves' as animation-curves;
+
+:host {
+  display: block;
+}
+
+.wrapper {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  padding: 8px 0;
+  background-color: map.get(theming.$theme, 'color', 'primary', 'default');
+  color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
+  overflow-y: auto;
+
+  :host.expanded & {
+    align-items: flex-start;
+    padding: 8px 16px;
+  }
+
+  @include scrollbar.scrollbar(
+    $regular-color:
+      color.change(
+        map.get(theming.$theme, 'color', 'primary', 'default-contrast'),
+        $alpha: 0.12
+      ),
+    $hover-color:
+      color.change(
+        map.get(theming.$theme, 'color', 'primary', 'default-contrast'),
+        $alpha: 0.3
+      ),
+    $activation-selector: '.scrolling'
+  );
+}
+
+.primary-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  :host.expanded & {
+    width: 100%;
+  }
+
+  .group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.menu {
+  width: 100%;
+}

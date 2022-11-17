@@ -1,0 +1,18 @@
+<div class="wrapper" scrolling="scrolling">
+  <div class="primary-line">
+    <div class="group">
+      <rpl-nav-logo-button [expanded]="expanded"></rpl-nav-logo-button>
+    </div>
+    <div class="group" *ngIf="expanded">
+      <rpl-nav-avatar-button></rpl-nav-avatar-button>
+      <rpl-settings-button></rpl-settings-button>
+    </div>
+  </div>
+
+  <rpl-nav-floating-action-button
+    class="fab"
+    [expanded]="expanded"
+  ></rpl-nav-floating-action-button>
+
+  <rpl-nav-menu class="menu" [expanded]="expanded"></rpl-nav-menu>
+</div>

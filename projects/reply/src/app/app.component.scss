@@ -26,7 +26,7 @@
   overflow: hidden; // animations might cause overflow
 }
 
-rpl-nav {
+rpl-side-nav {
   grid-row: 1;
   grid-column: 1 / span 2;
   :host-context(.tablet-landscape) & {

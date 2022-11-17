@@ -1,0 +1,57 @@
+<ng-container *ngIf="layoutContext.value$ | async as layoutContext">
+  <div class="background" [class.clipped]="!bottomMenuOpened"></div>
+  <div class="content">
+    <div class="group">
+      <rpl-nav-logo-button
+        [indicator]="arrow"
+        [dense]="true"
+        (click)="logoClick$.emit()"
+      ></rpl-nav-logo-button>
+      <ng-template #arrow>
+        <mat-icon
+          fontSet="filled"
+          fontIcon="arrow_drop_up"
+          [@arrow]="bottomMenuOpened"
+        ></mat-icon>
+      </ng-template>
+    </div>
+    <div class="group">
+      <ng-container
+        *ngIf="
+          bottomMenuOpened
+            ? settingsButtonTemplate
+            : layoutContext.navBottomActions ??
+              searchButtonTemplate as bottomActionsTemplate
+        "
+      >
+        <div class="wrapper" [@bottomActions]="bottomActionsTemplate">
+          <ng-container
+            [ngTemplateOutlet]="bottomActionsTemplate"
+          ></ng-container>
+        </div>
+      </ng-container>
+      <ng-template #settingsButtonTemplate>
+        <rpl-settings-button></rpl-settings-button>
+      </ng-template>
+      <ng-template #searchButtonTemplate>
+        <rpl-search-button></rpl-search-button>
+      </ng-template>
+    </div>
+  </div>
+
+  <rpl-nav-floating-action-button
+    class="fab"
+    *ngIf="!bottomMenuOpened"
+    @fab
+  ></rpl-nav-floating-action-button>
+
+  <ng-template #bottomMenu>
+    <rpl-nav-bottom-menu
+      [expanded]="bottomMenuExpanded"
+      [style.touch-action]="bottomMenuExpanded ? 'pan-down' : 'none'"
+      (panup)="bottomMenuPan$.emit('up')"
+      (pandown)="bottomMenuPan$.emit('down')"
+      @bottomMenu
+    ></rpl-nav-bottom-menu>
+  </ng-template>
+</ng-container>
