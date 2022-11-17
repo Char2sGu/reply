@@ -1,7 +1,7 @@
 import { transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
-import { ChildrenOutletContexts } from '@angular/router';
 
+import { ChildRouteAnimationHost } from './common/child-route-animation-host';
 import { SharedAxisAnimation } from './core/animations';
 import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
 
@@ -30,7 +30,7 @@ import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
     ]),
   ],
 })
-export class AppComponent {
+export class AppComponent extends ChildRouteAnimationHost {
   @HostBinding('class') breakpointMap: BreakpointMap = {
     ['tablet-portrait']: false,
     ['tablet-landscape']: false,
@@ -40,19 +40,10 @@ export class AppComponent {
 
   breakpoints$ = this.breakpointManager.breakpoints$;
 
-  constructor(
-    private breakpointManager: BreakpointManager,
-    private childRouterOutletContexts: ChildrenOutletContexts,
-  ) {
+  constructor(private breakpointManager: BreakpointManager) {
+    super();
     this.breakpointManager.breakpoints$.subscribe((v) => {
       this.breakpointMap = v;
     });
-  }
-
-  getRouteComponentName(): string {
-    return (
-      this.childRouterOutletContexts.getContext('primary')?.route?.component
-        ?.name ?? 'Empty'
-    );
   }
 }
