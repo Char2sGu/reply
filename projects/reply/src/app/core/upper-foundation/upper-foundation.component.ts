@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { ChildRouteAnimationHost } from '@/app/common/child-route-animation-host';
 
-import { FadeThroughAnimation } from '../animations';
+import { FadeThroughAnimation } from '../../common/animations';
 
 @Component({
   selector: 'rpl-upper-foundation',

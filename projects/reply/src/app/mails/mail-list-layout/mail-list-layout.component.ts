@@ -10,7 +10,7 @@ import {
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, takeUntil } from 'rxjs';
 
-import { SharedAxisAnimation } from '@/app/core/animations';
+import { SharedAxisAnimation } from '@/app/common/animations';
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
 import { LayoutContext } from '@/app/core/layout.context';
 import { NavigationContext } from '@/app/core/navigation.context';

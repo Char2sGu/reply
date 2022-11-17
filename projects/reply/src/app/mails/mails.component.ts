@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ChildrenOutletContexts, NavigationEnd, Router } from '@angular/router';
 import { filter, map, Observable, startWith } from 'rxjs';
 
-import { SharedAxisAnimation } from '../core/animations';
+import { SharedAxisAnimation } from '../common/animations';
 
 @Component({
   selector: 'rpl-mails',

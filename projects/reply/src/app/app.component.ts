@@ -1,8 +1,8 @@
 import { transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
 
+import { SharedAxisAnimation } from './common/animations';
 import { ChildRouteAnimationHost } from './common/child-route-animation-host';
-import { SharedAxisAnimation } from './core/animations';
 import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
 
 @Component({
