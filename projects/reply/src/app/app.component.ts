@@ -18,12 +18,12 @@ import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
       transition('base => upper', [
         SharedAxisAnimation.apply('z', 'forward', {
           incoming: ':enter main',
-          outgoing: ':leave rpl-content, :leave rpl-nav',
+          outgoing: ':leave rpl-content, rpl-bottom-nav',
         }),
       ]),
       transition('upper => base', [
         SharedAxisAnimation.apply('z', 'backward', {
-          incoming: ':enter rpl-content, :enter rpl-nav',
+          incoming: ':enter rpl-content, rpl-bottom-nav',
           outgoing: ':leave main',
         }),
       ]),
