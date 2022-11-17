@@ -29,6 +29,7 @@ import { AnimationCurves } from '@angular/material/core';
         animate(`200ms ${AnimationCurves.STANDARD_CURVE}`),
       ]),
     ]),
+    trigger('fab', [transition(':enter', [])]), // disable entering animation
   ],
 })
 export class SideNavComponent implements OnInit {
