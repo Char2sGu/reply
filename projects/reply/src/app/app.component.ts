@@ -15,16 +15,16 @@ import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
     trigger('nav', [transition(':enter', [])]),
     trigger('wrapper', [
       transition(':enter, :leave, * <=> Empty', []),
-      transition('FoundationComponent => *', [
+      transition('BaseFoundationComponent => UpperFoundationComponent', [
         SharedAxisAnimation.apply('z', 'forward', {
-          incoming: ':enter',
+          incoming: ':enter main',
           outgoing: ':leave rpl-content, :leave rpl-nav',
         }),
       ]),
-      transition('* => FoundationComponent', [
+      transition('UpperFoundationComponent => BaseFoundationComponent', [
         SharedAxisAnimation.apply('z', 'backward', {
           incoming: ':enter rpl-content, :enter rpl-nav',
-          outgoing: ':leave',
+          outgoing: ':leave main',
         }),
       ]),
     ]),

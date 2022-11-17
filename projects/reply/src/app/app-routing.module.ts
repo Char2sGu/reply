@@ -8,7 +8,8 @@ import {
   TitleStrategy,
 } from '@angular/router';
 
-import { FoundationComponent } from './core/foundation/foundation.component';
+import { BaseFoundationComponent } from './core/base-foundation/base-foundation.component';
+import { UpperFoundationComponent } from './core/upper-foundation/upper-foundation.component';
 
 const routes: Routes = [
   {
@@ -18,7 +19,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: FoundationComponent,
+    component: BaseFoundationComponent,
     children: [
       {
         path: 'mailboxes/:mailboxName/mails',
@@ -29,6 +30,7 @@ const routes: Routes = [
   },
   {
     path: '',
+    component: UpperFoundationComponent,
     children: [
       {
         path: 'compose',

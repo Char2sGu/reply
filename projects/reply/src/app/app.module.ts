@@ -19,13 +19,14 @@ import { ScrollingModule } from '@reply/scrolling';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { FoundationComponent } from './core/foundation/foundation.component';
+import { BaseFoundationComponent } from './core/base-foundation/base-foundation.component';
 import { NavComponent } from './core/nav/nav.component';
 import { NavAvatarButtonComponent } from './core/nav-avatar-button/nav-avatar-button.component';
 import { NavBottomMenuComponent } from './core/nav-bottom-menu/nav-bottom-menu.component';
 import { NavFloatingActionButtonComponent } from './core/nav-floating-action-button/nav-floating-action-button.component';
 import { NavLogoButtonComponent } from './core/nav-logo-button/nav-logo-button.component';
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
+import { UpperFoundationComponent } from './core/upper-foundation/upper-foundation.component';
 import { ReattachOnChangeDirective } from './standalone/reattach-on-change.directive';
 import { SearchButtonComponent } from './standalone/search-button/search-button.component';
 import { SettingsButtonComponent } from './standalone/settings-button/settings-button.component';
@@ -43,7 +44,8 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
     NavAvatarButtonComponent,
     NavFloatingActionButtonComponent,
     NavBottomMenuComponent,
-    FoundationComponent,
+    BaseFoundationComponent,
+    UpperFoundationComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,26 +1,11 @@
 @use 'sass:map' as map;
-@use 'sass:color' as color;
 @use '@angular/material' as mat;
 @use 'styles/theming' as theming;
 
 :host {
   display: flex;
   flex-direction: column;
-
-  grid-row: 1;
-  grid-column: 1 / -1;
-  :host-context(.tablet-portrait) & {
-    grid-column: span 7 / -2;
-  }
-  :host-context(.tablet-landscape) & {
-    grid-column: span 11 / -2;
-  }
-  :host-context(.laptop) & {
-    grid-column: span 9 / -2;
-  }
-
-  background-color: map.get(theming.$theme, 'color', 'background', 'card');
-  color: map.get(theming.$theme, 'color', 'foreground', 'text');
+  height: 100%;
 }
 
 %line {
