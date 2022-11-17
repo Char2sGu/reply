@@ -3,6 +3,7 @@
 
 :host {
   display: grid;
+  height: 100%;
 
   background-color: map.get(
     theming.$theme,
@@ -12,7 +13,7 @@
   );
 
   column-gap: 8px;
-  grid-template-rows: 100vh;
+  grid-template-rows: 100%;
   grid-template-columns: 0px repeat(4, 1fr) 0px;
   &.tablet-portrait {
     column-gap: 32px;
