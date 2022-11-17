@@ -4,7 +4,7 @@
     [mode]="breakpoints['laptop'] ? 'drawer' : 'rail'"
     @nav
   ></rpl-nav>
-  <div class="wrapper" [@wrapper]="getChildRouteComponentName()">
+  <div class="wrapper" [@wrapper]="getChildRouteAnimationId()">
     <router-outlet></router-outlet>
   </div>
 </ng-container>

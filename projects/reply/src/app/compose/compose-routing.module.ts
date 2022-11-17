@@ -4,7 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { ComposeComponent } from './compose.component';
 
 const routes: Routes = [
-  { path: '', component: ComposeComponent, title: 'Compose' },
+  {
+    path: '',
+    component: ComposeComponent,
+    title: 'Compose',
+    data: { animationId: 'compose' },
+  },
 ];
 
 @NgModule({

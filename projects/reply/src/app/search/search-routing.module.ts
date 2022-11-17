@@ -4,7 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { SearchComponent } from './search.component';
 
 const routes: Routes = [
-  { path: '', component: SearchComponent, title: 'Search' },
+  {
+    path: '',
+    component: SearchComponent,
+    title: 'Search',
+    data: { animationId: 'search' },
+  },
 ];
 
 @NgModule({

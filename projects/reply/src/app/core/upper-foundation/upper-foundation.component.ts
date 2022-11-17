@@ -12,7 +12,7 @@ import { FadeThroughAnimation } from '../animations';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('main', [
-      transition(':enter, :leave, None <=> *', []),
+      transition(':enter, :leave, * <=> none', []),
       transition('* => *', [
         query(':self', style({ position: 'relative' })),
         query(':enter, :leave', style({ width: '100%' })),

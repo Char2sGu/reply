@@ -14,14 +14,14 @@ import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
     // remove the initial entering animations of nav elements
     trigger('nav', [transition(':enter', [])]),
     trigger('wrapper', [
-      transition(':enter, :leave, * <=> Empty', []),
-      transition('BaseFoundationComponent => UpperFoundationComponent', [
+      transition(':enter, :leave, * <=> none', []),
+      transition('base => upper', [
         SharedAxisAnimation.apply('z', 'forward', {
           incoming: ':enter main',
           outgoing: ':leave rpl-content, :leave rpl-nav',
         }),
       ]),
-      transition('UpperFoundationComponent => BaseFoundationComponent', [
+      transition('upper => base', [
         SharedAxisAnimation.apply('z', 'backward', {
           incoming: ':enter rpl-content, :enter rpl-nav',
           outgoing: ':leave main',

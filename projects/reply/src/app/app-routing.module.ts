@@ -20,6 +20,7 @@ const routes: Routes = [
   {
     path: '',
     component: BaseFoundationComponent,
+    data: { animationId: 'base' },
     children: [
       {
         path: 'mailboxes/:mailboxName/mails',
@@ -31,6 +32,7 @@ const routes: Routes = [
   {
     path: '',
     component: UpperFoundationComponent,
+    data: { animationId: 'upper' },
     children: [
       {
         path: 'compose',

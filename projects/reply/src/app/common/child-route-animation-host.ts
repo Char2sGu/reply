@@ -4,10 +4,10 @@ import { ChildrenOutletContexts } from '@angular/router';
 export abstract class ChildRouteAnimationHost {
   protected childRouterOutletContexts = inject(ChildrenOutletContexts);
 
-  getChildRouteComponentName(): string {
+  getChildRouteAnimationId(): string {
     return (
-      this.childRouterOutletContexts.getContext('primary')?.route?.component
-        ?.name ?? 'None'
+      this.childRouterOutletContexts.getContext('primary')?.route?.snapshot
+        ?.data?.['animationId'] ?? 'none'
     );
   }
 }
