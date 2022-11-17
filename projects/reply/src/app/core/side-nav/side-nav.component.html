@@ -1,7 +1,18 @@
 <div class="wrapper" scrolling="scrolling">
   <div class="primary-line">
     <div class="group">
-      <rpl-nav-logo-button [expanded]="expanded"></rpl-nav-logo-button>
+      <rpl-nav-logo-button
+        [indicator]="arrow"
+        [expanded]="expanded"
+        (click)="expandedChange.emit(!expanded)"
+      ></rpl-nav-logo-button>
+      <ng-template #arrow>
+        <mat-icon
+          fontSet="filled"
+          fontIcon="arrow_right"
+          [@arrow]="expanded"
+        ></mat-icon>
+      </ng-template>
     </div>
     <div class="group" *ngIf="expanded">
       <rpl-nav-avatar-button></rpl-nav-avatar-button>

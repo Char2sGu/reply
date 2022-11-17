@@ -11,8 +11,6 @@ import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-    // remove the initial entering animations of nav elements
-    trigger('nav', [transition(':enter', [])]),
     trigger('wrapper', [
       transition(':enter, :leave, * <=> none', []),
       transition('base => upper', [
@@ -39,6 +37,7 @@ export class AppComponent extends ChildRouteAnimationHost {
   };
 
   breakpoints$ = this.breakpointManager.breakpoints$;
+  navExpanded?: boolean = undefined;
 
   constructor(private breakpointManager: BreakpointManager) {
     super();

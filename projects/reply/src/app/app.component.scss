@@ -35,6 +35,13 @@ rpl-side-nav {
   :host-context(.laptop) & {
     grid-column: 1 / span 4;
   }
+
+  &:not(.on-grid) {
+    width: 100px;
+    &.expanded {
+      width: 300px;
+    }
+  }
 }
 
 .wrapper {
