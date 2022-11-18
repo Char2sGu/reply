@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { FlipModule } from '@reply/flip';
 import { ScrollingModule } from '@reply/scrolling';
 
 import { LayoutProjectionModule } from '../layout-projection/layout-projection.module';
@@ -41,14 +40,13 @@ import { MailsRoutingModule } from './mails-routing.module';
     MatButtonModule,
     MatRippleModule,
     MatIconModule,
-    FlipModule,
+    LayoutProjectionModule,
     ScrollingModule,
     SearchButtonComponent,
     ContentComponent,
     ReadableDatePipe,
     ReadableStringsPipe,
     ReattachOnChangeDirective,
-    LayoutProjectionModule,
   ],
 })
 export class MailsModule {}
