@@ -1,9 +1,9 @@
 <ng-container *ngIf="mails$ | async as mails">
-  <div class="wrapper" [libFlipScope]="flipConfig" [flipOn]="mails">
+  <div class="wrapper" rplLayoutProjectionRoot [animateLayoutOn]="mails$">
     <rpl-mail-card
       *ngFor="let mail of mails; let index = index; trackBy: mailTracker"
       [mail]="mail"
-      [libFlipItem]="mailTracker(index, mail)"
+      rplLayoutProjectionNode
     ></rpl-mail-card>
   </div>
 </ng-container>

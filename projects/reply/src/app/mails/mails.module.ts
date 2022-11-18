@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlipModule } from '@reply/flip';
 import { ScrollingModule } from '@reply/scrolling';
 
+import { LayoutProjectionModule } from '../layout-projection/layout-projection.module';
 import { ContentComponent } from '../standalone/content/content.component';
 import { ReadableDatePipe } from '../standalone/readable-date.pipe';
 import { ReadableStringsPipe } from '../standalone/readable-strings.pipe';
@@ -47,6 +48,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     ReadableDatePipe,
     ReadableStringsPipe,
     ReattachOnChangeDirective,
+    LayoutProjectionModule,
   ],
 })
 export class MailsModule {}

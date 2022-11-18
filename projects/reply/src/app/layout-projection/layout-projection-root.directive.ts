@@ -42,9 +42,9 @@ export class LayoutProjectionRootDirective
    * be animated will follow.
    */
   // prettier-ignore
-  @Input() set animateOn(stream: Observable<any>)
-    { this.animateOn$.next(stream); }
-  private animateOn$ = new BehaviorSubject<Observable<void>>(EMPTY);
+  @Input() set animateLayoutOn(stream: Observable<any>)
+    { this.animateLayoutOn$.next(stream); }
+  private animateLayoutOn$ = new BehaviorSubject<Observable<void>>(EMPTY);
 
   private destroy$ = new EventEmitter();
 
@@ -61,7 +61,7 @@ export class LayoutProjectionRootDirective
   }
 
   ngOnInit(): void {
-    const domWillUpdate$ = this.animateOn$.pipe(exhaustAll(), skip(1));
+    const domWillUpdate$ = this.animateLayoutOn$.pipe(exhaustAll(), skip(1));
 
     domWillUpdate$
       .pipe(
