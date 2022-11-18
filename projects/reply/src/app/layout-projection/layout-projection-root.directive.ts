@@ -46,6 +46,8 @@ export class LayoutProjectionRootDirective
     { this.animateLayoutOn$.next(stream); }
   private animateLayoutOn$ = new BehaviorSubject<Observable<void>>(EMPTY);
 
+  @Input() animationTimings: string | number = '225ms ease-in-out';
+
   private destroy$ = new EventEmitter();
 
   private layoutSnapshots = new WeakMap<
@@ -99,7 +101,7 @@ export class LayoutProjectionRootDirective
   animateToRemoveProjection(): void {
     this.traverse((node) => {
       const animationPlayer = this.animationBuilder
-        .build([animate('100ms', style({ transform: 'none' }))])
+        .build([animate(this.animationTimings, style({ transform: 'none' }))])
         .create(node.element);
       animationPlayer.play();
       animationPlayer.onDone(() => {

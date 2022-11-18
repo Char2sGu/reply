@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
-import { FlipScopeConfig } from '@reply/flip';
 import { map, Observable } from 'rxjs';
 
 import { Mail } from '../../data/mail.model';
@@ -20,13 +19,10 @@ import { MailService } from '../../data/mail.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailCardListComponent implements OnInit {
+  AnimationCurves = AnimationCurves;
+
   mails$!: Observable<Mail[]>;
   mailTracker: TrackByFunction<Mail> = (_, mail) => mail.id;
-
-  flipConfig: FlipScopeConfig = {
-    duration: 225,
-    easing: AnimationCurves.STANDARD_CURVE,
-  };
 
   constructor(
     private route: ActivatedRoute,

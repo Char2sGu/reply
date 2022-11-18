@@ -1,5 +1,10 @@
 <ng-container *ngIf="mails$ | async as mails">
-  <div class="wrapper" rplLayoutProjectionRoot [animateLayoutOn]="mails$">
+  <div
+    class="wrapper"
+    rplLayoutProjectionRoot
+    [animateLayoutOn]="mails$"
+    animationTimings="225ms {{ AnimationCurves.STANDARD_CURVE }}"
+  >
     <rpl-mail-card
       *ngFor="let mail of mails; let index = index; trackBy: mailTracker"
       [mail]="mail"
