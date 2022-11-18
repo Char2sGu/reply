@@ -6,17 +6,29 @@ export class LayoutProjectionNode {
   static idNext = 1;
 
   id = LayoutProjectionNode.idNext++;
+
   layout?: LayoutProjectionLayout;
   transform?: LayoutProjectionTransform;
+
+  parent?: LayoutProjectionNode;
   children = new Set<LayoutProjectionNode>();
 
-  private ancestors?: LayoutProjectionNode[];
+  constructor(public element: HTMLElement) {}
 
-  constructor(
-    public element: HTMLElement,
-    public parent?: LayoutProjectionNode,
-  ) {
-    if (parent) parent.children.add(this);
+  attach(parent: LayoutProjectionNode): void {
+    this.parent = parent;
+    parent.children.add(this);
+  }
+
+  detach(): void {
+    if (!this.parent) throw new Error('Parent not found');
+    this.parent.children.delete(this);
+    this.parent = undefined;
+  }
+
+  traverse(callback: (node: LayoutProjectionNode) => void): void {
+    callback(this);
+    this.children.forEach((child) => child.traverse(callback));
   }
 
   measure(): void {
@@ -54,18 +66,13 @@ export class LayoutProjectionNode {
     for (const ancestor of ancestors) {
       if (!ancestor.transform)
         throw new Error('Transform not found on ancestor');
-      const calibrated = {
+      this.layout = LayoutProjectionLayout.from({
         width: this.layout.width * ancestor.transform.x.scale,
         height: this.layout.height * ancestor.transform.y.scale,
         top: calibratePoint(this.layout.top, ancestor.transform.y),
         left: calibratePoint(this.layout.left, ancestor.transform.x),
         right: calibratePoint(this.layout.right, ancestor.transform.x),
         bottom: calibratePoint(this.layout.bottom, ancestor.transform.y),
-      };
-      this.layout = LayoutProjectionLayout.from({
-        ...calibrated,
-        x: calibrated.left,
-        y: calibrated.top,
       });
     }
 
@@ -106,18 +113,17 @@ scale(${this.transform.x.scale}, ${this.transform.y.scale})
   }
 
   private getAncestors(): LayoutProjectionNode[] {
-    if (this.ancestors) return this.ancestors;
-    this.ancestors = [];
+    const ancestors = [];
     let ancestor = this.parent;
     while (ancestor) {
-      this.ancestors.unshift(ancestor);
+      ancestors.unshift(ancestor);
       ancestor = ancestor.parent;
     }
-    return this.ancestors;
+    return ancestors;
   }
 }
 
-export class LayoutProjectionLayout implements Omit<DOMRect, 'toJSON'> {
+export class LayoutProjectionLayout {
   static from(data: LayoutProjectionLayout): LayoutProjectionLayout {
     const layout = new LayoutProjectionLayout();
     layout.width = data.width;
@@ -126,8 +132,6 @@ export class LayoutProjectionLayout implements Omit<DOMRect, 'toJSON'> {
     layout.left = data.left;
     layout.right = data.right;
     layout.bottom = data.bottom;
-    layout.x = data.x;
-    layout.y = data.y;
     return layout;
   }
 
@@ -137,8 +141,6 @@ export class LayoutProjectionLayout implements Omit<DOMRect, 'toJSON'> {
   left!: number;
   right!: number;
   bottom!: number;
-  x!: number;
-  y!: number;
 }
 
 export interface LayoutProjectionTransform {

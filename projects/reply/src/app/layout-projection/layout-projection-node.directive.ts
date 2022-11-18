@@ -1,37 +1,29 @@
-import {
-  Directive,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Optional,
-  SkipSelf,
-} from '@angular/core';
+import { Directive, ElementRef, OnDestroy, SkipSelf } from '@angular/core';
 
-import { LayoutProjectionNode } from './core/core';
+import { LayoutProjectionNode } from './core/layout-projection';
 
 @Directive({
   selector: '[rplLayoutProjectionNode]',
+  providers: [
+    {
+      provide: LayoutProjectionNode,
+      useExisting: LayoutProjectionNodeDirective,
+    },
+  ],
 })
 export class LayoutProjectionNodeDirective
   extends LayoutProjectionNode
-  implements OnInit, OnDestroy
+  implements OnDestroy
 {
-  @Input('rplLayoutProjectionNode') key?: string;
-
-  private destroy$ = new EventEmitter();
-
   constructor(
     elementRef: ElementRef<HTMLElement>,
-    @Optional() @SkipSelf() parent: LayoutProjectionNodeDirective,
+    @SkipSelf() parent: LayoutProjectionNode,
   ) {
-    super(elementRef.nativeElement, parent);
+    super(elementRef.nativeElement);
+    this.attach(parent);
   }
 
-  ngOnInit(): void {}
-
   ngOnDestroy(): void {
-    this.destroy$.emit();
+    this.detach();
   }
 }
