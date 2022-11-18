@@ -7,6 +7,7 @@ import {
   exhaustAll,
   first,
   Observable,
+  of,
   skip,
   switchMap,
   tap,
@@ -23,12 +24,15 @@ import {
 })
 export class LayoutAnimationDirective implements OnInit {
   /**
-   * A stream that informs on view model updates where DOM updates that should
+   * Accepts:
+   * - A stream that informs on view model updates where DOM updates that should
    * be animated will follow.
+   * - An arbitrary value which will be set to another value before DOM updates.
    */
-  // prettier-ignore
-  @Input() set animateLayoutOn(stream: Observable<any>)
-    { this.animateLayoutOn$.next(stream); }
+  @Input() set animateLayoutOn(value: unknown) {
+    const stream = value instanceof Observable ? value : of(value);
+    this.animateLayoutOn$.next(stream);
+  }
   private animateLayoutOn$ = new BehaviorSubject<Observable<void>>(EMPTY);
 
   @Input() animationTimings: string | number = '225ms ease-in-out';
