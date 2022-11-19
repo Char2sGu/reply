@@ -6,6 +6,7 @@ import {
   SkipSelf,
 } from '@angular/core';
 
+import { LayoutMeasurer } from './core/layout-measurement';
 import { LayoutProjectionNode } from './core/layout-projection';
 
 @Directive({
@@ -23,9 +24,10 @@ export class LayoutProjectionNodeDirective
 {
   constructor(
     elementRef: ElementRef<HTMLElement>,
+    measurer: LayoutMeasurer,
     @SkipSelf() @Optional() parent?: LayoutProjectionNode,
   ) {
-    super(elementRef.nativeElement);
+    super(elementRef.nativeElement, measurer);
     if (parent) this.attach(parent);
   }
 

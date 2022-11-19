@@ -1,5 +1,7 @@
 import { mix } from 'popmotion';
 
+import { LayoutMeasurer } from './layout-measurement';
+
 /**
  * @see https://www.youtube.com/watch?v=5-JIu0u42Jc Inside Framer Motion's Layout Animations - Matt Perry
  * @see https://gist.github.com/TheNightmareX/f5bf72e81d2667f6036e91cf81270ef7 Layout Projection - Matt Perry
@@ -16,7 +18,10 @@ export class LayoutProjectionNode {
   parent?: LayoutProjectionNode;
   children = new Set<LayoutProjectionNode>();
 
-  constructor(public element: HTMLElement) {}
+  constructor(
+    public element: HTMLElement,
+    protected measurer: LayoutMeasurer,
+  ) {}
 
   attach(parent: LayoutProjectionNode): void {
     this.parent = parent;
@@ -40,7 +45,7 @@ export class LayoutProjectionNode {
     // https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing
     this.element.style.transform = '';
     this.children.forEach((child) => child.measure());
-    this.boundingBox = LayoutBoundingBox.measure(this.element);
+    this.boundingBox = this.measurer.measureBoundingBox(this.element);
   }
 
   calculate(destBoundingBox: LayoutBoundingBox): void {
@@ -126,10 +131,6 @@ export class LayoutProjectionNode {
 }
 
 export class LayoutBoundingBox {
-  static measure(element: HTMLElement): LayoutBoundingBox {
-    return new this(element.getBoundingClientRect());
-  }
-
   top: number;
   left: number;
   right: number;
@@ -166,4 +167,18 @@ export interface LayoutBoundingBoxAxisTransform {
   origin: number;
   scale: number;
   translate: number;
+}
+
+export interface LayoutBorderRadiuses {
+  topLeft: LayoutBorderRadius;
+  topRight: LayoutBorderRadius;
+  bottomLeft: LayoutBorderRadius;
+  bottomRight: LayoutBorderRadius;
+}
+
+export class LayoutBorderRadius {
+  constructor(public x: number, public y: number) {}
+  toStyle(): string {
+    return `${this.x}% ${this.y}%`;
+  }
 }

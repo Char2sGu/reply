@@ -17,6 +17,7 @@ import {
   LayoutAnimationEasingParser,
   LayoutAnimator,
 } from './core/layout-animation';
+import { LayoutMeasurer } from './core/layout-measurement';
 import { LayoutProjectionNode } from './core/layout-projection';
 
 @Directive({
@@ -44,9 +45,10 @@ export class LayoutAnimationDirective extends LayoutAnimator implements OnInit {
 
   constructor(
     @Self() node: LayoutProjectionNode,
+    measurer: LayoutMeasurer,
     easingParser: LayoutAnimationEasingParser,
   ) {
-    super(node, easingParser);
+    super(node, measurer, easingParser);
   }
 
   ngOnInit(): void {

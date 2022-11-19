@@ -9,6 +9,7 @@ import {
   mix,
 } from 'popmotion';
 
+import { LayoutMeasurer } from './layout-measurement';
 import { LayoutBoundingBox, LayoutProjectionNode } from './layout-projection';
 
 export class LayoutAnimator {
@@ -16,12 +17,13 @@ export class LayoutAnimator {
 
   constructor(
     public root: LayoutProjectionNode,
+    protected measurer: LayoutMeasurer,
     protected easingParser: LayoutAnimationEasingParser,
   ) {}
 
   snapshot(): void {
     this.root.traverse((node) => {
-      const snapshot = LayoutBoundingBox.measure(node.element);
+      const snapshot = this.measurer.measureBoundingBox(node.element);
       this.boundingBoxSnapshots.set(node, snapshot);
     });
   }
@@ -33,7 +35,7 @@ export class LayoutAnimator {
     this.root.traverse((node) => {
       const snapshot = this.boundingBoxSnapshots.get(node);
       this.boundingBoxSnapshots.delete(node);
-      const dest = snapshot ?? LayoutBoundingBox.measure(node.element);
+      const dest = snapshot ?? this.measurer.measureBoundingBox(node.element);
       destBoundingBoxMap.set(node, dest);
     });
 
