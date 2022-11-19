@@ -72,14 +72,8 @@ export class LayoutAnimationDirective implements OnInit {
   animate(): void {
     this.node.measure();
 
-    const sourceLayoutMap = new NodeLayoutWeakMap();
     const destLayoutMap = new NodeLayoutWeakMap();
-
     this.node.traverse((node) => {
-      const sourceLayout = node.layout;
-      if (!sourceLayout) throw new Error('Unknown node');
-      sourceLayoutMap.set(node, sourceLayout);
-
       const snapshot = this.layoutSnapshots.get(node);
       this.layoutSnapshots.delete(node);
       const destLayout =
@@ -87,8 +81,7 @@ export class LayoutAnimationDirective implements OnInit {
       destLayoutMap.set(node, destLayout);
     });
 
-    const project = (progress: number) =>
-      this.project(sourceLayoutMap, destLayoutMap, progress);
+    const project = (progress: number) => this.project(destLayoutMap, progress);
 
     project(0);
     animate({
@@ -100,16 +93,10 @@ export class LayoutAnimationDirective implements OnInit {
     });
   }
 
-  project(
-    sourceLayoutMap: NodeLayoutWeakMap,
-    destLayoutMap: NodeLayoutWeakMap,
-    progress: number,
-  ): void {
-    this.node.measure();
-
+  project(destLayouts: NodeLayoutWeakMap, progress: number): void {
     this.node.traverse((node) => {
-      const sourceLayout = sourceLayoutMap.get(node);
-      const destLayout = destLayoutMap.get(node);
+      const sourceLayout = node.layout;
+      const destLayout = destLayouts.get(node);
       if (!sourceLayout || !destLayout) throw new Error('Unknown node');
 
       const frameTargetLayout = new LayoutProjectionLayout({

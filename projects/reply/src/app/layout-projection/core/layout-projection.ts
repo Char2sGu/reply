@@ -8,6 +8,7 @@ export class LayoutProjectionNode {
   id = LayoutProjectionNode.idNext++;
 
   layout?: LayoutProjectionLayout;
+  layoutCalibrated?: LayoutProjectionLayout;
   transform?: LayoutProjectionTransform;
 
   parent?: LayoutProjectionNode;
@@ -40,15 +41,17 @@ export class LayoutProjectionNode {
     this.layout = LayoutProjectionLayout.measure(this.element);
   }
 
-  calculate(targetLayout: LayoutProjectionLayout): void {
-    if (!this.layout) throw new Error('Layout not found');
+  calculate(destLayout: LayoutProjectionLayout): void {
     this.calibrate();
-    const originX = mix(this.layout.left, this.layout.right, 0.5);
-    const originY = mix(this.layout.top, this.layout.bottom, 0.5);
-    const targetOriginX = mix(targetLayout.left, targetLayout.right, 0.5);
-    const targetOriginY = mix(targetLayout.top, targetLayout.bottom, 0.5);
-    const scaleX = targetLayout.width() / this.layout.width();
-    const scaleY = targetLayout.height() / this.layout.height();
+    if (!this.layoutCalibrated) throw new Error('Layout not calibrated');
+
+    const layout = this.layoutCalibrated;
+    const originX = mix(layout.left, layout.right, 0.5);
+    const originY = mix(layout.top, layout.bottom, 0.5);
+    const targetOriginX = mix(destLayout.left, destLayout.right, 0.5);
+    const targetOriginY = mix(destLayout.top, destLayout.bottom, 0.5);
+    const scaleX = destLayout.width() / layout.width();
+    const scaleY = destLayout.height() / layout.height();
     const translateX = targetOriginX - originX;
     const translateY = targetOriginY - originY;
     this.transform = {
@@ -60,16 +63,19 @@ export class LayoutProjectionNode {
   calibrate(): void {
     if (!this.layout) throw new Error('Layout not found');
 
+    let layout = this.layout;
     const ancestors = this.getAncestors();
     for (const ancestor of ancestors) {
       if (!ancestor.transform) continue;
-      this.layout = new LayoutProjectionLayout({
-        top: calibratePoint(this.layout.top, ancestor.transform.y),
-        left: calibratePoint(this.layout.left, ancestor.transform.x),
-        right: calibratePoint(this.layout.right, ancestor.transform.x),
-        bottom: calibratePoint(this.layout.bottom, ancestor.transform.y),
+      layout = new LayoutProjectionLayout({
+        top: calibratePoint(layout.top, ancestor.transform.y),
+        left: calibratePoint(layout.left, ancestor.transform.x),
+        right: calibratePoint(layout.right, ancestor.transform.x),
+        bottom: calibratePoint(layout.bottom, ancestor.transform.y),
       });
     }
+
+    this.layoutCalibrated = layout;
 
     function calibratePoint(
       point: number,
