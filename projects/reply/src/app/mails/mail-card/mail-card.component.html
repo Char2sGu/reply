@@ -1,58 +1,30 @@
 <ng-container *ngIf="breakpoints$ | async as breakpoints">
   <ng-container *ngIf="mailSender$ | async as mailSender">
-    <div
-      class="wrapper"
-      rplLayoutProjectionNode
-      rplLayoutAnimation
-      [animationDuration]="2000"
-    >
-      <div class="overlay"></div>
-      <div class="ripple" matRipple></div>
-      <div class="headline" rplLayoutProjectionNode>
-        <div class="titles" rplLayoutProjectionNode>
-          <h5 class="subtitle" rplLayoutProjectionNode>
-            <span rplLayoutProjectionNode>
-              <span>{{ mailSender.name }}</span> -
-              <span>{{ mail.sentAt | readableDate }}</span>
-            </span>
-          </h5>
-          <h1 class="title" rplLayoutProjectionNode>
-            <a routerLink="./{{ mail.id }}" #anchor>
-              <span rplLayoutProjectionNode style="background-color: red">{{
-                mail.subject
-              }}</span>
-            </a>
-          </h1>
-        </div>
-        <div
-          class="actions"
-          rplLayoutProjectionNode
-          style="background-color: red"
-          (click)="$event.stopPropagation()"
-        >
-          <ng-container *ngIf="breakpoints['tablet-landscape']">
-            <rpl-mail-star-button
-              rplLayoutProjectionNode
-              [mail]="mail"
-            ></rpl-mail-star-button>
-            <rpl-mail-delete-button
-              rplLayoutProjectionNode
-              [mail]="mail"
-            ></rpl-mail-delete-button>
-            <button rplLayoutProjectionNode mat-icon-button>
-              <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
-            </button>
-          </ng-container>
-          <button mat-icon-button rplLayoutProjectionNode class="avatar-button">
-            <rpl-mail-avatar [src]="mailSender.avatarUrl"></rpl-mail-avatar>
-          </button>
-        </div>
+    <div class="overlay"></div>
+    <div class="ripple" matRipple></div>
+    <div class="headline">
+      <div class="titles">
+        <h5 class="subtitle">
+          <span>{{ mailSender.name }}</span> -
+          <span>{{ mail.sentAt | readableDate }}</span>
+        </h5>
+        <h1 class="title">
+          <a routerLink="./{{ mail.id }}" #anchor>{{ mail.subject }}</a>
+        </h1>
       </div>
-      <div class="overview" *ngIf="!mail.isRead" rplLayoutProjectionNode>
-        <span rplLayoutProjectionNode>
-          {{ mail.content }}
-        </span>
+      <div class="actions" (click)="$event.stopPropagation()">
+        <ng-container *ngIf="breakpoints['tablet-landscape']">
+          <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
+          <rpl-mail-delete-button [mail]="mail"></rpl-mail-delete-button>
+          <button mat-icon-button>
+            <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
+          </button>
+        </ng-container>
+        <button mat-icon-button class="avatar-button">
+          <rpl-mail-avatar [src]="mailSender.avatarUrl"></rpl-mail-avatar>
+        </button>
       </div>
     </div>
+    <div class="overview" *ngIf="!mail.isRead">{{ mail.content }}</div>
   </ng-container>
 </ng-container>

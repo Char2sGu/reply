@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   HostBinding,
@@ -14,7 +13,6 @@ import { Observable } from 'rxjs';
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
 import { Contact } from '@/app/data/contact.model';
 import { ContactService } from '@/app/data/contact.service';
-import { LayoutAnimationDirective } from '@/app/layout-projection/layout-animation.directive';
 
 import { Mail } from '../../data/mail.model';
 
@@ -35,28 +33,15 @@ export class MailCardComponent implements OnInit {
   }
 
   @ViewChild('anchor') private anchorElementRef!: ElementRef<HTMLAnchorElement>;
-  @ViewChild(LayoutAnimationDirective)
-  layoutAnimator!: LayoutAnimationDirective;
 
   constructor(
     private breakpointManager: BreakpointManager,
     private contactService: ContactService,
-    private changeDetector: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.mailSender$ = this.contactService.getContact$ById(this.mail.sender);
-    setInterval(() => {
-      this.layoutAnimator.snapshot();
-      this.flag = !this.flag;
-      this.changeDetector.markForCheck();
-      requestAnimationFrame(() => {
-        this.layoutAnimator.animate();
-      });
-    }, 1000);
   }
-
-  @HostBinding('class.flag') flag = false;
 
   @HostListener('click') onClick(): void {
     this.anchorElementRef.nativeElement.click();

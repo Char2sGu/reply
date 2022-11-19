@@ -4,28 +4,13 @@
 
 :host {
   display: block;
-}
-
-.wrapper {
-  display: block;
-  height: 100%;
   padding: 16px;
   background-color: map.get(theming.$theme, 'color', 'background', 'card');
   cursor: pointer;
   position: relative;
-  border-radius: 50px;
   :host-context(.tablet-portrait) & {
     padding: 24px;
   }
-}
-
-:host.flag .wrapper {
-  width: 50%;
-}
-
-span {
-  display: inline-block;
-  white-space: pre;
 }
 
 %position-background {
