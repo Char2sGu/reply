@@ -1,14 +1,5 @@
 import { Directive, Input, OnInit, Self } from '@angular/core';
-import {
-  animate,
-  cubicBezier,
-  easeIn,
-  easeInOut,
-  easeOut,
-  Easing,
-  linear,
-  mix,
-} from 'popmotion';
+import { Easing } from 'popmotion';
 import {
   animationFrames,
   BehaviorSubject,
@@ -23,15 +14,19 @@ import {
 } from 'rxjs';
 
 import {
-  LayoutBoundingBox,
-  LayoutProjectionNode,
-} from './core/layout-projection';
+  LayoutAnimationEasingParser,
+  LayoutAnimator,
+} from './core/layout-animation';
+import { LayoutProjectionNode } from './core/layout-projection';
 
 @Directive({
   selector:
     '[rplLayoutProjectionNode][rplLayoutAnimation],[rplLayoutProjectionNode][animateLayoutOn]',
+  providers: [
+    { provide: LayoutAnimator, useExisting: LayoutAnimationDirective },
+  ],
 })
-export class LayoutAnimationDirective implements OnInit {
+export class LayoutAnimationDirective extends LayoutAnimator implements OnInit {
   /**
    * Accepts:
    * - A stream that informs on view model updates where DOM updates that should
@@ -45,11 +40,14 @@ export class LayoutAnimationDirective implements OnInit {
   private animateLayoutOn$ = new BehaviorSubject<Observable<void>>(EMPTY);
 
   @Input() animationDuration: number = 225;
-  @Input() animationEasing: string = 'ease-in-out';
+  @Input() animationEasing: string | Easing = 'ease-in-out';
 
-  private boundingBoxSnapshots = new NodeBoundingBoxWeakMap();
-
-  constructor(@Self() private node: LayoutProjectionNode) {}
+  constructor(
+    @Self() node: LayoutProjectionNode,
+    easingParser: LayoutAnimationEasingParser,
+  ) {
+    super(node, easingParser);
+  }
 
   ngOnInit(): void {
     const domWillUpdate$ = this.animateLayoutOn$.pipe(exhaustAll(), skip(1));
@@ -62,80 +60,10 @@ export class LayoutAnimationDirective implements OnInit {
       .subscribe(() => this.animate());
   }
 
-  snapshot(): void {
-    this.node.traverse((node) => {
-      const snapshot = LayoutBoundingBox.measure(node.element);
-      this.boundingBoxSnapshots.set(node, snapshot);
-    });
+  override animate(
+    duration: number = this.animationDuration,
+    easing: string | Easing = this.animationEasing,
+  ): void {
+    super.animate(duration, easing);
   }
-
-  animate(): void {
-    this.node.measure();
-
-    const destBoundingBoxMap = new NodeBoundingBoxWeakMap();
-    this.node.traverse((node) => {
-      const snapshot = this.boundingBoxSnapshots.get(node);
-      this.boundingBoxSnapshots.delete(node);
-      const dest = snapshot ?? LayoutBoundingBox.measure(node.element);
-      destBoundingBoxMap.set(node, dest);
-    });
-
-    const project = (progress: number) =>
-      this.project(destBoundingBoxMap, progress);
-
-    project(0);
-    animate({
-      from: 0,
-      to: 1,
-      duration: this.animationDuration,
-      ease: parseEasing(this.animationEasing),
-      onUpdate: project,
-    });
-  }
-
-  project(destBoundingBoxMap: NodeBoundingBoxWeakMap, progress: number): void {
-    this.node.traverse((node) => {
-      const source = node.boundingBox;
-      const dest = destBoundingBoxMap.get(node);
-      if (!source || !dest) throw new Error('Unknown node');
-
-      const frameDest = new LayoutBoundingBox({
-        top: mix(dest.top, source.top, progress),
-        left: mix(dest.left, source.left, progress),
-        right: mix(dest.right, source.right, progress),
-        bottom: mix(dest.bottom, source.bottom, progress),
-      });
-
-      node.calculate(frameDest);
-    });
-
-    this.node.project();
-  }
-}
-
-class NodeBoundingBoxWeakMap extends WeakMap<
-  LayoutProjectionNode,
-  LayoutBoundingBox
-> {}
-
-function parseEasing(raw: string): Easing {
-  if (raw === 'linear') {
-    return linear;
-  } else if (raw === 'ease') {
-    return easeInOut;
-  } else if (raw === 'ease-in') {
-    return easeIn;
-  } else if (raw === 'ease-out') {
-    return easeOut;
-  } else if (raw === 'ease-in-out') {
-    return easeInOut;
-  } else if (raw.startsWith('cubic-bezier')) {
-    const [a, b, c, d] = raw
-      .replace('cubic-bezier(', '')
-      .replace(')', '')
-      .split(',')
-      .map((v) => parseFloat(v));
-    return cubicBezier(a, b, c, d);
-  }
-  throw new Error(`Unsupported easing string: ${raw}`);
 }

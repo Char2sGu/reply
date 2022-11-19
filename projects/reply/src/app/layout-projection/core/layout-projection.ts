@@ -114,7 +114,7 @@ export class LayoutProjectionNode {
     this.children.forEach((child) => child.project());
   }
 
-  private getAncestors(): LayoutProjectionNode[] {
+  protected getAncestors(): LayoutProjectionNode[] {
     const ancestors = [];
     let ancestor = this.parent;
     while (ancestor) {
