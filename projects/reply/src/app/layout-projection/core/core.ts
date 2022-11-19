@@ -46,9 +46,7 @@ export interface LayoutBorderRadiuses {
   bottomRight: LayoutBorderRadius;
 }
 
-export class LayoutBorderRadius {
-  constructor(public x: number, public y: number) {}
-  toStyle(): string {
-    return `${this.x}% ${this.y}%`;
-  }
+export interface LayoutBorderRadius {
+  x: number;
+  y: number;
 }

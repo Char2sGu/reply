@@ -43,18 +43,15 @@ export class LayoutBorderRadiusParser {
   ): LayoutBorderRadius {
     if (raw.match(/\d+(\.\d+)?% \d+(\.\d+)?%/u)) {
       const [x, y] = raw.split(' ').map((value) => parseFloat(value));
-      return new LayoutBorderRadius(x, y);
+      return { x, y };
     }
     if (styleUnits.percent.test(raw)) {
       const value = parseFloat(raw);
-      return new LayoutBorderRadius(value, value);
+      return { x: value, y: value };
     }
     if (styleUnits.px.test(raw)) {
       const value = parseFloat(raw);
-      return new LayoutBorderRadius(
-        (value / width) * 100,
-        (value / height) * 100,
-      );
+      return { x: (value / width) * 100, y: (value / height) * 100 };
     }
     throw new Error(`Unsupported radius: ${raw}`);
   }

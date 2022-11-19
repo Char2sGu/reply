@@ -1,4 +1,6 @@
 import {
+  LayoutBorderRadius,
+  LayoutBorderRadiuses,
   LayoutBoundingBox,
   LayoutBoundingBoxAxisTransform,
   LayoutBoundingBoxTransform,
@@ -18,6 +20,8 @@ export class LayoutProjectionNode {
   boundingBoxCalibrated?: LayoutBoundingBox;
   boundingBoxTransform?: LayoutBoundingBoxTransform;
 
+  borderRadiuses?: LayoutBorderRadiuses;
+
   parent?: LayoutProjectionNode;
   children = new Set<LayoutProjectionNode>();
 
@@ -32,7 +36,7 @@ export class LayoutProjectionNode {
   }
 
   detach(): void {
-    if (!this.parent) throw new Error('Parent not found');
+    if (!this.parent) throw new Error('Missing parent');
     this.parent.children.delete(this);
     this.parent = undefined;
   }
@@ -43,12 +47,18 @@ export class LayoutProjectionNode {
   }
 
   measure(): void {
+    this.element.style.transform = '';
+
     // We have to perform the dom-write actions and dom-read actions separately
     // to avoid layout thrashing.
     // https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing
-    this.element.style.transform = '';
     this.children.forEach((child) => child.measure());
+
     this.boundingBox = this.measurer.measureBoundingBox(this.element);
+    this.borderRadiuses = this.measurer.measureBorderRadiuses(
+      this.element,
+      this.boundingBox,
+    );
   }
 
   calculate(destBoundingBox: LayoutBoundingBox): void {
@@ -101,7 +111,8 @@ export class LayoutProjectionNode {
   }
 
   project(): void {
-    if (!this.boundingBoxTransform) throw new Error('Transform not found');
+    if (!this.boundingBoxTransform) throw new Error('Missing transform');
+    if (!this.borderRadiuses) throw new Error('Missing border radiuses');
 
     const ancestorTotalScale = { x: 1, y: 1 };
     const ancestors = this.getAncestors();
@@ -111,13 +122,28 @@ export class LayoutProjectionNode {
       ancestorTotalScale.y *= ancestor.boundingBoxTransform.y.scale;
     }
 
+    const style = this.element.style;
+
     const transform = this.boundingBoxTransform;
     const translateX = transform.x.translate / ancestorTotalScale.x;
     const translateY = transform.y.translate / ancestorTotalScale.y;
-    this.element.style.transform = [
+    style.transform = [
       `translate3d(${translateX}px, ${translateY}px, 0)`,
       `scale(${transform.x.scale}, ${transform.y.scale})`,
     ].join(' ');
+
+    const totalScale = {
+      x: ancestorTotalScale.x * this.boundingBoxTransform.x.scale,
+      y: ancestorTotalScale.y * this.boundingBoxTransform.y.scale,
+    };
+
+    const radiuses = this.borderRadiuses;
+    const radiusStyle = (radius: LayoutBorderRadius) =>
+      `${radius.x / totalScale.x}% ${radius.y / totalScale.y}%`;
+    style.borderTopLeftRadius = radiusStyle(radiuses.topLeft);
+    style.borderTopRightRadius = radiusStyle(radiuses.topRight);
+    style.borderBottomLeftRadius = radiusStyle(radiuses.bottomLeft);
+    style.borderBottomRightRadius = radiusStyle(radiuses.bottomRight);
 
     this.children.forEach((child) => child.project());
   }
