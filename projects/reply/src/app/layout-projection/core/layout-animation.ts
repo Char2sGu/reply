@@ -9,8 +9,9 @@ import {
   mix,
 } from 'popmotion';
 
+import { LayoutBoundingBox } from './core';
 import { LayoutMeasurer } from './layout-measurement';
-import { LayoutBoundingBox, LayoutProjectionNode } from './layout-projection';
+import { LayoutProjectionNode } from './layout-projection';
 
 export class LayoutAnimator {
   protected boundingBoxSnapshots = new NodeBoundingBoxWeakMap();

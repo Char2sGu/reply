@@ -4,7 +4,7 @@ import {
   LayoutBorderRadius,
   LayoutBorderRadiuses,
   LayoutBoundingBox,
-} from './layout-projection';
+} from './core';
 
 export class LayoutMeasurer {
   constructor(protected borderRadiusParser: LayoutBorderRadiusParser) {}
