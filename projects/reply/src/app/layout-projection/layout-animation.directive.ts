@@ -20,7 +20,7 @@ import {
 
 @Directive({
   selector:
-    '[rplLayoutProjectionRoot][animateLayoutOn],[rplLayoutProjectionNode][animateLayoutOn]',
+    '[rplLayoutProjectionNode][rplLayoutAnimation],[rplLayoutProjectionNode][animateLayoutOn]',
 })
 export class LayoutAnimationDirective implements OnInit {
   /**
@@ -86,7 +86,7 @@ export class LayoutAnimationDirective implements OnInit {
         .create(node.element);
       animationPlayer.play();
       animationPlayer.onDone(() => {
-        node.element.style.transform = 'none';
+        node.element.style.transform = '';
         animationPlayer.destroy();
       });
     });

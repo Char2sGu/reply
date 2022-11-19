@@ -1,4 +1,10 @@
-import { Directive, ElementRef, OnDestroy, SkipSelf } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  OnDestroy,
+  Optional,
+  SkipSelf,
+} from '@angular/core';
 
 import { LayoutProjectionNode } from './core/layout-projection';
 
@@ -17,13 +23,13 @@ export class LayoutProjectionNodeDirective
 {
   constructor(
     elementRef: ElementRef<HTMLElement>,
-    @SkipSelf() parent: LayoutProjectionNode,
+    @SkipSelf() @Optional() parent?: LayoutProjectionNode,
   ) {
     super(elementRef.nativeElement);
-    this.attach(parent);
+    if (parent) this.attach(parent);
   }
 
   ngOnDestroy(): void {
-    this.detach();
+    if (this.parent) this.detach();
   }
 }

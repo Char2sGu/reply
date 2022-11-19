@@ -1,7 +1,7 @@
 <ng-container *ngIf="mails$ | async as mails">
   <div
     class="wrapper"
-    rplLayoutProjectionRoot
+    rplLayoutProjectionNode
     [animateLayoutOn]="mails"
     animationTimings="225ms {{ AnimationCurves.STANDARD_CURVE }}"
   >

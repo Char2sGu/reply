@@ -64,8 +64,7 @@ export class LayoutProjectionNode {
 
     const ancestors = this.getAncestors();
     for (const ancestor of ancestors) {
-      if (!ancestor.transform)
-        throw new Error('Transform not found on ancestor');
+      if (!ancestor.transform) continue;
       this.layout = LayoutProjectionLayout.from({
         width: this.layout.width * ancestor.transform.x.scale,
         height: this.layout.height * ancestor.transform.y.scale,
@@ -94,20 +93,17 @@ export class LayoutProjectionNode {
     const ancestorTotalScale = { x: 1, y: 1 };
     const ancestors = this.getAncestors();
     for (const ancestor of ancestors) {
-      if (!ancestor.transform)
-        throw new Error('Transform not found on ancestor');
+      if (!ancestor.transform) continue;
       ancestorTotalScale.x *= ancestor.transform.x.scale;
       ancestorTotalScale.y *= ancestor.transform.y.scale;
     }
 
     const translateX = this.transform.x.translate / ancestorTotalScale.x;
     const translateY = this.transform.y.translate / ancestorTotalScale.y;
-    this.element.style.transform = `
-translate3d(${translateX}px, ${translateY}px, 0)
-scale(${this.transform.x.scale}, ${this.transform.y.scale})
-`
-      .trim()
-      .replace('\n', ' ');
+    this.element.style.transform = [
+      `translate3d(${translateX}px, ${translateY}px, 0)`,
+      `scale(${this.transform.x.scale}, ${this.transform.y.scale})`,
+    ].join(' ');
 
     this.children.forEach((child) => child.project());
   }
