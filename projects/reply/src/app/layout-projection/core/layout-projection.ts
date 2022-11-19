@@ -46,8 +46,13 @@ export class LayoutProjectionNode {
     this.children.forEach((child) => child.traverse(callback));
   }
 
-  measure(): void {
+  reset(): void {
     this.element.style.transform = '';
+    this.element.style.borderRadius = '';
+  }
+
+  measure(): void {
+    this.reset();
 
     // We have to perform the dom-write actions and dom-read actions separately
     // to avoid layout thrashing.

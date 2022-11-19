@@ -15,6 +15,7 @@ import { LayoutProjectionNode } from './layout-projection';
 
 export class LayoutAnimator {
   protected boundingBoxSnapshots = new NodeBoundingBoxWeakMap();
+  protected animatingStopper?: () => void;
 
   constructor(
     public root: LayoutProjectionNode,
@@ -30,6 +31,11 @@ export class LayoutAnimator {
   }
 
   animate(duration: number, easing: string | Easing): void {
+    if (this.animatingStopper) {
+      this.animatingStopper();
+      this.animatingStopper = undefined;
+    }
+
     this.root.measure();
 
     const destBoundingBoxMap = new NodeBoundingBoxWeakMap();
@@ -44,13 +50,14 @@ export class LayoutAnimator {
       this.project(destBoundingBoxMap, progress);
 
     project(0);
-    animate({
+    const { stop } = animate({
       from: 0,
       to: 1,
       duration,
       ease: this.easingParser.coerceEasing(easing),
       onUpdate: project,
     });
+    this.animatingStopper = stop;
   }
 
   project(destBoundingBoxMap: NodeBoundingBoxWeakMap, progress: number): void {
