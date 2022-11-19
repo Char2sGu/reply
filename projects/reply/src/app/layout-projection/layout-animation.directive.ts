@@ -95,7 +95,7 @@ export class LayoutAnimationDirective implements OnInit {
       from: 0,
       to: 1,
       duration: this.animationDuration,
-      ease: resolveEasingString(this.animationEasing),
+      ease: parseEasing(this.animationEasing),
       onUpdate: project,
     });
   }
@@ -131,24 +131,24 @@ class NodeLayoutWeakMap extends WeakMap<
   LayoutProjectionLayout
 > {}
 
-function resolveEasingString(easing: string): Easing {
-  if (easing === 'linear') {
+function parseEasing(raw: string): Easing {
+  if (raw === 'linear') {
     return linear;
-  } else if (easing === 'ease') {
+  } else if (raw === 'ease') {
     return easeInOut;
-  } else if (easing === 'ease-in') {
+  } else if (raw === 'ease-in') {
     return easeIn;
-  } else if (easing === 'ease-out') {
+  } else if (raw === 'ease-out') {
     return easeOut;
-  } else if (easing === 'ease-in-out') {
+  } else if (raw === 'ease-in-out') {
     return easeInOut;
-  } else if (easing.startsWith('cubic-bezier')) {
-    const [a, b, c, d] = easing
+  } else if (raw.startsWith('cubic-bezier')) {
+    const [a, b, c, d] = raw
       .replace('cubic-bezier(', '')
       .replace(')', '')
       .split(',')
       .map((v) => parseFloat(v));
     return cubicBezier(a, b, c, d);
   }
-  throw new Error(`Invalid easing string: ${easing}`);
+  throw new Error(`Unsupported easing string: ${raw}`);
 }
