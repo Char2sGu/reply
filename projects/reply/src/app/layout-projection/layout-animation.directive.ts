@@ -64,7 +64,8 @@ export class LayoutAnimationDirective implements OnInit {
 
   snapshot(): void {
     this.node.traverse((node) => {
-      this.layoutSnapshots.set(node, node.element.getBoundingClientRect());
+      const snapshot = LayoutProjectionLayout.measure(node.element);
+      this.layoutSnapshots.set(node, snapshot);
     });
   }
 
@@ -81,7 +82,8 @@ export class LayoutAnimationDirective implements OnInit {
 
       const snapshot = this.layoutSnapshots.get(node);
       this.layoutSnapshots.delete(node);
-      const destLayout = snapshot ?? node.element.getBoundingClientRect();
+      const destLayout =
+        snapshot ?? LayoutProjectionLayout.measure(node.element);
       destLayoutMap.set(node, destLayout);
     });
 
@@ -110,14 +112,12 @@ export class LayoutAnimationDirective implements OnInit {
       const destLayout = destLayoutMap.get(node);
       if (!sourceLayout || !destLayout) throw new Error('Unknown node');
 
-      const frameTargetLayout: LayoutProjectionLayout = {
+      const frameTargetLayout = new LayoutProjectionLayout({
         top: mix(destLayout.top, sourceLayout.top, progress),
         left: mix(destLayout.left, sourceLayout.left, progress),
         right: mix(destLayout.right, sourceLayout.right, progress),
         bottom: mix(destLayout.bottom, sourceLayout.bottom, progress),
-        width: mix(destLayout.width, sourceLayout.width, progress),
-        height: mix(destLayout.height, sourceLayout.height, progress),
-      };
+      });
 
       node.calculate(frameTargetLayout);
     });

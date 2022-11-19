@@ -37,9 +37,7 @@ export class LayoutProjectionNode {
     // https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing
     this.element.style.transform = '';
     this.children.forEach((child) => child.measure());
-    this.layout = LayoutProjectionLayout.from(
-      this.element.getBoundingClientRect(),
-    );
+    this.layout = LayoutProjectionLayout.measure(this.element);
   }
 
   calculate(targetLayout: LayoutProjectionLayout): void {
@@ -49,8 +47,8 @@ export class LayoutProjectionNode {
     const originY = mix(this.layout.top, this.layout.bottom, 0.5);
     const targetOriginX = mix(targetLayout.left, targetLayout.right, 0.5);
     const targetOriginY = mix(targetLayout.top, targetLayout.bottom, 0.5);
-    const scaleX = targetLayout.width / this.layout.width;
-    const scaleY = targetLayout.height / this.layout.height;
+    const scaleX = targetLayout.width() / this.layout.width();
+    const scaleY = targetLayout.height() / this.layout.height();
     const translateX = targetOriginX - originX;
     const translateY = targetOriginY - originY;
     this.transform = {
@@ -65,9 +63,7 @@ export class LayoutProjectionNode {
     const ancestors = this.getAncestors();
     for (const ancestor of ancestors) {
       if (!ancestor.transform) continue;
-      this.layout = LayoutProjectionLayout.from({
-        width: this.layout.width * ancestor.transform.x.scale,
-        height: this.layout.height * ancestor.transform.y.scale,
+      this.layout = new LayoutProjectionLayout({
         top: calibratePoint(this.layout.top, ancestor.transform.y),
         left: calibratePoint(this.layout.left, ancestor.transform.x),
         right: calibratePoint(this.layout.right, ancestor.transform.x),
@@ -120,23 +116,28 @@ export class LayoutProjectionNode {
 }
 
 export class LayoutProjectionLayout {
-  static from(data: LayoutProjectionLayout): LayoutProjectionLayout {
-    const layout = new LayoutProjectionLayout();
-    layout.width = data.width;
-    layout.height = data.height;
-    layout.top = data.top;
-    layout.left = data.left;
-    layout.right = data.right;
-    layout.bottom = data.bottom;
-    return layout;
+  static measure(element: HTMLElement): LayoutProjectionLayout {
+    return new this(element.getBoundingClientRect());
   }
 
-  width!: number;
-  height!: number;
   top!: number;
   left!: number;
   right!: number;
   bottom!: number;
+
+  constructor(data: Omit<LayoutProjectionLayout, 'width' | 'height'>) {
+    this.top = data.top;
+    this.left = data.left;
+    this.right = data.right;
+    this.bottom = data.bottom;
+  }
+
+  width(): number {
+    return this.right - this.left;
+  }
+  height(): number {
+    return this.bottom - this.top;
+  }
 }
 
 export interface LayoutProjectionTransform {
