@@ -3,7 +3,8 @@
     class="wrapper"
     rplLayoutProjectionNode
     [animateLayoutOn]="mails"
-    animationTimings="225ms {{ AnimationCurves.STANDARD_CURVE }}"
+    [animationDuration]="225"
+    [animationEasing]="AnimationCurves.STANDARD_CURVE"
   >
     <rpl-mail-card
       *ngFor="let mail of mails; let index = index; trackBy: mailTracker"

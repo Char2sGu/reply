@@ -27,6 +27,7 @@
     "@angular/service-worker": "^14.2.7",
     "dayjs": "^1.11.6",
     "hammerjs": "^2.0.8",
+    "popmotion": "^11.0.5",
     "rxjs": "~7.5.0",
     "timeago.js": "^4.0.2",
     "tslib": "^2.3.0",
