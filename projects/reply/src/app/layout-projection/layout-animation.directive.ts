@@ -23,7 +23,7 @@ import {
 } from 'rxjs';
 
 import {
-  LayoutProjectionLayout,
+  LayoutBoundingBox,
   LayoutProjectionNode,
 } from './core/layout-projection';
 
@@ -47,7 +47,7 @@ export class LayoutAnimationDirective implements OnInit {
   @Input() animationDuration: number = 225;
   @Input() animationEasing: string = 'ease-in-out';
 
-  private layoutSnapshots = new NodeLayoutWeakMap();
+  private boundingBoxSnapshots = new NodeBoundingBoxWeakMap();
 
   constructor(@Self() private node: LayoutProjectionNode) {}
 
@@ -64,24 +64,24 @@ export class LayoutAnimationDirective implements OnInit {
 
   snapshot(): void {
     this.node.traverse((node) => {
-      const snapshot = LayoutProjectionLayout.measure(node.element);
-      this.layoutSnapshots.set(node, snapshot);
+      const snapshot = LayoutBoundingBox.measure(node.element);
+      this.boundingBoxSnapshots.set(node, snapshot);
     });
   }
 
   animate(): void {
     this.node.measure();
 
-    const destLayoutMap = new NodeLayoutWeakMap();
+    const destBoundingBoxMap = new NodeBoundingBoxWeakMap();
     this.node.traverse((node) => {
-      const snapshot = this.layoutSnapshots.get(node);
-      this.layoutSnapshots.delete(node);
-      const destLayout =
-        snapshot ?? LayoutProjectionLayout.measure(node.element);
-      destLayoutMap.set(node, destLayout);
+      const snapshot = this.boundingBoxSnapshots.get(node);
+      this.boundingBoxSnapshots.delete(node);
+      const dest = snapshot ?? LayoutBoundingBox.measure(node.element);
+      destBoundingBoxMap.set(node, dest);
     });
 
-    const project = (progress: number) => this.project(destLayoutMap, progress);
+    const project = (progress: number) =>
+      this.project(destBoundingBoxMap, progress);
 
     project(0);
     animate({
@@ -93,29 +93,29 @@ export class LayoutAnimationDirective implements OnInit {
     });
   }
 
-  project(destLayouts: NodeLayoutWeakMap, progress: number): void {
+  project(destBoundingBoxMap: NodeBoundingBoxWeakMap, progress: number): void {
     this.node.traverse((node) => {
-      const sourceLayout = node.layout;
-      const destLayout = destLayouts.get(node);
-      if (!sourceLayout || !destLayout) throw new Error('Unknown node');
+      const source = node.boundingBox;
+      const dest = destBoundingBoxMap.get(node);
+      if (!source || !dest) throw new Error('Unknown node');
 
-      const frameTargetLayout = new LayoutProjectionLayout({
-        top: mix(destLayout.top, sourceLayout.top, progress),
-        left: mix(destLayout.left, sourceLayout.left, progress),
-        right: mix(destLayout.right, sourceLayout.right, progress),
-        bottom: mix(destLayout.bottom, sourceLayout.bottom, progress),
+      const frameDest = new LayoutBoundingBox({
+        top: mix(dest.top, source.top, progress),
+        left: mix(dest.left, source.left, progress),
+        right: mix(dest.right, source.right, progress),
+        bottom: mix(dest.bottom, source.bottom, progress),
       });
 
-      node.calculate(frameTargetLayout);
+      node.calculate(frameDest);
     });
 
     this.node.project();
   }
 }
 
-class NodeLayoutWeakMap extends WeakMap<
+class NodeBoundingBoxWeakMap extends WeakMap<
   LayoutProjectionNode,
-  LayoutProjectionLayout
+  LayoutBoundingBox
 > {}
 
 function parseEasing(raw: string): Easing {

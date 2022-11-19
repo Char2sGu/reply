@@ -1,3 +1,5 @@
+import { mix } from 'popmotion';
+
 /**
  * @see https://www.youtube.com/watch?v=5-JIu0u42Jc Inside Framer Motion's Layout Animations - Matt Perry
  * @see https://gist.github.com/TheNightmareX/f5bf72e81d2667f6036e91cf81270ef7 Layout Projection - Matt Perry
@@ -7,9 +9,9 @@ export class LayoutProjectionNode {
 
   id = LayoutProjectionNode.idNext++;
 
-  layout?: LayoutProjectionLayout;
-  layoutCalibrated?: LayoutProjectionLayout;
-  transform?: LayoutProjectionTransform;
+  boundingBox?: LayoutBoundingBox;
+  boundingBoxCalibrated?: LayoutBoundingBox;
+  boundingBoxTransform?: LayoutBoundingBoxTransform;
 
   parent?: LayoutProjectionNode;
   children = new Set<LayoutProjectionNode>();
@@ -38,73 +40,75 @@ export class LayoutProjectionNode {
     // https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing
     this.element.style.transform = '';
     this.children.forEach((child) => child.measure());
-    this.layout = LayoutProjectionLayout.measure(this.element);
+    this.boundingBox = LayoutBoundingBox.measure(this.element);
   }
 
-  calculate(destLayout: LayoutProjectionLayout): void {
+  calculate(destBoundingBox: LayoutBoundingBox): void {
     this.calibrate();
-    if (!this.layoutCalibrated) throw new Error('Layout not calibrated');
-
-    const layout = this.layoutCalibrated;
-    const originX = mix(layout.left, layout.right, 0.5);
-    const originY = mix(layout.top, layout.bottom, 0.5);
-    const targetOriginX = mix(destLayout.left, destLayout.right, 0.5);
-    const targetOriginY = mix(destLayout.top, destLayout.bottom, 0.5);
-    const scaleX = destLayout.width() / layout.width();
-    const scaleY = destLayout.height() / layout.height();
-    const translateX = targetOriginX - originX;
-    const translateY = targetOriginY - originY;
-    this.transform = {
-      x: { origin: originX, scale: scaleX, translate: translateX },
-      y: { origin: originY, scale: scaleY, translate: translateY },
+    if (!this.boundingBoxCalibrated)
+      throw new Error('Missing calibrated bounding box');
+    const currBoundingBox = this.boundingBoxCalibrated;
+    const currMidpoint = currBoundingBox.midpoint();
+    const destMidpoint = destBoundingBox.midpoint();
+    this.boundingBoxTransform = {
+      x: {
+        origin: currMidpoint.x,
+        scale: destBoundingBox.width() / currBoundingBox.width(),
+        translate: destMidpoint.x - currMidpoint.x,
+      },
+      y: {
+        origin: destMidpoint.y,
+        scale: destBoundingBox.height() / currBoundingBox.height(),
+        translate: destMidpoint.y - currMidpoint.y,
+      },
     };
   }
 
   calibrate(): void {
-    if (!this.layout) throw new Error('Layout not found');
+    if (!this.boundingBox) throw new Error('Missing bounding box');
 
-    let layout = this.layout;
-    const ancestors = this.getAncestors();
-    for (const ancestor of ancestors) {
-      if (!ancestor.transform) continue;
-      layout = new LayoutProjectionLayout({
-        top: calibratePoint(layout.top, ancestor.transform.y),
-        left: calibratePoint(layout.left, ancestor.transform.x),
-        right: calibratePoint(layout.right, ancestor.transform.x),
-        bottom: calibratePoint(layout.bottom, ancestor.transform.y),
+    let boundingBox = this.boundingBox;
+    for (const ancestor of this.getAncestors()) {
+      if (!ancestor.boundingBox || !ancestor.boundingBoxTransform) continue;
+      const transform = ancestor.boundingBoxTransform;
+      boundingBox = new LayoutBoundingBox({
+        top: calibratePoint(boundingBox.top, transform.y),
+        left: calibratePoint(boundingBox.left, transform.x),
+        right: calibratePoint(boundingBox.right, transform.x),
+        bottom: calibratePoint(boundingBox.bottom, transform.y),
       });
     }
 
-    this.layoutCalibrated = layout;
+    this.boundingBoxCalibrated = boundingBox;
 
     function calibratePoint(
       point: number,
-      { origin, scale, translate }: LayoutProjectionTransformAxis,
+      { origin, scale, translate }: LayoutBoundingBoxAxisTransform,
     ) {
       const distanceFromOrigin = point - origin;
-      const distanceFromOriginScaled = distanceFromOrigin * scale;
-      const scaled = origin + distanceFromOriginScaled;
+      const scaled = origin + distanceFromOrigin * scale;
       const translated = scaled + translate;
       return translated;
     }
   }
 
   project(): void {
-    if (!this.transform) throw new Error('Transform not found');
+    if (!this.boundingBoxTransform) throw new Error('Transform not found');
 
     const ancestorTotalScale = { x: 1, y: 1 };
     const ancestors = this.getAncestors();
     for (const ancestor of ancestors) {
-      if (!ancestor.transform) continue;
-      ancestorTotalScale.x *= ancestor.transform.x.scale;
-      ancestorTotalScale.y *= ancestor.transform.y.scale;
+      if (!ancestor.boundingBoxTransform) continue;
+      ancestorTotalScale.x *= ancestor.boundingBoxTransform.x.scale;
+      ancestorTotalScale.y *= ancestor.boundingBoxTransform.y.scale;
     }
 
-    const translateX = this.transform.x.translate / ancestorTotalScale.x;
-    const translateY = this.transform.y.translate / ancestorTotalScale.y;
+    const transform = this.boundingBoxTransform;
+    const translateX = transform.x.translate / ancestorTotalScale.x;
+    const translateY = transform.y.translate / ancestorTotalScale.y;
     this.element.style.transform = [
       `translate3d(${translateX}px, ${translateY}px, 0)`,
-      `scale(${this.transform.x.scale}, ${this.transform.y.scale})`,
+      `scale(${transform.x.scale}, ${transform.y.scale})`,
     ].join(' ');
 
     this.children.forEach((child) => child.project());
@@ -121,17 +125,17 @@ export class LayoutProjectionNode {
   }
 }
 
-export class LayoutProjectionLayout {
-  static measure(element: HTMLElement): LayoutProjectionLayout {
+export class LayoutBoundingBox {
+  static measure(element: HTMLElement): LayoutBoundingBox {
     return new this(element.getBoundingClientRect());
   }
 
-  top!: number;
-  left!: number;
-  right!: number;
-  bottom!: number;
+  top: number;
+  left: number;
+  right: number;
+  bottom: number;
 
-  constructor(data: Omit<LayoutProjectionLayout, 'width' | 'height'>) {
+  constructor(data: Omit<LayoutBoundingBox, 'width' | 'height' | 'midpoint'>) {
     this.top = data.top;
     this.left = data.left;
     this.right = data.right;
@@ -144,19 +148,22 @@ export class LayoutProjectionLayout {
   height(): number {
     return this.bottom - this.top;
   }
+
+  midpoint(): { x: number; y: number } {
+    return {
+      x: mix(this.left, this.right, 0.5),
+      y: mix(this.top, this.bottom, 0.5),
+    };
+  }
 }
 
-export interface LayoutProjectionTransform {
-  x: LayoutProjectionTransformAxis;
-  y: LayoutProjectionTransformAxis;
+export interface LayoutBoundingBoxTransform {
+  x: LayoutBoundingBoxAxisTransform;
+  y: LayoutBoundingBoxAxisTransform;
 }
 
-export interface LayoutProjectionTransformAxis {
+export interface LayoutBoundingBoxAxisTransform {
   origin: number;
   scale: number;
   translate: number;
-}
-
-function mix(a: number, b: number, rate: number): number {
-  return a + (b - a) * rate;
 }
