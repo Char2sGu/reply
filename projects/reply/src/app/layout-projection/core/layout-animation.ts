@@ -48,22 +48,25 @@ export class LayoutAnimator {
 
     const animationContextMap = this.getAnimationContextMap();
 
-    const project = (progress: number) =>
-      this.project(animationContextMap, progress);
+    const projectFrame = (progress: number) =>
+      this.projectFrame(animationContextMap, progress);
 
-    project(0);
+    projectFrame(0);
 
     const { stop } = animate({
       from: 0,
       to: 1,
       duration,
       ease: this.easingParser.coerceEasing(easing),
-      onUpdate: project,
+      onUpdate: projectFrame,
     });
     this.animatingStopper = stop;
   }
 
-  project(configMap: NodeAnimationContextWeakMap, progress: number): void {
+  protected projectFrame(
+    configMap: NodeAnimationContextWeakMap,
+    progress: number,
+  ): void {
     this.root.traverse((node) => {
       const context = configMap.get(node);
       if (!context) throw new Error('Unknown node');
