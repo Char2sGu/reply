@@ -59,8 +59,8 @@ export class AppComponent extends ChildRouteAnimationHost {
   onClick(): void {
     this.animator.snapshot();
     this.flag = !this.flag;
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       this.animator.animate(500, 'ease');
-    }, 1000);
+    });
   }
 }

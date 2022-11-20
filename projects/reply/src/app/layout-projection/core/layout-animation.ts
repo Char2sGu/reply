@@ -9,12 +9,17 @@ import {
   mix,
 } from 'popmotion';
 
-import { LayoutBoundingBox } from './core';
+import {
+  LayoutBorderRadius,
+  LayoutBorderRadiuses,
+  LayoutBoundingBox,
+} from './core';
 import { LayoutMeasurer } from './layout-measurement';
 import { LayoutProjectionNode } from './layout-projection';
 
 export class LayoutAnimator {
   protected boundingBoxSnapshots = new NodeBoundingBoxWeakMap();
+  protected borderRadiusesSnapshots = new NodeBorderRadiusesWeakMap();
   protected animatingStopper?: () => void;
 
   constructor(
@@ -25,8 +30,13 @@ export class LayoutAnimator {
 
   snapshot(): void {
     this.root.traverse((node) => {
-      const snapshot = this.measurer.measureBoundingBox(node.element);
-      this.boundingBoxSnapshots.set(node, snapshot);
+      const boundingBox = this.measurer.measureBoundingBox(node.element);
+      const borderRadiuses = this.measurer.measureBorderRadiuses(
+        node.element,
+        boundingBox,
+      );
+      this.boundingBoxSnapshots.set(node, boundingBox);
+      this.borderRadiusesSnapshots.set(node, borderRadiuses);
     });
   }
 
@@ -36,20 +46,13 @@ export class LayoutAnimator {
       this.animatingStopper = undefined;
     }
 
-    this.root.measure();
-
-    const destBoundingBoxMap = new NodeBoundingBoxWeakMap();
-    this.root.traverse((node) => {
-      const snapshot = this.boundingBoxSnapshots.get(node);
-      this.boundingBoxSnapshots.delete(node);
-      const dest = snapshot ?? this.measurer.measureBoundingBox(node.element);
-      destBoundingBoxMap.set(node, dest);
-    });
+    const animationContextMap = this.getAnimationContextMap();
 
     const project = (progress: number) =>
-      this.project(destBoundingBoxMap, progress);
+      this.project(animationContextMap, progress);
 
     project(0);
+
     const { stop } = animate({
       from: 0,
       to: 1,
@@ -60,23 +63,88 @@ export class LayoutAnimator {
     this.animatingStopper = stop;
   }
 
-  project(destBoundingBoxMap: NodeBoundingBoxWeakMap, progress: number): void {
+  project(configMap: NodeAnimationContextWeakMap, progress: number): void {
     this.root.traverse((node) => {
-      const source = node.boundingBox;
-      const dest = destBoundingBoxMap.get(node);
-      if (!source || !dest) throw new Error('Unknown node');
-
-      const frameDest = new LayoutBoundingBox({
-        top: mix(dest.top, source.top, progress),
-        left: mix(dest.left, source.left, progress),
-        right: mix(dest.right, source.right, progress),
-        bottom: mix(dest.bottom, source.bottom, progress),
-      });
-
-      node.calculate(frameDest);
+      const context = configMap.get(node);
+      if (!context) throw new Error('Unknown node');
+      const boundingBox = this.getFrameBoundingBox(context, progress);
+      const borderRadiuses = this.getFrameBorderRadiuses(context, progress);
+      node.calculate(boundingBox);
+      node.borderRadiuses = borderRadiuses;
     });
 
     this.root.project();
+  }
+
+  protected getAnimationContextMap(): NodeAnimationContextWeakMap {
+    this.root.measure();
+
+    const map = new NodeAnimationContextWeakMap();
+
+    this.root.traverse((node) => {
+      if (!node.boundingBox || !node.borderRadiuses)
+        throw new Error('Unknown node');
+
+      const boundingBoxSnapshot = this.boundingBoxSnapshots.get(node);
+      this.boundingBoxSnapshots.delete(node);
+      const boundingBoxSource =
+        boundingBoxSnapshot ?? this.measurer.measureBoundingBox(node.element);
+      const boundingBoxDest = node.boundingBox;
+
+      const borderRadiusesSnapshot = this.borderRadiusesSnapshots.get(node);
+      this.borderRadiusesSnapshots.delete(node);
+      const borderRadiusesSource =
+        borderRadiusesSnapshot ??
+        this.measurer.measureBorderRadiuses(node.element, node.boundingBox);
+      const borderRadiusesDest = node.borderRadiuses;
+
+      map.set(node, {
+        boundingBoxSource,
+        boundingBoxDest,
+        borderRadiusesSource,
+        borderRadiusesDest,
+      });
+    });
+
+    return map;
+  }
+
+  protected getFrameBoundingBox(
+    context: NodeAnimationContext,
+    progress: number,
+  ): LayoutBoundingBox {
+    const source = context.boundingBoxSource;
+    const dest = context.boundingBoxDest;
+    return new LayoutBoundingBox({
+      top: mix(source.top, dest.top, progress),
+      left: mix(source.left, dest.left, progress),
+      right: mix(source.right, dest.right, progress),
+      bottom: mix(source.bottom, dest.bottom, progress),
+    });
+  }
+
+  protected getFrameBorderRadiuses(
+    context: NodeAnimationContext,
+    progress: number,
+  ): LayoutBorderRadiuses {
+    const source = context.borderRadiusesSource;
+    const dest = context.borderRadiusesDest;
+
+    const mixRadius = (
+      source: LayoutBorderRadius,
+      dest: LayoutBorderRadius,
+      progress: number,
+    ): LayoutBorderRadius => ({
+      x: mix(source.x, dest.x, progress),
+      y: mix(source.y, dest.y, progress),
+    });
+
+    return {
+      topLeft: mixRadius(source.topLeft, dest.topLeft, progress),
+      topRight: mixRadius(source.topRight, dest.topRight, progress),
+      bottomLeft: mixRadius(source.bottomLeft, dest.bottomLeft, progress),
+      bottomRight: mixRadius(source.bottomRight, dest.bottomRight, progress),
+    };
   }
 }
 
@@ -112,3 +180,20 @@ class NodeBoundingBoxWeakMap extends WeakMap<
   LayoutProjectionNode,
   LayoutBoundingBox
 > {}
+
+class NodeBorderRadiusesWeakMap extends WeakMap<
+  LayoutProjectionNode,
+  LayoutBorderRadiuses
+> {}
+
+class NodeAnimationContextWeakMap extends WeakMap<
+  LayoutProjectionNode,
+  NodeAnimationContext
+> {}
+
+interface NodeAnimationContext {
+  boundingBoxSource: LayoutBoundingBox;
+  boundingBoxDest: LayoutBoundingBox;
+  borderRadiusesSource: LayoutBorderRadiuses;
+  borderRadiusesDest: LayoutBorderRadiuses;
+}
