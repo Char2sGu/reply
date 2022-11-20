@@ -73,16 +73,16 @@ export class LayoutProjectionNode {
     const destMidpoint = destBoundingBox.midpoint();
 
     this.boundingBoxTransform = {
-      x: {
+      x: new LayoutBoundingBoxAxisTransform({
         origin: currMidpoint.x,
         scale: destBoundingBox.width() / currBoundingBox.width(),
         translate: destMidpoint.x - currMidpoint.x,
-      },
-      y: {
+      }),
+      y: new LayoutBoundingBoxAxisTransform({
         origin: destMidpoint.y,
         scale: destBoundingBox.height() / currBoundingBox.height(),
         translate: destMidpoint.y - currMidpoint.y,
-      },
+      }),
     };
 
     // edge case: invisible element (width/height is 0)
@@ -97,24 +97,13 @@ export class LayoutProjectionNode {
       if (!ancestor.boundingBox || !ancestor.boundingBoxTransform) continue;
       const transform = ancestor.boundingBoxTransform;
       boundingBox = new LayoutBoundingBox({
-        top: calibratePoint(boundingBox.top, transform.y),
-        left: calibratePoint(boundingBox.left, transform.x),
-        right: calibratePoint(boundingBox.right, transform.x),
-        bottom: calibratePoint(boundingBox.bottom, transform.y),
+        top: transform.y.apply(boundingBox.top),
+        left: transform.x.apply(boundingBox.left),
+        right: transform.x.apply(boundingBox.right),
+        bottom: transform.y.apply(boundingBox.bottom),
       });
     }
-
     return boundingBox;
-
-    function calibratePoint(
-      point: number,
-      { origin, scale, translate }: LayoutBoundingBoxAxisTransform,
-    ) {
-      const distanceFromOrigin = point - origin;
-      const scaled = origin + distanceFromOrigin * scale;
-      const translated = scaled + translate * scale;
-      return translated;
-    }
   }
 
   project(): void {

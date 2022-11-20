@@ -33,10 +33,23 @@ export interface LayoutBoundingBoxTransform {
   y: LayoutBoundingBoxAxisTransform;
 }
 
-export interface LayoutBoundingBoxAxisTransform {
+export class LayoutBoundingBoxAxisTransform {
   origin: number;
   scale: number;
   translate: number;
+
+  constructor(data: Omit<LayoutBoundingBoxAxisTransform, 'apply'>) {
+    this.origin = data.origin;
+    this.scale = data.scale;
+    this.translate = data.translate;
+  }
+
+  apply(value: number): number {
+    const distanceFromOrigin = value - this.origin;
+    const scaled = this.origin + distanceFromOrigin * this.scale;
+    const translated = scaled + this.translate * this.scale;
+    return translated;
+  }
 }
 
 export interface LayoutBorderRadiuses {
