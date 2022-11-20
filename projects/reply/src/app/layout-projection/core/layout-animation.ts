@@ -37,6 +37,15 @@ export class LayoutAnimator {
         node.element,
         boundingBox,
       );
+
+      const nodeIdDuplicated =
+        this.boundingBoxSnapshots.has(node.id) ||
+        this.borderRadiusesSnapshots.has(node.id);
+      if (nodeIdDuplicated) {
+        const msg = `Multiple nodes with same id "${node.id}" belonging to a single layout animator`;
+        throw new Error(msg);
+      }
+
       this.boundingBoxSnapshots.set(node.id, boundingBox);
       this.borderRadiusesSnapshots.set(node.id, borderRadiuses);
     });
