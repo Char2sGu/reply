@@ -14,7 +14,7 @@ import { LayoutMeasurer } from './layout-measurement';
 export class LayoutProjectionNode {
   static idNext = 1;
 
-  id = LayoutProjectionNode.idNext++;
+  id = `anonymous-${LayoutProjectionNode.idNext++}`;
 
   boundingBox?: LayoutBoundingBox;
   boundingBoxTransform?: LayoutBoundingBoxTransform;
