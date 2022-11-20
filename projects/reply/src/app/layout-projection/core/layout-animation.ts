@@ -18,8 +18,8 @@ import { LayoutMeasurer } from './layout-measurement';
 import { LayoutProjectionNode } from './layout-projection';
 
 export class LayoutAnimator {
-  protected boundingBoxSnapshots = new NodeBoundingBoxWeakMap();
-  protected borderRadiusesSnapshots = new NodeBorderRadiusesWeakMap();
+  protected boundingBoxSnapshots = new NodeBoundingBoxMap();
+  protected borderRadiusesSnapshots = new NodeBorderRadiusesMap();
   protected animatingStopper?: () => void;
 
   constructor(
@@ -29,14 +29,16 @@ export class LayoutAnimator {
   ) {}
 
   snapshot(): void {
+    this.boundingBoxSnapshots.clear();
+    this.borderRadiusesSnapshots.clear();
     this.root.traverse((node) => {
       const boundingBox = this.measurer.measureBoundingBox(node.element);
       const borderRadiuses = this.measurer.measureBorderRadiuses(
         node.element,
         boundingBox,
       );
-      this.boundingBoxSnapshots.set(node, boundingBox);
-      this.borderRadiusesSnapshots.set(node, borderRadiuses);
+      this.boundingBoxSnapshots.set(node.id, boundingBox);
+      this.borderRadiusesSnapshots.set(node.id, borderRadiuses);
     });
   }
 
@@ -64,11 +66,11 @@ export class LayoutAnimator {
   }
 
   protected projectFrame(
-    configMap: NodeAnimationContextWeakMap,
+    configMap: NodeAnimationContextMap,
     progress: number,
   ): void {
     this.root.traverse((node) => {
-      const context = configMap.get(node);
+      const context = configMap.get(node.id);
       if (!context) throw new Error('Unknown node');
       const boundingBox = this.getFrameBoundingBox(context, progress);
       const borderRadiuses = this.getFrameBorderRadiuses(context, progress);
@@ -79,29 +81,27 @@ export class LayoutAnimator {
     this.root.project();
   }
 
-  protected getAnimationContextMap(): NodeAnimationContextWeakMap {
+  protected getAnimationContextMap(): NodeAnimationContextMap {
     this.root.measure();
 
-    const map = new NodeAnimationContextWeakMap();
+    const map = new NodeAnimationContextMap();
 
     this.root.traverse((node) => {
       if (!node.boundingBox || !node.borderRadiuses)
         throw new Error('Unknown node');
 
-      const boundingBoxSnapshot = this.boundingBoxSnapshots.get(node);
-      this.boundingBoxSnapshots.delete(node);
+      const boundingBoxSnapshot = this.boundingBoxSnapshots.get(node.id);
       const boundingBoxSource =
         boundingBoxSnapshot ?? this.measurer.measureBoundingBox(node.element);
       const boundingBoxDest = node.boundingBox;
 
-      const borderRadiusesSnapshot = this.borderRadiusesSnapshots.get(node);
-      this.borderRadiusesSnapshots.delete(node);
+      const borderRadiusesSnapshot = this.borderRadiusesSnapshots.get(node.id);
       const borderRadiusesSource =
         borderRadiusesSnapshot ??
         this.measurer.measureBorderRadiuses(node.element, node.boundingBox);
       const borderRadiusesDest = node.borderRadiuses;
 
-      map.set(node, {
+      map.set(node.id, {
         boundingBoxSource,
         boundingBoxDest,
         borderRadiusesSource,
@@ -179,18 +179,18 @@ export class LayoutAnimationEasingParser {
   }
 }
 
-class NodeBoundingBoxWeakMap extends WeakMap<
-  LayoutProjectionNode,
+class NodeBoundingBoxMap extends Map<
+  LayoutProjectionNode['id'],
   LayoutBoundingBox
 > {}
 
-class NodeBorderRadiusesWeakMap extends WeakMap<
-  LayoutProjectionNode,
+class NodeBorderRadiusesMap extends Map<
+  LayoutProjectionNode['id'],
   LayoutBorderRadiuses
 > {}
 
-class NodeAnimationContextWeakMap extends WeakMap<
-  LayoutProjectionNode,
+class NodeAnimationContextMap extends Map<
+  LayoutProjectionNode['id'],
   NodeAnimationContext
 > {}
 

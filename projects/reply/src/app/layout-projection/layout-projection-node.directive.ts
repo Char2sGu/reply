@@ -1,6 +1,7 @@
 import {
   Directive,
   ElementRef,
+  Input,
   OnDestroy,
   Optional,
   SkipSelf,
@@ -22,6 +23,11 @@ export class LayoutProjectionNodeDirective
   extends LayoutProjectionNode
   implements OnDestroy
 {
+  @Input() set rplLayoutProjectionNode(v: this['id']) {
+    if (!v) return;
+    this.id = v;
+  }
+
   constructor(
     elementRef: ElementRef<HTMLElement>,
     measurer: LayoutMeasurer,
