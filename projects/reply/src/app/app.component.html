@@ -16,15 +16,16 @@
     ></rpl-side-nav>
     <div class="wrapper" [@wrapper]="getChildRouteAnimationId()">
       <router-outlet></router-outlet>
-    </div>                                                                 
+    </div>
   </ng-container>
 </ng-container> -->
 
-<div class="container" rplLayoutProjectionNode rplLayoutAnimation>
+<div class="container" rplLayoutProjectionNode>
   <div
     class="box"
     rplLayoutProjectionNode
-    [class.flag]="flag"
+    [animateLayoutOn]="flag$"
+    [class.flag]="flag$.value"
     (click)="onClick()"
   >
     <div class="circle" rplLayoutProjectionNode></div>

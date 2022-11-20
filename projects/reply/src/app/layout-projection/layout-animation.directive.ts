@@ -9,6 +9,7 @@ import {
   Observable,
   of,
   skip,
+  startWith,
   switchMap,
   tap,
 } from 'rxjs';
@@ -35,7 +36,10 @@ export class LayoutAnimationDirective extends LayoutAnimator implements OnInit {
    * - An arbitrary value which will be set to another value before DOM updates.
    */
   @Input() set animateLayoutOn(value: unknown) {
-    const stream = value instanceof Observable ? value : of(value);
+    const stream =
+      value instanceof Observable
+        ? value.pipe(startWith(of(value)))
+        : of(value);
     this.animateLayoutOn$.next(stream);
   }
   private animateLayoutOn$ = new BehaviorSubject<Observable<void>>(EMPTY);
@@ -52,10 +56,10 @@ export class LayoutAnimationDirective extends LayoutAnimator implements OnInit {
   }
 
   ngOnInit(): void {
-    const domWillUpdate$ = this.animateLayoutOn$.pipe(exhaustAll(), skip(1));
-
-    domWillUpdate$
+    this.animateLayoutOn$
       .pipe(
+        exhaustAll(),
+        skip(1),
         tap(() => this.snapshot()),
         switchMap(() => animationFrames().pipe(first())),
       )

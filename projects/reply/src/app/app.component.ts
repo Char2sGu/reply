@@ -5,6 +5,7 @@ import {
   HostBinding,
   ViewChild,
 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 import { SharedAxisAnimation } from './common/animations';
 import { ChildRouteAnimationHost } from './common/child-route-animation-host';
@@ -52,15 +53,11 @@ export class AppComponent extends ChildRouteAnimationHost {
     });
   }
 
-  flag = true;
+  flag$ = new BehaviorSubject(true);
 
   @ViewChild(LayoutAnimator) animator!: LayoutAnimator;
 
   onClick(): void {
-    this.animator.snapshot();
-    this.flag = !this.flag;
-    requestAnimationFrame(() => {
-      this.animator.animate(500, 'ease');
-    });
+    this.flag$.next(!this.flag$.value);
   }
 }
