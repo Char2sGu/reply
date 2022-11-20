@@ -28,6 +28,7 @@ import { NavLogoButtonComponent } from './core/nav-logo-button/nav-logo-button.c
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
 import { SideNavComponent } from './core/side-nav/side-nav.component';
 import { UpperFoundationComponent } from './core/upper-foundation/upper-foundation.component';
+import { LayoutProjectionModule } from './layout-projection/layout-projection.module';
 import { ReattachOnChangeDirective } from './standalone/reattach-on-change.directive';
 import { SearchButtonComponent } from './standalone/search-button/search-button.component';
 import { SettingsButtonComponent } from './standalone/settings-button/settings-button.component';
@@ -69,6 +70,7 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
     ReattachOnChangeDirective,
     SearchButtonComponent,
     SettingsButtonComponent,
+    LayoutProjectionModule,
   ],
   providers: [
     {

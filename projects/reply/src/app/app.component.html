@@ -1,4 +1,4 @@
-<ng-container *ngIf="breakpoints$ | async as breakpoints">
+<!-- <ng-container *ngIf="breakpoints$ | async as breakpoints">
   <ng-container
     *ngIf="{
       navShouldRender: breakpoints['tablet-portrait'],
@@ -16,6 +16,17 @@
     ></rpl-side-nav>
     <div class="wrapper" [@wrapper]="getChildRouteAnimationId()">
       <router-outlet></router-outlet>
-    </div>
+    </div>                                                                 
   </ng-container>
-</ng-container>
+</ng-container> -->
+
+<div class="container" rplLayoutProjectionNode rplLayoutAnimation>
+  <div
+    class="box"
+    rplLayoutProjectionNode
+    [class.flag]="flag"
+    (click)="onClick()"
+  >
+    <div class="circle" rplLayoutProjectionNode></div>
+  </div>
+</div>

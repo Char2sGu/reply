@@ -1,9 +1,15 @@
 import { transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  ViewChild,
+} from '@angular/core';
 
 import { SharedAxisAnimation } from './common/animations';
 import { ChildRouteAnimationHost } from './common/child-route-animation-host';
 import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
+import { LayoutAnimator } from './layout-projection/core/layout-animation';
 
 @Component({
   selector: 'rpl-root',
@@ -44,5 +50,17 @@ export class AppComponent extends ChildRouteAnimationHost {
     this.breakpointManager.breakpoints$.subscribe((v) => {
       this.breakpointMap = v;
     });
+  }
+
+  flag = false;
+
+  @ViewChild(LayoutAnimator) animator!: LayoutAnimator;
+
+  onClick(): void {
+    this.animator.snapshot();
+    this.flag = !this.flag;
+    setTimeout(() => {
+      this.animator.animate(500, 'ease');
+    }, 1000);
   }
 }

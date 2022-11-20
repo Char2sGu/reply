@@ -17,7 +17,6 @@ export class LayoutProjectionNode {
   id = LayoutProjectionNode.idNext++;
 
   boundingBox?: LayoutBoundingBox;
-  boundingBoxCalibrated?: LayoutBoundingBox;
   boundingBoxTransform?: LayoutBoundingBoxTransform;
 
   borderRadiuses?: LayoutBorderRadiuses;
@@ -67,12 +66,12 @@ export class LayoutProjectionNode {
   }
 
   calculate(destBoundingBox: LayoutBoundingBox): void {
-    this.calibrate();
-    if (!this.boundingBoxCalibrated)
-      throw new Error('Missing calibrated bounding box');
-    const currBoundingBox = this.boundingBoxCalibrated;
+    if (!this.boundingBox) throw new Error('Missing bounding box');
+
+    const currBoundingBox = this.calibrate(this.boundingBox);
     const currMidpoint = currBoundingBox.midpoint();
     const destMidpoint = destBoundingBox.midpoint();
+
     this.boundingBoxTransform = {
       x: {
         origin: currMidpoint.x,
@@ -87,10 +86,7 @@ export class LayoutProjectionNode {
     };
   }
 
-  calibrate(): void {
-    if (!this.boundingBox) throw new Error('Missing bounding box');
-
-    let boundingBox = this.boundingBox;
+  calibrate(boundingBox: LayoutBoundingBox): LayoutBoundingBox {
     for (const ancestor of this.getAncestors()) {
       if (!ancestor.boundingBox || !ancestor.boundingBoxTransform) continue;
       const transform = ancestor.boundingBoxTransform;
@@ -102,7 +98,7 @@ export class LayoutProjectionNode {
       });
     }
 
-    this.boundingBoxCalibrated = boundingBox;
+    return boundingBox;
 
     function calibratePoint(
       point: number,
@@ -110,7 +106,7 @@ export class LayoutProjectionNode {
     ) {
       const distanceFromOrigin = point - origin;
       const scaled = origin + distanceFromOrigin * scale;
-      const translated = scaled + translate;
+      const translated = scaled + translate * scale;
       return translated;
     }
   }
