@@ -140,7 +140,7 @@ export class LayoutProjectionNode {
 
     const radiuses = this.borderRadiuses;
     const radiusStyle = (radius: LayoutBorderRadius) =>
-      `${radius.x / totalScale.x}% ${radius.y / totalScale.y}%`;
+      `${radius.x / totalScale.x}px ${radius.y / totalScale.y}px`;
     style.borderTopLeftRadius = radiusStyle(radiuses.topLeft);
     style.borderTopRightRadius = radiusStyle(radiuses.topRight);
     style.borderBottomLeftRadius = radiusStyle(radiuses.bottomLeft);

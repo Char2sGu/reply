@@ -52,7 +52,7 @@ export class AppComponent extends ChildRouteAnimationHost {
     });
   }
 
-  flag = false;
+  flag = true;
 
   @ViewChild(LayoutAnimator) animator!: LayoutAnimator;
 

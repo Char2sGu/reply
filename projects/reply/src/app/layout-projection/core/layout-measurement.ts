@@ -41,17 +41,17 @@ export class LayoutBorderRadiusParser {
     width: number,
     height: number,
   ): LayoutBorderRadius {
-    if (raw.match(/\d+(\.\d+)?% \d+(\.\d+)?%/u)) {
+    if (raw.match(/\d+(\.\d+)?px \d+(\.\d+)?px/u)) {
       const [x, y] = raw.split(' ').map((value) => parseFloat(value));
       return { x, y };
     }
     if (styleUnits.percent.test(raw)) {
       const value = parseFloat(raw);
-      return { x: value, y: value };
+      return { x: value * width, y: value * height };
     }
     if (styleUnits.px.test(raw)) {
       const value = parseFloat(raw);
-      return { x: (value / width) * 100, y: (value / height) * 100 };
+      return { x: value, y: value };
     }
     throw new Error(`Unsupported radius: ${raw}`);
   }
