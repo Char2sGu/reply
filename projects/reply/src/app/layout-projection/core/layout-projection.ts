@@ -84,6 +84,12 @@ export class LayoutProjectionNode {
         translate: destMidpoint.y - currMidpoint.y,
       },
     };
+
+    // edge case: invisible element (width/height is 0)
+    if (isNaN(this.boundingBoxTransform.x.scale))
+      this.boundingBoxTransform.x.scale = 1;
+    if (isNaN(this.boundingBoxTransform.y.scale))
+      this.boundingBoxTransform.y.scale = 1;
   }
 
   calibrate(boundingBox: LayoutBoundingBox): LayoutBoundingBox {
