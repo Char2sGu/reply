@@ -18,8 +18,7 @@ import { LayoutMeasurer } from './layout-measurement';
 import { LayoutProjectionNode } from './layout-projection';
 
 export class LayoutAnimator {
-  protected boundingBoxSnapshots = new NodeBoundingBoxMap();
-  protected borderRadiusesSnapshots = new NodeBorderRadiusesMap();
+  protected snapshots = new NodeLayoutSnapshotMap();
   protected animatingStopper?: () => void;
 
   constructor(
@@ -29,8 +28,8 @@ export class LayoutAnimator {
   ) {}
 
   snapshot(): void {
-    this.boundingBoxSnapshots.clear();
-    this.borderRadiusesSnapshots.clear();
+    this.snapshots.clear();
+
     this.root.traverse((node) => {
       const boundingBox = this.measurer.measureBoundingBox(node.element);
       const borderRadiuses = this.measurer.measureBorderRadiuses(
@@ -38,16 +37,12 @@ export class LayoutAnimator {
         boundingBox,
       );
 
-      const nodeIdDuplicated =
-        this.boundingBoxSnapshots.has(node.id) ||
-        this.borderRadiusesSnapshots.has(node.id);
-      if (nodeIdDuplicated) {
+      if (this.snapshots.has(node.id)) {
         const msg = `Multiple nodes with same id "${node.id}" belonging to a single layout animator`;
         throw new Error(msg);
       }
 
-      this.boundingBoxSnapshots.set(node.id, boundingBox);
-      this.borderRadiusesSnapshots.set(node.id, borderRadiuses);
+      this.snapshots.set(node.id, { boundingBox, borderRadiuses });
     });
   }
 
@@ -75,11 +70,11 @@ export class LayoutAnimator {
   }
 
   protected projectFrame(
-    configMap: NodeAnimationContextMap,
+    contextMap: NodeAnimationContextMap,
     progress: number,
   ): void {
     this.root.traverse((node) => {
-      const context = configMap.get(node.id);
+      const context = contextMap.get(node.id);
       if (!context) throw new Error('Unknown node');
       const boundingBox = this.getFrameBoundingBox(context, progress);
       const borderRadiuses = this.getFrameBorderRadiuses(context, progress);
@@ -99,22 +94,22 @@ export class LayoutAnimator {
       if (!node.boundingBox || !node.borderRadiuses)
         throw new Error('Unknown node');
 
-      const boundingBoxSnapshot = this.boundingBoxSnapshots.get(node.id);
-      const boundingBoxSource =
-        boundingBoxSnapshot ?? this.measurer.measureBoundingBox(node.element);
-      const boundingBoxDest = node.boundingBox;
+      const snapshot = this.snapshots.get(node.id);
 
-      const borderRadiusesSnapshot = this.borderRadiusesSnapshots.get(node.id);
-      const borderRadiusesSource =
-        borderRadiusesSnapshot ??
+      const boundingBoxFrom =
+        snapshot?.boundingBox ?? this.measurer.measureBoundingBox(node.element);
+      const boundingBoxTo = node.boundingBox;
+
+      const borderRadiusesFrom =
+        snapshot?.borderRadiuses ??
         this.measurer.measureBorderRadiuses(node.element, node.boundingBox);
-      const borderRadiusesDest = node.borderRadiuses;
+      const borderRadiusesTo = node.borderRadiuses;
 
       map.set(node.id, {
-        boundingBoxSource,
-        boundingBoxDest,
-        borderRadiusesSource,
-        borderRadiusesDest,
+        boundingBoxFrom,
+        boundingBoxTo,
+        borderRadiusesFrom,
+        borderRadiusesTo,
       });
     });
 
@@ -125,13 +120,13 @@ export class LayoutAnimator {
     context: NodeAnimationContext,
     progress: number,
   ): LayoutBoundingBox {
-    const source = context.boundingBoxSource;
-    const dest = context.boundingBoxDest;
+    const from = context.boundingBoxFrom;
+    const to = context.boundingBoxTo;
     return new LayoutBoundingBox({
-      top: mix(source.top, dest.top, progress),
-      left: mix(source.left, dest.left, progress),
-      right: mix(source.right, dest.right, progress),
-      bottom: mix(source.bottom, dest.bottom, progress),
+      top: mix(from.top, to.top, progress),
+      left: mix(from.left, to.left, progress),
+      right: mix(from.right, to.right, progress),
+      bottom: mix(from.bottom, to.bottom, progress),
     });
   }
 
@@ -139,23 +134,23 @@ export class LayoutAnimator {
     context: NodeAnimationContext,
     progress: number,
   ): LayoutBorderRadiuses {
-    const source = context.borderRadiusesSource;
-    const dest = context.borderRadiusesDest;
+    const from = context.borderRadiusesFrom;
+    const to = context.borderRadiusesTo;
 
     const mixRadius = (
-      source: LayoutBorderRadius,
-      dest: LayoutBorderRadius,
+      from: LayoutBorderRadius,
+      to: LayoutBorderRadius,
       progress: number,
     ): LayoutBorderRadius => ({
-      x: mix(source.x, dest.x, progress),
-      y: mix(source.y, dest.y, progress),
+      x: mix(from.x, to.x, progress),
+      y: mix(from.y, to.y, progress),
     });
 
     return {
-      topLeft: mixRadius(source.topLeft, dest.topLeft, progress),
-      topRight: mixRadius(source.topRight, dest.topRight, progress),
-      bottomLeft: mixRadius(source.bottomLeft, dest.bottomLeft, progress),
-      bottomRight: mixRadius(source.bottomRight, dest.bottomRight, progress),
+      topLeft: mixRadius(from.topLeft, to.topLeft, progress),
+      topRight: mixRadius(from.topRight, to.topRight, progress),
+      bottomLeft: mixRadius(from.bottomLeft, to.bottomLeft, progress),
+      bottomRight: mixRadius(from.bottomRight, to.bottomRight, progress),
     };
   }
 }
@@ -188,15 +183,15 @@ export class LayoutAnimationEasingParser {
   }
 }
 
-class NodeBoundingBoxMap extends Map<
+class NodeLayoutSnapshotMap extends Map<
   LayoutProjectionNode['id'],
-  LayoutBoundingBox
+  NodeLayoutSnapshot
 > {}
 
-class NodeBorderRadiusesMap extends Map<
-  LayoutProjectionNode['id'],
-  LayoutBorderRadiuses
-> {}
+interface NodeLayoutSnapshot {
+  boundingBox: LayoutBoundingBox;
+  borderRadiuses: LayoutBorderRadiuses;
+}
 
 class NodeAnimationContextMap extends Map<
   LayoutProjectionNode['id'],
@@ -204,8 +199,8 @@ class NodeAnimationContextMap extends Map<
 > {}
 
 interface NodeAnimationContext {
-  boundingBoxSource: LayoutBoundingBox;
-  boundingBoxDest: LayoutBoundingBox;
-  borderRadiusesSource: LayoutBorderRadiuses;
-  borderRadiusesDest: LayoutBorderRadiuses;
+  boundingBoxFrom: LayoutBoundingBox;
+  boundingBoxTo: LayoutBoundingBox;
+  borderRadiusesFrom: LayoutBorderRadiuses;
+  borderRadiusesTo: LayoutBorderRadiuses;
 }
