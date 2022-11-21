@@ -173,8 +173,8 @@ export class LayoutAnimator {
     let ancestor = node;
     let ancestorSnapshot: NodeLayoutSnapshot | undefined = undefined;
     while ((ancestorSnapshot = this.snapshots.get(ancestor.id)) === undefined) {
-      if (!node.parent) return;
-      ancestor = node.parent;
+      if (!ancestor.parent) return;
+      ancestor = ancestor.parent;
       if (ancestor === this.root) return;
     }
     if (!ancestor.boundingBox) throw new Error('Unknown ancestor');
