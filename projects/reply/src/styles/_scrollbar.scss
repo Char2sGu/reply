@@ -1,6 +1,11 @@
 @use 'sass:color' as color;
 
 @mixin scrollbar($regular-color, $hover-color, $activation-selector) {
+  overflow-y: auto;
+  @supports (overflow: overlay) {
+    overflow-y: overlay;
+  }
+
   &::-webkit-scrollbar {
     width: 8px;
     height: 8px;

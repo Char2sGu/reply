@@ -9,7 +9,7 @@
 
 .wrapper {
   height: 100%;
-  overflow-y: auto;
+
   @include scrollbar.scrollbar(
     $regular-color:
       color.change(

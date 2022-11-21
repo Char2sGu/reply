@@ -19,7 +19,6 @@
   padding: 8px 0;
   background-color: map.get(theming.$theme, 'color', 'primary', 'default');
   color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
-  overflow-y: auto;
 
   :host.expanded & {
     align-items: flex-start;
