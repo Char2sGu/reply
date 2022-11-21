@@ -66,10 +66,10 @@ export class LayoutAnimationDirective extends LayoutAnimator implements OnInit {
       .subscribe(() => this.animate());
   }
 
-  override animate(
+  override async animate(
     duration: number = this.animationDuration,
     easing: string | Easing = this.animationEasing,
-  ): void {
-    super.animate(duration, easing);
+  ): Promise<void> {
+    return super.animate(duration, easing);
   }
 }

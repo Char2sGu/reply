@@ -49,27 +49,30 @@ export class LayoutAnimator {
     );
   }
 
-  animate(duration: number, easing: string | Easing): void {
-    if (this.animatingStopper) {
-      this.animatingStopper();
-      this.animatingStopper = undefined;
-    }
+  async animate(duration: number, easing: string | Easing): Promise<void> {
+    return new Promise((resolve) => {
+      if (this.animatingStopper) {
+        this.animatingStopper();
+        this.animatingStopper = undefined;
+      }
 
-    const animationContextMap = this.getAnimationContextMap();
+      const animationContextMap = this.getAnimationContextMap();
 
-    const projectFrame = (progress: number) =>
-      this.projectFrame(animationContextMap, progress);
+      const projectFrame = (progress: number) =>
+        this.projectFrame(animationContextMap, progress);
 
-    projectFrame(0);
-
-    const { stop } = animate({
-      from: 0,
-      to: 1,
-      duration,
-      ease: this.easingParser.coerceEasing(easing),
-      onUpdate: projectFrame,
+      projectFrame(0);
+      const { stop } = animate({
+        from: 0,
+        to: 1,
+        duration,
+        ease: this.easingParser.coerceEasing(easing),
+        onUpdate: projectFrame,
+        onComplete: resolve,
+        onStop: resolve,
+      });
+      this.animatingStopper = stop;
     });
-    this.animatingStopper = stop;
   }
 
   protected projectFrame(
