@@ -9,7 +9,8 @@
     <rpl-mail-card
       *ngFor="let mail of mails; let index = index; trackBy: mailTracker"
       [mail]="mail"
-      rplLayoutProjectionNode
+      rplLayoutProjectionNode="mail-{{ mail.id }}"
+      [style.zIndex]="(mailPrevId$ | async) === mail.id ? 1 : null"
     ></rpl-mail-card>
   </div>
 </ng-container>

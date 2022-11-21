@@ -23,6 +23,7 @@ export class MailCardListComponent implements OnInit {
 
   mails$!: Observable<Mail[]>;
   mailTracker: TrackByFunction<Mail> = (_, mail) => mail.id;
+  mailPrevId$ = this.route.queryParams.pipe(map((params) => params['prev']));
 
   constructor(
     private route: ActivatedRoute,

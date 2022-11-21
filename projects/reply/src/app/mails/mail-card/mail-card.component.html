@@ -3,7 +3,7 @@
     <div class="overlay"></div>
     <div class="ripple" matRipple></div>
     <div class="headline">
-      <div class="titles">
+      <div class="titles" rplLayoutProjectionNode>
         <h5 class="subtitle">
           <span>{{ mailSender.name }}</span> -
           <span>{{ mail.sentAt | readableDate }}</span>
@@ -12,7 +12,11 @@
           <a routerLink="./{{ mail.id }}" #anchor>{{ mail.subject }}</a>
         </h1>
       </div>
-      <div class="actions" (click)="$event.stopPropagation()">
+      <div
+        class="actions"
+        rplLayoutProjectionNode
+        (click)="$event.stopPropagation()"
+      >
         <ng-container *ngIf="breakpoints['tablet-landscape']">
           <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
           <rpl-mail-delete-button [mail]="mail"></rpl-mail-delete-button>
@@ -20,7 +24,11 @@
             <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
           </button>
         </ng-container>
-        <button mat-icon-button class="avatar-button">
+        <button
+          mat-icon-button
+          class="avatar-button"
+          rplLayoutProjectionNode="mail-{{ mail.id }}-avatar"
+        >
           <rpl-mail-avatar [src]="mailSender.avatarUrl"></rpl-mail-avatar>
         </button>
       </div>

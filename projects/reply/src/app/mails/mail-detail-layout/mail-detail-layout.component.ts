@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-
-import { LayoutContext } from '@/app/core/layout.context';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'rpl-mail-detail-layout',
@@ -9,7 +9,9 @@ import { LayoutContext } from '@/app/core/layout.context';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailDetailLayoutComponent implements OnInit {
-  constructor(public layout: LayoutContext) {}
+  mailId$ = this.route.params.pipe(map((params) => params['mailId']));
+
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {}
 }
