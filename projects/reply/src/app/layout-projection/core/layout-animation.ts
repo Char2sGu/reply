@@ -30,20 +30,23 @@ export class LayoutAnimator {
   snapshot(): void {
     this.snapshots.clear();
 
-    this.root.traverse((node) => {
-      const boundingBox = this.measurer.measureBoundingBox(node.element);
-      const borderRadiuses = this.measurer.measureBorderRadiuses(
-        node.element,
-        boundingBox,
-      );
+    this.root.traverse(
+      (node) => {
+        const boundingBox = this.measurer.measureBoundingBox(node.element);
+        const borderRadiuses = this.measurer.measureBorderRadiuses(
+          node.element,
+          boundingBox,
+        );
 
-      if (this.snapshots.has(node.id)) {
-        const msg = `Multiple nodes with same id "${node.id}" belonging to a single layout animator`;
-        throw new Error(msg);
-      }
+        if (this.snapshots.has(node.id)) {
+          const msg = `Multiple nodes with same id "${node.id}" belonging to a single layout animator`;
+          throw new Error(msg);
+        }
 
-      this.snapshots.set(node.id, { boundingBox, borderRadiuses });
-    });
+        this.snapshots.set(node.id, { boundingBox, borderRadiuses });
+      },
+      { includeSelf: true },
+    );
   }
 
   animate(duration: number, easing: string | Easing): void {
@@ -73,14 +76,17 @@ export class LayoutAnimator {
     contextMap: NodeAnimationContextMap,
     progress: number,
   ): void {
-    this.root.traverse((node) => {
-      const context = contextMap.get(node.id);
-      if (!context) throw new Error('Unknown node');
-      const boundingBox = this.getFrameBoundingBox(context, progress);
-      const borderRadiuses = this.getFrameBorderRadiuses(context, progress);
-      node.calculate(boundingBox);
-      node.borderRadiuses = borderRadiuses;
-    });
+    this.root.traverse(
+      (node) => {
+        const context = contextMap.get(node.id);
+        if (!context) throw new Error('Unknown node');
+        const boundingBox = this.getFrameBoundingBox(context, progress);
+        const borderRadiuses = this.getFrameBorderRadiuses(context, progress);
+        node.calculate(boundingBox);
+        node.borderRadiuses = borderRadiuses;
+      },
+      { includeSelf: true },
+    );
 
     this.root.project();
   }
@@ -90,30 +96,33 @@ export class LayoutAnimator {
 
     const map = new NodeAnimationContextMap();
 
-    this.root.traverse((node) => {
-      if (!node.boundingBox || !node.borderRadiuses)
-        throw new Error('Unknown node');
+    this.root.traverse(
+      (node) => {
+        if (!node.boundingBox || !node.borderRadiuses)
+          throw new Error('Unknown node');
 
-      const snapshot = this.snapshots.get(node.id);
+        const snapshot = this.snapshots.get(node.id);
 
-      const boundingBoxFrom =
-        snapshot?.boundingBox ??
-        this.estimateStartingBoundingBox(node) ??
-        node.boundingBox;
-      const boundingBoxTo = node.boundingBox;
+        const boundingBoxFrom =
+          snapshot?.boundingBox ??
+          this.estimateStartingBoundingBox(node) ??
+          node.boundingBox;
+        const boundingBoxTo = node.boundingBox;
 
-      const borderRadiusesFrom =
-        snapshot?.borderRadiuses ??
-        this.measurer.measureBorderRadiuses(node.element, node.boundingBox);
-      const borderRadiusesTo = node.borderRadiuses;
+        const borderRadiusesFrom =
+          snapshot?.borderRadiuses ??
+          this.measurer.measureBorderRadiuses(node.element, node.boundingBox);
+        const borderRadiusesTo = node.borderRadiuses;
 
-      map.set(node.id, {
-        boundingBoxFrom,
-        boundingBoxTo,
-        borderRadiusesFrom,
-        borderRadiusesTo,
-      });
-    });
+        map.set(node.id, {
+          boundingBoxFrom,
+          boundingBoxTo,
+          borderRadiusesFrom,
+          borderRadiusesTo,
+        });
+      },
+      { includeSelf: true },
+    );
 
     return map;
   }

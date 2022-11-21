@@ -23,9 +23,13 @@ export class LayoutProjectionNodeDirective
   extends LayoutProjectionNode
   implements OnDestroy
 {
-  @Input() set rplLayoutProjectionNode(v: this['id']) {
-    if (!v) return;
-    this.id = v;
+  @Input() set rplLayoutProjectionNode(v: string | false) {
+    if (typeof v === 'string') {
+      if (v) this.identifyAs(v);
+      this.activate();
+    } else {
+      this.deactivate();
+    }
   }
 
   constructor(

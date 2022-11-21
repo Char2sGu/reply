@@ -15,34 +15,55 @@ export class LayoutProjectionNode {
   static idNext = 1;
 
   id = `anonymous-${LayoutProjectionNode.idNext++}`;
+  activated = false;
+
+  parent?: LayoutProjectionNode;
+  children = new Set<LayoutProjectionNode>();
 
   boundingBox?: LayoutBoundingBox;
   boundingBoxTransform?: LayoutBoundingBoxTransform;
 
   borderRadiuses?: LayoutBorderRadiuses;
 
-  parent?: LayoutProjectionNode;
-  children = new Set<LayoutProjectionNode>();
-
   constructor(
     public element: HTMLElement,
     protected measurer: LayoutMeasurer,
   ) {}
 
+  identifyAs(id: string): void {
+    this.id = id;
+  }
+
+  activate(): void {
+    this.activated = true;
+  }
+  deactivate(): void {
+    this.activated = false;
+  }
+
   attach(parent: LayoutProjectionNode): void {
     this.parent = parent;
     parent.children.add(this);
   }
-
   detach(): void {
     if (!this.parent) throw new Error('Missing parent');
     this.parent.children.delete(this);
     this.parent = undefined;
   }
 
-  traverse(callback: (node: LayoutProjectionNode) => void): void {
-    callback(this);
-    this.children.forEach((child) => child.traverse(callback));
+  traverse(
+    callback: (node: LayoutProjectionNode) => void,
+    options: LayoutProjectionNodeTraverseOptions = {},
+  ): void {
+    options.includeSelf ??= false;
+    options.includeDeactivated ??= false;
+
+    if (options.includeSelf) callback(this);
+
+    this.children.forEach((child) => {
+      if (!options.includeDeactivated && !child.activated) return;
+      child.traverse(callback, { ...options, includeSelf: true });
+    });
   }
 
   reset(): void {
@@ -56,7 +77,7 @@ export class LayoutProjectionNode {
     // We have to perform the dom-write actions and dom-read actions separately
     // to avoid layout thrashing.
     // https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing
-    this.children.forEach((child) => child.measure());
+    this.traverse((child) => child.measure());
 
     this.boundingBox = this.measurer.measureBoundingBox(this.element);
     this.borderRadiuses = this.measurer.measureBorderRadiuses(
@@ -141,7 +162,7 @@ export class LayoutProjectionNode {
     style.borderBottomLeftRadius = radiusStyle(radiuses.bottomLeft);
     style.borderBottomRightRadius = radiusStyle(radiuses.bottomRight);
 
-    this.children.forEach((child) => child.project());
+    this.traverse((child) => child.project());
   }
 
   protected getAncestors(): LayoutProjectionNode[] {
@@ -153,4 +174,9 @@ export class LayoutProjectionNode {
     }
     return ancestors;
   }
+}
+
+export interface LayoutProjectionNodeTraverseOptions {
+  includeSelf?: boolean;
+  includeDeactivated?: boolean;
 }
