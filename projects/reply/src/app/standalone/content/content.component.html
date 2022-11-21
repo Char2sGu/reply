@@ -1,8 +1,9 @@
 <div
   class="wrapper"
-  (scrollUp)="layoutContext.contentFavored = false"
-  (scrollDown)="layoutContext.contentFavored = true"
+  (scrollUp)="onScroll('up')"
+  (scrollDown)="onScroll('down')"
   scrolling="scrolling"
+  #wrapper
 >
   <ng-content></ng-content>
 </div>

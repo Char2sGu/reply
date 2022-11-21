@@ -5,6 +5,7 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
@@ -15,6 +16,7 @@ import { BreakpointManager } from '@/app/core/breakpoint.manager';
 import { LayoutContext } from '@/app/core/layout.context';
 import { NavigationContext } from '@/app/core/navigation.context';
 import { LayoutAnimator } from '@/app/layout-projection/core/layout-animation';
+import { ContentComponent } from '@/app/standalone/content/content.component';
 
 let scrollTop = 0;
 
@@ -40,7 +42,7 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
   breakpoints$ = this.breakpointManager.breakpoints$;
   mailboxName$ = this.route.params.pipe(map((params) => params['mailboxName']));
 
-  private scrollable!: HTMLElement;
+  @ViewChild(ContentComponent) private content!: ContentComponent;
 
   constructor(
     public layoutContext: LayoutContext,
@@ -54,40 +56,12 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
   ngOnInit(): void {}
 
   async ngAfterViewInit(): Promise<void> {
-    // TODO: cleaner implementation
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.scrollable = this.elementRef.nativeElement //
-      .querySelector<HTMLElement>('rpl-content > .wrapper')!;
-
-    const tick = () => new Promise((r) => requestAnimationFrame(r));
-
-    // The content might have changed, so we need to correct the scroll top.
-    this.scrollable.scrollTop = scrollTop;
-    scrollTop = this.scrollable.scrollTop;
-    this.scrollable.scrollTop = 0;
-
-    // We have to use a fake scroll here because we want to show the overflow
-    // content in the layout animation.
-    this.scrollable.style.overflow = 'visible';
-    this.scrollable.style.position = 'relative';
-    this.scrollable.style.top = `${-scrollTop}px`;
-
-    await tick();
+    this.content.fakeScroll(scrollTop);
     await this.layoutAnimator.animate(250, AnimationCurves.STANDARD_CURVE);
-
-    this.scrollable.style.overflow = '';
-    this.scrollable.style.position = '';
-    this.scrollable.style.top = '';
-    this.scrollable.scrollTop = scrollTop;
-
-    // Changing scrollTop will result in a scroll event, which would result in
-    // a wrong contentFavored change, so we have to correct it back.
-    await tick();
-    this.layoutContext.contentFavored = false;
+    this.content.setScrollTop(scrollTop);
   }
 
   ngOnDestroy(): void {
-    scrollTop = this.scrollable.scrollTop;
+    scrollTop = this.content.getScrollTop();
   }
 }
