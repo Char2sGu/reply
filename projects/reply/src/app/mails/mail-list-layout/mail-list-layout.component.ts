@@ -24,7 +24,6 @@ let scrollTop = 0;
   styleUrls: ['./mail-list-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-    // TODO: shared axis animation
     trigger('content', [
       transition(':increment', [
         query(':leave', style({ position: 'absolute' })),
