@@ -1,79 +1,49 @@
-// @use 'sass:map' as map;
-// @use 'styles/theming' as theming;
+@use 'sass:map' as map;
+@use 'styles/theming' as theming;
 
-// :host {
-//   display: grid;
-//   height: 100%;
-
-//   background-color: map.get(
-//     theming.$theme,
-//     'color',
-//     'background',
-//     'background'
-//   );
-
-//   column-gap: 8px;
-//   grid-template-rows: 100%;
-//   grid-template-columns: 0px repeat(4, 1fr) 0px;
-//   &.tablet-portrait {
-//     column-gap: 32px;
-//     grid-template-columns: 0px repeat(8, 1fr) 0px;
-//   }
-//   &.tablet-landscape {
-//     grid-template-columns: 0px repeat(12, 1fr) 0px;
-//   }
-
-//   overflow: hidden; // animations might cause overflow
-// }
-
-// rpl-side-nav {
-//   grid-row: 1;
-//   grid-column: 1 / span 2;
-//   :host-context(.tablet-landscape) & {
-//     grid-column: 1 / span 2;
-//   }
-//   :host-context(.laptop) & {
-//     grid-column: 1 / span 4;
-//   }
-
-//   &:not(.on-grid) {
-//     width: 100px;
-//     &.expanded {
-//       width: 300px;
-//     }
-//   }
-// }
-
-// .wrapper {
-//   display: contents;
-// }
-
-.container {
-  background: linear-gradient(250deg, #7b2ff7, #f107a3);
-  background-repeat: no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+:host {
+  display: grid;
   height: 100%;
+
+  background-color: map.get(
+    theming.$theme,
+    'color',
+    'background',
+    'background'
+  );
+
+  column-gap: 8px;
+  grid-template-rows: 100%;
+  grid-template-columns: 0px repeat(4, 1fr) 0px;
+  &.tablet-portrait {
+    column-gap: 32px;
+    grid-template-columns: 0px repeat(8, 1fr) 0px;
+  }
+  &.tablet-landscape {
+    grid-template-columns: 0px repeat(12, 1fr) 0px;
+  }
+
+  overflow: hidden; // animations might cause overflow
 }
 
-.box {
-  height: 300px;
-  width: 300px;
-  background-color: purple;
+rpl-side-nav {
+  grid-row: 1;
+  grid-column: 1 / span 2;
+  :host-context(.tablet-landscape) & {
+    grid-column: 1 / span 2;
+  }
+  :host-context(.laptop) & {
+    grid-column: 1 / span 4;
+  }
+
+  &:not(.on-grid) {
+    width: 100px;
+    &.expanded {
+      width: 300px;
+    }
+  }
 }
 
-.box.flag {
-  padding: 30px;
-  width: 400px;
-  height: 200px;
-  margin-top: 300px;
-  border-radius: 20px;
-}
-
-.circle {
-  height: 30px;
-  width: 30px;
-  background-color: white;
-  border-radius: 50%;
+.wrapper {
+  display: contents;
 }
