@@ -68,7 +68,10 @@ export class LayoutAnimator {
         duration,
         ease: this.easingParser.coerceEasing(easing),
         onUpdate: projectFrame,
-        onComplete: resolve,
+        onComplete: () => {
+          this.root.traverse((node) => node.reset(), { includeSelf: true });
+          resolve();
+        },
         onStop: resolve,
       });
       this.animatingStopper = stop;
