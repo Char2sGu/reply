@@ -97,7 +97,9 @@ export class LayoutAnimator {
       const snapshot = this.snapshots.get(node.id);
 
       const boundingBoxFrom =
-        snapshot?.boundingBox ?? this.measurer.measureBoundingBox(node.element);
+        snapshot?.boundingBox ??
+        this.estimateStartingBoundingBox(node) ??
+        node.boundingBox;
       const boundingBoxTo = node.boundingBox;
 
       const borderRadiusesFrom =
@@ -152,6 +154,42 @@ export class LayoutAnimator {
       bottomLeft: mixRadius(from.bottomLeft, to.bottomLeft, progress),
       bottomRight: mixRadius(from.bottomRight, to.bottomRight, progress),
     };
+  }
+
+  protected estimateStartingBoundingBox(
+    node: LayoutProjectionNode,
+  ): LayoutBoundingBox | undefined {
+    if (!node.boundingBox) throw new Error('Unknown node');
+
+    let ancestor = node;
+    let ancestorSnapshot: NodeLayoutSnapshot | undefined = undefined;
+    while ((ancestorSnapshot = this.snapshots.get(ancestor.id)) === undefined) {
+      if (!node.parent) return;
+      ancestor = node.parent;
+      if (ancestor === this.root) return;
+    }
+    if (!ancestor.boundingBox) throw new Error('Unknown ancestor');
+
+    /* eslint-disable @typescript-eslint/no-non-null-assertion */
+    ancestor.calculate(ancestorSnapshot.boundingBox);
+    const transform = ancestor.boundingBoxTransform!;
+    /* eslint-enable @typescript-eslint/no-non-null-assertion */
+    const scale = transform.x.scale;
+
+    return new LayoutBoundingBox({
+      top:
+        ancestorSnapshot.boundingBox.top -
+        (ancestor.boundingBox.top - node.boundingBox.top) * scale,
+      left:
+        ancestorSnapshot.boundingBox.left -
+        (ancestor.boundingBox.left - node.boundingBox.left) * scale,
+      right:
+        ancestorSnapshot.boundingBox.right -
+        (ancestor.boundingBox.right - node.boundingBox.right) * scale,
+      bottom:
+        ancestorSnapshot.boundingBox.top -
+        (ancestor.boundingBox.top - node.boundingBox.bottom) * scale,
+    });
   }
 }
 
