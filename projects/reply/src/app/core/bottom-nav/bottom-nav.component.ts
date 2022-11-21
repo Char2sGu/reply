@@ -136,9 +136,7 @@ export class BottomNavComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl(urlTree);
     } else {
       this.bottomMenuPortal.detach();
-      await new Promise((r) => {
-        setTimeout(r, 200); // delay for animation for better visuals
-      });
+      await new Promise((r) => setTimeout(r, 200)); // delay for animation for better visuals
       this.bottomMenuExpanded = false;
       this.bottomMenuOpened = false;
       this.changeDetectorRef.markForCheck();
