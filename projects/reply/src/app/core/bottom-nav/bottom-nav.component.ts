@@ -111,7 +111,6 @@ export class BottomNavComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.setupOverlayContainer();
     this.setupBottomMenu();
   }
 
@@ -125,6 +124,7 @@ export class BottomNavComponent implements OnInit, OnDestroy {
     if (this.bottomMenuToggling) return;
     this.bottomMenuToggling = true;
     if (to === true) {
+      this.adjustOverlayContainer();
       this.bottomMenuOpened = true;
       this.bottomMenuExpanded = false;
       this.bottomMenuPortal.attach(this.bottomMenuOverlayRef);
@@ -140,6 +140,8 @@ export class BottomNavComponent implements OnInit, OnDestroy {
       this.bottomMenuExpanded = false;
       this.bottomMenuOpened = false;
       this.changeDetectorRef.markForCheck();
+      this.restoreOverlayContainer();
+
       const urlTree = this.router.parseUrl(this.router.url);
       urlTree.fragment = null;
       this.router.navigateByUrl(urlTree);
@@ -147,15 +149,17 @@ export class BottomNavComponent implements OnInit, OnDestroy {
     this.bottomMenuToggling = false;
   }
 
-  private setupOverlayContainer(): void {
+  private adjustOverlayContainer(): void {
     const overlayContainer = this.overlayContainerRef.getContainerElement();
     const height = this.elementRef.nativeElement.offsetHeight;
     overlayContainer.style.height = `calc(100% - ${height}px)`;
     overlayContainer.style.overflow = 'hidden';
-    this.destroy$.subscribe(() => {
-      overlayContainer.style.height = '';
-      overlayContainer.style.overflow = '';
-    });
+  }
+
+  private restoreOverlayContainer(): void {
+    const overlayContainer = this.overlayContainerRef.getContainerElement();
+    overlayContainer.style.height = '';
+    overlayContainer.style.overflow = '';
   }
 
   private setupBottomMenu(): void {
