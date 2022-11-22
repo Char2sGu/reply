@@ -17,7 +17,7 @@
         rplLayoutProjectionNode
         (click)="$event.stopPropagation()"
       >
-        <ng-container *ngIf="breakpoints['tablet-landscape']">
+        <ng-container *ngIf="breakpoints['tablet-portrait']">
           <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
           <rpl-mail-delete-button [mail]="mail"></rpl-mail-delete-button>
           <button mat-icon-button>
