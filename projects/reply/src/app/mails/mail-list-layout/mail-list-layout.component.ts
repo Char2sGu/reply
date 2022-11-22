@@ -2,7 +2,6 @@ import { query, style, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -13,7 +12,6 @@ import { map } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/common/animations';
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
-import { LayoutContext } from '@/app/core/layout.context';
 import { NavigationContext } from '@/app/core/navigation.context';
 import { LayoutAnimator } from '@/app/layout-projection/core/layout-animation';
 import { ContentComponent } from '@/app/standalone/content/content.component';
@@ -45,12 +43,10 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
   @ViewChild(ContentComponent) private content!: ContentComponent;
 
   constructor(
-    public layoutContext: LayoutContext,
     public navigationContext: NavigationContext,
     private route: ActivatedRoute,
     private breakpointManager: BreakpointManager,
     private layoutAnimator: LayoutAnimator,
-    private elementRef: ElementRef<HTMLElement>,
   ) {}
 
   ngOnInit(): void {}
