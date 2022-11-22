@@ -25,8 +25,16 @@ const routes: Routes = [
     component: MailsComponent,
     title: MailboxRouteTitleResolver,
     children: [
-      { path: '', component: MailListLayoutComponent },
-      { path: ':mailId', component: MailDetailLayoutComponent },
+      {
+        path: '',
+        component: MailListLayoutComponent,
+        data: { animationId: 'list' },
+      },
+      {
+        path: ':mailId',
+        component: MailDetailLayoutComponent,
+        data: { animationId: 'detail' },
+      },
     ],
   },
 ];

@@ -14,9 +14,10 @@ rpl-content {
   :host-context(.laptop) & {
     grid-column: span 9 / -2;
   }
+  z-index: 1; // cover the mail list in layout animation
 }
 
 rpl-mail {
-  margin: 4px;
+  padding: 4px;
   min-height: calc(100% - 4px * 2);
 }

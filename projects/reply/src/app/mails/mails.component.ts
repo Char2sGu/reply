@@ -1,3 +1,4 @@
+import { animate, query, transition, trigger } from '@angular/animations';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -10,6 +11,7 @@ import {
 import { NavigationStart, Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs';
 
+import { ChildRouteAnimationHost } from '../common/child-route-animation-host';
 import { LayoutAnimator } from '../layout-projection/core/layout-animation';
 
 @Component({
@@ -17,12 +19,22 @@ import { LayoutAnimator } from '../layout-projection/core/layout-animation';
   templateUrl: './mails.component.html',
   styleUrls: ['./mails.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('route', [
+      transition('list => detail', [query(':leave', [animate('500ms')])]),
+    ]),
+  ],
 })
-export class MailsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class MailsComponent
+  extends ChildRouteAnimationHost
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @ViewChild(LayoutAnimator) private layoutAnimator!: LayoutAnimator;
   private destroy$ = new EventEmitter();
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    super();
+  }
 
   ngOnInit(): void {}
 
