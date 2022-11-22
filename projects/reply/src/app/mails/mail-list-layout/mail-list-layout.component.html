@@ -4,6 +4,10 @@
       <div
         class="content-wrapper"
         [@content]="navigationContext.latestMailboxIndex"
+        rplLayoutProjectionNode
+        [animateLayoutOn]="mailboxName"
+        [animationDuration]="300"
+        [animationEasing]="AnimationCurves.STANDARD_CURVE"
       >
         <rpl-content class="content" *rplReattachOnChange="mailboxName">
           <rpl-mail-card-list class="list" #list></rpl-mail-card-list>

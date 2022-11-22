@@ -37,6 +37,8 @@ let scrollTop = 0;
   ],
 })
 export class MailListLayoutComponent implements OnInit, OnDestroy {
+  AnimationCurves = AnimationCurves;
+
   breakpoints$ = this.breakpointManager.breakpoints$;
   mailboxName$ = this.route.params.pipe(map((params) => params['mailboxName']));
 
