@@ -1,0 +1,109 @@
+{
+  "configVersion": 1,
+  "timestamp": 1669176652570,
+  "index": "/reply/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/reply/104.1e2b915651a75201.js",
+        "/reply/110.d0d2fc6ff4f115d9.js",
+        "/reply/395.9da4a81fd98b55f2.js",
+        "/reply/680.7acc7105b602a143.js",
+        "/reply/730.79fbc3ae5e5fb2cd.js",
+        "/reply/favicon.ico",
+        "/reply/index.html",
+        "/reply/main.71824e19a381d0da.js",
+        "/reply/manifest.webmanifest",
+        "/reply/polyfills.e895bce5bdcd3cbf.js",
+        "/reply/runtime.71c0e0b1c6c5a9e6.js",
+        "/reply/styles.cb7cfe8d1aed2aaf.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/reply/assets/avatar-1.jpg",
+        "/reply/assets/avatar-2.jpg",
+        "/reply/assets/avatar-3.jpg",
+        "/reply/assets/avatar-4.jpg",
+        "/reply/assets/avatar-5.jpg",
+        "/reply/assets/avatar-6.jpg",
+        "/reply/assets/avatar-express.png",
+        "/reply/assets/icons.svg",
+        "/reply/assets/icons/icon-128x128.png",
+        "/reply/assets/icons/icon-144x144.png",
+        "/reply/assets/icons/icon-152x152.png",
+        "/reply/assets/icons/icon-192x192.png",
+        "/reply/assets/icons/icon-384x384.png",
+        "/reply/assets/icons/icon-512x512.png",
+        "/reply/assets/icons/icon-72x72.png",
+        "/reply/assets/icons/icon-96x96.png",
+        "/reply/assets/logo.svg"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/reply/104.1e2b915651a75201.js": "5cd9b63f0911319eda80d175a9717913545b350d",
+    "/reply/110.d0d2fc6ff4f115d9.js": "11bb8597874ca4ae59d92f7d6d6b6ef9d9c00975",
+    "/reply/395.9da4a81fd98b55f2.js": "6822e78df6ae6440bd9000ec2471fb7842077a11",
+    "/reply/680.7acc7105b602a143.js": "2007fd02070563cb005e90261a1c17ffcce7847c",
+    "/reply/730.79fbc3ae5e5fb2cd.js": "d92d7adc3768114ce4f876ac4279016b4fc41eb4",
+    "/reply/assets/avatar-1.jpg": "574088a7bac02fd68300a5a6ecda90446409f88c",
+    "/reply/assets/avatar-2.jpg": "5e35e2d7400a6c74e0892171aae1d82e06da2a76",
+    "/reply/assets/avatar-3.jpg": "2078ebd443ccb0b5aca03c32a3762b2bf33ddaf3",
+    "/reply/assets/avatar-4.jpg": "1838da5f62f89db6c3245a8c8600fe4f72aae20c",
+    "/reply/assets/avatar-5.jpg": "796782b3d0c79765e5bd75868d258fb2c7b33b1c",
+    "/reply/assets/avatar-6.jpg": "19bf2d0aa16a030940f9f6b096c4e55b66e77ec3",
+    "/reply/assets/avatar-express.png": "ec3bdb014ddf5fd0447ec956b63155ed3e8337ff",
+    "/reply/assets/icons.svg": "578a6af503e76d7f3068110c06af431942887ba2",
+    "/reply/assets/icons/icon-128x128.png": "65194060be53b7d01ec245c9448f3bc667256ec6",
+    "/reply/assets/icons/icon-144x144.png": "b79662af84a1094f0952e6a67fb1941a81548436",
+    "/reply/assets/icons/icon-152x152.png": "13f931f41ce75fc21b08673946fee957592165f9",
+    "/reply/assets/icons/icon-192x192.png": "23bf54b4a2d261c53f097708ed8f24c1cc10a768",
+    "/reply/assets/icons/icon-384x384.png": "f680e2f62df94818a08a904d0e9911678cd0af06",
+    "/reply/assets/icons/icon-512x512.png": "2c487f7a424cf8082b8cf690fddfd403883801fe",
+    "/reply/assets/icons/icon-72x72.png": "fca065187bcd1431381e439641680a4288f3b883",
+    "/reply/assets/icons/icon-96x96.png": "424dded4ea1d268fad672990ad048e92ce81af00",
+    "/reply/assets/logo.svg": "e4f62630201bb9a72cd0b9d2debdec31930e2b6f",
+    "/reply/favicon.ico": "fbab354eb685a7157f9a006929ddf52c55458317",
+    "/reply/index.html": "5e4823b1f38900e67b6daf0f94d93d99bb3089c6",
+    "/reply/main.71824e19a381d0da.js": "03536a93e4f0317093637b6e01c6ae16fe8f1789",
+    "/reply/manifest.webmanifest": "0478daf5cb975561ca56b989460603ab7bb253e0",
+    "/reply/polyfills.e895bce5bdcd3cbf.js": "8d72664d69ebf3f5efc85da9eace761406401960",
+    "/reply/runtime.71c0e0b1c6c5a9e6.js": "ec3d6a50d75cc907d3fae5a12182e1824ec68647",
+    "/reply/styles.cb7cfe8d1aed2aaf.css": "5bde7a77fc24fa5bb4afb1d95262d2fca701bcb2"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
