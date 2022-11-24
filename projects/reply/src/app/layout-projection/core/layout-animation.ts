@@ -19,7 +19,7 @@ import { LayoutProjectionNode } from './layout-projection';
 
 export class LayoutAnimator {
   protected snapshots = new NodeLayoutSnapshotMap();
-  protected animatingStopper?: () => void;
+  protected animationStopper?: () => void;
 
   constructor(
     public root: LayoutProjectionNode,
@@ -43,7 +43,11 @@ export class LayoutAnimator {
           throw new Error(msg);
         }
 
-        this.snapshots.set(node.id, { boundingBox, borderRadiuses });
+        this.snapshots.set(node.id, {
+          element: node.element,
+          boundingBox,
+          borderRadiuses,
+        });
       },
       { includeSelf: true },
     );
@@ -51,9 +55,9 @@ export class LayoutAnimator {
 
   async animate(duration: number, easing: string | Easing): Promise<void> {
     return new Promise((resolve) => {
-      if (this.animatingStopper) {
-        this.animatingStopper();
-        this.animatingStopper = undefined;
+      if (this.animationStopper) {
+        this.animationStopper();
+        this.animationStopper = undefined;
       }
 
       const animationContextMap = this.getAnimationContextMap();
@@ -74,7 +78,7 @@ export class LayoutAnimator {
         },
         onStop: resolve,
       });
-      this.animatingStopper = stop;
+      this.animationStopper = stop;
     });
   }
 
@@ -108,6 +112,9 @@ export class LayoutAnimator {
           throw new Error('Unknown node');
 
         const snapshot = this.snapshots.get(node.id);
+        // This is the old node instance in a shared-element layout animation,
+        // it should share the same animation context with the new instance.
+        if (map.has(node.id) && node.element === snapshot?.element) return;
 
         const boundingBoxFrom =
           snapshot?.boundingBox ??
@@ -242,6 +249,7 @@ class NodeLayoutSnapshotMap extends Map<
 > {}
 
 interface NodeLayoutSnapshot {
+  element: HTMLElement;
   boundingBox: LayoutBoundingBox;
   borderRadiuses: LayoutBorderRadiuses;
 }
