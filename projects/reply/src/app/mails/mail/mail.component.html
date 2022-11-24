@@ -2,7 +2,7 @@
   <ng-container *ngIf="mailSender$ | async as mailSender">
     <ng-container *ngIf="mailRecipientNames$ | async as mailRecipientNames">
       <div class="wrapper">
-        <div class="title-line" rplLayoutProjectionNode>
+        <div class="title-line" libLayoutProjectionNode>
           <h1 class="mat-display-1">
             {{ mail.subject }}
           </h1>
@@ -11,7 +11,7 @@
           </a>
         </div>
 
-        <div class="info-line" rplLayoutProjectionNode>
+        <div class="info-line" libLayoutProjectionNode>
           <div class="left-group">
             <div class="mat-body-1">
               <span>{{ mailSender.name }}</span> -
@@ -23,13 +23,13 @@
           </div>
           <div class="right-group">
             <rpl-mail-avatar
-              rplLayoutProjectionNode="mail-{{ mail.id }}-avatar"
+              libLayoutProjectionNode="mail-{{ mail.id }}-avatar"
               [src]="mailSender.avatarUrl"
             ></rpl-mail-avatar>
           </div>
         </div>
 
-        <div class="content" rplLayoutProjectionNode>{{ mail.content }}</div>
+        <div class="content" libLayoutProjectionNode>{{ mail.content }}</div>
       </div>
 
       <ng-template #bottomActions>

@@ -17,13 +17,13 @@ import {
 import {
   LayoutAnimationEasingParser,
   LayoutAnimator,
-} from './core/layout-animation';
-import { LayoutMeasurer } from './core/layout-measurement';
-import { LayoutProjectionNode } from './core/layout-projection';
+  LayoutMeasurer,
+  LayoutProjectionNode,
+} from './core';
 
 @Directive({
   selector:
-    '[rplLayoutProjectionNode][rplLayoutAnimation],[rplLayoutProjectionNode][animateLayoutOn]',
+    '[libLayoutProjectionNode][libLayoutAnimation],[libLayoutProjectionNode][animateLayoutOn]',
   providers: [
     { provide: LayoutAnimator, useExisting: LayoutAnimationDirective },
   ],

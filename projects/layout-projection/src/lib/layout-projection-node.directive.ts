@@ -7,11 +7,10 @@ import {
   SkipSelf,
 } from '@angular/core';
 
-import { LayoutMeasurer } from './core/layout-measurement';
-import { LayoutProjectionNode } from './core/layout-projection';
+import { LayoutMeasurer, LayoutProjectionNode } from './core';
 
 @Directive({
-  selector: '[rplLayoutProjectionNode]',
+  selector: '[libLayoutProjectionNode]',
   providers: [
     {
       provide: LayoutProjectionNode,
@@ -23,7 +22,7 @@ export class LayoutProjectionNodeDirective
   extends LayoutProjectionNode
   implements OnDestroy
 {
-  @Input() set rplLayoutProjectionNode(v: string | false) {
+  @Input() set libLayoutProjectionNode(v: string | false) {
     if (typeof v === 'string') {
       if (v) this.identifyAs(v);
       this.activate();

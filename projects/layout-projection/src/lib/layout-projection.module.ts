@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 
-import { LayoutAnimationEasingParser } from './core/layout-animation';
 import {
+  LayoutAnimationEasingParser,
   LayoutBorderRadiusParser,
   LayoutMeasurer,
-} from './core/layout-measurement';
+} from './core';
 import { LayoutAnimationDirective } from './layout-animation.directive';
 import { LayoutProjectionNodeDirective } from './layout-projection-node.directive';
 

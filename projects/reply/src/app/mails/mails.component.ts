@@ -9,10 +9,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
+import { LayoutAnimator } from '@reply/layout-projection';
 import { filter, takeUntil } from 'rxjs';
 
 import { ChildRouteAnimationHost } from '../common/child-route-animation-host';
-import { LayoutAnimator } from '../layout-projection/core/layout-animation';
 
 @Component({
   selector: 'rpl-mails',

@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { LayoutProjectionModule } from '@reply/layout-projection';
 import { ScrollingModule } from '@reply/scrolling';
 
-import { LayoutProjectionModule } from '../layout-projection/layout-projection.module';
 import { ContentComponent } from '../standalone/content/content.component';
 import { ReadableDatePipe } from '../standalone/readable-date.pipe';
 import { ReadableStringsPipe } from '../standalone/readable-strings.pipe';

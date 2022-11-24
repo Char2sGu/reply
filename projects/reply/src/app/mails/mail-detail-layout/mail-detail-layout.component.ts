@@ -6,9 +6,8 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
+import { LayoutAnimator } from '@reply/layout-projection';
 import { map } from 'rxjs';
-
-import { LayoutAnimator } from '@/app/layout-projection/core/layout-animation';
 
 @Component({
   selector: 'rpl-mail-detail-layout',

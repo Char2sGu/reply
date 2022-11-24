@@ -20,7 +20,8 @@
     "paths": {
       "@/*": ["projects/reply/src/*"],
       "@reply/scrolling": ["dist/scrolling"],
-      "@reply/flip": ["dist/flip"]
+      "@reply/flip": ["dist/flip"],
+      "@reply/layout-projection": ["dist/layout-projection"]
     },
     "target": "es2020",
     "module": "es2020",

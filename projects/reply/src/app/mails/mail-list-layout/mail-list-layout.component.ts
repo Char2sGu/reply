@@ -8,12 +8,12 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
+import { LayoutAnimator } from '@reply/layout-projection';
 import { map } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/common/animations';
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
 import { NavigationContext } from '@/app/core/navigation.context';
-import { LayoutAnimator } from '@/app/layout-projection/core/layout-animation';
 import { ContentComponent } from '@/app/standalone/content/content.component';
 
 let scrollTop = 0;
