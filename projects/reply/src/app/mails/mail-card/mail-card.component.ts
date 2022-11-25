@@ -31,6 +31,9 @@ export class MailCardComponent implements OnInit {
   @HostBinding('class.read') get mailIsRead(): boolean {
     return this.mail.isRead;
   }
+  @HostBinding('class.starred') get mailIsStared(): boolean {
+    return this.mail.isStarred;
+  }
 
   @ViewChild('anchor') private anchorElementRef!: ElementRef<HTMLAnchorElement>;
 

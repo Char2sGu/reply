@@ -4,16 +4,11 @@
 
 :host {
   display: block;
-  padding: 16px;
-  background-color: map.get(theming.$theme, 'color', 'background', 'card');
-  cursor: pointer;
   position: relative;
-  :host-context(.tablet-portrait) & {
-    padding: 24px;
-  }
+  background-color: map.get(theming.$theme, 'color', 'accent', 'default');
 }
 
-%position-background {
+%overlay {
   position: absolute;
   left: 0;
   right: 0;
@@ -28,7 +23,7 @@
 }
 
 .overlay {
-  @extend %position-background;
+  @extend %overlay;
   background-color: map.get(theming.$theme, 'color', 'foreground', 'base');
   opacity: 0;
   :host:hover & {
@@ -37,50 +32,76 @@
 }
 
 .ripple {
-  @extend %position-background;
+  @extend %overlay;
 }
 
-.headline {
-  display: flex;
-  justify-content: space-between;
+.content {
+  padding: 16px;
+  background-color: map.get(theming.$theme, 'color', 'background', 'card');
+  cursor: pointer;
+  :host-context(.tablet-portrait) & {
+    padding: 24px;
+  }
 
-  .titles {
-    width: 0;
-    flex-grow: 1;
-    .subtitle {
-      @extend %single-line-text;
-      margin-bottom: 0;
-    }
-    .title {
-      margin-bottom: 0;
-      :host.read & {
-        color: map.get(theming.$theme, 'color', 'foreground', 'secondary-text');
-      }
-      a:focus {
-        text-decoration: underline;
-      }
+  :host.starred & {
+    border-top-left-radius: 24px;
+    :host-context(.tablet-portrait) & {
+      border-top-left-radius: initial;
     }
   }
 
-  .actions {
+  .headline {
     display: flex;
-    gap: 8px;
-    > * {
-      :host.read & {
-        color: map.get(theming.$theme, 'color', 'foreground', 'secondary-text');
+    justify-content: space-between;
+
+    .titles {
+      width: 0;
+      flex-grow: 1;
+      .subtitle {
+        @extend %single-line-text;
+        margin-bottom: 0;
+      }
+      .title {
+        margin-bottom: 0;
+        :host.read & {
+          color: map.get(
+            theming.$theme,
+            'color',
+            'foreground',
+            'secondary-text'
+          );
+        }
+        a:focus {
+          text-decoration: underline;
+        }
       }
     }
-    .avatar-button {
-      :host:hover & {
-        background-color: #ffffff;
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      > * {
+        :host.read & {
+          color: map.get(
+            theming.$theme,
+            'color',
+            'foreground',
+            'secondary-text'
+          );
+        }
+      }
+      .avatar-button {
+        :host:hover & {
+          background-color: #ffffff;
+        }
       }
     }
   }
-}
 
-.overview {
-  @extend %single-line-text;
-  margin-top: 8px;
-  height: map.get(theming.$typography-config, 'body-1', 'line-height');
-  white-space: pre;
+  .overview {
+    @extend %single-line-text;
+    margin-top: 8px;
+    height: map.get(theming.$typography-config, 'body-1', 'line-height');
+    white-space: pre;
+  }
 }
