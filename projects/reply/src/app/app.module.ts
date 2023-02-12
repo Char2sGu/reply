@@ -38,8 +38,8 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
 // TODO: schedule
 
 // TODO: nav item enum
-// TODO: repository injection variable rename
 // TODO: entity records -> entity collection
+// TODO: redesign auth service
 
 @NgModule({
   declarations: [

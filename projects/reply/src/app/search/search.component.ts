@@ -25,7 +25,7 @@ export class SearchComponent implements OnInit {
 
   constructor(
     public navigationContext: NavigationContext,
-    private mailService: MailRepository,
+    private mailRepo: MailRepository,
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +34,7 @@ export class SearchComponent implements OnInit {
       this.searchText$.pipe(debounceTime(200)),
     ).pipe(
       map((text) => text.split(' ')),
-      switchMap((keywords) => this.mailService.listByKeywords(keywords)),
+      switchMap((keywords) => this.mailRepo.listByKeywords(keywords)),
     );
   }
 }

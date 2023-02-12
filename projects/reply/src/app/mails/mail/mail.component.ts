@@ -42,8 +42,8 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private layoutContext: LayoutContext,
     private authService: AuthService,
-    private mailService: MailRepository,
-    private contactService: ContactRepository,
+    private mailRepo: MailRepository,
+    private contactRepo: ContactRepository,
     private changeDetector: ChangeDetectorRef,
   ) {}
 
@@ -53,21 +53,21 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // TODO: cleaner implementation
 
-      this.mail$ = this.mailService.retrieve(mailId).pipe(
+      this.mail$ = this.mailRepo.retrieve(mailId).pipe(
         tap((mail) => {
           if (mail.isRead) return;
-          this.mailService.update(mail.id, { isRead: true });
+          this.mailRepo.update(mail.id, { isRead: true });
         }),
       );
 
       this.mailSender$ = this.mail$.pipe(
-        switchMap((mail) => this.contactService.retrieve(mail.sender)),
+        switchMap((mail) => this.contactRepo.retrieve(mail.sender)),
       );
 
       const mailRecipients$ = this.mail$.pipe(
         switchMap((mail) =>
           combineLatest(
-            mail.recipients.map((id) => this.contactService.retrieve(id)),
+            mail.recipients.map((id) => this.contactRepo.retrieve(id)),
           ),
         ),
       );

@@ -29,7 +29,7 @@ export class MailCardListComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private mailService: MailRepository,
+    private mailRepo: MailRepository,
     private changeDetector: ChangeDetectorRef,
   ) {}
 
@@ -42,8 +42,8 @@ export class MailCardListComponent implements OnInit {
 
       this.mails$ = (
         mailboxName === 'Starred'
-          ? this.mailService.listStarred()
-          : this.mailService.listByMailbox(mailboxName)
+          ? this.mailRepo.listStarred()
+          : this.mailRepo.listByMailbox(mailboxName)
       ).pipe(
         map((mails) =>
           mails.sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime()),

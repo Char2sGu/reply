@@ -9,9 +9,9 @@ import { ContactRepository } from './contact.repository';
   standalone: true,
 })
 export class ContactRefPipe implements PipeTransform {
-  constructor(private contactService: ContactRepository) {}
+  constructor(private contactRepo: ContactRepository) {}
 
   transform(id: Contact['id']): Observable<Contact> {
-    return this.contactService.retrieve(id);
+    return this.contactRepo.retrieve(id);
   }
 }

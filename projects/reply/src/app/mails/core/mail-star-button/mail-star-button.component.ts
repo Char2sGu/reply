@@ -26,7 +26,7 @@ export class MailStarButtonComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private mailService: MailRepository,
+    private mailRepo: MailRepository,
     private listComponent: MailCardListComponent,
   ) {}
 
@@ -37,8 +37,8 @@ export class MailStarButtonComponent implements OnInit {
         tap(() => this.busy$.next(true)),
         tap(() => {
           if (this.mail.isStarred)
-            this.mailService.update(this.mail.id, { isStarred: false });
-          else this.mailService.update(this.mail.id, { isStarred: true });
+            this.mailRepo.update(this.mail.id, { isStarred: false });
+          else this.mailRepo.update(this.mail.id, { isStarred: true });
           if (this.route.snapshot.params['mailboxName'] === 'Starred')
             this.listComponent.refresh();
         }),

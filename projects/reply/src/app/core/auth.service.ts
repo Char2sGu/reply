@@ -8,9 +8,9 @@ import { ContactRepository } from '../data/contact.repository';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private contactService: ContactRepository) {}
+  constructor(private contactRepo: ContactRepository) {}
 
   getUser$(): Observable<Contact> {
-    return this.contactService.retrieve('user');
+    return this.contactRepo.retrieve('user');
   }
 }
