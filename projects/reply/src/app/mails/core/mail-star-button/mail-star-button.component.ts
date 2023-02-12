@@ -12,7 +12,7 @@ import { NavMenuItemName } from '@/app/core/nav-menu/nav-menu.component';
 
 import { Mail } from '../../../data/mail.model';
 import { MailRepository } from '../../../data/mail.repository';
-import { MailCardListComponent } from '../../mail-card-list/mail-card-list.component';
+import { MailListRefreshEvent } from '../mail-list-refresh.event';
 
 @Component({
   selector: 'rpl-mail-star-button',
@@ -29,7 +29,7 @@ export class MailStarButtonComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private mailRepo: MailRepository,
-    private listComponent: MailCardListComponent,
+    private listRefresh$: MailListRefreshEvent,
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +45,7 @@ export class MailStarButtonComponent implements OnInit {
             this.route.snapshot.params['mailboxName'] ===
             NavMenuItemName.Starred
           )
-            this.listComponent.refresh();
+            this.listRefresh$.emit();
         }),
         tap(() => this.busy$.next(false)),
       )

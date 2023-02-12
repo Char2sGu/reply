@@ -7,12 +7,13 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, map, Observable, startWith, Subject } from 'rxjs';
+import { combineLatest, map, Observable, startWith } from 'rxjs';
 
 import { NavMenuItemName } from '@/app/core/nav-menu/nav-menu.component';
 
 import { Mail } from '../../data/mail.model';
 import { MailRepository } from '../../data/mail.repository';
+import { MailListRefreshEvent } from '../core/mail-list-refresh.event';
 
 @Component({
   selector: 'rpl-mail-card-list',
@@ -27,12 +28,11 @@ export class MailCardListComponent implements OnInit {
   mailTracker: TrackByFunction<Mail> = (_, mail) => mail.id;
   mailPrevId$ = this.route.queryParams.pipe(map((params) => params['prev']));
 
-  private refresh$ = new Subject<void>();
-
   constructor(
     private route: ActivatedRoute,
     private mailRepo: MailRepository,
     private changeDetector: ChangeDetectorRef,
+    private refresh$: MailListRefreshEvent,
   ) {}
 
   ngOnInit(): void {
@@ -54,9 +54,5 @@ export class MailCardListComponent implements OnInit {
 
       this.changeDetector.markForCheck();
     });
-  }
-
-  refresh(): void {
-    this.refresh$.next();
   }
 }
