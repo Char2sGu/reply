@@ -38,7 +38,6 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
 // TODO: schedule
 
 // TODO: entity records -> entity collection
-// TODO: redesign auth service
 
 @NgModule({
   declarations: [
