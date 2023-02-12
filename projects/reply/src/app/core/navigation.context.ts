@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ReactiveObject } from '@/app/common/reactive';
+import { ReactiveObject } from '@/app/common/reactivity';
 
 @Injectable({
   providedIn: 'root',

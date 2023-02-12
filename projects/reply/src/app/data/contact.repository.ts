@@ -7,7 +7,7 @@ import { CONTACTS } from './contact.records';
 @Injectable({
   providedIn: 'root',
 })
-export class ContactService {
+export class ContactRepository {
   private contacts$ = new BehaviorSubject(CONTACTS);
 
   constructor() {}

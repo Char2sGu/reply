@@ -8,7 +8,7 @@ import {
 import { BehaviorSubject, filter, tap } from 'rxjs';
 
 import { Mail } from '../../../data/mail.model';
-import { MailService } from '../../../data/mail.service';
+import { MailRepository } from '../../../data/mail.repository';
 
 @Component({
   selector: 'rpl-mail-star-button',
@@ -22,7 +22,7 @@ export class MailStarButtonComponent implements OnInit {
   click$ = new EventEmitter();
   busy$ = new BehaviorSubject(false);
 
-  constructor(private mailService: MailService) {}
+  constructor(private mailService: MailRepository) {}
 
   ngOnInit(): void {
     this.click$

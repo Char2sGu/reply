@@ -11,7 +11,7 @@ import {
 
 import { NavigationContext } from '../core/navigation.context';
 import { Mail } from '../data/mail.model';
-import { MailService } from '../data/mail.service';
+import { MailRepository } from '../data/mail.repository';
 
 @Component({
   selector: 'rpl-search',
@@ -25,7 +25,7 @@ export class SearchComponent implements OnInit {
 
   constructor(
     public navigationContext: NavigationContext,
-    private mailService: MailService,
+    private mailService: MailRepository,
   ) {}
 
   ngOnInit(): void {

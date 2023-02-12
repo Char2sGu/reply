@@ -14,10 +14,10 @@ import { combineLatest, map, Observable, switchMap, tap } from 'rxjs';
 import { AuthService } from '@/app/core/auth.service';
 import { LayoutContext } from '@/app/core/layout.context';
 import { Contact } from '@/app/data/contact.model';
-import { ContactService } from '@/app/data/contact.service';
+import { ContactRepository } from '@/app/data/contact.repository';
 
 import { Mail } from '../../data/mail.model';
-import { MailService } from '../../data/mail.service';
+import { MailRepository } from '../../data/mail.repository';
 
 @Component({
   selector: 'rpl-mail',
@@ -42,8 +42,8 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private layoutContext: LayoutContext,
     private authService: AuthService,
-    private mailService: MailService,
-    private contactService: ContactService,
+    private mailService: MailRepository,
+    private contactService: ContactRepository,
     private changeDetector: ChangeDetectorRef,
   ) {}
 

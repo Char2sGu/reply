@@ -7,7 +7,7 @@ import { MAILS } from './mail.records';
 @Injectable({
   providedIn: 'root',
 })
-export class MailService {
+export class MailRepository {
   private mails$ = new BehaviorSubject(MAILS);
 
   constructor() {}

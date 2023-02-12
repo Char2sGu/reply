@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 import { Mail } from '../../../data/mail.model';
-import { MailService } from '../../../data/mail.service';
+import { MailRepository } from '../../../data/mail.repository';
 
 @Component({
   selector: 'rpl-mail-delete-button',
@@ -20,7 +20,7 @@ export class MailDeleteButtonComponent implements OnInit {
 
   click$ = new EventEmitter();
 
-  constructor(private mailService: MailService) {}
+  constructor(private mailService: MailRepository) {}
 
   ngOnInit(): void {
     this.click$.subscribe(() => {

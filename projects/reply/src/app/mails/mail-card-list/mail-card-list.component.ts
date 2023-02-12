@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map, Observable } from 'rxjs';
 
 import { Mail } from '../../data/mail.model';
-import { MailService } from '../../data/mail.service';
+import { MailRepository } from '../../data/mail.repository';
 
 @Component({
   selector: 'rpl-mail-card-list',
@@ -27,7 +27,7 @@ export class MailCardListComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private mailService: MailService,
+    private mailService: MailRepository,
     private changeDetector: ChangeDetectorRef,
   ) {}
 

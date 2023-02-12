@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
 import { Contact } from '@/app/data/contact.model';
-import { ContactService } from '@/app/data/contact.service';
+import { ContactRepository } from '@/app/data/contact.repository';
 
 import { Mail } from '../../data/mail.model';
 
@@ -39,7 +39,7 @@ export class MailCardComponent implements OnInit {
 
   constructor(
     private breakpointManager: BreakpointManager,
-    private contactService: ContactService,
+    private contactService: ContactRepository,
   ) {}
 
   ngOnInit(): void {
