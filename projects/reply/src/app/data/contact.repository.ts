@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ReactiveIdentityMap } from '../common/reactivity';
-import { EntityNotFoundException } from '../core/exceptions';
+import { EntityCollection, ReactiveRepository } from '../common/repository';
 import { Contact } from './contact.model';
 import { CONTACTS } from './contact.records';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContactRepository {
-  private entities = [...CONTACTS];
-  private reactivity = new ReactiveIdentityMap<Contact>();
-
-  constructor() {}
+export class ContactRepository extends ReactiveRepository<Contact> {
+  private entities = new EntityCollection(...CONTACTS);
 
   retrieve(id: Contact['id']): Observable<Contact> {
-    const entity = this.entities.find((item) => item.id === id);
-    if (!entity) throw new EntityNotFoundException();
-    this.reactivity.set(id, entity);
-    return this.reactivity.get(id);
+    const entity = this.entities.findOrThrow((item) => item.id === id);
+    return this.reactivityFor(entity);
+  }
+
+  protected identify(entity: Contact): string {
+    return entity.id;
   }
 }

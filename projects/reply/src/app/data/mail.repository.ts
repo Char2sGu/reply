@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ReactiveRepository } from '../common/repository';
-import { EntityNotFoundException } from '../core/exceptions';
+import { EntityCollection, ReactiveRepository } from '../common/repository';
 import { Mail } from './mail.model';
 import { MAILS } from './mail.records';
 
@@ -10,11 +9,10 @@ import { MAILS } from './mail.records';
   providedIn: 'root',
 })
 export class MailRepository extends ReactiveRepository<Mail> {
-  private entities = [...MAILS];
+  private entities = new EntityCollection(...MAILS);
 
   retrieve(id: Mail['id']): Observable<Mail> {
-    const entity = this.entities.find((item) => item.id === id);
-    if (!entity) throw new EntityNotFoundException();
+    const entity = this.entities.findOrThrow((item) => item.id === id);
     return this.reactivityFor(entity);
   }
 
@@ -40,16 +38,15 @@ export class MailRepository extends ReactiveRepository<Mail> {
   }
 
   update(id: Mail['id'], payload: Partial<Mail>): Observable<Mail> {
-    const index = this.entities.findIndex((item) => item.id === id);
-    if (index === -1) throw new EntityNotFoundException();
-    this.entities[index] = { ...this.entities[index], ...payload, id };
-    return this.reactivityFor(this.entities[index]);
+    const entity = this.entities.update(
+      (item) => item.id === id,
+      (prev) => ({ ...prev, ...payload, id }),
+    );
+    return this.reactivityFor(entity);
   }
 
   delete(id: Mail['id']): void {
-    const index = this.entities.findIndex((item) => item.id === id);
-    if (index === -1) throw new EntityNotFoundException();
-    this.entities.splice(index, 1);
+    this.entities.remove((item) => item.id === id);
     this.reactivity.set(id, null);
   }
 
