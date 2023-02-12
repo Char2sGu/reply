@@ -37,7 +37,6 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
 // TODO: image
 // TODO: schedule
 
-// TODO: nav item enum
 // TODO: entity records -> entity collection
 // TODO: redesign auth service
 

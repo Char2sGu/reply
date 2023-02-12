@@ -9,6 +9,8 @@ import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, Observable, startWith, Subject } from 'rxjs';
 
+import { NavMenuItemName } from '@/app/core/nav-menu/nav-menu.component';
+
 import { Mail } from '../../data/mail.model';
 import { MailRepository } from '../../data/mail.repository';
 
@@ -41,7 +43,7 @@ export class MailCardListComponent implements OnInit {
       const mailboxName = params['mailboxName'];
 
       this.mails$ = (
-        mailboxName === 'Starred'
+        mailboxName === NavMenuItemName.Starred
           ? this.mailRepo.listStarred()
           : this.mailRepo.listByMailbox(mailboxName)
       ).pipe(

@@ -14,6 +14,8 @@ import { NavigationContext } from '../navigation.context';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavMenuComponent implements OnInit {
+  ItemName = NavMenuItemName;
+
   @Input() @HostBinding('class.expanded') expanded = true;
 
   constructor(private navigationContext: NavigationContext) {}
@@ -28,4 +30,13 @@ export class NavMenuComponent implements OnInit {
   getMailboxUrl(name: string): string {
     return `/mailboxes/${name}/mails`;
   }
+}
+
+export enum NavMenuItemName {
+  Inbox = 'Inbox',
+  Starred = 'Starred',
+  Sent = 'Sent',
+  Trash = 'Trash',
+  Spam = 'Spam',
+  Drafts = 'Drafts',
 }

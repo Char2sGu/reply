@@ -8,6 +8,8 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, filter, tap } from 'rxjs';
 
+import { NavMenuItemName } from '@/app/core/nav-menu/nav-menu.component';
+
 import { Mail } from '../../../data/mail.model';
 import { MailRepository } from '../../../data/mail.repository';
 import { MailCardListComponent } from '../../mail-card-list/mail-card-list.component';
@@ -39,7 +41,10 @@ export class MailStarButtonComponent implements OnInit {
           if (this.mail.isStarred)
             this.mailRepo.update(this.mail.id, { isStarred: false });
           else this.mailRepo.update(this.mail.id, { isStarred: true });
-          if (this.route.snapshot.params['mailboxName'] === 'Starred')
+          if (
+            this.route.snapshot.params['mailboxName'] ===
+            NavMenuItemName.Starred
+          )
             this.listComponent.refresh();
         }),
         tap(() => this.busy$.next(false)),
