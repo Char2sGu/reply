@@ -53,23 +53,21 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // TODO: cleaner implementation
 
-      this.mail$ = this.mailService.getMail$ById(mailId).pipe(
+      this.mail$ = this.mailService.retrieve(mailId).pipe(
         tap((mail) => {
           if (mail.isRead) return;
-          this.mailService.updateMail(mail.id, { isRead: true });
+          this.mailService.update(mail.id, { isRead: true });
         }),
       );
 
       this.mailSender$ = this.mail$.pipe(
-        switchMap((mail) => this.contactService.getContact$ById(mail.sender)),
+        switchMap((mail) => this.contactService.retrieve(mail.sender)),
       );
 
       const mailRecipients$ = this.mail$.pipe(
         switchMap((mail) =>
           combineLatest(
-            mail.recipients.map((id) =>
-              this.contactService.getContact$ById(id),
-            ),
+            mail.recipients.map((id) => this.contactService.retrieve(id)),
           ),
         ),
       );

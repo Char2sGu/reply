@@ -43,7 +43,7 @@ export class MailCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.mailSender$ = this.contactService.getContact$ById(this.mail.sender);
+    this.mailSender$ = this.contactService.retrieve(this.mail.sender);
   }
 
   @HostListener('click') onClick(): void {

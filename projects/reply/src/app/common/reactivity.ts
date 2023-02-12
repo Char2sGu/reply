@@ -1,5 +1,13 @@
 import { EventEmitter } from '@angular/core';
-import { debounceTime, map, Observable, shareReplay, startWith } from 'rxjs';
+import {
+  BehaviorSubject,
+  debounceTime,
+  map,
+  Observable,
+  shareReplay,
+  startWith,
+  takeWhile,
+} from 'rxjs';
 
 export abstract class ReactiveObject {
   readonly value$: Observable<this>;
@@ -30,5 +38,27 @@ export abstract class ReactiveObject {
         return true;
       },
     });
+  }
+}
+
+export class ReactiveIdentityMap<Value> {
+  private subjects = new Map<string, BehaviorSubject<Value | null>>();
+
+  set(id: string, entity: Value | null): void {
+    const subject = this.getOrInitSubject(id);
+    subject.next(entity);
+  }
+
+  get(id: string): Observable<Value> {
+    return this.getOrInitSubject(id).pipe(takeWhile(Boolean));
+  }
+
+  private getOrInitSubject(id: string): BehaviorSubject<Value | null> {
+    let subject = this.subjects.get(id);
+    if (!subject) {
+      subject = new BehaviorSubject<Value | null>(null);
+      this.subjects.set(id, subject);
+    }
+    return subject;
   }
 }

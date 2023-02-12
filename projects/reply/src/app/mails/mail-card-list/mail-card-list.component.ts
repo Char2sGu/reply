@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { combineLatest, map, Observable, startWith, Subject } from 'rxjs';
 
 import { Mail } from '../../data/mail.model';
 import { MailRepository } from '../../data/mail.repository';
@@ -25,6 +25,8 @@ export class MailCardListComponent implements OnInit {
   mailTracker: TrackByFunction<Mail> = (_, mail) => mail.id;
   mailPrevId$ = this.route.queryParams.pipe(map((params) => params['prev']));
 
+  private refresh$ = new Subject<void>();
+
   constructor(
     private route: ActivatedRoute,
     private mailService: MailRepository,
@@ -32,13 +34,16 @@ export class MailCardListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
+    combineLatest([
+      this.route.params,
+      this.refresh$.pipe(startWith(null)),
+    ]).subscribe(([params]) => {
       const mailboxName = params['mailboxName'];
 
       this.mails$ = (
         mailboxName === 'Starred'
-          ? this.mailService.getMails$Starred()
-          : this.mailService.getMails$ByMailbox(mailboxName)
+          ? this.mailService.listStarred()
+          : this.mailService.listByMailbox(mailboxName)
       ).pipe(
         map((mails) =>
           mails.sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime()),
@@ -47,5 +52,9 @@ export class MailCardListComponent implements OnInit {
 
       this.changeDetector.markForCheck();
     });
+  }
+
+  refresh(): void {
+    this.refresh$.next();
   }
 }

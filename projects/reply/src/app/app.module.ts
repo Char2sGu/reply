@@ -37,6 +37,10 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
 // TODO: image
 // TODO: schedule
 
+// TODO: nav item enum
+// TODO: repository injection variable rename
+// TODO: entity records -> entity collection
+
 @NgModule({
   declarations: [
     AppComponent,

@@ -8,6 +8,7 @@ import {
 
 import { Mail } from '../../../data/mail.model';
 import { MailRepository } from '../../../data/mail.repository';
+import { MailCardListComponent } from '../../mail-card-list/mail-card-list.component';
 
 @Component({
   selector: 'rpl-mail-delete-button',
@@ -20,13 +21,17 @@ export class MailDeleteButtonComponent implements OnInit {
 
   click$ = new EventEmitter();
 
-  constructor(private mailService: MailRepository) {}
+  constructor(
+    private mailService: MailRepository,
+    private listComponent: MailCardListComponent,
+  ) {}
 
   ngOnInit(): void {
     this.click$.subscribe(() => {
       if (this.mail.mailboxName === 'Trash')
-        this.mailService.deleteMail(this.mail.id);
-      else this.mailService.updateMail(this.mail.id, { mailboxName: 'Trash' });
+        this.mailService.delete(this.mail.id);
+      else this.mailService.update(this.mail.id, { mailboxName: 'Trash' });
+      this.listComponent.refresh();
     });
   }
 }

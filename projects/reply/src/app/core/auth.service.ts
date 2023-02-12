@@ -11,6 +11,6 @@ export class AuthService {
   constructor(private contactService: ContactRepository) {}
 
   getUser$(): Observable<Contact> {
-    return this.contactService.getContact$ById('user');
+    return this.contactService.retrieve('user');
   }
 }

@@ -12,6 +12,6 @@ export class ContactRefPipe implements PipeTransform {
   constructor(private contactService: ContactRepository) {}
 
   transform(id: Contact['id']): Observable<Contact> {
-    return this.contactService.getContact$ById(id);
+    return this.contactService.retrieve(id);
   }
 }

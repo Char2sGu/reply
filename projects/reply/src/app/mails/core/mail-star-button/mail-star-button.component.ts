@@ -5,10 +5,12 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, filter, tap } from 'rxjs';
 
 import { Mail } from '../../../data/mail.model';
 import { MailRepository } from '../../../data/mail.repository';
+import { MailCardListComponent } from '../../mail-card-list/mail-card-list.component';
 
 @Component({
   selector: 'rpl-mail-star-button',
@@ -22,7 +24,11 @@ export class MailStarButtonComponent implements OnInit {
   click$ = new EventEmitter();
   busy$ = new BehaviorSubject(false);
 
-  constructor(private mailService: MailRepository) {}
+  constructor(
+    private route: ActivatedRoute,
+    private mailService: MailRepository,
+    private listComponent: MailCardListComponent,
+  ) {}
 
   ngOnInit(): void {
     this.click$
@@ -31,8 +37,10 @@ export class MailStarButtonComponent implements OnInit {
         tap(() => this.busy$.next(true)),
         tap(() => {
           if (this.mail.isStarred)
-            this.mailService.updateMail(this.mail.id, { isStarred: false });
-          else this.mailService.updateMail(this.mail.id, { isStarred: true });
+            this.mailService.update(this.mail.id, { isStarred: false });
+          else this.mailService.update(this.mail.id, { isStarred: true });
+          if (this.route.snapshot.params['mailboxName'] === 'Starred')
+            this.listComponent.refresh();
         }),
         tap(() => this.busy$.next(false)),
       )

@@ -34,7 +34,7 @@ export class SearchComponent implements OnInit {
       this.searchText$.pipe(debounceTime(200)),
     ).pipe(
       map((text) => text.split(' ')),
-      switchMap((keywords) => this.mailService.getMails$ByKeywords(keywords)),
+      switchMap((keywords) => this.mailService.listByKeywords(keywords)),
     );
   }
 }
