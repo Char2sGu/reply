@@ -6,6 +6,7 @@
   display: block;
   position: relative;
   background-color: map.get(theming.$theme, 'color', 'accent', 'default');
+  cursor: pointer;
 }
 
 %overlay {
@@ -38,7 +39,6 @@
 .content {
   padding: 16px;
   background-color: map.get(theming.$theme, 'color', 'background', 'card');
-  cursor: pointer;
   :host-context(.tablet-portrait) & {
     padding: 24px;
   }
