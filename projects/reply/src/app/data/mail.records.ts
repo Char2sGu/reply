@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 import { Mail } from './mail.model';
 
-export const MAILS: Mail[] = [
+export const MAILS: readonly Mail[] = [
   {
     id: '1',
     subject: 'Package shipped!',

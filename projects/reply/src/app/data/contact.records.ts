@@ -1,6 +1,6 @@
 import { Contact } from './contact.model';
 
-export const CONTACTS: Contact[] = [
+export const CONTACTS: readonly Contact[] = [
   {
     id: 'user',
     name: 'Charles Gu',
