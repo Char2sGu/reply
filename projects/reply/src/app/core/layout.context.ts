@@ -2,12 +2,12 @@ import { Injectable, TemplateRef } from '@angular/core';
 import { NavigationStart, Params, Router } from '@angular/router';
 import { filter } from 'rxjs';
 
-import { Reactive } from '../common/reactive';
+import { ReactiveObject } from '../common/reactivity';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LayoutContext extends Reactive {
+export class LayoutContext extends ReactiveObject {
   contentFavored = false;
 
   navFabConfig?: LayoutNavFabConfig;

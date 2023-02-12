@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { Reactive } from '@/app/common/reactive';
+import { ReactiveObject } from '@/app/common/reactive';
 
 @Injectable({
   providedIn: 'root',
 })
-export class NavigationContext extends Reactive {
+export class NavigationContext extends ReactiveObject {
   latestMailboxUrl?: string;
   latestMailboxIndex?: number;
 }

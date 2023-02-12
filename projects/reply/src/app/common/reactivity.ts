@@ -1,7 +1,7 @@
 import { EventEmitter } from '@angular/core';
 import { debounceTime, map, Observable, shareReplay, startWith } from 'rxjs';
 
-export abstract class Reactive {
+export abstract class ReactiveObject {
   readonly value$: Observable<this>;
 
   protected assign$: EventEmitter<void>;
