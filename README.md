@@ -8,7 +8,7 @@ The Angular implementation of [Reply](https://m2.material.io/design/material-stu
 
 # Features
 
-- Fantastic Material Motion animations
+- [Fantastic Material Motion animations](https://github.com/TheNightmareX/reply/discussions/2)
 - Excellent UX on Any Screen
 - Native-like UI Behavior
 - Well-considered Keyboard Accessibility
