@@ -58,6 +58,6 @@
     "popmotion": "^11.0.5",
     "prettier": "^2.7.1",
     "style-value-types": "^5.1.2",
-    "typescript": "~4.7.2"
+    "typescript": "^4.9.5"
   }
 }
