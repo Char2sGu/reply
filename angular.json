@@ -159,68 +159,6 @@
           }
         }
       }
-    },
-    "flip": {
-      "projectType": "library",
-      "root": "projects/flip",
-      "sourceRoot": "projects/flip/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/flip/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/flip/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/flip/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/flip/src/test.ts",
-            "tsConfig": "projects/flip/tsconfig.spec.json",
-            "karmaConfig": "projects/flip/karma.conf.js"
-          }
-        }
-      }
-    },
-    "layout-projection": {
-      "projectType": "library",
-      "root": "projects/layout-projection",
-      "sourceRoot": "projects/layout-projection/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/layout-projection/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/layout-projection/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/layout-projection/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/layout-projection/src/test.ts",
-            "tsConfig": "projects/layout-projection/tsconfig.spec.json",
-            "karmaConfig": "projects/layout-projection/karma.conf.js"
-          }
-        }
-      }
     }
   },
   "cli": {

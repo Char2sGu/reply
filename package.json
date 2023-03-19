@@ -5,7 +5,7 @@
     "prepare": "husky install",
     "ng": "ng",
     "start": "ng serve",
-    "build-libs": "ng build scrolling && ng build flip && ng build layout-projection",
+    "build-libs": "ng build scrolling",
     "build": "ng build reply",
     "watch": "ng build reply --watch --configuration development",
     "test": "ng test reply",
@@ -47,7 +47,6 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-simple-import-sort": "^8.0.0",
-    "flipping": "^1.1.0",
     "husky": "^8.0.1",
     "jasmine-core": "~4.3.0",
     "karma": "~6.4.0",
@@ -57,9 +56,7 @@
     "karma-jasmine-html-reporter": "~2.0.0",
     "lint-staged": "^13.0.3",
     "ng-packagr": "^15.2.2",
-    "popmotion": "^11.0.5",
     "prettier": "^2.7.1",
-    "style-value-types": "^5.1.2",
     "typescript": "^4.9.5"
   }
 }

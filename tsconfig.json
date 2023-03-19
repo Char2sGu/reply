@@ -19,9 +19,7 @@
     "importHelpers": true,
     "paths": {
       "@/*": ["projects/reply/src/*"],
-      "@reply/scrolling": ["dist/scrolling"],
-      "@reply/flip": ["dist/flip"],
-      "@reply/layout-projection": ["dist/layout-projection"]
+      "@reply/scrolling": ["dist/scrolling"]
     },
     "target": "ES2022",
     "module": "es2020",
