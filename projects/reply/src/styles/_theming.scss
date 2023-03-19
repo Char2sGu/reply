@@ -5,7 +5,7 @@
 
 // https://m2.material.io/design/material-studies/reply.html#typography
 // prettier-ignore
-$typography-config: mat.define-typography-config(
+$typography-config: mat.define-legacy-typography-config(
   $font-family:   '"Work Sans", sans-serif',
   $display-4:     mat.define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
   $display-3:     mat.define-typography-level(56px, 56px, 600, $letter-spacing: -0.02em),
