@@ -23,9 +23,10 @@
       "@reply/flip": ["dist/flip"],
       "@reply/layout-projection": ["dist/layout-projection"]
     },
-    "target": "es2020",
+    "target": "ES2022",
     "module": "es2020",
-    "lib": ["es2020", "dom"]
+    "lib": ["es2020", "dom"],
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
