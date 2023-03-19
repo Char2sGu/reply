@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
-import { LayoutAnimator } from '@reply/layout-projection';
+import { LayoutAnimator } from '@layout-projection/core';
 import { map } from 'rxjs';
 
 @Component({

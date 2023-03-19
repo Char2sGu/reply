@@ -4,7 +4,7 @@
     <div class="ripple" matRipple></div>
     <div class="content">
       <div class="headline">
-        <div class="titles" libLayoutProjectionNode>
+        <div class="titles" lpjNode>
           <h5 class="subtitle">
             <span>{{ mailSender.name }}</span> -
             <span>{{ mail.sentAt | readableDate }}</span>
@@ -13,11 +13,7 @@
             <a routerLink="./{{ mail.id }}" #anchor>{{ mail.subject }}</a>
           </h1>
         </div>
-        <div
-          class="actions"
-          libLayoutProjectionNode
-          (click)="$event.stopPropagation()"
-        >
+        <div class="actions" lpjNode (click)="$event.stopPropagation()">
           <ng-container *ngIf="breakpoints['tablet-portrait']">
             <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
             <rpl-mail-delete-button [mail]="mail"></rpl-mail-delete-button>
@@ -28,7 +24,7 @@
           <button
             mat-icon-button
             class="avatar-button"
-            libLayoutProjectionNode="mail-{{ mail.id }}-avatar"
+            lpjNode="mail-{{ mail.id }}-avatar"
           >
             <rpl-mail-avatar [src]="mailSender.avatarUrl"></rpl-mail-avatar>
           </button>
