@@ -8,13 +8,14 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
-import { LayoutAnimator } from '@layout-projection/core';
 import { map } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/common/animations';
 import { BreakpointManager } from '@/app/core/breakpoint.manager';
 import { NavigationContext } from '@/app/core/navigation.context';
 import { ContentComponent } from '@/app/standalone/content/content.component';
+
+import { MailsComponent } from '../mails.component';
 
 let scrollTop = 0;
 
@@ -48,14 +49,14 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
     public navigationContext: NavigationContext,
     private route: ActivatedRoute,
     private breakpointManager: BreakpointManager,
-    private layoutAnimator: LayoutAnimator,
+    private mailsComponent: MailsComponent,
   ) {}
 
   ngOnInit(): void {}
 
   async ngAfterViewInit(): Promise<void> {
     this.content.fakeScroll(scrollTop);
-    await this.layoutAnimator.animate(250, AnimationCurves.STANDARD_CURVE);
+    await this.mailsComponent.animateLayout(250);
     this.content.setScrollTop(scrollTop);
   }
 

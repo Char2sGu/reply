@@ -8,8 +8,14 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { AnimationCurves } from '@angular/material/core';
 import { NavigationStart, Router } from '@angular/router';
-import { LayoutAnimator } from '@layout-projection/core';
+import {
+  LayoutAnimator,
+  Node,
+  NodeSnapper,
+  NodeSnapshotMap,
+} from '@layout-projection/core';
 import { filter, takeUntil } from 'rxjs';
 
 import { ChildRouteAnimationHost } from '../common/child-route-animation-host';
@@ -29,10 +35,16 @@ export class MailsComponent
   extends ChildRouteAnimationHost
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @ViewChild(LayoutAnimator) private layoutAnimator!: LayoutAnimator;
+  @ViewChild(Node) private layoutAnimationRoot!: Node;
+  private layoutAnimationSnapshots = new NodeSnapshotMap();
+
   private destroy$ = new EventEmitter();
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private layoutAnimator: LayoutAnimator,
+    private layoutSnapper: NodeSnapper,
+  ) {
     super();
   }
 
@@ -44,10 +56,26 @@ export class MailsComponent
         takeUntil(this.destroy$),
         filter((event) => event instanceof NavigationStart),
       )
-      .subscribe(() => this.layoutAnimator.snapshot());
+      .subscribe(() => {
+        this.layoutSnapper.snapshotTree(
+          this.layoutAnimationRoot,
+          this.layoutAnimationSnapshots,
+        );
+      });
   }
 
   ngOnDestroy(): void {
     this.destroy$.emit();
+  }
+
+  async animateLayout(duration: number): Promise<void> {
+    if (!this.layoutAnimationRoot) return; // This method might be called before view init.
+    await this.layoutAnimator.animate({
+      root: this.layoutAnimationRoot,
+      from: this.layoutAnimationSnapshots,
+      duration,
+      easing: AnimationCurves.STANDARD_CURVE,
+    });
+    this.layoutAnimationSnapshots.clear();
   }
 }

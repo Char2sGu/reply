@@ -1,10 +1,10 @@
 <ng-container *ngIf="mails$ | async as mails">
   <div
     class="wrapper"
+    *lpjAnimationScope="animationScope"
     lpjNode
-    [animateOn]="mails"
-    [animationDuration]="225"
-    [animationEasing]="AnimationCurves.STANDARD_CURVE"
+    [lpjAnimation]="{ duration: 225, easing: AnimationCurves.STANDARD_CURVE }"
+    [lpjAnimationTrigger]="mails"
   >
     <rpl-mail-card
       *ngFor="let mail of mails; let index = index; trackBy: mailTracker"

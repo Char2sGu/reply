@@ -3,14 +3,21 @@
     <ng-container *ngIf="mailboxName$ | async as mailboxName">
       <div
         class="content-wrapper"
-        [@content]="navigationContext.latestMailboxIndex"
+        *lpjAnimationScope="let animationScope"
         lpjNode
-        [animateOn]="mailboxName"
-        [animationDuration]="300"
-        [animationEasing]="AnimationCurves.STANDARD_CURVE"
+        [lpjAnimation]="{
+          duration: 300,
+          easing: AnimationCurves.STANDARD_CURVE
+        }"
+        [lpjAnimationTrigger]="mailboxName"
+        [@content]="navigationContext.latestMailboxIndex"
       >
         <rpl-content class="content" *rplReattachOnChange="mailboxName">
-          <rpl-mail-card-list class="list" #list></rpl-mail-card-list>
+          <rpl-mail-card-list
+            class="list"
+            [animationScope]="animationScope"
+            #list
+          ></rpl-mail-card-list>
           <div class="empty-prompt" *ngIf="!(list.mails$ | async)?.length">
             Empty in {{ mailboxName }}
           </div>

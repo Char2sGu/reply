@@ -4,10 +4,10 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
-import { LayoutAnimator } from '@layout-projection/core';
 import { map } from 'rxjs';
+
+import { MailsComponent } from '../mails.component';
 
 @Component({
   selector: 'rpl-mail-detail-layout',
@@ -20,12 +20,12 @@ export class MailDetailLayoutComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
-    private layoutAnimator: LayoutAnimator,
+    private mailsComponent: MailsComponent,
   ) {}
 
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    this.layoutAnimator.animate(300, AnimationCurves.STANDARD_CURVE);
+    this.mailsComponent.animateLayout(300);
   }
 }
