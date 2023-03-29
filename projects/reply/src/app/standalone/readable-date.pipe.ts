@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { DateDistancePipe } from './date-distance.pipe';
 

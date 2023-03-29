@@ -4,7 +4,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
 import { Mail } from '@/app/data/mail.model';
