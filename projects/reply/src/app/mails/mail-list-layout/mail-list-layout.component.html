@@ -7,9 +7,11 @@
         lpjNode
         [lpjAnimation]="{
           duration: 300,
-          easing: AnimationCurves.STANDARD_CURVE
+          easing: AnimationCurves.STANDARD_CURVE,
+          estimation: true
         }"
         [lpjAnimationTrigger]="mailboxName"
+        (animationSettle)="animationScope.snapshots.clear()"
         [@content]="navigationContext.latestMailboxIndex"
       >
         <rpl-content class="content" *rplReattachOnChange="mailboxName">

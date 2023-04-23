@@ -12,9 +12,9 @@ import { AnimationCurves } from '@angular/material/core';
 import { NavigationStart, Router } from '@angular/router';
 import {
   LayoutAnimator,
-  Node,
-  NodeSnapper,
-  NodeSnapshotMap,
+  ProjectionNode,
+  ProjectionNodeSnapper,
+  ProjectionNodeSnapshotMap,
 } from '@layout-projection/core';
 import { filter, takeUntil } from 'rxjs';
 
@@ -35,15 +35,15 @@ export class MailsComponent
   extends ChildRouteAnimationHost
   implements OnInit, AfterViewInit, OnDestroy
 {
-  @ViewChild(Node) private layoutAnimationRoot!: Node;
-  private layoutAnimationSnapshots = new NodeSnapshotMap();
+  @ViewChild(ProjectionNode) private layoutAnimationRoot!: ProjectionNode;
+  private layoutAnimationSnapshots = new ProjectionNodeSnapshotMap();
 
   private destroy$ = new EventEmitter();
 
   constructor(
     private router: Router,
     private layoutAnimator: LayoutAnimator,
-    private layoutSnapper: NodeSnapper,
+    private layoutSnapper: ProjectionNodeSnapper,
   ) {
     super();
   }
@@ -57,9 +57,8 @@ export class MailsComponent
         filter((event) => event instanceof NavigationStart),
       )
       .subscribe(() => {
-        this.layoutSnapper.snapshotTree(
-          this.layoutAnimationRoot,
-          this.layoutAnimationSnapshots,
+        this.layoutAnimationSnapshots.merge(
+          this.layoutSnapper.snapshotTree(this.layoutAnimationRoot),
         );
       });
   }
@@ -75,6 +74,7 @@ export class MailsComponent
       from: this.layoutAnimationSnapshots,
       duration,
       easing: AnimationCurves.STANDARD_CURVE,
+      estimation: true,
     });
     this.layoutAnimationSnapshots.clear();
   }
