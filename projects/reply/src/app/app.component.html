@@ -14,7 +14,7 @@
         navExpanded = $event === context.navShouldExpand ? undefined : $event
       "
     ></rpl-side-nav>
-    <div class="wrapper" [@wrapper]="getChildRouteAnimationId()">
+    <div class="wrapper" [@wrapper]="routeAnimationId()">
       <router-outlet></router-outlet>
     </div>
   </ng-container>

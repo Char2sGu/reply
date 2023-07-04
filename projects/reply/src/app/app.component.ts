@@ -2,8 +2,10 @@ import { transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { SharedAxisAnimation } from './common/animations';
-import { ChildRouteAnimationHost } from './common/child-route-animation-host';
+import {
+  injectAnimationIdFactory,
+  SharedAxisAnimation,
+} from './common/animations';
 import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
 
 @Component({
@@ -29,7 +31,9 @@ import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
     ]),
   ],
 })
-export class AppComponent extends ChildRouteAnimationHost {
+export class AppComponent {
+  routeAnimationId = injectAnimationIdFactory();
+
   @HostBinding('class') breakpointMap: BreakpointMap = {
     ['tablet-portrait']: false,
     ['tablet-landscape']: false,
@@ -41,7 +45,6 @@ export class AppComponent extends ChildRouteAnimationHost {
   navExpanded?: boolean = undefined;
 
   constructor(private breakpointManager: BreakpointManager) {
-    super();
     this.breakpointManager.breakpoints$.subscribe((v) => {
       this.breakpointMap = v;
     });

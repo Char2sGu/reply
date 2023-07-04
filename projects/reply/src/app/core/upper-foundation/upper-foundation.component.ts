@@ -1,9 +1,10 @@
 import { query, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ChildRouteAnimationHost } from '@/app/common/child-route-animation-host';
-
-import { FadeThroughAnimation } from '../../common/animations';
+import {
+  FadeThroughAnimation,
+  injectAnimationIdFactory,
+} from '../../common/animations';
 
 @Component({
   selector: 'rpl-upper-foundation',
@@ -21,13 +22,6 @@ import { FadeThroughAnimation } from '../../common/animations';
     ]),
   ],
 })
-export class UpperFoundationComponent
-  extends ChildRouteAnimationHost
-  implements OnInit
-{
-  constructor() {
-    super();
-  }
-
-  ngOnInit(): void {}
+export class UpperFoundationComponent {
+  animationId = injectAnimationIdFactory();
 }

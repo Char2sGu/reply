@@ -8,7 +8,16 @@ import {
   style,
   useAnimation,
 } from '@angular/animations';
+import { inject } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
+import { ChildrenOutletContexts } from '@angular/router';
+
+export function injectAnimationIdFactory(): () => string {
+  const contexts = inject(ChildrenOutletContexts);
+  return () =>
+    contexts.getContext('primary')?.route?.snapshot?.data?.['animationId'] ??
+    'none';
+}
 
 export abstract class Animation {
   static readonly content: AnimationReferenceMetadata;

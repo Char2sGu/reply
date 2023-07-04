@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  inject,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -18,7 +19,7 @@ import {
 } from '@layout-projection/core';
 import { filter, takeUntil } from 'rxjs';
 
-import { ChildRouteAnimationHost } from '../common/child-route-animation-host';
+import { injectAnimationIdFactory } from '../common/animations';
 
 @Component({
   selector: 'rpl-mails',
@@ -31,22 +32,16 @@ import { ChildRouteAnimationHost } from '../common/child-route-animation-host';
     ]),
   ],
 })
-export class MailsComponent
-  extends ChildRouteAnimationHost
-  implements OnInit, AfterViewInit, OnDestroy
-{
+export class MailsComponent implements OnInit, AfterViewInit, OnDestroy {
+  routeAnimationId = injectAnimationIdFactory();
+  private router = inject(Router);
+  private layoutAnimator = inject(LayoutAnimator);
+  private layoutSnapper = inject(ProjectionNodeSnapper);
+
   @ViewChild(ProjectionNode) private layoutAnimationRoot!: ProjectionNode;
   private layoutAnimationSnapshots = new ProjectionNodeSnapshotMap();
 
   private destroy$ = new EventEmitter();
-
-  constructor(
-    private router: Router,
-    private layoutAnimator: LayoutAnimator,
-    private layoutSnapper: ProjectionNodeSnapper,
-  ) {
-    super();
-  }
 
   ngOnInit(): void {}
 
