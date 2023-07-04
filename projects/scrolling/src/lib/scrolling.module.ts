@@ -4,9 +4,11 @@ import { ScrollDirectionDirective } from './scroll-direction.directive';
 import { ScrollStateDirective } from './scroll-state.directive';
 import { ScrollingModuleConfig } from './scrolling.module-config';
 
+const directives = [ScrollDirectionDirective, ScrollStateDirective];
+
 @NgModule({
-  declarations: [ScrollDirectionDirective, ScrollStateDirective],
-  exports: [ScrollDirectionDirective, ScrollStateDirective],
+  imports: directives,
+  exports: directives,
 })
 export class ScrollingModule {
   static forRoot(
