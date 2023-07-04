@@ -66,7 +66,7 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
     MatButtonModule,
     MatIconModule,
     MatListModule,
-    LayoutProjectionModule,
+    LayoutProjectionModule.forRoot(),
     ScrollingModule.forRoot(),
     ReattachOnChangeDirective,
     SearchButtonComponent,

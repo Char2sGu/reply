@@ -58,7 +58,10 @@ export class MailsComponent
       )
       .subscribe(() => {
         this.layoutAnimationSnapshots.merge(
-          this.layoutSnapper.snapshotTree(this.layoutAnimationRoot),
+          this.layoutSnapper.snapshotTree(
+            this.layoutAnimationRoot, //
+            { measure: true },
+          ),
         );
       });
   }
