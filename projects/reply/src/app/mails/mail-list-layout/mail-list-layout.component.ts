@@ -11,7 +11,7 @@ import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 
-import { SharedAxisAnimation } from '@/app/common/animations';
+import { SharedAxisAnimation } from '@/app/core/animations';
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
 import { NavigationContext } from '@/app/core/navigation.context';
 import { ContentComponent } from '@/app/standalone/content/content.component';

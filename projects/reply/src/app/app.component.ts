@@ -11,7 +11,7 @@ import {
 import {
   injectAnimationIdFactory,
   SharedAxisAnimation,
-} from './common/animations';
+} from './core/animations';
 import { BreakpointMap, BREAKPOINTS } from './core/breakpoint.service';
 
 @Component({

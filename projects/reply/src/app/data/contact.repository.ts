@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ReactiveRepository } from '../common/reactive-repository';
+import { ReactiveRepository } from '../core/reactive-repository';
 import { Contact } from './contact.model';
 import { CONTACTS } from './contact.records';
 

@@ -19,7 +19,7 @@ import {
 } from '@layout-projection/core';
 import { filter, takeUntil } from 'rxjs';
 
-import { injectAnimationIdFactory } from '../common/animations';
+import { injectAnimationIdFactory } from '../core/animations';
 
 @Component({
   selector: 'rpl-mails',

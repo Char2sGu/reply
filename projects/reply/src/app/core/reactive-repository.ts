@@ -10,7 +10,7 @@ import {
 import {
   EntityDuplicateException,
   EntityNotFoundException,
-} from '../core/exceptions';
+} from './exceptions';
 
 export abstract class ReactiveRepository<Entity> {
   protected updatesSubject = new Subject<ReactiveRepositoryUpdate<Entity>>();

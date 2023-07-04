@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 
-import { FadeThroughAnimation } from '../../common/animations';
+import { FadeThroughAnimation } from '../animations';
 import { LayoutContext } from '../layout.context';
 
 @Component({

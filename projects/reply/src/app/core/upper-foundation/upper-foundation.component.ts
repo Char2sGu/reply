@@ -1,10 +1,7 @@
 import { query, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import {
-  FadeThroughAnimation,
-  injectAnimationIdFactory,
-} from '../../common/animations';
+import { FadeThroughAnimation, injectAnimationIdFactory } from '../animations';
 
 @Component({
   selector: 'rpl-upper-foundation',
