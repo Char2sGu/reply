@@ -23,8 +23,8 @@ export class NavMenuComponent implements OnInit {
   ngOnInit(): void {}
 
   onItemActive(name: string, index: number): void {
-    this.navigationContext.latestMailboxUrl = this.getMailboxUrl(name);
-    this.navigationContext.latestMailboxIndex = index;
+    this.navigationContext.latestMailboxUrl.set(this.getMailboxUrl(name));
+    this.navigationContext.latestMailboxIndex.set(index);
   }
 
   getMailboxUrl(name: string): string {

@@ -82,7 +82,7 @@ export class BottomNavComponent implements OnInit, OnDestroy {
   @ViewChild('bottomMenu') private bottomMenuTemplate!: TemplateRef<unknown>;
 
   @HostBinding('class.unfavored') get unfavored(): boolean {
-    return this.layoutContext.contentFavored;
+    return this.layoutContext.contentFavored();
   }
 
   private destroy$ = new EventEmitter();

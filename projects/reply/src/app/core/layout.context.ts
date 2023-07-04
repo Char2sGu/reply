@@ -1,23 +1,20 @@
-import { Injectable, TemplateRef } from '@angular/core';
+import { inject, Injectable, signal, TemplateRef } from '@angular/core';
 import { NavigationStart, Params, Router } from '@angular/router';
 import { filter } from 'rxjs';
-
-import { ReactiveObject } from '../common/reactivity';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LayoutContext extends ReactiveObject {
-  contentFavored = false;
+export class LayoutContext {
+  contentFavored = signal(false);
 
-  navFabConfig?: LayoutNavFabConfig;
-  navBottomActions?: TemplateRef<never>;
+  navFabConfig = signal<LayoutNavFabConfig | null>(null);
+  navBottomActions = signal<TemplateRef<never> | null>(null);
 
-  constructor(router: Router) {
-    super();
-    router.events
-      .pipe(filter((event) => event instanceof NavigationStart))
-      .subscribe(() => (this.contentFavored = false));
+  constructor() {
+    inject(Router)
+      .events.pipe(filter((event) => event instanceof NavigationStart))
+      .subscribe(() => this.contentFavored.set(false));
   }
 }
 

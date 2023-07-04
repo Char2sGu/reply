@@ -65,7 +65,7 @@ export class ContentComponent implements OnInit {
       this.scrolledManually = false;
       return;
     }
-    if (direction === 'up') this.layoutContext.contentFavored = false;
-    else this.layoutContext.contentFavored = true;
+    if (direction === 'up') this.layoutContext.contentFavored.set(false);
+    else this.layoutContext.contentFavored.set(true);
   }
 }

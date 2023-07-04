@@ -32,11 +32,11 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('replyIcon')
   private navFabIconTemplate!: TemplateRef<never>;
-  private navFabConfigBackup = this.layoutContext.navFabConfig;
+  private navFabConfigBackup = this.layoutContext.navFabConfig();
 
   @ViewChild('bottomActions')
   private navBottomActionsTemplate!: TemplateRef<never>;
-  private navBottomActionsBackup = this.layoutContext.navBottomActions;
+  private navBottomActionsBackup = this.layoutContext.navBottomActions();
 
   constructor(
     private route: ActivatedRoute,
@@ -92,17 +92,17 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.layoutContext.navFabConfig = {
+    this.layoutContext.navFabConfig.set({
       text: 'Reply',
       icon: this.navFabIconTemplate,
       link: '/compose',
       linkParams: { reply: this.route.snapshot.params['mailId'] },
-    };
-    this.layoutContext.navBottomActions = this.navBottomActionsTemplate;
+    });
+    this.layoutContext.navBottomActions.set(this.navBottomActionsTemplate);
   }
 
   ngOnDestroy(): void {
-    this.layoutContext.navFabConfig = this.navFabConfigBackup;
-    this.layoutContext.navBottomActions = this.navBottomActionsBackup;
+    this.layoutContext.navFabConfig.set(this.navFabConfigBackup);
+    this.layoutContext.navBottomActions.set(this.navBottomActionsBackup);
   }
 }

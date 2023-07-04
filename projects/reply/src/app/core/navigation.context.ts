@@ -1,11 +1,9 @@
-import { Injectable } from '@angular/core';
-
-import { ReactiveObject } from '@/app/common/reactivity';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class NavigationContext extends ReactiveObject {
-  latestMailboxUrl?: string;
-  latestMailboxIndex?: number;
+export class NavigationContext {
+  latestMailboxUrl = signal<string | null>(null);
+  latestMailboxIndex = signal<number | null>(null);
 }

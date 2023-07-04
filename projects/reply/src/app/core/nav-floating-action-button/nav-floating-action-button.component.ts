@@ -1,10 +1,12 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  effect,
   HostBinding,
+  inject,
   Input,
-  OnInit,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 
@@ -33,10 +35,17 @@ import { LayoutContext } from '../layout.context';
     ]),
   ],
 })
-export class NavFloatingActionButtonComponent implements OnInit {
+export class NavFloatingActionButtonComponent {
+  private changeDetector = inject(ChangeDetectorRef);
+
+  layoutContext = inject(LayoutContext);
   @Input() @HostBinding('class.expanded') expanded = false;
 
-  constructor(public layoutContext: LayoutContext) {}
-
-  ngOnInit(): void {}
+  constructor() {
+    // TODO: find out why and try to remove this effect
+    effect(() => {
+      this.layoutContext.navFabConfig();
+      this.changeDetector.markForCheck();
+    });
+  }
 }

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 
@@ -27,9 +28,7 @@ export class ComposeComponent implements OnInit {
   ) {
     this.backUrl$ = combineLatest([
       this.mailId$,
-      this.navigationContext.value$.pipe(
-        map((context) => context.latestMailboxUrl),
-      ),
+      toObservable(this.navigationContext.latestMailboxUrl),
     ]).pipe(
       map(([mailId, mailboxUrl]) =>
         mailboxUrl ? (mailId ? `${mailboxUrl}/${mailId}` : mailboxUrl) : '/',

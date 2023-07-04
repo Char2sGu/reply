@@ -1,29 +1,22 @@
-<ng-container *ngIf="layoutContext.value$ | async as layoutContext">
-  <ng-container
-    *ngIf="
-      layoutContext.navFabConfig ??
-      {
-        text: 'Compose',
-        icon: editIconTemplate,
-        link: '/compose',
-        linkParams: {}
-      } as config
-    "
-  >
-    <a
-      mat-fab
-      [routerLink]="config.link"
-      [queryParams]="config.linkParams"
-      @host
-    >
-      <span class="icon" [@icon]="config.icon">
-        <ng-container [ngTemplateOutlet]="config.icon"></ng-container>
-      </span>
-      <span class="text">
-        {{ config.text }}
-      </span>
-    </a>
-  </ng-container>
+<ng-container
+  *ngIf="
+    layoutContext.navFabConfig() ??
+    {
+      text: 'Compose',
+      icon: editIconTemplate,
+      link: '/compose',
+      linkParams: {}
+    } as config
+  "
+>
+  <a mat-fab [routerLink]="config.link" [queryParams]="config.linkParams" @host>
+    <span class="icon" [@icon]="config.icon">
+      <ng-container [ngTemplateOutlet]="config.icon"></ng-container>
+    </span>
+    <span class="text">
+      {{ config.text }}
+    </span>
+  </a>
 </ng-container>
 
 <ng-template #editIconTemplate>
