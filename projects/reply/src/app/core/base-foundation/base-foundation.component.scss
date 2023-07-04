@@ -8,6 +8,6 @@ main {
 
 rpl-bottom-nav {
   grid-row: 1;
-  grid-column: 1 / -1;
+  grid-column: margin-left / margin-right;
   align-self: end;
 }

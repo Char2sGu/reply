@@ -14,13 +14,16 @@
 
   column-gap: 8px;
   grid-template-rows: 100%;
-  grid-template-columns: 0px repeat(4, 1fr) 0px;
+  grid-template-columns: [margin-left] 0px repeat(4, 1fr) 0px [margin-right];
+  grid-template-areas: '. col-1 col-2 col-3 col-4 .';
   &.tablet-portrait {
     column-gap: 32px;
-    grid-template-columns: 0px repeat(8, 1fr) 0px;
+    grid-template-columns: [margin-left] 0px repeat(8, 1fr) 0px [margin-right];
+    grid-template-areas: '. col-1 col-2 col-3 col-4 col-5 col-6 col-7 col-8 .';
   }
   &.tablet-landscape {
-    grid-template-columns: 0px repeat(12, 1fr) 0px;
+    grid-template-columns: [margin-left] 0px repeat(12, 1fr) 0px [margin-right];
+    grid-template-areas: '. col-1 col-2 col-3 col-4 col-5 col-6 col-7 col-8 col-9 col-10 col-11 col-12 .';
   }
 
   overflow: hidden; // animations might cause overflow
@@ -28,12 +31,9 @@
 
 rpl-side-nav {
   grid-row: 1;
-  grid-column: 1 / span 2;
-  :host-context(.tablet-landscape) & {
-    grid-column: 1 / span 2;
-  }
+  grid-column: margin-left / col-1;
   :host-context(.laptop) & {
-    grid-column: 1 / span 4;
+    grid-column: margin-left / col-3;
   }
 
   &:not(.on-grid) {

@@ -6,15 +6,15 @@
   position: relative;
 
   grid-row: 1;
-  grid-column: 1 / -1;
+  grid-column: margin-left / margin-right;
   :host-context(.tablet-portrait) & {
-    grid-column: span 7 / -2;
+    grid-column: col-2 / col-8;
   }
   :host-context(.tablet-landscape) & {
-    grid-column: span 9 / -3;
+    grid-column: col-3 / col-11;
   }
   :host-context(.laptop) & {
-    grid-column: span 7 / -3;
+    grid-column: col-5 / col-11;
   }
 
   .content {
@@ -47,7 +47,7 @@
   :host-context(.tablet-landscape) & {
     position: initial;
     grid-row: 1;
-    grid-column: -3 / -2;
+    grid-column: col-12;
     padding: 16px 0;
   }
 }
