@@ -19,7 +19,7 @@
       *ngIf="
         bottomMenuOpened
           ? settingsButtonTemplate
-          : layoutContext.navBottomActions() ??
+          : layoutContext().navBottomActions ??
             searchButtonTemplate as bottomActionsTemplate
       "
     >

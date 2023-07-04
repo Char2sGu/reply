@@ -10,7 +10,7 @@
     }"
     [lpjAnimationTrigger]="mailboxName"
     (animationSettle)="animationScope.snapshots.clear()"
-    [@content]="navigationContext.latestMailboxIndex()"
+    [@content]="navigationContext().latestMailboxIndex"
   >
     <rpl-content
       class="content"

@@ -1,6 +1,6 @@
 <ng-container
   *ngIf="
-    layoutContext.navFabConfig() ??
+    layoutContext().navFabConfig ??
     {
       text: 'Compose',
       icon: editIconTemplate,

@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  inject,
   OnDestroy,
   OnInit,
   TemplateRef,
@@ -12,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, Observable, switchMap, tap } from 'rxjs';
 
 import { AuthenticationService } from '@/app/core/authentication.service';
-import { LayoutContext } from '@/app/core/layout.context';
+import { LAYOUT_CONTEXT } from '@/app/core/layout-context.token';
 import { Contact } from '@/app/data/contact.model';
 import { ContactRepository } from '@/app/data/contact.repository';
 
@@ -26,26 +27,24 @@ import { MailRepository } from '../../data/mail.repository';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private layoutContext = inject(LAYOUT_CONTEXT);
+  private auth = inject(AuthenticationService);
+  private mailRepo = inject(MailRepository);
+  private contactRepo = inject(ContactRepository);
+  private changeDetector = inject(ChangeDetectorRef);
+
   mail$!: Observable<Mail>;
   mailSender$!: Observable<Contact>;
   mailRecipientNames$!: Observable<string[]>;
 
   @ViewChild('replyIcon')
   private navFabIconTemplate!: TemplateRef<never>;
-  private navFabConfigBackup = this.layoutContext.navFabConfig();
+  private navFabConfigBackup = this.layoutContext().navFabConfig;
 
   @ViewChild('bottomActions')
   private navBottomActionsTemplate!: TemplateRef<never>;
-  private navBottomActionsBackup = this.layoutContext.navBottomActions();
-
-  constructor(
-    private route: ActivatedRoute,
-    private layoutContext: LayoutContext,
-    private auth: AuthenticationService,
-    private mailRepo: MailRepository,
-    private contactRepo: ContactRepository,
-    private changeDetector: ChangeDetectorRef,
-  ) {}
+  private navBottomActionsBackup = this.layoutContext().navBottomActions;
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -92,17 +91,21 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.layoutContext.navFabConfig.set({
-      text: 'Reply',
-      icon: this.navFabIconTemplate,
-      link: '/compose',
-      linkParams: { reply: this.route.snapshot.params['mailId'] },
+    this.layoutContext.mutate((c) => {
+      c.navFabConfig = {
+        text: 'Reply',
+        icon: this.navFabIconTemplate,
+        link: '/compose',
+        linkParams: { reply: this.route.snapshot.params['mailId'] },
+      };
+      c.navBottomActions = this.navBottomActionsTemplate;
     });
-    this.layoutContext.navBottomActions.set(this.navBottomActionsTemplate);
   }
 
   ngOnDestroy(): void {
-    this.layoutContext.navFabConfig.set(this.navFabConfigBackup);
-    this.layoutContext.navBottomActions.set(this.navBottomActionsBackup);
+    this.layoutContext.mutate((c) => {
+      c.navFabConfig = this.navFabConfigBackup;
+      c.navBottomActions = this.navBottomActionsBackup;
+    });
   }
 }

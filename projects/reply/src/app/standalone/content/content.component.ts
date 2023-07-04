@@ -3,12 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  OnInit,
+  inject,
   ViewChild,
 } from '@angular/core';
 import { ScrollingModule } from '@reply/scrolling';
 
-import { LayoutContext } from '@/app/core/layout.context';
+import { LAYOUT_CONTEXT } from '@/app/core/layout-context.token';
 
 @Component({
   selector: 'rpl-content',
@@ -18,13 +18,11 @@ import { LayoutContext } from '@/app/core/layout.context';
   styleUrls: ['./content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContentComponent implements OnInit {
+export class ContentComponent {
+  layoutContext = inject(LAYOUT_CONTEXT);
+
   @ViewChild('wrapper') private wrapper!: ElementRef<HTMLElement>;
   private scrolledManually = false;
-
-  constructor(public layoutContext: LayoutContext) {}
-
-  ngOnInit(): void {}
 
   /**
    * Imitate the layout of the specified scrollTop with overflowing content
@@ -65,7 +63,8 @@ export class ContentComponent implements OnInit {
       this.scrolledManually = false;
       return;
     }
-    if (direction === 'up') this.layoutContext.contentFavored.set(false);
-    else this.layoutContext.contentFavored.set(true);
+    if (direction === 'up')
+      this.layoutContext.mutate((c) => (c.contentFavored = false));
+    else this.layoutContext.mutate((c) => (c.contentFavored = true));
   }
 }

@@ -2,7 +2,7 @@ import 'hammerjs';
 
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, inject, NgModule } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
@@ -13,15 +13,18 @@ import {
   SafeValue,
 } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NavigationStart, Router } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { LayoutProjectionModule } from '@layout-projection/angular';
 import { ScrollingModule } from '@reply/scrolling';
+import { filter } from 'rxjs';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BaseFoundationComponent } from './core/base-foundation/base-foundation.component';
 import { BottomNavComponent } from './core/bottom-nav/bottom-nav.component';
+import { LAYOUT_CONTEXT } from './core/layout-context.token';
 import { NavAvatarButtonComponent } from './core/nav-avatar-button/nav-avatar-button.component';
 import { NavBottomMenuComponent } from './core/nav-bottom-menu/nav-bottom-menu.component';
 import { NavFloatingActionButtonComponent } from './core/nav-floating-action-button/nav-floating-action-button.component';
@@ -90,6 +93,20 @@ import { SettingsButtonComponent } from './standalone/settings-button/settings-b
           iconRegistry.addSvgIconSet(trusted('assets/icons.svg'));
         },
       deps: [MatIconRegistry, DomSanitizer],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => {
+        const layoutContext = inject(LAYOUT_CONTEXT);
+        const router = inject(Router);
+        return () =>
+          router.events
+            .pipe(filter((event) => event instanceof NavigationStart))
+            .subscribe(() =>
+              layoutContext.mutate((c) => (c.contentFavored = false)),
+            );
+      },
       multi: true,
     },
   ],

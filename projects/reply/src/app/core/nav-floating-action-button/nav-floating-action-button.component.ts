@@ -11,7 +11,7 @@ import {
 import { AnimationCurves } from '@angular/material/core';
 
 import { FadeThroughAnimation } from '../animations';
-import { LayoutContext } from '../layout.context';
+import { LAYOUT_CONTEXT } from '../layout-context.token';
 
 @Component({
   selector: 'rpl-nav-floating-action-button',
@@ -36,15 +36,15 @@ import { LayoutContext } from '../layout.context';
   ],
 })
 export class NavFloatingActionButtonComponent {
+  layoutContext = inject(LAYOUT_CONTEXT);
   private changeDetector = inject(ChangeDetectorRef);
 
-  layoutContext = inject(LayoutContext);
   @Input() @HostBinding('class.expanded') expanded = false;
 
   constructor() {
     // TODO: find out why and try to remove this effect
     effect(() => {
-      this.layoutContext.navFabConfig();
+      this.layoutContext();
       this.changeDetector.markForCheck();
     });
   }

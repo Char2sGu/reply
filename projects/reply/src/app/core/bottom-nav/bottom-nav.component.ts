@@ -17,6 +17,7 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding,
+  inject,
   OnDestroy,
   OnInit,
   TemplateRef,
@@ -27,7 +28,7 @@ import { AnimationCurves } from '@angular/material/core';
 import { NavigationStart, Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs';
 
-import { LayoutContext } from '../layout.context';
+import { LAYOUT_CONTEXT } from '../layout-context.token';
 
 @Component({
   selector: 'rpl-bottom-nav',
@@ -71,6 +72,14 @@ import { LayoutContext } from '../layout.context';
   ],
 })
 export class BottomNavComponent implements OnInit, OnDestroy {
+  layoutContext = inject(LAYOUT_CONTEXT);
+  private router = inject(Router);
+  private overlayContainerRef = inject(OverlayContainer);
+  private overlayManager = inject(Overlay);
+  private elementRef = inject(ElementRef<HTMLElement>);
+  private viewContainerRef = inject(ViewContainerRef);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+
   logoClick$ = new EventEmitter();
 
   bottomMenuPan$ = new EventEmitter<'up' | 'down'>();
@@ -82,20 +91,10 @@ export class BottomNavComponent implements OnInit, OnDestroy {
   @ViewChild('bottomMenu') private bottomMenuTemplate!: TemplateRef<unknown>;
 
   @HostBinding('class.unfavored') get unfavored(): boolean {
-    return this.layoutContext.contentFavored();
+    return this.layoutContext().contentFavored;
   }
 
   private destroy$ = new EventEmitter();
-
-  constructor(
-    public layoutContext: LayoutContext,
-    private router: Router,
-    private overlayContainerRef: OverlayContainer,
-    private overlayManager: Overlay,
-    private elementRef: ElementRef<HTMLElement>,
-    private viewContainerRef: ViewContainerRef,
-    private changeDetectorRef: ChangeDetectorRef,
-  ) {}
 
   ngOnInit(): void {
     this.logoClick$.subscribe(() => {

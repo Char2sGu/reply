@@ -2,11 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  inject,
   Input,
   OnInit,
 } from '@angular/core';
 
-import { NavigationContext } from '../navigation.context';
+import { NAVIGATION_CONTEXT } from '../navigation-context.token';
 @Component({
   selector: 'rpl-nav-menu',
   templateUrl: './nav-menu.component.html',
@@ -15,16 +16,17 @@ import { NavigationContext } from '../navigation.context';
 })
 export class NavMenuComponent implements OnInit {
   ItemName = NavMenuItemName;
+  navigationContext = inject(NAVIGATION_CONTEXT);
 
   @Input() @HostBinding('class.expanded') expanded = true;
-
-  constructor(private navigationContext: NavigationContext) {}
 
   ngOnInit(): void {}
 
   onItemActive(name: string, index: number): void {
-    this.navigationContext.latestMailboxUrl.set(this.getMailboxUrl(name));
-    this.navigationContext.latestMailboxIndex.set(index);
+    this.navigationContext.mutate((c) => {
+      c.latestMailboxUrl = this.getMailboxUrl(name);
+      c.latestMailboxIndex = index;
+    });
   }
 
   getMailboxUrl(name: string): string {

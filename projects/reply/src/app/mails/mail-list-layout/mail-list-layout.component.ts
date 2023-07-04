@@ -13,7 +13,7 @@ import { map } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
-import { NavigationContext } from '@/app/core/navigation.context';
+import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
 import { ContentComponent } from '@/app/standalone/content/content.component';
 
 import { MailsComponent } from '../mails.component';
@@ -41,16 +41,13 @@ let scrollTop = 0;
 export class MailListLayoutComponent implements OnInit, OnDestroy {
   AnimationCurves = AnimationCurves;
   breakpoints = inject(BREAKPOINTS);
+  navigationContext = inject(NAVIGATION_CONTEXT);
+  private route = inject(ActivatedRoute);
+  private mailsComponent = inject(MailsComponent);
 
   mailboxName$ = this.route.params.pipe(map((params) => params['mailboxName']));
 
   @ViewChild(ContentComponent) private content!: ContentComponent;
-
-  constructor(
-    public navigationContext: NavigationContext,
-    private route: ActivatedRoute,
-    private mailsComponent: MailsComponent,
-  ) {}
 
   ngOnInit(): void {}
 
