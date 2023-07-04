@@ -1,5 +1,6 @@
 /// <reference types="gapi" />
 /// <reference types="gapi.client.gmail-v1" />
+/// <reference types="gapi.people" />
 /// <reference types="google.accounts" />
 
 import { inject, InjectionToken } from '@angular/core';
@@ -9,7 +10,7 @@ import { ScriptLoader } from './script-loader.service';
 
 export interface GoogleApis {
   gmail: typeof gapi.client.gmail;
-  identity: typeof google.accounts.id;
+  people: typeof gapi.client.people;
   oauth2: typeof google.accounts.oauth2;
 }
 
@@ -28,6 +29,7 @@ export const GOOGLE_APIS = new InjectionToken<Observable<GoogleApis>>(
             gapi.client.init({
               discoveryDocs: [
                 'https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest',
+                'https://www.googleapis.com/discovery/v1/apis/people/v1/rest',
               ],
             }),
           ),
@@ -36,7 +38,7 @@ export const GOOGLE_APIS = new InjectionToken<Observable<GoogleApis>>(
       ]).pipe(
         map(() => ({
           gmail: gapi.client.gmail,
-          identity: google.accounts.id,
+          people: gapi.client.people,
           oauth2: google.accounts.oauth2,
         })),
         shareReplay(1),
