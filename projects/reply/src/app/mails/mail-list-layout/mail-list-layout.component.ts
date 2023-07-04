@@ -2,6 +2,7 @@ import { query, style, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   Component,
+  inject,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -11,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/common/animations';
-import { BreakpointManager } from '@/app/core/breakpoint.manager';
+import { BREAKPOINTS } from '@/app/core/breakpoint.service';
 import { NavigationContext } from '@/app/core/navigation.context';
 import { ContentComponent } from '@/app/standalone/content/content.component';
 
@@ -39,8 +40,8 @@ let scrollTop = 0;
 })
 export class MailListLayoutComponent implements OnInit, OnDestroy {
   AnimationCurves = AnimationCurves;
+  breakpoints = inject(BREAKPOINTS);
 
-  breakpoints$ = this.breakpointManager.breakpoints$;
   mailboxName$ = this.route.params.pipe(map((params) => params['mailboxName']));
 
   @ViewChild(ContentComponent) private content!: ContentComponent;
@@ -48,7 +49,6 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
   constructor(
     public navigationContext: NavigationContext,
     private route: ActivatedRoute,
-    private breakpointManager: BreakpointManager,
     private mailsComponent: MailsComponent,
   ) {}
 

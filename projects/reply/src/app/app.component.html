@@ -1,21 +1,12 @@
-<ng-container *ngIf="breakpoints$ | async as breakpoints">
-  <ng-container
-    *ngIf="{
-      navShouldRender: breakpoints['tablet-portrait'],
-      navShouldExpand: breakpoints['laptop']
-    } as context"
-  >
-    <rpl-side-nav
-      *ngIf="context.navShouldRender"
-      [class.expanded]="navExpanded"
-      [class.on-grid]="navExpanded === undefined"
-      [expanded]="navExpanded ?? context.navShouldExpand"
-      (expandedChange)="
-        navExpanded = $event === context.navShouldExpand ? undefined : $event
-      "
-    ></rpl-side-nav>
-    <div class="wrapper" [@wrapper]="routeAnimationId()">
-      <router-outlet></router-outlet>
-    </div>
-  </ng-container>
-</ng-container>
+<rpl-side-nav
+  *ngIf="navShouldRender()"
+  [class.expanded]="navExpanded()"
+  [class.on-grid]="navExpanded() === undefined"
+  [expanded]="navExpanded() ?? navShouldExpand()"
+  (expandedChange)="
+    navExpanded.set($event === navShouldExpand() ? undefined : $event)
+  "
+></rpl-side-nav>
+<div class="wrapper" [@wrapper]="routeAnimationId()">
+  <router-outlet></router-outlet>
+</div>

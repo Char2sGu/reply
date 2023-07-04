@@ -1,36 +1,34 @@
-<ng-container *ngIf="breakpoints$ | async as breakpoints">
-  <ng-container *ngIf="mailSender$ | async as mailSender">
-    <div class="overlay"></div>
-    <div class="ripple" matRipple></div>
-    <div class="content">
-      <div class="headline">
-        <div class="titles" lpjNode>
-          <h5 class="subtitle">
-            <span>{{ mailSender.name }}</span> -
-            <span>{{ mail.sentAt | readableDate }}</span>
-          </h5>
-          <h1 class="title">
-            <a routerLink="./{{ mail.id }}" #anchor>{{ mail.subject }}</a>
-          </h1>
-        </div>
-        <div class="actions" lpjNode (click)="$event.stopPropagation()">
-          <ng-container *ngIf="breakpoints['tablet-portrait']">
-            <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
-            <rpl-mail-delete-button [mail]="mail"></rpl-mail-delete-button>
-            <button mat-icon-button>
-              <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
-            </button>
-          </ng-container>
-          <button
-            mat-icon-button
-            class="avatar-button"
-            lpjNode="mail-{{ mail.id }}-avatar"
-          >
-            <rpl-mail-avatar [src]="mailSender.avatarUrl"></rpl-mail-avatar>
-          </button>
-        </div>
+<ng-container *ngIf="mailSender$ | async as mailSender">
+  <div class="overlay"></div>
+  <div class="ripple" matRipple></div>
+  <div class="content">
+    <div class="headline">
+      <div class="titles" lpjNode>
+        <h5 class="subtitle">
+          <span>{{ mailSender.name }}</span> -
+          <span>{{ mail.sentAt | readableDate }}</span>
+        </h5>
+        <h1 class="title">
+          <a routerLink="./{{ mail.id }}" #anchor>{{ mail.subject }}</a>
+        </h1>
       </div>
-      <div class="overview" *ngIf="!mail.isRead">{{ mail.content }}</div>
+      <div class="actions" lpjNode (click)="$event.stopPropagation()">
+        <ng-container *ngIf="breakpoints()['tablet-portrait']">
+          <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
+          <rpl-mail-delete-button [mail]="mail"></rpl-mail-delete-button>
+          <button mat-icon-button>
+            <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
+          </button>
+        </ng-container>
+        <button
+          mat-icon-button
+          class="avatar-button"
+          lpjNode="mail-{{ mail.id }}-avatar"
+        >
+          <rpl-mail-avatar [src]="mailSender.avatarUrl"></rpl-mail-avatar>
+        </button>
+      </div>
     </div>
-  </ng-container>
+    <div class="overview" *ngIf="!mail.isRead">{{ mail.content }}</div>
+  </div>
 </ng-container>

@@ -1,35 +1,33 @@
-<ng-container *ngIf="breakpoints$ | async as breakpoints">
-  <ng-container *ngIf="mailboxName$ | async as mailboxName">
-    <div
-      class="content-wrapper"
-      *lpjAnimationScope="let animationScope"
-      lpjNode
-      [lpjAnimation]="{
-        duration: 300,
-        easing: AnimationCurves.STANDARD_CURVE,
-        estimation: true
-      }"
-      [lpjAnimationTrigger]="mailboxName"
-      (animationSettle)="animationScope.snapshots.clear()"
-      [@content]="navigationContext.latestMailboxIndex()"
+<ng-container *ngIf="mailboxName$ | async as mailboxName">
+  <div
+    class="content-wrapper"
+    *lpjAnimationScope="let animationScope"
+    lpjNode
+    [lpjAnimation]="{
+      duration: 300,
+      easing: AnimationCurves.STANDARD_CURVE,
+      estimation: true
+    }"
+    [lpjAnimationTrigger]="mailboxName"
+    (animationSettle)="animationScope.snapshots.clear()"
+    [@content]="navigationContext.latestMailboxIndex()"
+  >
+    <rpl-content
+      class="content"
+      data-route-animation="root"
+      *rplReattachOnChange="mailboxName"
     >
-      <rpl-content
-        class="content"
-        data-route-animation="root"
-        *rplReattachOnChange="mailboxName"
-      >
-        <rpl-mail-card-list
-          class="list"
-          [animationScope]="animationScope"
-          #list
-        ></rpl-mail-card-list>
-        <div class="empty-prompt" *ngIf="!(list.mails$ | async)?.length">
-          Empty in {{ mailboxName }}
-        </div>
-      </rpl-content>
-    </div>
-    <div class="actions" *ngIf="breakpoints['tablet-portrait']">
-      <rpl-search-button></rpl-search-button>
-    </div>
-  </ng-container>
+      <rpl-mail-card-list
+        class="list"
+        [animationScope]="animationScope"
+        #list
+      ></rpl-mail-card-list>
+      <div class="empty-prompt" *ngIf="!(list.mails$ | async)?.length">
+        Empty in {{ mailboxName }}
+      </div>
+    </rpl-content>
+  </div>
+  <div class="actions" *ngIf="breakpoints()['tablet-portrait']">
+    <rpl-search-button></rpl-search-button>
+  </div>
 </ng-container>

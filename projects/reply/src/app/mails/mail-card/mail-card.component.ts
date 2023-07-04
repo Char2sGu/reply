@@ -4,13 +4,14 @@ import {
   ElementRef,
   HostBinding,
   HostListener,
+  inject,
   Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { BreakpointManager } from '@/app/core/breakpoint.manager';
+import { BREAKPOINTS } from '@/app/core/breakpoint.service';
 import { Contact } from '@/app/data/contact.model';
 import { ContactRepository } from '@/app/data/contact.repository';
 
@@ -23,9 +24,11 @@ import { Mail } from '../../data/mail.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailCardComponent implements OnInit {
+  breakpoints = inject(BREAKPOINTS);
+  private contactRepo = inject(ContactRepository);
+
   @Input() mail!: Mail;
 
-  breakpoints$ = this.breakpointManager.breakpoints$;
   mailSender$!: Observable<Contact>;
 
   @HostBinding('class.read') get mailIsRead(): boolean {
@@ -36,11 +39,6 @@ export class MailCardComponent implements OnInit {
   }
 
   @ViewChild('anchor') private anchorElementRef!: ElementRef<HTMLAnchorElement>;
-
-  constructor(
-    private breakpointManager: BreakpointManager,
-    private contactRepo: ContactRepository,
-  ) {}
 
   ngOnInit(): void {
     this.mailSender$ = this.contactRepo.retrieve(this.mail.sender);

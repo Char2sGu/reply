@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { BreakpointManager } from '../breakpoint.manager';
+import { BREAKPOINTS } from '../breakpoint.service';
 
 @Component({
   selector: 'rpl-base-foundation',
@@ -8,10 +8,6 @@ import { BreakpointManager } from '../breakpoint.manager';
   styleUrls: ['./base-foundation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BaseFoundationComponent implements OnInit {
-  breakpoints$ = this.breakpointManager.breakpoints$;
-
-  constructor(private breakpointManager: BreakpointManager) {}
-
-  ngOnInit(): void {}
+export class BaseFoundationComponent {
+  breakpoints = inject(BREAKPOINTS);
 }

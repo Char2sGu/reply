@@ -1,11 +1,12 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Injectable } from '@angular/core';
+import { inject, Injectable, InjectionToken, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { map, Observable, shareReplay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class BreakpointManager {
+export class BreakpointService {
   readonly breakpoints$: Observable<BreakpointMap>;
 
   private config: BreakpointConfig;
@@ -33,6 +34,22 @@ export class BreakpointManager {
     return map as Required<typeof map>;
   }
 }
+
+export const BREAKPOINTS = new InjectionToken<Signal<BreakpointMap>>(
+  'BREAKPOINTS',
+  {
+    providedIn: 'root',
+    factory: () =>
+      toSignal(inject(BreakpointService).breakpoints$, {
+        initialValue: {
+          ['tablet-portrait']: false,
+          ['tablet-landscape']: false,
+          ['laptop']: false,
+          ['desktop']: false,
+        },
+      }),
+  },
+);
 
 export type BreakpointName =
   | 'tablet-portrait'

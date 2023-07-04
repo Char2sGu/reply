@@ -1,12 +1,18 @@
 import { transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  HostBinding,
+  inject,
+  signal,
+} from '@angular/core';
 
 import {
   injectAnimationIdFactory,
   SharedAxisAnimation,
 } from './common/animations';
-import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
+import { BreakpointMap, BREAKPOINTS } from './core/breakpoint.service';
 
 @Component({
   selector: 'rpl-root',
@@ -33,26 +39,13 @@ import { BreakpointManager, BreakpointMap } from './core/breakpoint.manager';
 })
 export class AppComponent {
   routeAnimationId = injectAnimationIdFactory();
+  breakpoints = inject(BREAKPOINTS);
 
-  @HostBinding('class') breakpointMap: BreakpointMap = {
-    ['tablet-portrait']: false,
-    ['tablet-landscape']: false,
-    ['laptop']: false,
-    ['desktop']: false,
-  };
-
-  breakpoints$ = this.breakpointManager.breakpoints$;
-  navExpanded?: boolean = undefined;
-
-  constructor(private breakpointManager: BreakpointManager) {
-    this.breakpointManager.breakpoints$.subscribe((v) => {
-      this.breakpointMap = v;
-    });
+  @HostBinding('class') get breakpointsClassBindings(): BreakpointMap {
+    return this.breakpoints();
   }
 
-  flag$ = new BehaviorSubject(true);
-
-  onClick(): void {
-    this.flag$.next(!this.flag$.value);
-  }
+  navShouldRender = computed(() => this.breakpoints()['tablet-portrait']);
+  navShouldExpand = computed(() => this.breakpoints()['laptop']);
+  navExpanded = signal<boolean | undefined>(undefined);
 }
