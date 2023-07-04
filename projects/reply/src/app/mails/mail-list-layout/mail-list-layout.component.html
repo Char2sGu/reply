@@ -13,7 +13,11 @@
       (animationSettle)="animationScope.snapshots.clear()"
       [@content]="navigationContext.latestMailboxIndex()"
     >
-      <rpl-content class="content" *rplReattachOnChange="mailboxName">
+      <rpl-content
+        class="content"
+        data-route-animation="root"
+        *rplReattachOnChange="mailboxName"
+      >
         <rpl-mail-card-list
           class="list"
           [animationScope]="animationScope"

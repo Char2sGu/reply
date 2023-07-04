@@ -1,6 +1,9 @@
 <ng-container *ngIf="breakpoints$ | async as breakpoints">
-  <main>
+  <main data-route-animation="root">
     <router-outlet></router-outlet>
   </main>
-  <rpl-bottom-nav *ngIf="!breakpoints['tablet-portrait']"></rpl-bottom-nav>
+  <rpl-bottom-nav
+    data-route-animation="root"
+    *ngIf="!breakpoints['tablet-portrait']"
+  ></rpl-bottom-nav>
 </ng-container>
