@@ -5,7 +5,7 @@ import { ContactRepository } from '../data/contact.repository';
 @Injectable({
   providedIn: 'root',
 })
-export class Authenticator {
+export class AuthenticationService {
   user$ = this.contactRepo.retrieve('user');
 
   constructor(private contactRepo: ContactRepository) {}

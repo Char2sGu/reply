@@ -29,7 +29,7 @@ export class MailDeleteButtonComponent implements OnInit {
   ngOnInit(): void {
     this.click$.subscribe(() => {
       if (this.mail.mailboxName === 'Trash') this.mailRepo.delete(this.mail.id);
-      else this.mailRepo.update(this.mail.id, { mailboxName: 'Trash' });
+      else this.mailRepo.patch(this.mail.id, { mailboxName: 'Trash' });
       this.listRefresh$.emit();
     });
   }

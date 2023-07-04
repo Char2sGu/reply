@@ -11,7 +11,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, Observable, switchMap, tap } from 'rxjs';
 
-import { Authenticator } from '@/app/core/authenticator.service';
+import { AuthenticationService } from '@/app/core/authentication.service';
 import { LayoutContext } from '@/app/core/layout.context';
 import { Contact } from '@/app/data/contact.model';
 import { ContactRepository } from '@/app/data/contact.repository';
@@ -41,7 +41,7 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private layoutContext: LayoutContext,
-    private authenticator: Authenticator,
+    private auth: AuthenticationService,
     private mailRepo: MailRepository,
     private contactRepo: ContactRepository,
     private changeDetector: ChangeDetectorRef,
@@ -56,7 +56,7 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mail$ = this.mailRepo.retrieve(mailId).pipe(
         tap((mail) => {
           if (mail.isRead) return;
-          this.mailRepo.update(mail.id, { isRead: true });
+          this.mailRepo.patch(mail.id, { isRead: true });
         }),
       );
 
@@ -74,7 +74,7 @@ export class MailComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.mailRecipientNames$ = combineLatest([
         mailRecipients$,
-        this.authenticator.user$,
+        this.auth.user$,
       ]).pipe(
         map(([recipients, user]) =>
           recipients

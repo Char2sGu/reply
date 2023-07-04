@@ -46,15 +46,17 @@ export class MailCardListComponent implements OnInit {
     ]).subscribe(([params]) => {
       const mailboxName = params['mailboxName'];
 
-      this.mails$ = (
-        mailboxName === NavMenuItemName.Starred
-          ? this.mailRepo.listStarred()
-          : this.mailRepo.listByMailbox(mailboxName)
-      ).pipe(
-        map((mails) =>
-          mails.sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime()),
-        ),
-      );
+      this.mails$ = this.mailRepo
+        .query(
+          mailboxName === NavMenuItemName.Starred
+            ? (e) => e.isStarred
+            : (e) => e.mailboxName === mailboxName,
+        )
+        .pipe(
+          map((mails) =>
+            mails.sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime()),
+          ),
+        );
 
       this.changeDetector.markForCheck();
     });

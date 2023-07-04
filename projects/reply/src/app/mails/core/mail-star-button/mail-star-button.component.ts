@@ -39,8 +39,8 @@ export class MailStarButtonComponent implements OnInit {
         tap(() => this.busy$.next(true)),
         tap(() => {
           if (this.mail.isStarred)
-            this.mailRepo.update(this.mail.id, { isStarred: false });
-          else this.mailRepo.update(this.mail.id, { isStarred: true });
+            this.mailRepo.patch(this.mail.id, { isStarred: false });
+          else this.mailRepo.patch(this.mail.id, { isStarred: true });
           if (
             this.route.snapshot.params['mailboxName'] ===
             NavMenuItemName.Starred

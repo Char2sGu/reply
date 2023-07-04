@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 
-import { EntityCollection, ReactiveRepository } from '../common/repository';
+import { ReactiveRepository } from '../common/reactive-repository';
 import { Contact } from './contact.model';
 import { CONTACTS } from './contact.records';
 
@@ -9,11 +8,9 @@ import { CONTACTS } from './contact.records';
   providedIn: 'root',
 })
 export class ContactRepository extends ReactiveRepository<Contact> {
-  private entities = new EntityCollection(...CONTACTS);
-
-  retrieve(id: Contact['id']): Observable<Contact> {
-    const entity = this.entities.findOrThrow((item) => item.id === id);
-    return this.reactivityFor(entity);
+  constructor() {
+    super();
+    CONTACTS.forEach((contact) => this.insert(contact));
   }
 
   protected identify(entity: Contact): string {
