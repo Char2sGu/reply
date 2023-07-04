@@ -7,7 +7,7 @@ import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 
-import { HeaderComponent } from '../standalone/header/header.component';
+import { HeaderComponent } from '../shared/header/header.component';
 import { ComposeComponent } from './compose.component';
 import { ComposeRoutingModule } from './compose-routing.module';
 

@@ -6,11 +6,11 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
 import { LayoutProjectionModule } from '@layout-projection/angular';
 import { ScrollingModule } from '@reply/scrolling';
 
-import { ContentComponent } from '../standalone/content/content.component';
-import { ReadableDatePipe } from '../standalone/readable-date.pipe';
-import { ReadableStringsPipe } from '../standalone/readable-strings.pipe';
-import { ReattachOnChangeDirective } from '../standalone/reattach-on-change.directive';
-import { SearchButtonComponent } from '../standalone/search-button/search-button.component';
+import { ContentComponent } from '../shared/content/content.component';
+import { ReadableDatePipe } from '../shared/readable-date.pipe';
+import { ReadableStringsPipe } from '../shared/readable-strings.pipe';
+import { ReattachOnChangeDirective } from '../shared/reattach-on-change.directive';
+import { SearchButtonComponent } from '../shared/search-button/search-button.component';
 import { MailAvatarComponent } from './core/mail-avatar/mail-avatar.component';
 import { MailDeleteButtonComponent } from './core/mail-delete-button/mail-delete-button.component';
 import { MailStarButtonComponent } from './core/mail-star-button/mail-star-button.component';

@@ -14,7 +14,7 @@ import { map } from 'rxjs';
 import { SharedAxisAnimation } from '@/app/core/animations';
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
-import { ContentComponent } from '@/app/standalone/content/content.component';
+import { ContentComponent } from '@/app/shared/content/content.component';
 
 import { MailsComponent } from '../mails.component';
 

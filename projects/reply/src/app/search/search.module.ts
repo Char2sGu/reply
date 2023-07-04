@@ -8,9 +8,9 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
 
 import { ContactRefPipe } from '../data/contact-ref.pipe';
-import { ContentComponent } from '../standalone/content/content.component';
-import { HeaderComponent } from '../standalone/header/header.component';
-import { ReadableDatePipe } from '../standalone/readable-date.pipe';
+import { ContentComponent } from '../shared/content/content.component';
+import { HeaderComponent } from '../shared/header/header.component';
+import { ReadableDatePipe } from '../shared/readable-date.pipe';
 import { SearchComponent } from './search.component';
 import { SearchResultListComponent } from './search-result-list/search-result-list.component';
 import { SearchRoutingModule } from './search-routing.module';

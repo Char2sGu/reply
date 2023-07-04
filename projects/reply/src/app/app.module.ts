@@ -32,9 +32,9 @@ import { NavLogoButtonComponent } from './core/nav-logo-button/nav-logo-button.c
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
 import { SideNavComponent } from './core/side-nav/side-nav.component';
 import { UpperFoundationComponent } from './core/upper-foundation/upper-foundation.component';
-import { ReattachOnChangeDirective } from './standalone/reattach-on-change.directive';
-import { SearchButtonComponent } from './standalone/search-button/search-button.component';
-import { SettingsButtonComponent } from './standalone/settings-button/settings-button.component';
+import { ReattachOnChangeDirective } from './shared/reattach-on-change.directive';
+import { SearchButtonComponent } from './shared/search-button/search-button.component';
+import { SettingsButtonComponent } from './shared/settings-button/settings-button.component';
 
 // TODO: attachment
 // TODO: image
