@@ -1,0 +1,25 @@
+@use 'sass:map' as map;
+@use '@angular/material' as mat;
+@use 'styles/theming' as theming;
+
+:host {
+  grid-row: 1;
+  grid-column: margin-left / margin-right;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8vh;
+  color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
+  background-color: map.get(theming.$theme, 'color', 'primary', 'default');
+}
+
+.logo {
+  width: 120px;
+}
+
+.text {
+  @include mat.typography-level(theming.$typography-config, 'headline');
+  text-transform: uppercase;
+}

@@ -23,6 +23,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BaseFoundationComponent } from './core/base-foundation/base-foundation.component';
 import { BottomNavComponent } from './core/bottom-nav/bottom-nav.component';
 import { FoundationComponent } from './core/foundation/foundation.component';
+import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { NavAvatarButtonComponent } from './core/nav-avatar-button/nav-avatar-button.component';
 import { NavBottomMenuComponent } from './core/nav-bottom-menu/nav-bottom-menu.component';
 import { NavFloatingActionButtonComponent } from './core/nav-floating-action-button/nav-floating-action-button.component';
@@ -52,6 +53,7 @@ import { SettingsButtonComponent } from './shared/settings-button/settings-butto
     BaseFoundationComponent,
     UpperFoundationComponent,
     FoundationComponent,
+    LaunchScreenComponent,
   ],
   imports: [
     BrowserModule,
