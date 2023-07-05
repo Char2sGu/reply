@@ -1,7 +1,7 @@
-import { inject, Injectable, NgZone } from '@angular/core';
+import { ApplicationRef, inject, Injectable, NgZone } from '@angular/core';
 import {
   combineLatest,
-  distinctUntilChanged,
+  filter,
   first,
   map,
   Observable,
@@ -9,6 +9,8 @@ import {
   startWith,
   Subject,
   switchMap,
+  tap,
+  timer,
 } from 'rxjs';
 
 import { environment } from '@/environments/environment';
@@ -31,6 +33,7 @@ export class AuthenticationService {
   private contactRepo = inject(ContactRepository);
   private googleApis$ = inject(GOOGLE_APIS);
   private zone = inject(NgZone);
+  private applicationRef = inject(ApplicationRef);
 
   private tokenResponse$ = new Subject<google.accounts.oauth2.TokenResponse>();
   private tokenClient$ = this.googleApis$.pipe(
@@ -48,13 +51,12 @@ export class AuthenticationService {
   readonly authorized$: Observable<boolean> = this.tokenResponse$.pipe(
     map(() => true),
     startWith(false),
-    distinctUntilChanged(),
     shareReplay(1),
   );
 
   readonly user$: Observable<Contact> = combineLatest([
     this.googleApis$,
-    this.tokenResponse$,
+    this.authorized$.pipe(filter(Boolean)),
   ]).pipe(
     switchMap(([apis]) =>
       apis.people.people.get({
@@ -62,6 +64,7 @@ export class AuthenticationService {
         personFields: 'photos,emailAddresses',
       }),
     ),
+    tap(() => timer(0).subscribe(() => this.applicationRef.tick())),
     map((response): Contact => {
       const { resourceName, photos, emailAddresses } = response.result;
       const photo = photos?.find((p) => p.metadata?.primary);

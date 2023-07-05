@@ -1,3 +1,3 @@
 <button mat-icon-button>
-  <img src="assets/avatar-1.jpg" alt="Avatar" />
+  <img [src]="(user$ | async)?.avatarUrl" alt="Avatar" />
 </button>

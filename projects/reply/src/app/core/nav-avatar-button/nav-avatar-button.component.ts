@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'rpl-nav-avatar-button',
@@ -6,8 +8,6 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   styleUrls: ['./nav-avatar-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavAvatarButtonComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
+export class NavAvatarButtonComponent {
+  user$ = inject(AuthenticationService).user$;
 }
