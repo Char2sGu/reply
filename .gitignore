@@ -3,6 +3,8 @@
 /.angular/cache
 /.eslintcache
 
+environment.prod.ts
+
 /.vscode/*
 !/.vscode/settings.json
 !/.vscode/tasks.json
