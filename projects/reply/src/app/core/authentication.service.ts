@@ -1,6 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import {
   combineLatest,
+  distinctUntilChanged,
   first,
   map,
   Observable,
@@ -29,6 +30,7 @@ const SCOPES = [
 export class AuthenticationService {
   private contactRepo = inject(ContactRepository);
   private googleApis$ = inject(GOOGLE_APIS);
+  private zone = inject(NgZone);
 
   private tokenResponse$ = new Subject<google.accounts.oauth2.TokenResponse>();
   private tokenClient$ = this.googleApis$.pipe(
@@ -36,9 +38,18 @@ export class AuthenticationService {
       apis.oauth2.initTokenClient({
         ['client_id']: environment.googleClientId,
         scope: SCOPES.join(' '),
-        callback: (r) => this.tokenResponse$.next(r),
+        callback: (r) => {
+          this.zone.run(() => this.tokenResponse$.next(r));
+        },
       }),
     ),
+  );
+
+  readonly authorized$: Observable<boolean> = this.tokenResponse$.pipe(
+    map(() => true),
+    startWith(false),
+    distinctUntilChanged(),
+    shareReplay(1),
   );
 
   readonly user$: Observable<Contact> = combineLatest([
@@ -67,14 +78,9 @@ export class AuthenticationService {
     shareReplay(1),
   );
 
-  readonly authorized$: Observable<boolean> = this.user$.pipe(
-    map(() => true),
-    startWith(false),
-  );
-
   requestAuthorization(): void {
-    this.tokenClient$.pipe(first()).subscribe((c) => {
-      c.requestAccessToken();
+    this.tokenClient$.pipe(first()).subscribe((client) => {
+      client.requestAccessToken();
     });
   }
 }

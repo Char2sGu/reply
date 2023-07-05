@@ -1,0 +1,45 @@
+<div class="background"></div>
+<div class="container">
+  <div class="content">
+    <div class="heading">
+      <rpl-logo class="logo"></rpl-logo>
+      <span class="text">Reply</span>
+    </div>
+    <div class="body">
+      <p>
+        <a href="https://github.com/TheNightmareX/reply">Reply</a> is an open
+        source Gmail web client built with Angular, whose user interface is
+        inspired by the
+        <a href="https://m2.material.io/design/material-studies/reply.html"
+          >"Reply"</a
+        >
+        Material Design example by Google.
+      </p>
+      <p>
+        Please note that although this app is strictly inspected before
+        publishing to avoid any unintentional damage to your Gmail data, it is
+        still risky to lose data because of undiscovered bugs. The author is not
+        responsible for any damage caused by the use of this app.
+      </p>
+      <mat-checkbox [(ngModel)]="checked">
+        I understand the risks, let me in
+      </mat-checkbox>
+    </div>
+    <div class="actions">
+      <button
+        mat-flat-button
+        color="accent"
+        [disabled]="!checked || (loading$ | async)"
+        (click)="onButtonClick()"
+      >
+        Sign in with Google
+      </button>
+      <mat-progress-spinner
+        *ngIf="loading$ | async"
+        mode="indeterminate"
+        diameter="32"
+        color="accent"
+      ></mat-progress-spinner>
+    </div>
+  </div>
+</div>
