@@ -13,7 +13,7 @@ export class ContactRepository extends ReactiveRepository<Contact> {
     CONTACTS.forEach((contact) => this.insert(contact));
   }
 
-  protected identify(entity: Contact): string {
+  identify(entity: Contact): string {
     return entity.id;
   }
 }

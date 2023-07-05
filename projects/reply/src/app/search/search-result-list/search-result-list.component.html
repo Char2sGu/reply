@@ -10,7 +10,10 @@
         <mat-icon matListIcon fontSet="filled" fontIcon="schedule"></mat-icon>
         <div matLine>{{ mail.subject }}</div>
         <div matLine>
-          <span>{{ (mail.sender | contactRef | async)?.name }}</span> -
+          <span>{{
+            (mail.sender | resolveRef : contactRepo | async)?.name
+          }}</span>
+          -
           <span>{{ mail.sentAt | readableDate }}</span>
         </div>
       </a>

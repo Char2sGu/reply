@@ -6,9 +6,11 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
 import { LayoutProjectionModule } from '@layout-projection/angular';
 import { ScrollingModule } from '@reply/scrolling';
 
+import { ContactSortPipe } from '../data/contact-sort.pipe';
+import { ContactStringifyPipe } from '../data/contact-stringify.pipe';
+import { ResolveRefPipe } from '../data/resolve-ref.pipe';
 import { ContentComponent } from '../shared/content/content.component';
 import { ReadableDatePipe } from '../shared/readable-date.pipe';
-import { ReadableStringsPipe } from '../shared/readable-strings.pipe';
 import { ReattachOnChangeDirective } from '../shared/reattach-on-change.directive';
 import { SearchButtonComponent } from '../shared/search-button/search-button.component';
 import { MailAvatarComponent } from './core/mail-avatar/mail-avatar.component';
@@ -45,7 +47,9 @@ import { MailsRoutingModule } from './mails-routing.module';
     SearchButtonComponent,
     ContentComponent,
     ReadableDatePipe,
-    ReadableStringsPipe,
+    ResolveRefPipe,
+    ContactSortPipe,
+    ContactStringifyPipe,
     ReattachOnChangeDirective,
   ],
 })

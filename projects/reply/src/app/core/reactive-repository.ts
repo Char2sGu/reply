@@ -19,6 +19,8 @@ export abstract class ReactiveRepository<Entity> {
 
   protected entities = new Map<string, BehaviorSubject<Entity>>();
 
+  abstract identify(entity: Entity): string;
+
   query(
     condition: (entity: Entity) => boolean = () => true,
   ): Observable<Entity[]> {
@@ -93,8 +95,6 @@ export abstract class ReactiveRepository<Entity> {
       map(() => result),
     );
   }
-
-  protected abstract identify(entity: Entity): string;
 }
 
 export interface ReactiveRepositoryUpdate<Entity> {

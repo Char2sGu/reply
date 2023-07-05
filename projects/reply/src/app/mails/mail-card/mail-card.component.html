@@ -1,4 +1,6 @@
-<ng-container *ngIf="mailSender$ | async as mailSender">
+<ng-container
+  *ngIf="mail.sender | resolveRef : contactRepo | async as mailSender"
+>
   <div class="overlay"></div>
   <div class="ripple" matRipple></div>
   <div class="content">

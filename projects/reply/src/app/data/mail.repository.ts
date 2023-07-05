@@ -13,7 +13,7 @@ export class MailRepository extends ReactiveRepository<Mail> {
     MAILS.forEach((mail) => this.insert(mail));
   }
 
-  protected identify(entity: Mail): string {
+  identify(entity: Mail): string {
     return entity.id;
   }
 }

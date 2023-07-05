@@ -7,7 +7,7 @@ import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/materia
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
 
-import { ContactRefPipe } from '../data/contact-ref.pipe';
+import { ResolveRefPipe } from '../data/resolve-ref.pipe';
 import { ContentComponent } from '../shared/content/content.component';
 import { HeaderComponent } from '../shared/header/header.component';
 import { ReadableDatePipe } from '../shared/readable-date.pipe';
@@ -27,7 +27,7 @@ import { SearchRoutingModule } from './search-routing.module';
     MatInputModule,
     MatListModule,
     ContentComponent,
-    ContactRefPipe,
+    ResolveRefPipe,
     HeaderComponent,
     ReadableDatePipe,
   ],

@@ -1,48 +1,65 @@
 <ng-container *ngIf="mail$ | async as mail">
-  <ng-container *ngIf="mailSender$ | async as mailSender">
-    <ng-container *ngIf="mailRecipientNames$ | async as mailRecipientNames">
-      <div class="wrapper">
-        <div class="title-line" lpjNode>
-          <h1 class="mat-display-1">
-            {{ mail.subject }}
-          </h1>
-          <a mat-icon-button routerLink=".." [queryParams]="{ prev: mail.id }">
-            <mat-icon fontSet="filled" fontIcon="expand_more"></mat-icon>
-          </a>
-        </div>
-
-        <div class="info-line" lpjNode>
-          <div class="left-group">
-            <div class="mat-body-1">
-              <span>{{ mailSender.name }}</span> -
-              <span>{{ mail.sentAt | readableDate }}</span>
-            </div>
-            <div class="mat-small">
-              <span>To {{ mailRecipientNames | readableStrings }}</span>
-            </div>
-          </div>
-          <div class="right-group">
-            <rpl-mail-avatar
-              lpjNode="mail-{{ mail.id }}-avatar"
-              [src]="mailSender.avatarUrl"
-            ></rpl-mail-avatar>
-          </div>
-        </div>
-
-        <div class="content" lpjNode>{{ mail.content }}</div>
+  <ng-container
+    *ngIf="mail.sender | resolveRef : contactRepo | async as mailSender"
+  >
+    <div class="wrapper">
+      <div class="title-line" lpjNode>
+        <h1 class="mat-display-1">
+          {{ mail.subject }}
+        </h1>
+        <a mat-icon-button routerLink=".." [queryParams]="{ prev: mail.id }">
+          <mat-icon fontSet="filled" fontIcon="expand_more"></mat-icon>
+        </a>
       </div>
 
-      <ng-template #bottomActions>
-        <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
-        <rpl-mail-delete-button
-          [mail]="mail"
-          routerLink=".."
-        ></rpl-mail-delete-button>
-        <button mat-icon-button>
-          <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
-        </button>
-      </ng-template>
-    </ng-container>
+      <div class="info-line" lpjNode>
+        <div class="left-group">
+          <div class="mat-body-1">
+            <span>{{ mailSender.name }}</span> -
+            <span>{{ mail.sentAt | readableDate }}</span>
+          </div>
+          <div class="mat-small">
+            <span>
+              To
+              <ng-container *ngIf="user$ | async as user">
+                <ng-container
+                  *ngIf="
+                    mail.recipients
+                      | resolveRef : contactRepo
+                      | async as recipients
+                  "
+                >
+                  {{
+                    recipients
+                      | contactSort : user.id
+                      | contactStringify : user.id
+                  }}
+                </ng-container>
+              </ng-container>
+            </span>
+          </div>
+        </div>
+        <div class="right-group">
+          <rpl-mail-avatar
+            lpjNode="mail-{{ mail.id }}-avatar"
+            [src]="mailSender.avatarUrl"
+          ></rpl-mail-avatar>
+        </div>
+      </div>
+
+      <div class="content" lpjNode>{{ mail.content }}</div>
+    </div>
+
+    <ng-template #bottomActions>
+      <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
+      <rpl-mail-delete-button
+        [mail]="mail"
+        routerLink=".."
+      ></rpl-mail-delete-button>
+      <button mat-icon-button>
+        <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
+      </button>
+    </ng-template>
   </ng-container>
 </ng-container>
 

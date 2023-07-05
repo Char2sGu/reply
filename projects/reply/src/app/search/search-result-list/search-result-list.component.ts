@@ -1,12 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  inject,
   Input,
   OnInit,
 } from '@angular/core';
 import dayjs from 'dayjs/esm';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
+import { ContactRepository } from '@/app/data/contact.repository';
 import { Mail } from '@/app/data/mail.model';
 
 @Component({
@@ -16,6 +18,8 @@ import { Mail } from '@/app/data/mail.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchResultListComponent implements OnInit {
+  contactRepo = inject(ContactRepository);
+
   @Input() set mails(v: Mail[]) {
     this.mails$.next(v);
   }
