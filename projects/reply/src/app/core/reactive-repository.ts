@@ -1,5 +1,6 @@
 import {
   BehaviorSubject,
+  filter,
   map,
   Observable,
   startWith,
@@ -65,12 +66,32 @@ export abstract class ReactiveRepository<Entity> {
     return entity;
   }
 
+  insertOrPatch(entity: Entity): Observable<Entity> {
+    const id = this.identify(entity);
+    const existing = this.entities.get(id);
+    if (existing) return this.patch(id, entity);
+    return this.insert(entity);
+  }
+
   delete(id: string): void {
     const entity = this.entities.get(id);
     if (!entity) throw new EntityNotFoundException();
     entity.complete();
     this.entities.delete(id);
     this.updatesSubject.next({ id, prev: entity.value, curr: null });
+  }
+
+  exists(id: string): Observable<boolean> {
+    let result = this.entities.has(id);
+    return this.updates$.pipe(
+      filter((u) => u.id === id),
+      tap((update) => {
+        if (update.curr === null) result = false;
+        else result = true;
+      }),
+      startWith(null),
+      map(() => result),
+    );
   }
 
   protected abstract identify(entity: Entity): string;

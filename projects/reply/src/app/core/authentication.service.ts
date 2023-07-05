@@ -1,12 +1,74 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import {
+  combineLatest,
+  first,
+  map,
+  Observable,
+  shareReplay,
+  Subject,
+  switchMap,
+} from 'rxjs';
 
+import { environment } from '@/environments/environment';
+
+import { Contact } from '../data/contact.model';
 import { ContactRepository } from '../data/contact.repository';
+import { ResponseNotValidException } from './exceptions';
+import { GOOGLE_APIS } from './google-apis.token';
+
+const SCOPES = [
+  'https://mail.google.com/',
+  'https://www.googleapis.com/auth/userinfo.profile',
+  'https://www.googleapis.com/auth/userinfo.email',
+] as const;
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  user$ = this.contactRepo.retrieve('user');
+  private contactRepo = inject(ContactRepository);
+  private googleApis$ = inject(GOOGLE_APIS);
 
-  constructor(private contactRepo: ContactRepository) {}
+  private tokenResponse$ = new Subject<google.accounts.oauth2.TokenResponse>();
+  private tokenClient$ = this.googleApis$.pipe(
+    map((apis) =>
+      apis.oauth2.initTokenClient({
+        ['client_id']: environment.googleClientId,
+        scope: SCOPES.join(' '),
+        callback: (r) => this.tokenResponse$.next(r),
+      }),
+    ),
+  );
+
+  readonly user$: Observable<Contact> = combineLatest([
+    this.googleApis$,
+    this.tokenResponse$,
+  ]).pipe(
+    switchMap(([apis]) =>
+      apis.people.people.get({
+        resourceName: 'people/me',
+        personFields: 'photos,emailAddresses',
+      }),
+    ),
+    map((response): Contact => {
+      const { resourceName, photos, emailAddresses } = response.result;
+      const photo = photos?.find((p) => p.metadata?.primary);
+      const email = emailAddresses?.find((e) => e.metadata?.primary);
+      if (!email || !photo) throw new ResponseNotValidException();
+      return {
+        id: resourceName,
+        name: email.displayName,
+        email: email.value,
+        avatarUrl: photo.url,
+      };
+    }),
+    switchMap((c) => this.contactRepo.insertOrPatch(c)),
+    shareReplay(1),
+  );
+
+  requestAuthorization(): void {
+    this.tokenClient$.pipe(first()).subscribe((c) => {
+      c.requestAccessToken();
+    });
+  }
 }
