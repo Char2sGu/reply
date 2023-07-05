@@ -10,9 +10,6 @@ import {
 import { map } from 'rxjs';
 
 import { AuthenticationService } from './core/authentication.service';
-import { BaseFoundationComponent } from './core/base-foundation/base-foundation.component';
-import { FoundationComponent } from './core/foundation/foundation.component';
-import { UpperFoundationComponent } from './core/upper-foundation/upper-foundation.component';
 
 const authorized: CanMatchFn = () => inject(AuthenticationService).authorized$;
 const unauthorized: CanMatchFn = () =>
@@ -36,7 +33,6 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: FoundationComponent,
     canMatch: [authorized],
     children: [
       {
@@ -46,37 +42,8 @@ const routes: Routes = [
       },
       {
         path: '',
-        component: BaseFoundationComponent,
-        data: { animationId: 'base' },
-        children: [
-          {
-            path: 'mailboxes/:mailboxName/mails',
-            loadChildren: () =>
-              import('./mails/mails.module').then((m) => m.MailsModule),
-          },
-        ],
-      },
-      {
-        path: '',
-        component: UpperFoundationComponent,
-        data: { animationId: 'upper' },
-        children: [
-          {
-            path: 'auth',
-            loadChildren: () =>
-              import('./auth/auth.module').then((m) => m.AuthModule),
-          },
-          {
-            path: 'compose',
-            loadChildren: () =>
-              import('./compose/compose.module').then((m) => m.ComposeModule),
-          },
-          {
-            path: 'search',
-            loadChildren: () =>
-              import('./search/search.module').then((m) => m.SearchModule),
-          },
-        ],
+        loadChildren: () =>
+          import('./main/main.module').then((m) => m.MainModule),
       },
       {
         path: '**',

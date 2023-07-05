@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LayoutAnimationScopeRef } from '@layout-projection/angular';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 
-import { NavMenuItemName } from '@/app/core/nav-menu/nav-menu.component';
+import { SystemInbox } from '@/app/core/system-inbox.enum';
 
 import { Mail } from '../../data/mail.model';
 import { MailRepository } from '../../data/mail.repository';
@@ -48,7 +48,7 @@ export class MailCardListComponent implements OnInit {
 
       this.mails$ = this.mailRepo
         .query(
-          mailboxName === NavMenuItemName.Starred
+          mailboxName === SystemInbox.Starred
             ? (e) => e.isStarred
             : (e) => e.mailboxName === mailboxName,
         )

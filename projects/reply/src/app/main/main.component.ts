@@ -7,13 +7,16 @@ import {
   signal,
 } from '@angular/core';
 
-import { injectAnimationIdFactory, SharedAxisAnimation } from '../animations';
-import { BREAKPOINTS } from '../breakpoint.service';
+import {
+  injectAnimationIdFactory,
+  SharedAxisAnimation,
+} from '../core/animations';
+import { BREAKPOINTS } from '../core/breakpoint.service';
 
 @Component({
-  selector: 'rpl-foundation',
-  templateUrl: './foundation.component.html',
-  styleUrls: ['./foundation.component.scss'],
+  selector: 'rpl-main',
+  templateUrl: './main.component.html',
+  styleUrls: ['./main.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('content', [
@@ -33,7 +36,7 @@ import { BREAKPOINTS } from '../breakpoint.service';
     ]),
   ],
 })
-export class FoundationComponent {
+export class MainComponent {
   routeAnimationId = injectAnimationIdFactory();
   private breakpoints = inject(BREAKPOINTS);
 

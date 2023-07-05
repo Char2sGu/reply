@@ -7,7 +7,9 @@ import {
   OnInit,
 } from '@angular/core';
 
-import { NAVIGATION_CONTEXT } from '../navigation-context.token';
+import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
+import { SystemInbox } from '@/app/core/system-inbox.enum';
+
 @Component({
   selector: 'rpl-nav-menu',
   templateUrl: './nav-menu.component.html',
@@ -15,7 +17,7 @@ import { NAVIGATION_CONTEXT } from '../navigation-context.token';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavMenuComponent implements OnInit {
-  ItemName = NavMenuItemName;
+  SystemInbox = SystemInbox;
   navigationContext = inject(NAVIGATION_CONTEXT);
 
   @Input() @HostBinding('class.expanded') expanded = true;
@@ -32,13 +34,4 @@ export class NavMenuComponent implements OnInit {
   getMailboxUrl(name: string): string {
     return `/mailboxes/${name}/mails`;
   }
-}
-
-export enum NavMenuItemName {
-  Inbox = 'Inbox',
-  Starred = 'Starred',
-  Sent = 'Sent',
-  Trash = 'Trash',
-  Spam = 'Spam',
-  Drafts = 'Drafts',
 }
