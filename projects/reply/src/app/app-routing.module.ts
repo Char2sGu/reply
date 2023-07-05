@@ -2,7 +2,6 @@ import { inject, Injectable, NgModule } from '@angular/core';
 import {
   CanMatchFn,
   DefaultTitleStrategy,
-  PreloadAllModules,
   RouterModule,
   RouterStateSnapshot,
   Routes,
@@ -96,9 +95,7 @@ export class AppTitleStrategy extends DefaultTitleStrategy {
 }
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
-  ],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
   providers: [{ provide: TitleStrategy, useClass: AppTitleStrategy }],
 })
