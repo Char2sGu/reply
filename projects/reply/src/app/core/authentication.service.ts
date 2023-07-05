@@ -81,6 +81,24 @@ export class AuthenticationService {
     shareReplay(1),
   );
 
+  constructor() {
+    /* eslint-disable no-console */
+    if (!environment.production)
+      this.googleApis$.subscribe(() => {
+        if (localStorage['tokenResponse']) {
+          const parsed = JSON.parse(localStorage['tokenResponse']);
+          this.tokenResponse$.next(parsed);
+          gapi.client.setToken(parsed);
+          console.log('token response restored', parsed);
+        }
+        this.tokenResponse$.subscribe((r) => {
+          localStorage['tokenResponse'] = JSON.stringify(r);
+          console.log('token response saved', r);
+        });
+      });
+    /* eslint-enable no-console */
+  }
+
   requestAuthorization(): void {
     this.tokenClient$.pipe(first()).subscribe((client) => {
       client.requestAccessToken();
