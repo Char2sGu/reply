@@ -1,0 +1,12 @@
+<rpl-side-nav
+  *ngIf="navShouldRender()"
+  [class.expanded]="navExpanded()"
+  [class.on-grid]="navExpanded() === undefined"
+  [expanded]="navExpanded() ?? navShouldExpand()"
+  (expandedChange)="
+    navExpanded.set($event === navShouldExpand() ? undefined : $event)
+  "
+></rpl-side-nav>
+<div class="content" [@content]="routeAnimationId()">
+  <router-outlet></router-outlet>
+</div>

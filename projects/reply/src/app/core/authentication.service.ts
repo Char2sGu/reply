@@ -5,6 +5,7 @@ import {
   map,
   Observable,
   shareReplay,
+  startWith,
   Subject,
   switchMap,
 } from 'rxjs';
@@ -64,6 +65,11 @@ export class AuthenticationService {
     }),
     switchMap((c) => this.contactRepo.insertOrPatch(c)),
     shareReplay(1),
+  );
+
+  readonly authorized$: Observable<boolean> = this.user$.pipe(
+    map(() => true),
+    startWith(false),
   );
 
   requestAuthorization(): void {

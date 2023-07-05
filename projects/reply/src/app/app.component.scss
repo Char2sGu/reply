@@ -28,22 +28,3 @@
 
   overflow: hidden; // animations might cause overflow
 }
-
-rpl-side-nav {
-  grid-row: 1;
-  grid-column: margin-left / col-1;
-  :host-context(.laptop) & {
-    grid-column: margin-left / col-3;
-  }
-
-  &:not(.on-grid) {
-    width: 100px;
-    &.expanded {
-      width: 300px;
-    }
-  }
-}
-
-.wrapper {
-  display: contents;
-}

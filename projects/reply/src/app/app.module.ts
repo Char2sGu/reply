@@ -22,6 +22,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BaseFoundationComponent } from './core/base-foundation/base-foundation.component';
 import { BottomNavComponent } from './core/bottom-nav/bottom-nav.component';
+import { FoundationComponent } from './core/foundation/foundation.component';
 import { NavAvatarButtonComponent } from './core/nav-avatar-button/nav-avatar-button.component';
 import { NavBottomMenuComponent } from './core/nav-bottom-menu/nav-bottom-menu.component';
 import { NavFloatingActionButtonComponent } from './core/nav-floating-action-button/nav-floating-action-button.component';
@@ -29,6 +30,7 @@ import { NavLogoButtonComponent } from './core/nav-logo-button/nav-logo-button.c
 import { NavMenuComponent } from './core/nav-menu/nav-menu.component';
 import { SideNavComponent } from './core/side-nav/side-nav.component';
 import { UpperFoundationComponent } from './core/upper-foundation/upper-foundation.component';
+import { LogoComponent } from './shared/logo/logo.component';
 import { ReattachOnChangeDirective } from './shared/reattach-on-change.directive';
 import { SearchButtonComponent } from './shared/search-button/search-button.component';
 import { SettingsButtonComponent } from './shared/settings-button/settings-button.component';
@@ -49,6 +51,7 @@ import { SettingsButtonComponent } from './shared/settings-button/settings-butto
     NavBottomMenuComponent,
     BaseFoundationComponent,
     UpperFoundationComponent,
+    FoundationComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +74,7 @@ import { SettingsButtonComponent } from './shared/settings-button/settings-butto
     ReattachOnChangeDirective,
     SearchButtonComponent,
     SettingsButtonComponent,
+    LogoComponent,
   ],
   providers: [
     {
