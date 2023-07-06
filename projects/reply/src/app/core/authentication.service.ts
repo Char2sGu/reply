@@ -35,14 +35,6 @@ export class AuthenticationService {
   private zone = inject(NgZone);
   private applicationRef = inject(ApplicationRef);
 
-  private tokenUpdate$ = new Subject<
-    | {
-        type: 'obtain';
-        response: google.accounts.oauth2.TokenResponse;
-      }
-    | { type: 'revoke' }
-  >();
-
   private tokenClient$ = this.googleApis$.pipe(
     map((apis) =>
       apis.oauth2.initTokenClient({
@@ -50,23 +42,32 @@ export class AuthenticationService {
         scope: SCOPES.join(' '),
         callback: (response) => {
           this.zone.run(() =>
-            this.tokenUpdate$.next({ type: 'obtain', response }),
+            this.authorizationUpdate$.next({
+              type: 'obtain',
+              value: {
+                token: response['access_token'],
+                issuedAt: new Date(),
+                expiresIn: +response['expires_in'],
+              },
+            }),
           );
         },
       }),
     ),
   );
 
+  private authorizationUpdate$ = new Subject<
+    | {
+        type: 'obtain';
+        value: Authorization;
+      }
+    | { type: 'revoke' }
+  >();
+
   readonly authorization$: Observable<Authorization | null> =
-    this.tokenUpdate$.pipe(
+    this.authorizationUpdate$.pipe(
       map((update): Authorization | null =>
-        update.type === 'obtain'
-          ? {
-              token: update.response['access_token'],
-              issuedAt: new Date(),
-              expiresIn: +update.response['expires_in'],
-            }
-          : null,
+        update.type === 'obtain' ? update.value : null,
       ),
       startWith(null),
       shareReplay(1),
@@ -105,19 +106,22 @@ export class AuthenticationService {
 
   constructor() {
     /* eslint-disable no-console */
-    if (!environment.production)
+    if (!environment.production) {
       this.googleApis$.subscribe(() => {
-        if (localStorage['tokenResponse']) {
-          const parsed = JSON.parse(localStorage['tokenResponse']);
-          this.tokenUpdate$.next(parsed);
-          gapi.client.setToken(parsed);
-          console.log('token response restored', parsed);
+        if (localStorage['authorization']) {
+          const auth = JSON.parse(
+            localStorage['authorization'],
+          ) as Authorization;
+          this.authorizationUpdate$.next({ type: 'obtain', value: auth });
+          gapi.client.setToken({ ['access_token']: auth.token });
+          console.log('authorization restored', auth);
         }
-        this.tokenUpdate$.subscribe((r) => {
-          localStorage['tokenResponse'] = JSON.stringify(r);
-          console.log('token response saved', r);
-        });
       });
+      this.authorization$.pipe(filter(Boolean)).subscribe((r) => {
+        localStorage['authorization'] = JSON.stringify(r);
+        console.log('authorization saved', r);
+      });
+    }
     /* eslint-enable no-console */
   }
 
@@ -133,7 +137,7 @@ export class AuthenticationService {
       .subscribe(([apis, auth]) => {
         if (!auth) throw new UnauthorizedException();
         apis.oauth2.revoke(auth.token, () => {
-          this.tokenUpdate$.next({ type: 'revoke' });
+          this.authorizationUpdate$.next({ type: 'revoke' });
         });
       });
   }

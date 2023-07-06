@@ -28,3 +28,9 @@
 
   overflow: hidden; // animations might cause overflow
 }
+
+.launch-screen {
+  grid-row: 1;
+  grid-column: margin-left / margin-right;
+  z-index: 1000;
+}
