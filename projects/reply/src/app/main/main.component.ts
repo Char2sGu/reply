@@ -23,14 +23,14 @@ import { BREAKPOINTS } from '../core/breakpoint.service';
       transition(':enter, :leave, * <=> none', []),
       transition('base => upper', [
         SharedAxisAnimation.apply('z', 'forward', {
-          incoming: ':enter [data-route-animation="root"]',
-          outgoing: ':leave [data-route-animation="root"]',
+          incoming: ':enter [data-route-animation-target]',
+          outgoing: ':leave [data-route-animation-target]',
         }),
       ]),
       transition('upper => base', [
         SharedAxisAnimation.apply('z', 'backward', {
-          incoming: ':enter [data-route-animation="root"]',
-          outgoing: ':leave [data-route-animation="root"]',
+          incoming: ':enter [data-route-animation-target]',
+          outgoing: ':leave [data-route-animation-target]',
         }),
       ]),
     ]),

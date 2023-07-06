@@ -33,7 +33,6 @@
   align-items: stretch;
   gap: 16px;
   padding: 24px 24px 36px;
-  background-color: map.get(theming.$theme, 'color', 'primary', 'default');
   color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
 }
 

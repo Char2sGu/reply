@@ -22,6 +22,7 @@ const routes: Routes = [
     children: [
       {
         path: 'auth',
+        data: { animationId: 'auth' },
         loadChildren: () =>
           import('./auth/auth.module').then((m) => m.AuthModule),
       },
@@ -42,6 +43,7 @@ const routes: Routes = [
       },
       {
         path: '',
+        data: { animationId: 'main' },
         loadChildren: () =>
           import('./main/main.module').then((m) => m.MainModule),
       },

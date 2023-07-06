@@ -1,5 +1,6 @@
 <rpl-side-nav
   *ngIf="navShouldRender()"
+  data-route-animation-target
   [class.expanded]="navExpanded()"
   [class.on-grid]="navExpanded() === undefined"
   [expanded]="navExpanded() ?? navShouldExpand()"

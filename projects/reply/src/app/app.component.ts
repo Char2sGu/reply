@@ -16,6 +16,10 @@ import {
   timer,
 } from 'rxjs';
 
+import {
+  injectAnimationIdFactory,
+  SharedAxisAnimation,
+} from './core/animations';
 import { AuthenticationService } from './core/authentication.service';
 import { BreakpointMap, BREAKPOINTS } from './core/breakpoint.service';
 import { GOOGLE_APIS } from './core/google-apis.token';
@@ -26,6 +30,15 @@ import { GOOGLE_APIS } from './core/google-apis.token';
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
+    trigger('routes', [
+      transition(
+        'auth => main',
+        SharedAxisAnimation.apply('z', 'forward', {
+          incoming: ':enter [data-route-animation-target]',
+          outgoing: ':leave [data-route-animation-target]',
+        }),
+      ),
+    ]),
     trigger('launchScreen', [
       transition(':leave', [
         animate(
@@ -35,8 +48,12 @@ import { GOOGLE_APIS } from './core/google-apis.token';
       ]),
     ]),
   ],
+  host: {
+    ['[@routes]']: 'animationId()',
+  },
 })
 export class AppComponent {
+  animationId = injectAnimationIdFactory();
   private breakpoints = inject(BREAKPOINTS);
   private router = inject(Router);
   private authService = inject(AuthenticationService);
