@@ -3,8 +3,16 @@
 /// <reference types="gapi.people" />
 /// <reference types="google.accounts" />
 
-import { inject, InjectionToken } from '@angular/core';
-import { combineLatest, concatMap, map, Observable, shareReplay } from 'rxjs';
+import { ApplicationRef, inject, InjectionToken } from '@angular/core';
+import {
+  combineLatest,
+  concatMap,
+  map,
+  Observable,
+  shareReplay,
+  tap,
+  timer,
+} from 'rxjs';
 
 import { ScriptLoader } from './script-loader.service';
 
@@ -20,6 +28,7 @@ export const GOOGLE_APIS = new InjectionToken<Observable<GoogleApis>>(
     providedIn: 'root',
     factory: () => {
       const scriptLoader = inject(ScriptLoader);
+      const applicationRef = inject(ApplicationRef);
       return combineLatest([
         scriptLoader.load('https://apis.google.com/js/api.js').pipe(
           concatMap(
@@ -41,6 +50,7 @@ export const GOOGLE_APIS = new InjectionToken<Observable<GoogleApis>>(
           people: gapi.client.people,
           oauth2: google.accounts.oauth2,
         })),
+        tap(() => timer(0).subscribe(() => applicationRef.tick())),
         shareReplay(1),
       );
     },
