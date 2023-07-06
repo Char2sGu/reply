@@ -2,7 +2,7 @@ import 'hammerjs';
 
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, inject, NgModule } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import {
   BrowserModule,
@@ -47,21 +47,21 @@ import { LogoComponent } from './shared/logo/logo.component';
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory:
-        (iconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) => () => {
+      useFactory: () => {
+        const iconRegistry = inject(MatIconRegistry);
+        const domSanitizer = inject(DomSanitizer);
+        const trusted = (v: string): SafeValue =>
+          domSanitizer.bypassSecurityTrustResourceUrl(v);
+        return () => {
           iconRegistry.setDefaultFontSetClass();
           iconRegistry.registerFontClassAlias(
             'filled',
             'material-icons mat-ligature-font',
           );
-
-          const trusted = (v: string): SafeValue =>
-            domSanitizer.bypassSecurityTrustResourceUrl(v);
-
           iconRegistry.addSvgIcon('logo', trusted('assets/logo.svg'));
           iconRegistry.addSvgIconSet(trusted('assets/icons.svg'));
-        },
-      deps: [MatIconRegistry, DomSanitizer],
+        };
+      },
       multi: true,
     },
   ],
