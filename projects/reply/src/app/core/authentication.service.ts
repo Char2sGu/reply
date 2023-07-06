@@ -17,7 +17,7 @@ import { environment } from '@/environments/environment';
 
 import { Contact } from '../data/contact.model';
 import { ContactRepository } from '../data/contact.repository';
-import { ResponseNotValidException } from './exceptions';
+import { InvalidResponseException, UnauthorizedException } from './exceptions';
 import { GOOGLE_APIS } from './google-apis.token';
 
 const SCOPES = [
@@ -35,23 +35,45 @@ export class AuthenticationService {
   private zone = inject(NgZone);
   private applicationRef = inject(ApplicationRef);
 
-  private tokenResponse$ = new Subject<google.accounts.oauth2.TokenResponse>();
+  private tokenUpdate$ = new Subject<
+    | {
+        type: 'obtain';
+        response: google.accounts.oauth2.TokenResponse;
+      }
+    | { type: 'revoke' }
+  >();
+
   private tokenClient$ = this.googleApis$.pipe(
     map((apis) =>
       apis.oauth2.initTokenClient({
         ['client_id']: environment.googleClientId,
         scope: SCOPES.join(' '),
-        callback: (r) => {
-          this.zone.run(() => this.tokenResponse$.next(r));
+        callback: (response) => {
+          this.zone.run(() =>
+            this.tokenUpdate$.next({ type: 'obtain', response }),
+          );
         },
       }),
     ),
   );
 
-  readonly authorized$: Observable<boolean> = this.tokenResponse$.pipe(
-    map(() => true),
-    startWith(false),
-    shareReplay(1),
+  readonly authorization$: Observable<Authorization | null> =
+    this.tokenUpdate$.pipe(
+      map((update): Authorization | null =>
+        update.type === 'obtain'
+          ? {
+              token: update.response['access_token'],
+              issuedAt: new Date(),
+              expiresIn: +update.response['expires_in'],
+            }
+          : null,
+      ),
+      startWith(null),
+      shareReplay(1),
+    );
+
+  readonly authorized$: Observable<boolean> = this.authorization$.pipe(
+    map((auth) => !!auth),
   );
 
   readonly user$: Observable<Contact> = combineLatest([
@@ -69,7 +91,7 @@ export class AuthenticationService {
       const { resourceName, photos, emailAddresses } = response.result;
       const photo = photos?.find((p) => p.metadata?.primary);
       const email = emailAddresses?.find((e) => e.metadata?.primary);
-      if (!email || !photo) throw new ResponseNotValidException();
+      if (!email || !photo) throw new InvalidResponseException();
       return {
         id: resourceName,
         name: email.displayName,
@@ -87,11 +109,11 @@ export class AuthenticationService {
       this.googleApis$.subscribe(() => {
         if (localStorage['tokenResponse']) {
           const parsed = JSON.parse(localStorage['tokenResponse']);
-          this.tokenResponse$.next(parsed);
+          this.tokenUpdate$.next(parsed);
           gapi.client.setToken(parsed);
           console.log('token response restored', parsed);
         }
-        this.tokenResponse$.subscribe((r) => {
+        this.tokenUpdate$.subscribe((r) => {
           localStorage['tokenResponse'] = JSON.stringify(r);
           console.log('token response saved', r);
         });
@@ -104,4 +126,21 @@ export class AuthenticationService {
       client.requestAccessToken();
     });
   }
+
+  revokeAuthorization(): void {
+    combineLatest([this.googleApis$, this.authorization$])
+      .pipe(first())
+      .subscribe(([apis, auth]) => {
+        if (!auth) throw new UnauthorizedException();
+        apis.oauth2.revoke(auth.token, () => {
+          this.tokenUpdate$.next({ type: 'revoke' });
+        });
+      });
+  }
+}
+
+export interface Authorization {
+  token: string;
+  issuedAt: Date;
+  expiresIn: number;
 }
