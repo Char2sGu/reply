@@ -1,4 +1,5 @@
 import { inject, Injectable, NgZone } from '@angular/core';
+import dayjs from 'dayjs/esm';
 import {
   combineLatest,
   filter,
@@ -9,6 +10,8 @@ import {
   startWith,
   Subject,
   switchMap,
+  takeUntil,
+  timer,
 } from 'rxjs';
 
 import { environment } from '@/environments/environment';
@@ -39,13 +42,10 @@ export class AuthenticationService {
         scope: SCOPES.join(' '),
         callback: (response) => {
           this.zone.run(() =>
-            this.authorizationUpdate$.next({
-              type: 'obtain',
-              value: {
-                token: response['access_token'],
-                issuedAt: new Date(),
-                expiresIn: +response['expires_in'],
-              },
+            this.setAuthorization({
+              token: response['access_token'],
+              issuedAt: new Date(),
+              expiresIn: +response['expires_in'],
             }),
           );
         },
@@ -58,6 +58,7 @@ export class AuthenticationService {
         type: 'obtain';
         value: Authorization;
       }
+    | { type: 'expire' }
     | { type: 'revoke' }
   >();
 
@@ -100,25 +101,23 @@ export class AuthenticationService {
     shareReplay(1),
   );
 
-  constructor() {
-    /* eslint-disable no-console */
-    if (!environment.production) {
-      this.googleApis$.subscribe(() => {
-        if (localStorage['authorization']) {
-          const auth = JSON.parse(
-            localStorage['authorization'],
-          ) as Authorization;
-          this.authorizationUpdate$.next({ type: 'obtain', value: auth });
-          gapi.client.setToken({ ['access_token']: auth.token });
-          console.log('authorization restored', auth);
-        }
+  setAuthorization(auth: Authorization): boolean {
+    const issueDate = dayjs(auth.issuedAt);
+    const expireDate = issueDate.add(auth.expiresIn, 'seconds');
+    const isAboutToExpire = () => dayjs().add(1, 'minute').isAfter(expireDate);
+
+    if (isAboutToExpire()) return false;
+
+    this.authorizationUpdate$.next({ type: 'obtain', value: auth });
+    timer(0, 30 * 1000)
+      .pipe(
+        takeUntil(this.authorizationUpdate$),
+        filter(() => isAboutToExpire()),
+      )
+      .subscribe(() => {
+        this.authorizationUpdate$.next({ type: 'expire' });
       });
-      this.authorization$.pipe(filter(Boolean)).subscribe((r) => {
-        localStorage['authorization'] = JSON.stringify(r);
-        console.log('authorization saved', r);
-      });
-    }
-    /* eslint-enable no-console */
+    return true;
   }
 
   requestAuthorization(): void {

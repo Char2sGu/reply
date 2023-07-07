@@ -18,14 +18,20 @@ import { Router } from '@angular/router';
 import {
   bufferCount,
   distinctUntilChanged,
+  filter,
   map,
   merge,
   startWith,
   timer,
 } from 'rxjs';
 
+import { environment } from '@/environments/environment';
+
 import { injectAnimationIdFactory } from './core/animations';
-import { AuthenticationService } from './core/authentication.service';
+import {
+  AuthenticationService,
+  Authorization,
+} from './core/authentication.service';
 import { BreakpointMap, BREAKPOINTS } from './core/breakpoint.service';
 import { GOOGLE_APIS } from './core/google-apis.token';
 
@@ -87,5 +93,24 @@ export class AppComponent {
     this.authService.authorized$.pipe(distinctUntilChanged()).subscribe(() => {
       this.router.navigateByUrl('/');
     });
+
+    /* eslint-disable no-console */
+    if (!environment.production) {
+      this.googleApis$.subscribe(() => {
+        if (localStorage['authorization']) {
+          const auth = JSON.parse(
+            localStorage['authorization'],
+          ) as Authorization;
+          this.authService.setAuthorization(auth);
+          gapi.client.setToken({ ['access_token']: auth.token });
+          console.log('authorization restored', auth);
+        }
+      });
+      this.authService.authorization$.pipe(filter(Boolean)).subscribe((r) => {
+        localStorage['authorization'] = JSON.stringify(r);
+        console.log('authorization saved', r);
+      });
+    }
+    /* eslint-enable no-console */
   }
 }
