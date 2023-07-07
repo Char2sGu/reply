@@ -33,9 +33,7 @@ const SCOPES = [
   'https://www.googleapis.com/auth/userinfo.email',
 ] as const;
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class GoogleAuthenticationService implements AuthenticationService {
   private contactRepo = inject(ContactRepository);
   private apis$ = inject(GOOGLE_APIS);

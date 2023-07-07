@@ -23,15 +23,21 @@ import { GOOGLE_CLIENT_ID } from './google-client-id.token';
   ],
 })
 export class GoogleBackendModule {
-  static configure(clientId: string): ModuleWithProviders<GoogleBackendModule> {
+  static configure(
+    config: GoogleBackendConfig,
+  ): ModuleWithProviders<GoogleBackendModule> {
     return {
       ngModule: GoogleBackendModule,
       providers: [
         {
           provide: GOOGLE_CLIENT_ID,
-          useValue: clientId,
+          useValue: config.clientId,
         },
       ],
     };
   }
+}
+
+export interface GoogleBackendConfig {
+  clientId: string;
 }

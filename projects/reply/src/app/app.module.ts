@@ -20,7 +20,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { INITIALIZER, Initializer } from './core/initialization';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
-import { GoogleBackendModule } from './google-backend/google-backend.module';
 import { LogoComponent } from './shared/logo/logo.component';
 
 // TODO: attachment
@@ -42,7 +41,7 @@ import { LogoComponent } from './shared/logo/logo.component';
     HttpClientModule,
     LayoutProjectionModule.forRoot(),
     ScrollingModule.forRoot(),
-    GoogleBackendModule.configure(environment.backend.split(':')[1]),
+    environment.backend,
     AppRoutingModule,
     LogoComponent,
   ],

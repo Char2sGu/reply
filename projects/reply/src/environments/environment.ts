@@ -2,10 +2,11 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { DemoBackendModule } from '@/app/demo-backend/demo-backend.module';
+
 export const environment = {
   production: false,
-  // backend: 'google:<client_id>'
-  backend: '',
+  backend: DemoBackendModule,
 };
 
 /*

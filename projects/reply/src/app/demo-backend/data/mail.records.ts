@@ -1,6 +1,6 @@
 import dayjs from 'dayjs/esm';
 
-import { Mail } from './mail.model';
+import { Mail } from '../../data/mail.model';
 
 export const MAILS: readonly Mail[] = [
   {
