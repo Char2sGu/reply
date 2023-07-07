@@ -45,7 +45,7 @@ export class NavFloatingActionButtonComponent {
     // TODO: find out why and try to remove this effect
     effect(() => {
       this.layoutContext();
-      this.changeDetector.markForCheck();
+      this.changeDetector.detectChanges();
     });
   }
 }

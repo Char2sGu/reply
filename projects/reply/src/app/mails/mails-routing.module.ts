@@ -1,27 +1,27 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, UrlMatcher, UrlSegment } from '@angular/router';
 
-import { MailDetailLayoutComponent } from './mail-detail-layout/mail-detail-layout.component';
-import { MailListLayoutComponent } from './mail-list-layout/mail-list-layout.component';
 import { MailsComponent } from './mails.component';
 
 const routes: Routes = [
   {
-    path: '',
+    matcher: (segments): ReturnType<UrlMatcher> => {
+      if (segments.length === 0)
+        return {
+          consumed: segments,
+          posParams: {},
+        };
+      if (segments.length === 1)
+        return {
+          consumed: segments,
+          posParams: {
+            ['mailId']: new UrlSegment(segments[0].path, {}),
+          },
+        };
+      return null;
+    },
     component: MailsComponent,
     title: (route) => route.params['mailboxName'],
-    children: [
-      {
-        path: '',
-        component: MailListLayoutComponent,
-        data: { animationId: 'list' },
-      },
-      {
-        path: ':mailId',
-        component: MailDetailLayoutComponent,
-        data: { animationId: 'detail' },
-      },
-    ],
   },
 ];
 

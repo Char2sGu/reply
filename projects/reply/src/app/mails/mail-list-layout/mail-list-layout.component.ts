@@ -29,9 +29,6 @@ import { MailRepository } from '@/app/data/mail.repository';
 import { ContentComponent } from '@/app/shared/content/content.component';
 
 import { MailListRefreshEvent } from '../core/mail-list-refresh.event';
-import { MailsComponent } from '../mails.component';
-
-let scrollTop = 0;
 
 const mailCardsAnimation = animation([
   query(
@@ -78,7 +75,6 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
   breakpoints = inject(BREAKPOINTS);
   navigationContext = inject(NAVIGATION_CONTEXT);
   private route = inject(ActivatedRoute);
-  private mailsComponent = inject(MailsComponent);
   private mailRepo = inject(MailRepository);
   private refresh$ = inject(MailListRefreshEvent);
 
@@ -104,13 +100,7 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
 
-  async ngAfterViewInit(): Promise<void> {
-    this.content.fakeScroll(scrollTop);
-    await this.mailsComponent.animateLayout(250);
-    this.content.setScrollTop(scrollTop);
-  }
+  async ngAfterViewInit(): Promise<void> {}
 
-  ngOnDestroy(): void {
-    scrollTop = this.content.getScrollTop();
-  }
+  ngOnDestroy(): void {}
 }

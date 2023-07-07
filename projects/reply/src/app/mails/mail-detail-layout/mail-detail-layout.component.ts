@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, Observable, switchMap, tap } from 'rxjs';
+import { filter, map, Observable, switchMap, tap } from 'rxjs';
 
 import { AuthenticationService } from '@/app/core/authentication.service';
 import { LAYOUT_CONTEXT } from '@/app/core/layout-context.token';
@@ -15,7 +15,7 @@ import { ContactRepository } from '@/app/data/contact.repository';
 import { Mail } from '@/app/data/mail.model';
 import { MailRepository } from '@/app/data/mail.repository';
 
-import { MailsComponent } from '../mails.component';
+import { MailsLayoutAnimationService } from '../mails.component';
 
 @Component({
   selector: 'rpl-mail-detail-layout',
@@ -28,11 +28,12 @@ export class MailDetailLayoutComponent implements AfterViewInit {
   mailRepo = inject(MailRepository);
   contactRepo = inject(ContactRepository);
   private route = inject(ActivatedRoute);
-  private mailsComponent = inject(MailsComponent);
   private layoutContext = inject(LAYOUT_CONTEXT);
+  private layoutAnimationService = inject(MailsLayoutAnimationService);
 
   mail$: Observable<Mail> = this.route.params.pipe(
     map((p): string => p['mailId']),
+    filter(Boolean),
     switchMap((id) => this.mailRepo.retrieve(id)),
     tap((mail) => {
       if (mail.isRead) return;
@@ -49,7 +50,7 @@ export class MailDetailLayoutComponent implements AfterViewInit {
   private navBottomActionsBackup = this.layoutContext().navBottomActions;
 
   ngAfterViewInit(): void {
-    this.mailsComponent.animateLayout(300);
+    this.layoutAnimationService.animateLayout(300);
     this.layoutContext.mutate((c) => {
       c.navFabConfig = {
         text: 'Reply',
@@ -62,6 +63,7 @@ export class MailDetailLayoutComponent implements AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    this.layoutAnimationService.animateLayout(300);
     this.layoutContext.mutate((c) => {
       c.navFabConfig = this.navFabConfigBackup;
       c.navBottomActions = this.navBottomActionsBackup;

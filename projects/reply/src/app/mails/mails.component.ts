@@ -1,4 +1,3 @@
-import { animate, query, transition, trigger } from '@angular/animations';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -10,41 +9,61 @@ import {
   ViewChild,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
-import { NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { ProjectionNodeDirective } from '@layout-projection/angular';
 import {
   LayoutAnimator,
   ProjectionNode,
   ProjectionNodeSnapper,
   ProjectionNodeSnapshotMap,
 } from '@layout-projection/core';
-import { filter, takeUntil } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs';
 
-import { injectAnimationIdFactory } from '../core/animations';
+export class MailsLayoutAnimationService {
+  private layoutAnimator = inject(LayoutAnimator);
+  private root = inject(ProjectionNode);
+  private snapshots = new ProjectionNodeSnapshotMap();
 
-// TODO: merge the two layouts into this component
+  storeSnapshots(snapshots: ProjectionNodeSnapshotMap): void {
+    this.snapshots.merge(snapshots);
+  }
+
+  async animateLayout(duration: number): Promise<void> {
+    await this.layoutAnimator.animate({
+      root: this.root,
+      from: this.snapshots,
+      duration,
+      easing: AnimationCurves.STANDARD_CURVE,
+      estimation: true,
+    });
+    this.snapshots.clear();
+  }
+}
 
 @Component({
   selector: 'rpl-mails',
   templateUrl: './mails.component.html',
   styleUrls: ['./mails.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('route', [
-      transition('list => detail', [query(':leave', [animate(500)])]), // preserve leaving element
-      transition('detail => list', [query(':enter', [animate(1)])]), // block child :enter animation
-    ]),
-  ],
+  providers: [MailsLayoutAnimationService],
+  hostDirectives: [ProjectionNodeDirective],
 })
 export class MailsComponent implements OnInit, AfterViewInit, OnDestroy {
-  routeAnimationId = injectAnimationIdFactory();
   private router = inject(Router);
-  private layoutAnimator = inject(LayoutAnimator);
+  private route = inject(ActivatedRoute);
   private layoutSnapper = inject(ProjectionNodeSnapper);
+  private layoutAnimationService = inject(MailsLayoutAnimationService);
 
-  @ViewChild(ProjectionNode) private layoutAnimationRoot!: ProjectionNode;
-  private layoutAnimationSnapshots = new ProjectionNodeSnapshotMap();
+  detailed$ = this.route.params.pipe(map((params) => !!params['mailId']));
+
+  @ViewChild('listLayoutNode') private listLayoutNode!: ProjectionNode;
+  @ViewChild('detailLayoutNode') private detailLayoutNode?: ProjectionNode;
 
   private destroy$ = new EventEmitter();
+
+  constructor() {
+    inject(ProjectionNode, { self: true }).identifyAs('mails');
+  }
 
   ngOnInit(): void {}
 
@@ -55,28 +74,15 @@ export class MailsComponent implements OnInit, AfterViewInit, OnDestroy {
         filter((event) => event instanceof NavigationStart),
       )
       .subscribe(() => {
-        this.layoutAnimationSnapshots.merge(
-          this.layoutSnapper.snapshotTree(
-            this.layoutAnimationRoot, //
-            { measure: true },
-          ),
+        const snapshots = this.layoutSnapper.snapshotTree(
+          this.detailLayoutNode ?? this.listLayoutNode, //
+          { measure: true },
         );
+        this.layoutAnimationService.storeSnapshots(snapshots);
       });
   }
 
   ngOnDestroy(): void {
     this.destroy$.emit();
-  }
-
-  async animateLayout(duration: number): Promise<void> {
-    if (!this.layoutAnimationRoot) return; // This method might be called before view init.
-    await this.layoutAnimator.animate({
-      root: this.layoutAnimationRoot,
-      from: this.layoutAnimationSnapshots,
-      duration,
-      easing: AnimationCurves.STANDARD_CURVE,
-      estimation: true,
-    });
-    this.layoutAnimationSnapshots.clear();
   }
 }
