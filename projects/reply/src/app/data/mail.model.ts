@@ -6,6 +6,7 @@ export interface Mail {
   sender: Contact['id'];
   recipients: Contact['id'][];
   sentAt: Date;
+  snippet: string;
   content: string;
   isStarred: boolean;
   isRead: boolean;

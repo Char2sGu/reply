@@ -8,9 +8,9 @@ import {
   Authorization,
 } from '../core/authentication.service';
 import { INITIALIZER, Initializer } from '../core/initialization';
-import { GOOGLE_APIS } from './google-apis.token';
+import { GOOGLE_APIS } from './core/google-apis.token';
+import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';
 import { GoogleAuthenticationService } from './google-authentication.service';
-import { GOOGLE_CLIENT_ID } from './google-client-id.token';
 
 @NgModule({
   providers: [

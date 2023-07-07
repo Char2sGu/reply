@@ -24,8 +24,8 @@ import {
 } from '../core/exceptions';
 import { Contact } from '../data/contact.model';
 import { ContactRepository } from '../data/contact.repository';
-import { GOOGLE_APIS } from './google-apis.token';
-import { GOOGLE_CLIENT_ID } from './google-client-id.token';
+import { GOOGLE_APIS } from './core/google-apis.token';
+import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';
 
 const SCOPES = [
   'https://mail.google.com/',

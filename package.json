@@ -30,6 +30,7 @@
     "@layout-projection/core": "^0.14.0",
     "dayjs": "^1.11.6",
     "hammerjs": "^2.0.8",
+    "js-base64": "^3.7.5",
     "rxjs": "^7.8.1",
     "timeago.js": "^4.0.2",
     "tslib": "^2.3.0",
