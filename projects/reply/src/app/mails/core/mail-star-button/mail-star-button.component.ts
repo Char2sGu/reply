@@ -2,17 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  inject,
   Input,
-  OnInit,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, filter, tap } from 'rxjs';
-
-import { SystemInbox } from '@/app/core/system-inbox.enum';
 
 import { Mail } from '../../../data/mail.model';
 import { MailRepository } from '../../../data/mail.repository';
-import { MailListRefreshEvent } from '../mail-list-refresh.event';
 
 @Component({
   selector: 'rpl-mail-star-button',
@@ -20,19 +16,15 @@ import { MailListRefreshEvent } from '../mail-list-refresh.event';
   styleUrls: ['./mail-star-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MailStarButtonComponent implements OnInit {
+export class MailStarButtonComponent {
+  private mailRepo = inject(MailRepository);
+
   @Input() mail!: Mail;
 
   click$ = new EventEmitter();
   busy$ = new BehaviorSubject(false);
 
-  constructor(
-    private route: ActivatedRoute,
-    private mailRepo: MailRepository,
-    private listRefresh$: MailListRefreshEvent,
-  ) {}
-
-  ngOnInit(): void {
+  constructor() {
     this.click$
       .pipe(
         filter(() => !this.busy$.value),
@@ -41,8 +33,6 @@ export class MailStarButtonComponent implements OnInit {
           if (this.mail.isStarred)
             this.mailRepo.patch(this.mail.id, { isStarred: false });
           else this.mailRepo.patch(this.mail.id, { isStarred: true });
-          if (this.route.snapshot.params['mailboxName'] === SystemInbox.Starred)
-            this.listRefresh$.emit();
         }),
         tap(() => this.busy$.next(false)),
       )

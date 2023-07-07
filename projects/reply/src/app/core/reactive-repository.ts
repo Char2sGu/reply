@@ -3,6 +3,7 @@ import {
   filter,
   map,
   Observable,
+  shareReplay,
   startWith,
   Subject,
   tap,
@@ -30,8 +31,8 @@ export abstract class ReactiveRepository<Entity> {
 
     return this.updates$.pipe(
       tap((update) => {
-        if (update.curr === null) results.delete(update.id);
-        else if (condition(update.curr)) results.add(update.id);
+        if (update.curr && condition(update.curr)) results.add(update.id);
+        else results.delete(update.id);
       }),
       startWith(null),
       map(() =>
@@ -41,6 +42,7 @@ export abstract class ReactiveRepository<Entity> {
           return entity.value;
         }),
       ),
+      shareReplay(1),
     );
   }
 

@@ -12,15 +12,13 @@ import {
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, map, startWith, switchMap } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
 import { SystemInbox } from '@/app/core/system-inbox.enum';
 import { MailRepository } from '@/app/data/mail.repository';
-
-import { MailListRefreshEvent } from '../core/mail-list-refresh.event';
 
 const mailCardsAnimation = animation([
   query(
@@ -68,14 +66,11 @@ export class MailListLayoutComponent {
   navigationContext = inject(NAVIGATION_CONTEXT);
   private route = inject(ActivatedRoute);
   private mailRepo = inject(MailRepository);
-  private refresh$ = inject(MailListRefreshEvent);
 
   mailboxName$ = this.route.params.pipe(map((params) => params['mailboxName']));
-  mails$ = combineLatest([
-    this.mailboxName$,
-    this.refresh$.pipe(startWith(null)),
-  ]).pipe(
-    switchMap(([mailboxName]) =>
+
+  mails$ = this.mailboxName$.pipe(
+    switchMap((mailboxName) =>
       this.mailRepo.query(
         mailboxName === SystemInbox.Starred
           ? (e) => e.isStarred
