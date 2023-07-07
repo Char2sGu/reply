@@ -1,4 +1,5 @@
 @use 'sass:map' as map;
+@use 'sass:color' as color;
 @use '@angular/material' as mat;
 @use 'styles/theming' as theming;
 
@@ -55,16 +56,22 @@
   a {
     text-decoration: underline;
   }
-  mat-checkbox {
-    ::ng-deep {
-      .mat-checkbox-frame {
-        border-color: map.get(
-          theming.$theme,
-          'color',
-          'primary',
-          'default-contrast'
-        );
-      }
+  mat-checkbox:not(.mat-checkbox-disabled) ::ng-deep {
+    .mat-checkbox-frame {
+      border-color: map.get(
+        theming.$theme,
+        'color',
+        'primary',
+        'default-contrast'
+      );
+    }
+  }
+  mat-checkbox.mat-checkbox-disabled ::ng-deep {
+    .mat-checkbox-label {
+      color: color.change(
+        map.get(theming.$theme, 'color', 'primary', 'default-contrast'),
+        $alpha: map.get(theming.$theme, 'opacity', 'text', 'disabled')
+      );
     }
   }
 }
