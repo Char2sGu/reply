@@ -5,8 +5,8 @@ import {
   EventEmitter,
   inject,
   OnDestroy,
-  OnInit,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
@@ -17,55 +17,54 @@ import {
   ProjectionNodeSnapper,
   ProjectionNodeSnapshotMap,
 } from '@layout-projection/core';
-import { filter, map, takeUntil } from 'rxjs';
+import {
+  animationFrames,
+  filter,
+  firstValueFrom,
+  map,
+  of,
+  pairwise,
+  shareReplay,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 
-export class MailsLayoutAnimationService {
-  private layoutAnimator = inject(LayoutAnimator);
-  private root = inject(ProjectionNode);
-  private snapshots = new ProjectionNodeSnapshotMap();
-
-  storeSnapshots(snapshots: ProjectionNodeSnapshotMap): void {
-    this.snapshots.merge(snapshots);
-  }
-
-  async animateLayout(duration: number): Promise<void> {
-    await this.layoutAnimator.animate({
-      root: this.root,
-      from: this.snapshots,
-      duration,
-      easing: AnimationCurves.STANDARD_CURVE,
-      estimation: true,
-    });
-    this.snapshots.clear();
-  }
-}
+import { Mail } from '../data/mail.model';
+import { MailRepository } from '../data/mail.repository';
+import { MailCardAnimationPresenceComponent } from './core/mail-card-animation-presence/mail-card-animation-presence.component';
 
 @Component({
   selector: 'rpl-mails',
   templateUrl: './mails.component.html',
   styleUrls: ['./mails.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [MailsLayoutAnimationService],
   hostDirectives: [ProjectionNodeDirective],
 })
-export class MailsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class MailsComponent implements AfterViewInit, OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private mailRepo = inject(MailRepository);
+  private hostNode = inject(ProjectionNode);
   private layoutSnapper = inject(ProjectionNodeSnapper);
-  private layoutAnimationService = inject(MailsLayoutAnimationService);
+  private layoutAnimator = inject(LayoutAnimator);
+  private viewContainer = inject(ViewContainerRef);
 
-  detailed$ = this.route.params.pipe(map((params) => !!params['mailId']));
+  mailId$ = this.route.params.pipe(map((params) => params['mailId']));
+  mail$ = this.mailId$.pipe(
+    switchMap((id) => (id ? this.mailRepo.retrieve(id) : of(null))),
+    shareReplay(1),
+  );
 
   @ViewChild('listLayoutNode') private listLayoutNode!: ProjectionNode;
+  private listLayoutSnapshots = new ProjectionNodeSnapshotMap();
   @ViewChild('detailLayoutNode') private detailLayoutNode?: ProjectionNode;
+  private detailLayoutSnapshots = new ProjectionNodeSnapshotMap();
 
   private destroy$ = new EventEmitter();
 
   constructor() {
     inject(ProjectionNode, { self: true }).identifyAs('mails');
   }
-
-  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.router.events
@@ -74,15 +73,88 @@ export class MailsComponent implements OnInit, AfterViewInit, OnDestroy {
         filter((event) => event instanceof NavigationStart),
       )
       .subscribe(() => {
-        const snapshots = this.layoutSnapper.snapshotTree(
-          this.detailLayoutNode ?? this.listLayoutNode, //
-          { measure: true },
-        );
-        this.layoutAnimationService.storeSnapshots(snapshots);
+        this.updateSnapshots();
+      });
+
+    this.mail$
+      .pipe(
+        pairwise(),
+        filter(([prev, curr]) => !prev && !!curr),
+      )
+      .subscribe(() => {
+        this.initiateListToDetailLayoutAnimation();
+      });
+
+    this.mail$
+      .pipe(
+        pairwise(),
+        filter(([prev, curr]) => !!prev && !curr),
+        map(([mail]) => mail as Mail),
+      )
+      .subscribe((mail) => {
+        this.initiateDetailToListLayoutAnimation(mail);
       });
   }
 
   ngOnDestroy(): void {
     this.destroy$.emit();
+  }
+
+  updateSnapshots(): void {
+    this.listLayoutSnapshots = this.layoutSnapper.snapshotTree(
+      this.listLayoutNode, //
+      { measure: true },
+    );
+    if (this.detailLayoutNode)
+      this.detailLayoutSnapshots = this.layoutSnapper.snapshotTree(
+        this.detailLayoutNode, //
+        { measure: true },
+      );
+  }
+
+  async initiateListToDetailLayoutAnimation(): Promise<void> {
+    await firstValueFrom(animationFrames());
+    await this.layoutAnimator.animate({
+      root: this.hostNode,
+      from: this.listLayoutSnapshots,
+      duration: 250,
+      easing: AnimationCurves.STANDARD_CURVE,
+      estimation: true,
+    });
+  }
+
+  async initiateDetailToListLayoutAnimation(mail: Mail): Promise<void> {
+    const snapshot = this.listLayoutSnapshots.get(`mail-${mail.id}`);
+    if (!snapshot) throw new Error('Missing snapshot');
+
+    const cardType = MailCardAnimationPresenceComponent;
+    const cardRef = this.viewContainer.createComponent(cardType);
+    cardRef.setInput('mail', mail);
+
+    const cardEle: HTMLElement = cardRef.location.nativeElement;
+    cardEle.style.position = 'fixed';
+    cardEle.style.top = snapshot.boundingBox.top + 'px';
+    cardEle.style.left = snapshot.boundingBox.left + 'px';
+    cardEle.style.width = snapshot.boundingBox.width() + 'px';
+    cardEle.style.height = snapshot.boundingBox.height() + 'px';
+
+    await firstValueFrom(animationFrames());
+
+    const cardNode = await firstValueFrom(cardRef.instance.node$);
+    cardNode.identifyAs(`mail-${mail.id}`);
+    cardNode.attach(this.hostNode);
+    this.listLayoutNode.deactivate();
+
+    await this.layoutAnimator.animate({
+      root: this.hostNode,
+      from: this.detailLayoutSnapshots,
+      duration: 250,
+      easing: AnimationCurves.STANDARD_CURVE,
+      estimation: true,
+    });
+
+    cardNode.detach();
+    cardRef.destroy();
+    this.listLayoutNode.activate();
   }
 }

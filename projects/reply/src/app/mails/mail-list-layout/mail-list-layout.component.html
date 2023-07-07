@@ -9,7 +9,6 @@
         class="list"
         *ngIf="mails.length; else empty"
         [mails]="mails"
-        [mailPrevId]="mailPrevId$ | async"
       ></rpl-mail-card-list>
       <ng-template #empty>
         <div class="empty-prompt">Empty in {{ mailboxName }}</div>

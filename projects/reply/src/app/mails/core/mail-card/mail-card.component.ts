@@ -23,7 +23,7 @@ export class MailCardComponent {
   breakpoints = inject(BREAKPOINTS);
   contactRepo = inject(ContactRepository);
 
-  @Input() mail!: Mail;
+  @Input({ required: true }) mail!: Mail;
 
   @HostBinding('class.read') get mailIsRead(): boolean {
     return this.mail.isRead;

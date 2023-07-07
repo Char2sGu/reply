@@ -16,9 +16,6 @@ import { Mail } from '@/app/data/mail.model';
 })
 export class MailCardListComponent {
   AnimationCurves = AnimationCurves;
-
   @Input() mails: Mail[] = [];
-  @Input() mailPrevId?: Mail['id'];
-
   mailTracker: TrackByFunction<Mail> = (_, mail) => mail.id;
 }

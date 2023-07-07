@@ -16,6 +16,7 @@ import { SearchButtonComponent } from '../shared/search-button/search-button.com
 import { MailComponent } from './core/mail/mail.component';
 import { MailAvatarComponent } from './core/mail-avatar/mail-avatar.component';
 import { MailCardComponent } from './core/mail-card/mail-card.component';
+import { MailCardAnimationPresenceComponent } from './core/mail-card-animation-presence/mail-card-animation-presence.component';
 import { MailCardListComponent } from './core/mail-card-list/mail-card-list.component';
 import { MailDeleteButtonComponent } from './core/mail-delete-button/mail-delete-button.component';
 import { MailStarButtonComponent } from './core/mail-star-button/mail-star-button.component';
@@ -35,6 +36,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     MailAvatarComponent,
     MailStarButtonComponent,
     MailDeleteButtonComponent,
+    MailCardAnimationPresenceComponent,
   ],
   imports: [
     CommonModule,

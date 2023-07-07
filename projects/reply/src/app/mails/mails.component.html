@@ -4,8 +4,8 @@
     #listLayoutNode="lpjNode"
   ></rpl-mail-list-layout>
   <rpl-mail-detail-layout
+    *ngIf="mail$ | async"
     lpjNode="detail-layout"
-    *ngIf="detailed$ | async"
     #detailLayoutNode="lpjNode"
   ></rpl-mail-detail-layout>
 </ng-container>

@@ -15,8 +15,6 @@ import { ContactRepository } from '@/app/data/contact.repository';
 import { Mail } from '@/app/data/mail.model';
 import { MailRepository } from '@/app/data/mail.repository';
 
-import { MailsLayoutAnimationService } from '../mails.component';
-
 @Component({
   selector: 'rpl-mail-detail-layout',
   templateUrl: './mail-detail-layout.component.html',
@@ -29,7 +27,6 @@ export class MailDetailLayoutComponent implements AfterViewInit {
   contactRepo = inject(ContactRepository);
   private route = inject(ActivatedRoute);
   private layoutContext = inject(LAYOUT_CONTEXT);
-  private layoutAnimationService = inject(MailsLayoutAnimationService);
 
   mail$: Observable<Mail> = this.route.params.pipe(
     map((p): string => p['mailId']),
@@ -50,7 +47,6 @@ export class MailDetailLayoutComponent implements AfterViewInit {
   private navBottomActionsBackup = this.layoutContext().navBottomActions;
 
   ngAfterViewInit(): void {
-    this.layoutAnimationService.animateLayout(300);
     this.layoutContext.mutate((c) => {
       c.navFabConfig = {
         text: 'Reply',
@@ -63,7 +59,6 @@ export class MailDetailLayoutComponent implements AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.layoutAnimationService.animateLayout(300);
     this.layoutContext.mutate((c) => {
       c.navFabConfig = this.navFabConfigBackup;
       c.navBottomActions = this.navBottomActionsBackup;

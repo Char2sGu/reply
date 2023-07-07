@@ -71,7 +71,6 @@ export class MailListLayoutComponent {
   private refresh$ = inject(MailListRefreshEvent);
 
   mailboxName$ = this.route.params.pipe(map((params) => params['mailboxName']));
-  mailPrevId$ = this.route.queryParams.pipe(map((params) => params['prev']));
   mails$ = combineLatest([
     this.mailboxName$,
     this.refresh$.pipe(startWith(null)),
