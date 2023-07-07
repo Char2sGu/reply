@@ -14,14 +14,17 @@ import {
   inject,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
+import { MatIconRegistry } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import {
   bufferCount,
+  catchError,
   combineLatestWith,
   distinctUntilChanged,
   filter,
   map,
   merge,
+  of,
   startWith,
   timer,
 } from 'rxjs';
@@ -79,13 +82,18 @@ export class AppComponent {
   private router = inject(Router);
   private authService = inject(AuthenticationService);
   private googleApis$ = inject(GOOGLE_APIS);
+  private iconRegistry = inject(MatIconRegistry);
 
   @HostBinding('class') get breakpointsClassBindings(): BreakpointMap {
     return this.breakpoints();
   }
 
-  initialized$ = merge(this.googleApis$, timer(1000)).pipe(
-    bufferCount(2),
+  private initializers = [
+    this.googleApis$,
+    this.iconRegistry.getNamedSvgIcon('').pipe(catchError(() => of(null))), // load all svg icon sets
+  ];
+  initialized$ = merge(...this.initializers, timer(1000)).pipe(
+    bufferCount(this.initializers.length + 1),
     map(() => true),
     startWith(false),
   );

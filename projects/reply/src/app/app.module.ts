@@ -58,7 +58,6 @@ import { LogoComponent } from './shared/logo/logo.component';
             'filled',
             'material-icons mat-ligature-font',
           );
-          iconRegistry.addSvgIcon('logo', trusted('assets/logo.svg'));
           iconRegistry.addSvgIconSet(trusted('assets/icons.svg'));
         };
       },
