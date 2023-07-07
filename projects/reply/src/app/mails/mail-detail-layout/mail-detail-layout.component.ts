@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { filter, map, Observable, switchMap, tap } from 'rxjs';
+import { filter, map, Observable, switchMap, tap, timer } from 'rxjs';
 
 import { AuthenticationService } from '@/app/core/authentication.service';
 import { LAYOUT_CONTEXT } from '@/app/core/layout-context.token';
@@ -47,21 +47,25 @@ export class MailDetailLayoutComponent implements AfterViewInit {
   private navBottomActionsBackup = this.layoutContext().navBottomActions;
 
   ngAfterViewInit(): void {
-    this.layoutContext.mutate((c) => {
-      c.navFabConfig = {
-        text: 'Reply',
-        icon: this.navFabIconTemplate,
-        link: '/compose',
-        linkParams: { reply: this.route.snapshot.params['mailId'] },
-      };
-      c.navBottomActions = this.navBottomActionsTemplate;
+    timer(0).subscribe(() => {
+      this.layoutContext.mutate((c) => {
+        c.navFabConfig = {
+          text: 'Reply',
+          icon: this.navFabIconTemplate,
+          link: '/compose',
+          linkParams: { reply: this.route.snapshot.params['mailId'] },
+        };
+        c.navBottomActions = this.navBottomActionsTemplate;
+      });
     });
   }
 
   ngOnDestroy(): void {
-    this.layoutContext.mutate((c) => {
-      c.navFabConfig = this.navFabConfigBackup;
-      c.navBottomActions = this.navBottomActionsBackup;
+    timer(0).subscribe(() => {
+      this.layoutContext.mutate((c) => {
+        c.navFabConfig = this.navFabConfigBackup;
+        c.navBottomActions = this.navBottomActionsBackup;
+      });
     });
   }
 }

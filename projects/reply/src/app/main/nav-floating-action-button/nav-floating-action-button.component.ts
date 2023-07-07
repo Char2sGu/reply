@@ -1,9 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  effect,
   HostBinding,
   inject,
   Input,
@@ -37,15 +35,5 @@ import { LAYOUT_CONTEXT } from '../../core/layout-context.token';
 })
 export class NavFloatingActionButtonComponent {
   layoutContext = inject(LAYOUT_CONTEXT);
-  private changeDetector = inject(ChangeDetectorRef);
-
   @Input() @HostBinding('class.expanded') expanded = false;
-
-  constructor() {
-    // TODO: find out why and try to remove this effect
-    effect(() => {
-      this.layoutContext();
-      this.changeDetector.detectChanges();
-    });
-  }
 }
