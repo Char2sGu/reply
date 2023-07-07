@@ -52,6 +52,27 @@ import { GOOGLE_APIS } from './core/google-apis.token';
             animate(`100ms ${AnimationCurves.STANDARD_CURVE}`),
             style({ opacity: 0 }),
           ]),
+          query(
+            ':enter rpl-side-nav:not(.expanded)',
+            [
+              style({ transform: 'translateX(-100%)' }),
+              animate(`225ms ${AnimationCurves.DECELERATION_CURVE}`),
+            ],
+            { optional: true },
+          ),
+          query(
+            ':enter rpl-bottom-nav > .content, :enter rpl-bottom-nav > .background',
+            [
+              style({ transform: 'translateY(100%)' }),
+              animate(`225ms ${AnimationCurves.DECELERATION_CURVE}`),
+            ],
+            { optional: true },
+          ),
+          query(
+            ':enter rpl-bottom-nav @*', //
+            [animateChild()],
+            { optional: true },
+          ),
           query(':enter rpl-mail-list-layout', [animateChild()]),
           query(':enter rpl-mail-list-layout rpl-mail-card-list', [
             query(':self', [
