@@ -6,7 +6,7 @@
       <ng-container
         *ngIf="mail.recipients | resolveRef : contactRepo | async as recipients"
       >
-        <rpl-content data-route-animation-target>
+        <rpl-scrollable-area data-route-animation-target>
           <rpl-mail
             [user]="user"
             [mail]="mail"
@@ -14,7 +14,7 @@
             [recipients]="recipients"
             lpjNode="mail-{{ mail.id }}"
           ></rpl-mail>
-        </rpl-content>
+        </rpl-scrollable-area>
       </ng-container>
     </ng-container>
   </ng-container>

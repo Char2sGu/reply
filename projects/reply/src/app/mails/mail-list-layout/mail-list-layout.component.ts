@@ -9,14 +9,7 @@ import {
   trigger,
   useAnimation,
 } from '@angular/animations';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, startWith, switchMap } from 'rxjs';
@@ -26,7 +19,6 @@ import { BREAKPOINTS } from '@/app/core/breakpoint.service';
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
 import { SystemInbox } from '@/app/core/system-inbox.enum';
 import { MailRepository } from '@/app/data/mail.repository';
-import { ContentComponent } from '@/app/shared/content/content.component';
 
 import { MailListRefreshEvent } from '../core/mail-list-refresh.event';
 
@@ -70,7 +62,7 @@ const mailCardsAnimation = animation([
     ['[@content]']: 'navigationContext().latestMailboxIndex',
   },
 })
-export class MailListLayoutComponent implements OnInit, OnDestroy {
+export class MailListLayoutComponent {
   AnimationCurves = AnimationCurves;
   breakpoints = inject(BREAKPOINTS);
   navigationContext = inject(NAVIGATION_CONTEXT);
@@ -95,12 +87,4 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
       mails.sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime()),
     ),
   );
-
-  @ViewChild(ContentComponent) private content!: ContentComponent;
-
-  ngOnInit(): void {}
-
-  async ngAfterViewInit(): Promise<void> {}
-
-  ngOnDestroy(): void {}
 }

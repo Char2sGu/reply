@@ -8,9 +8,9 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
 
 import { ResolveRefPipe } from '../data/resolve-ref.pipe';
-import { ContentComponent } from '../shared/content/content.component';
 import { HeaderComponent } from '../shared/header/header.component';
 import { ReadableDatePipe } from '../shared/readable-date.pipe';
+import { ScrollableAreaComponent } from '../shared/scrollable-area/scrollable-area.component';
 import { SearchComponent } from './search.component';
 import { SearchResultListComponent } from './search-result-list/search-result-list.component';
 import { SearchRoutingModule } from './search-routing.module';
@@ -26,7 +26,7 @@ import { SearchRoutingModule } from './search-routing.module';
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
-    ContentComponent,
+    ScrollableAreaComponent,
     ResolveRefPipe,
     HeaderComponent,
     ReadableDatePipe,

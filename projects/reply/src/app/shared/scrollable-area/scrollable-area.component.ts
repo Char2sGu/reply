@@ -11,14 +11,14 @@ import { ScrollingModule } from '@reply/scrolling';
 import { LAYOUT_CONTEXT } from '@/app/core/layout-context.token';
 
 @Component({
-  selector: 'rpl-content',
+  selector: 'rpl-scrollable-area',
   standalone: true,
   imports: [CommonModule, ScrollingModule],
-  templateUrl: './content.component.html',
-  styleUrls: ['./content.component.scss'],
+  templateUrl: './scrollable-area.component.html',
+  styleUrls: ['./scrollable-area.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContentComponent {
+export class ScrollableAreaComponent {
   layoutContext = inject(LAYOUT_CONTEXT);
 
   @ViewChild('wrapper') private wrapper!: ElementRef<HTMLElement>;
@@ -59,6 +59,7 @@ export class ContentComponent {
   }
 
   onScroll(direction: 'up' | 'down'): void {
+    // TODO: is it really good to put the logic here?
     if (this.scrolledManually) {
       this.scrolledManually = false;
       return;
