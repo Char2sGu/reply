@@ -17,6 +17,7 @@ import { AnimationCurves } from '@angular/material/core';
 import { Router } from '@angular/router';
 import {
   bufferCount,
+  combineLatestWith,
   distinctUntilChanged,
   filter,
   map,
@@ -90,9 +91,15 @@ export class AppComponent {
   );
 
   constructor() {
-    this.authService.authorized$.pipe(distinctUntilChanged()).subscribe(() => {
-      this.router.navigateByUrl('/');
-    });
+    this.authService.authorized$
+      .pipe(
+        combineLatestWith(this.authService.user$),
+        map(([v]) => v),
+        distinctUntilChanged(),
+      )
+      .subscribe(() => {
+        this.router.navigateByUrl('/');
+      });
 
     /* eslint-disable no-console */
     if (!environment.production) {
@@ -101,8 +108,8 @@ export class AppComponent {
           const auth = JSON.parse(
             localStorage['authorization'],
           ) as Authorization;
-          this.authService.setAuthorization(auth);
           gapi.client.setToken({ ['access_token']: auth.token });
+          this.authService.setAuthorization(auth);
           console.log('authorization restored', auth);
         }
       });

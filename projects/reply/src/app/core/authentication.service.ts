@@ -40,15 +40,14 @@ export class AuthenticationService {
       apis.oauth2.initTokenClient({
         ['client_id']: environment.googleClientId,
         scope: SCOPES.join(' '),
-        callback: (response) => {
-          this.zone.run(() =>
+        callback: (response) =>
+          this.zone.run(() => {
             this.setAuthorization({
               token: response['access_token'],
               issuedAt: new Date(),
               expiresIn: +response['expires_in'],
-            }),
-          );
-        },
+            });
+          }),
       }),
     ),
   );

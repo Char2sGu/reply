@@ -21,7 +21,7 @@
         still risky to lose data because of undiscovered bugs. The author is not
         responsible for any damage caused by the use of this app.
       </p>
-      <mat-checkbox [(ngModel)]="checked">
+      <mat-checkbox [disabled]="!!(loading$ | async)" [(ngModel)]="checked">
         I understand the risks, take me in
       </mat-checkbox>
     </div>

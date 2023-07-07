@@ -9,6 +9,8 @@ import { LogoComponent } from '../shared/logo/logo.component';
 import { AuthComponent } from './auth.component';
 import { AuthRoutingModule } from './auth-routing.module';
 
+// TODO: token expiry page
+
 @NgModule({
   declarations: [AuthComponent],
   imports: [
