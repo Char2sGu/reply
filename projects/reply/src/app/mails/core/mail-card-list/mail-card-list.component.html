@@ -2,5 +2,7 @@
   *ngFor="let mail of mails; let index = index; trackBy: mailTracker"
   [mail]="mail"
   lpjNode="mail-{{ mail.id }}"
+  [lpjAnimation]="{ duration: 250, easing: AnimationCurves.STANDARD_CURVE }"
+  [lpjAnimationTrigger]="mails"
   [style.zIndex]="mailPrevId === mail.id ? 1 : null"
 ></rpl-mail-card>

@@ -8,8 +8,6 @@ import { AnimationCurves } from '@angular/material/core';
 
 import { Mail } from '@/app/data/mail.model';
 
-// TODO: list items mutation animation
-
 @Component({
   selector: 'rpl-mail-card-list',
   templateUrl: './mail-card-list.component.html',
