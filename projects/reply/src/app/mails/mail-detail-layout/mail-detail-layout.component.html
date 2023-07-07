@@ -1,3 +1,24 @@
-<rpl-content data-route-animation-target>
-  <rpl-mail lpjNode="mail-{{ mailId$ | async }}"></rpl-mail>
-</rpl-content>
+<ng-container *ngIf="mail$ | async as mail">
+  <rpl-content data-route-animation-target *ngIf="user$ | async as user">
+    <rpl-mail
+      [mail]="mail"
+      [user]="user"
+      lpjNode="mail-{{ mail.id }}"
+    ></rpl-mail>
+  </rpl-content>
+
+  <ng-template #bottomActions>
+    <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
+    <rpl-mail-delete-button
+      [mail]="mail"
+      routerLink=".."
+    ></rpl-mail-delete-button>
+    <button mat-icon-button>
+      <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
+    </button>
+  </ng-template>
+
+  <ng-template #replyIcon>
+    <mat-icon svgIcon="reply"></mat-icon>
+  </ng-template>
+</ng-container>
