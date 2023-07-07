@@ -50,7 +50,7 @@ export class GoogleAuthenticationService implements AuthenticationService {
             this.setAuthorization({
               token: response['access_token'],
               issuedAt: new Date(),
-              expiresIn: +response['expires_in'],
+              lifespan: +response['expires_in'],
             });
           }),
       }),
@@ -107,7 +107,7 @@ export class GoogleAuthenticationService implements AuthenticationService {
 
   setAuthorization(auth: Authorization): boolean {
     const issueDate = dayjs(auth.issuedAt);
-    const expireDate = issueDate.add(auth.expiresIn, 'seconds');
+    const expireDate = issueDate.add(auth.lifespan, 'seconds');
     const isAboutToExpire = () => dayjs().add(1, 'minute').isAfter(expireDate);
 
     if (isAboutToExpire()) return false;

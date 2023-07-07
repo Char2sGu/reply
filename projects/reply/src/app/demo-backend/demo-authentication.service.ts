@@ -10,7 +10,7 @@ import { ContactRepository } from '../data/contact.repository';
 const AUTHORIZATION: Authorization = {
   token: 'demo',
   issuedAt: new Date(),
-  expiresIn: -1,
+  lifespan: -1,
 };
 
 @Injectable()

@@ -16,5 +16,5 @@ export abstract class AuthenticationService {
 export interface Authorization {
   token: string;
   issuedAt: Date;
-  expiresIn: number;
+  lifespan: number;
 }
