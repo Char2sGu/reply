@@ -1,4 +1,12 @@
-import { animate, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  animateChild,
+  group,
+  query,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,10 +24,7 @@ import {
   timer,
 } from 'rxjs';
 
-import {
-  injectAnimationIdFactory,
-  SharedAxisAnimation,
-} from './core/animations';
+import { injectAnimationIdFactory } from './core/animations';
 import { AuthenticationService } from './core/authentication.service';
 import { BreakpointMap, BREAKPOINTS } from './core/breakpoint.service';
 import { GOOGLE_APIS } from './core/google-apis.token';
@@ -31,20 +36,29 @@ import { GOOGLE_APIS } from './core/google-apis.token';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('routes', [
-      transition(
-        'auth => main',
-        SharedAxisAnimation.apply('z', 'forward', {
-          incoming: ':enter [data-route-animation-target]',
-          outgoing: ':leave [data-route-animation-target]',
-        }),
-      ),
+      transition('auth => main', [
+        group([
+          query(':leave [data-route-animation-target]', [
+            animate(`100ms ${AnimationCurves.STANDARD_CURVE}`),
+            style({ opacity: 0 }),
+          ]),
+          query(':enter rpl-mail-list-layout', [animateChild()]),
+          query(':enter rpl-mail-list-layout rpl-mail-card-list', [
+            query(':self', [
+              style({ transform: 'scale(92%)' }),
+              animate(
+                `225ms ${AnimationCurves.DECELERATION_CURVE}`,
+                style({ transform: 'scale(1)' }),
+              ),
+            ]),
+          ]),
+        ]),
+      ]),
     ]),
     trigger('launchScreen', [
       transition(':leave', [
-        animate(
-          `300ms ${AnimationCurves.STANDARD_CURVE}`,
-          style({ opacity: 0 }),
-        ),
+        animate(`100ms ${AnimationCurves.STANDARD_CURVE}`),
+        style({ opacity: 0 }),
       ]),
     ]),
   ],

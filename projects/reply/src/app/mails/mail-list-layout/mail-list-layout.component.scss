@@ -2,7 +2,7 @@
   display: contents;
 }
 
-.content-wrapper {
+.content {
   position: relative;
 
   grid-row: 1;
@@ -15,12 +15,6 @@
   }
   :host-context(.laptop) & {
     grid-column: col-5 / col-11;
-  }
-
-  .content {
-    position: relative;
-    width: 100%;
-    height: 100%;
   }
 
   .list {

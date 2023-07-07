@@ -1,4 +1,14 @@
-import { query, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  animation,
+  group,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger,
+  useAnimation,
+} from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,6 +30,20 @@ import { MailsComponent } from '../mails.component';
 
 let scrollTop = 0;
 
+const mailCardsAnimation = animation([
+  query(
+    ':enter rpl-mail-card',
+    [
+      style({ opacity: 0 }),
+      stagger(20, [
+        animate(`225ms ${AnimationCurves.STANDARD_CURVE}`),
+        style({ opacity: 1 }),
+      ]),
+    ],
+    { optional: true },
+  ),
+]);
+
 @Component({
   selector: 'rpl-mail-list-layout',
   templateUrl: './mail-list-layout.component.html',
@@ -27,16 +51,24 @@ let scrollTop = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('content', [
+      transition(':enter', [useAnimation(mailCardsAnimation)]),
       transition(':increment', [
-        query(':leave', style({ position: 'absolute' })),
-        SharedAxisAnimation.apply('y', 'forward'),
+        group([
+          SharedAxisAnimation.apply('y', 'forward'),
+          useAnimation(mailCardsAnimation),
+        ]),
       ]),
       transition(':decrement', [
-        query(':leave', style({ position: 'absolute' })),
-        SharedAxisAnimation.apply('y', 'backward'),
+        group([
+          SharedAxisAnimation.apply('y', 'backward'),
+          useAnimation(mailCardsAnimation),
+        ]),
       ]),
     ]),
   ],
+  host: {
+    ['[@content]']: 'navigationContext().latestMailboxIndex',
+  },
 })
 export class MailListLayoutComponent implements OnInit, OnDestroy {
   AnimationCurves = AnimationCurves;

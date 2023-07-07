@@ -2,13 +2,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Input,
   OnInit,
   TrackByFunction,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
-import { LayoutAnimationScopeRef } from '@layout-projection/angular';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 
 import { SystemInbox } from '@/app/core/system-inbox.enum';
@@ -16,6 +14,8 @@ import { SystemInbox } from '@/app/core/system-inbox.enum';
 import { Mail } from '../../data/mail.model';
 import { MailRepository } from '../../data/mail.repository';
 import { MailListRefreshEvent } from '../core/mail-list-refresh.event';
+
+// TODO: make it pure presentative
 
 @Component({
   selector: 'rpl-mail-card-list',
@@ -25,8 +25,6 @@ import { MailListRefreshEvent } from '../core/mail-list-refresh.event';
 })
 export class MailCardListComponent implements OnInit {
   AnimationCurves = AnimationCurves;
-
-  @Input() animationScope?: LayoutAnimationScopeRef;
 
   mails$!: Observable<Mail[]>;
   mailTracker: TrackByFunction<Mail> = (_, mail) => mail.id;
