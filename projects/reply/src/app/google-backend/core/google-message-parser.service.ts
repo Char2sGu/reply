@@ -21,31 +21,24 @@ export class GoogleMessageParser {
       'snippet',
       'payload',
       'payload.headers',
-      'payload.parts',
     ]);
 
-    const headers = msg.payload.headers;
-    const headerInfo = this.parseHeaders(headers);
-
-    const contentBase64Url = msg.payload.parts //
-      .find((p) => p.mimeType === 'text/plain')?.body?.data;
-    if (!contentBase64Url)
-      throw new InvalidResponseException('Missing part "text/plain"');
-    const content = Base64.decode(contentBase64Url);
+    const headerData = this.parseHeaders(msg.payload.headers);
+    const content = this.parseParts(msg.payload) ?? '<content not supported>';
 
     return combineLatest([
-      this.getOrCreateContactByAddress(headerInfo.sender),
-      ...headerInfo.recipients.map((addr) =>
+      this.getOrCreateContactByAddress(headerData.sender),
+      ...headerData.recipients.map((addr) =>
         this.getOrCreateContactByAddress(addr),
       ),
     ]).pipe(
       map(
         ([sender, ...recipients]): Mail => ({
           id: msg.id,
-          subject: headerInfo.subject,
+          subject: headerData.subject,
           sender: sender.id,
           recipients: recipients.map((r) => r.id),
-          sentAt: headerInfo.sentAt,
+          sentAt: headerData.sentAt,
           snippet: msg.snippet,
           content,
           isStarred: msg.labelIds.includes('STARRED'),
@@ -85,6 +78,18 @@ export class GoogleMessageParser {
     const sentAt = new Date(sentAtString);
 
     return { subject, sender, recipients, sentAt };
+  }
+
+  private parseParts(root: gapi.client.gmail.MessagePart): string | null {
+    if (root.mimeType === 'text/plain') {
+      const base64Url = assertPropertyPaths(root, ['body.data']).body.data;
+      return Base64.decode(base64Url);
+    }
+    for (const part of root.parts ?? []) {
+      const result = this.parseParts(part);
+      if (result) return result;
+    }
+    return null;
   }
 
   private getOrCreateContactByAddress(

@@ -2,6 +2,7 @@ import { inject, Injectable, NgZone } from '@angular/core';
 import dayjs from 'dayjs';
 import {
   combineLatest,
+  distinctUntilChanged,
   filter,
   first,
   map,
@@ -77,6 +78,8 @@ export class GoogleAuthenticationService implements AuthenticationService {
 
   readonly authorized$: Observable<boolean> = this.authorization$.pipe(
     map((auth) => !!auth),
+    distinctUntilChanged(),
+    shareReplay(1),
   );
 
   readonly user$: Observable<Contact> = combineLatest([

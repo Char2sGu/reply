@@ -17,8 +17,6 @@ import { AnimationCurves } from '@angular/material/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   bufferCount,
-  combineLatestWith,
-  distinctUntilChanged,
   filter,
   first,
   map,
@@ -119,14 +117,8 @@ export class AppComponent {
   );
 
   constructor() {
-    this.authService.authorized$
-      .pipe(
-        combineLatestWith(this.authService.user$),
-        map(([v]) => v),
-        distinctUntilChanged(),
-      )
-      .subscribe(() => {
-        this.router.navigateByUrl('/');
-      });
+    this.authService.authorized$.subscribe(() => {
+      this.router.navigateByUrl('/');
+    });
   }
 }

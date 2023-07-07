@@ -1,5 +1,6 @@
 import { inject, Injectable, NgModule } from '@angular/core';
 import {
+  CanActivateFn,
   CanMatchFn,
   DefaultTitleStrategy,
   RouterModule,
@@ -10,10 +11,19 @@ import {
 import { map } from 'rxjs';
 
 import { AuthenticationService } from './core/authentication.service';
+import { MailService } from './data/mail.service';
 
 const authorized: CanMatchFn = () => inject(AuthenticationService).authorized$;
 const unauthorized: CanMatchFn = () =>
   inject(AuthenticationService).authorized$.pipe(map((a) => !a));
+
+const mailsLoader: CanActivateFn = () =>
+  inject(MailService)
+    .loadMailList()
+    .pipe(map(() => true));
+
+const userLoader: CanActivateFn = () =>
+  inject(AuthenticationService).user$.pipe(map(() => true));
 
 const routes: Routes = [
   {
@@ -35,6 +45,7 @@ const routes: Routes = [
   {
     path: '',
     canMatch: [authorized],
+    canActivate: [userLoader, mailsLoader],
     children: [
       {
         path: '',

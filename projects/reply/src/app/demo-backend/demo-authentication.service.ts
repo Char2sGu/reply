@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, map, shareReplay } from 'rxjs';
 
 import {
   AuthenticationService,
@@ -18,7 +18,11 @@ export class DemoAuthenticationService implements AuthenticationService {
   private contactRepo = inject(ContactRepository);
 
   readonly authorization$ = new BehaviorSubject<Authorization | null>(null);
-  readonly authorized$ = this.authorization$.pipe(map(Boolean));
+  readonly authorized$ = this.authorization$.pipe(
+    map(Boolean),
+    distinctUntilChanged(),
+    shareReplay(1),
+  );
   readonly user$ = this.contactRepo.retrieve('user');
 
   setAuthorization(auth: Authorization): boolean {
