@@ -128,24 +128,5 @@ export class AppComponent {
       .subscribe(() => {
         this.router.navigateByUrl('/');
       });
-
-    // /* eslint-disable no-console */
-    // if (!environment.production) {
-    //   this.googleApis$.subscribe(() => {
-    //     if (localStorage['authorization']) {
-    //       const auth = JSON.parse(
-    //         localStorage['authorization'],
-    //       ) as Authorization;
-    //       gapi.client.setToken({ ['access_token']: auth.token });
-    //       this.authService.setAuthorization(auth);
-    //       console.log('authorization restored', auth);
-    //     }
-    //   });
-    //   this.authService.authorization$.pipe(filter(Boolean)).subscribe((r) => {
-    //     localStorage['authorization'] = JSON.stringify(r);
-    //     console.log('authorization saved', r);
-    //   });
-    // }
-    // /* eslint-enable no-console */
   }
 }
