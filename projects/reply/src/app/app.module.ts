@@ -1,8 +1,7 @@
 import 'hammerjs';
 
-import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, inject, NgModule } from '@angular/core';
+import { inject, NgModule } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import {
   BrowserModule,
@@ -14,11 +13,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { LayoutProjectionModule } from '@layout-projection/angular';
 import { ScrollingModule } from '@reply/scrolling';
+import { catchError, of } from 'rxjs';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { INITIALIZER, Initializer } from './core/initialization';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
+import { GoogleBackendModule } from './google-backend/google-backend.module';
 import { LogoComponent } from './shared/logo/logo.component';
 
 // TODO: attachment
@@ -38,20 +40,22 @@ import { LogoComponent } from './shared/logo/logo.component';
     }),
     HammerModule,
     HttpClientModule,
-    AppRoutingModule,
-    OverlayModule,
     LayoutProjectionModule.forRoot(),
     ScrollingModule.forRoot(),
+    GoogleBackendModule,
+    AppRoutingModule,
     LogoComponent,
   ],
   providers: [
     {
-      provide: APP_INITIALIZER,
-      useFactory: () => {
+      provide: INITIALIZER,
+      useFactory: (): Initializer => {
         const iconRegistry = inject(MatIconRegistry);
         const domSanitizer = inject(DomSanitizer);
         const trusted = (v: string): SafeValue =>
           domSanitizer.bypassSecurityTrustResourceUrl(v);
+        const loadAllSvgIconSets = () =>
+          iconRegistry.getNamedSvgIcon('').pipe(catchError(() => of(null)));
         return () => {
           iconRegistry.setDefaultFontSetClass();
           iconRegistry.registerFontClassAlias(
@@ -59,6 +63,7 @@ import { LogoComponent } from './shared/logo/logo.component';
             'material-icons mat-ligature-font',
           );
           iconRegistry.addSvgIconSet(trusted('assets/icons.svg'));
+          return loadAllSvgIconSets();
         };
       },
       multi: true,

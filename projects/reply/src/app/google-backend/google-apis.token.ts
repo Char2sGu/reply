@@ -14,7 +14,7 @@ import {
   timer,
 } from 'rxjs';
 
-import { ScriptLoader } from './script-loader.service';
+import { ScriptLoader } from '../core/script-loader.service';
 
 export interface GoogleApis {
   gmail: typeof gapi.client.gmail;

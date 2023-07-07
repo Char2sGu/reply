@@ -14,17 +14,14 @@ import {
   inject,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
-import { MatIconRegistry } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import {
   bufferCount,
-  catchError,
   combineLatestWith,
   distinctUntilChanged,
   filter,
   map,
   merge,
-  of,
   startWith,
   timer,
 } from 'rxjs';
@@ -37,7 +34,8 @@ import {
   Authorization,
 } from './core/authentication.service';
 import { BreakpointMap, BREAKPOINTS } from './core/breakpoint.service';
-import { GOOGLE_APIS } from './core/google-apis.token';
+import { INITIALIZER } from './core/initialization';
+import { GOOGLE_APIS } from './google-backend/google-apis.token';
 
 @Component({
   selector: 'rpl-root',
@@ -103,17 +101,13 @@ export class AppComponent {
   private router = inject(Router);
   private authService = inject(AuthenticationService);
   private googleApis$ = inject(GOOGLE_APIS);
-  private iconRegistry = inject(MatIconRegistry);
+  private initializers = inject(INITIALIZER);
 
   @HostBinding('class') get breakpointsClassBindings(): BreakpointMap {
     return this.breakpoints();
   }
 
-  private initializers = [
-    this.googleApis$,
-    this.iconRegistry.getNamedSvgIcon('').pipe(catchError(() => of(null))), // load all svg icon sets
-  ];
-  initialized$ = merge(...this.initializers, timer(1000)).pipe(
+  initialized$ = merge(...this.initializers.map((i) => i()), timer(500)).pipe(
     bufferCount(this.initializers.length + 1),
     map(() => true),
     startWith(false),
