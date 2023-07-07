@@ -4,5 +4,5 @@ import { ObservableInput } from 'rxjs';
 export const INITIALIZER = new InjectionToken<Initializer[]>('INITIALIZERS');
 
 export interface Initializer {
-  (): ObservableInput<unknown>;
+  (): ObservableInput<unknown> | void;
 }

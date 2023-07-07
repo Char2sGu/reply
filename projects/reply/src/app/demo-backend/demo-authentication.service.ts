@@ -17,20 +17,17 @@ const AUTHORIZATION: Authorization = {
 export class DemoAuthenticationService implements AuthenticationService {
   private contactRepo = inject(ContactRepository);
 
-  readonly authorization$ = new BehaviorSubject<Authorization | null>(
-    AUTHORIZATION,
-  );
-
+  readonly authorization$ = new BehaviorSubject<Authorization | null>(null);
   readonly authorized$ = this.authorization$.pipe(map(Boolean));
-
   readonly user$ = this.contactRepo.retrieve('user');
 
-  setAuthorization(): boolean {
-    return false;
+  setAuthorization(auth: Authorization): boolean {
+    this.authorization$.next(auth);
+    return true;
   }
 
   requestAuthorization(): void {
-    this.authorization$.next(AUTHORIZATION);
+    this.setAuthorization(AUTHORIZATION);
   }
 
   revokeAuthorization(): void {

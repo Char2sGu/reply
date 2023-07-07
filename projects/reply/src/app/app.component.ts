@@ -14,28 +14,25 @@ import {
   inject,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import {
   bufferCount,
   combineLatestWith,
   distinctUntilChanged,
   filter,
+  first,
   map,
   merge,
+  of,
+  shareReplay,
   startWith,
   timer,
 } from 'rxjs';
 
-import { environment } from '@/environments/environment';
-
 import { injectAnimationIdFactory } from './core/animations';
-import {
-  AuthenticationService,
-  Authorization,
-} from './core/authentication.service';
+import { AuthenticationService } from './core/authentication.service';
 import { BreakpointMap, BREAKPOINTS } from './core/breakpoint.service';
 import { INITIALIZER } from './core/initialization';
-import { GOOGLE_APIS } from './google-backend/google-apis.token';
 
 @Component({
   selector: 'rpl-root',
@@ -100,17 +97,25 @@ export class AppComponent {
   private breakpoints = inject(BREAKPOINTS);
   private router = inject(Router);
   private authService = inject(AuthenticationService);
-  private googleApis$ = inject(GOOGLE_APIS);
-  private initializers = inject(INITIALIZER);
+  private initializers = [
+    ...inject(INITIALIZER),
+    () =>
+      this.router.events.pipe(
+        filter((e) => e instanceof NavigationEnd),
+        first(),
+      ),
+    () => timer(500),
+  ];
 
   @HostBinding('class') get breakpointsClassBindings(): BreakpointMap {
     return this.breakpoints();
   }
 
-  initialized$ = merge(...this.initializers.map((i) => i()), timer(500)).pipe(
-    bufferCount(this.initializers.length + 1),
+  initialized$ = merge(...this.initializers.map((i) => i() ?? of(null))).pipe(
+    bufferCount(this.initializers.length),
     map(() => true),
     startWith(false),
+    shareReplay(1),
   );
 
   constructor() {
@@ -124,23 +129,23 @@ export class AppComponent {
         this.router.navigateByUrl('/');
       });
 
-    /* eslint-disable no-console */
-    if (!environment.production) {
-      this.googleApis$.subscribe(() => {
-        if (localStorage['authorization']) {
-          const auth = JSON.parse(
-            localStorage['authorization'],
-          ) as Authorization;
-          gapi.client.setToken({ ['access_token']: auth.token });
-          this.authService.setAuthorization(auth);
-          console.log('authorization restored', auth);
-        }
-      });
-      this.authService.authorization$.pipe(filter(Boolean)).subscribe((r) => {
-        localStorage['authorization'] = JSON.stringify(r);
-        console.log('authorization saved', r);
-      });
-    }
-    /* eslint-enable no-console */
+    // /* eslint-disable no-console */
+    // if (!environment.production) {
+    //   this.googleApis$.subscribe(() => {
+    //     if (localStorage['authorization']) {
+    //       const auth = JSON.parse(
+    //         localStorage['authorization'],
+    //       ) as Authorization;
+    //       gapi.client.setToken({ ['access_token']: auth.token });
+    //       this.authService.setAuthorization(auth);
+    //       console.log('authorization restored', auth);
+    //     }
+    //   });
+    //   this.authService.authorization$.pipe(filter(Boolean)).subscribe((r) => {
+    //     localStorage['authorization'] = JSON.stringify(r);
+    //     console.log('authorization saved', r);
+    //   });
+    // }
+    // /* eslint-enable no-console */
   }
 }
