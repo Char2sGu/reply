@@ -11,8 +11,7 @@ import {
 
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
 import { ContactRepository } from '@/app/data/contact.repository';
-
-import { Mail } from '../../data/mail.model';
+import { Mail } from '@/app/data/mail.model';
 
 @Component({
   selector: 'rpl-mail-card',

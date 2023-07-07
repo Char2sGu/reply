@@ -19,13 +19,16 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs';
+import { combineLatest, map, startWith, switchMap } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
+import { SystemInbox } from '@/app/core/system-inbox.enum';
+import { MailRepository } from '@/app/data/mail.repository';
 import { ContentComponent } from '@/app/shared/content/content.component';
 
+import { MailListRefreshEvent } from '../core/mail-list-refresh.event';
 import { MailsComponent } from '../mails.component';
 
 let scrollTop = 0;
@@ -76,8 +79,26 @@ export class MailListLayoutComponent implements OnInit, OnDestroy {
   navigationContext = inject(NAVIGATION_CONTEXT);
   private route = inject(ActivatedRoute);
   private mailsComponent = inject(MailsComponent);
+  private mailRepo = inject(MailRepository);
+  private refresh$ = inject(MailListRefreshEvent);
 
   mailboxName$ = this.route.params.pipe(map((params) => params['mailboxName']));
+  mailPrevId$ = this.route.queryParams.pipe(map((params) => params['prev']));
+  mails$ = combineLatest([
+    this.mailboxName$,
+    this.refresh$.pipe(startWith(null)),
+  ]).pipe(
+    switchMap(([mailboxName]) =>
+      this.mailRepo.query(
+        mailboxName === SystemInbox.Starred
+          ? (e) => e.isStarred
+          : (e) => e.mailboxName === mailboxName,
+      ),
+    ),
+    map((mails) =>
+      mails.sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime()),
+    ),
+  );
 
   @ViewChild(ContentComponent) private content!: ContentComponent;
 

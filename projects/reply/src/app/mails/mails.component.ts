@@ -21,6 +21,8 @@ import { filter, takeUntil } from 'rxjs';
 
 import { injectAnimationIdFactory } from '../core/animations';
 
+// TODO: merge the two layouts into this component
+
 @Component({
   selector: 'rpl-mails',
   templateUrl: './mails.component.html',
@@ -28,7 +30,8 @@ import { injectAnimationIdFactory } from '../core/animations';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('route', [
-      transition('list => detail', [query(':leave', [animate('500ms')])]),
+      transition('list => detail', [query(':leave', [animate(500)])]), // preserve leaving element
+      transition('detail => list', [query(':enter', [animate(1)])]), // block child :enter animation
     ]),
   ],
 })

@@ -4,12 +4,19 @@
     data-route-animation-target
     *rplReattachOnChange="mailboxName"
   >
-    <rpl-mail-card-list class="list" #list></rpl-mail-card-list>
-    <div class="empty-prompt" *ngIf="!(list.mails$ | async)?.length">
-      Empty in {{ mailboxName }}
-    </div>
+    <ng-container *ngIf="mails$ | async as mails">
+      <rpl-mail-card-list
+        class="list"
+        *ngIf="mails.length; else empty"
+        [mails]="mails"
+        [mailPrevId]="mailPrevId$ | async"
+      ></rpl-mail-card-list>
+      <ng-template #empty>
+        <div class="empty-prompt">Empty in {{ mailboxName }}</div>
+      </ng-template>
+    </ng-container>
   </rpl-content>
-  <div class="actions" *ngIf="breakpoints()['tablet-portrait']">
-    <rpl-search-button></rpl-search-button>
-  </div>
 </ng-container>
+<div class="actions" *ngIf="breakpoints()['tablet-portrait']">
+  <rpl-search-button></rpl-search-button>
+</div>
