@@ -1,9 +1,10 @@
-import { inject, NgModule } from '@angular/core';
+import { inject, ModuleWithProviders, NgModule } from '@angular/core';
 
 import { AuthenticationService } from '../core/authentication.service';
 import { INITIALIZER, Initializer } from '../core/initialization';
 import { GOOGLE_APIS } from './google-apis.token';
 import { GoogleAuthenticationService } from './google-authentication.service';
+import { GOOGLE_CLIENT_ID } from './google-client-id.token';
 
 @NgModule({
   providers: [
@@ -21,4 +22,16 @@ import { GoogleAuthenticationService } from './google-authentication.service';
     },
   ],
 })
-export class GoogleBackendModule {}
+export class GoogleBackendModule {
+  static configure(clientId: string): ModuleWithProviders<GoogleBackendModule> {
+    return {
+      ngModule: GoogleBackendModule,
+      providers: [
+        {
+          provide: GOOGLE_CLIENT_ID,
+          useValue: clientId,
+        },
+      ],
+    };
+  }
+}

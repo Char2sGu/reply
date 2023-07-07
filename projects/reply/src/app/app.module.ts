@@ -42,7 +42,7 @@ import { LogoComponent } from './shared/logo/logo.component';
     HttpClientModule,
     LayoutProjectionModule.forRoot(),
     ScrollingModule.forRoot(),
-    GoogleBackendModule,
+    GoogleBackendModule.configure(environment.backend.split(':')[1]),
     AppRoutingModule,
     LogoComponent,
   ],

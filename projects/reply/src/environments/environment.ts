@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  googleClientId: '',
+  // backend: 'google:<client_id>'
+  backend: '',
 };
 
 /*

@@ -14,8 +14,6 @@ import {
   timer,
 } from 'rxjs';
 
-import { environment } from '@/environments/environment';
-
 import {
   AuthenticationService,
   Authorization,
@@ -27,6 +25,7 @@ import {
 import { Contact } from '../data/contact.model';
 import { ContactRepository } from '../data/contact.repository';
 import { GOOGLE_APIS } from './google-apis.token';
+import { GOOGLE_CLIENT_ID } from './google-client-id.token';
 
 const SCOPES = [
   'https://mail.google.com/',
@@ -39,13 +38,14 @@ const SCOPES = [
 })
 export class GoogleAuthenticationService implements AuthenticationService {
   private contactRepo = inject(ContactRepository);
-  private googleApis$ = inject(GOOGLE_APIS);
+  private apis$ = inject(GOOGLE_APIS);
+  private clientId = inject(GOOGLE_CLIENT_ID);
   private zone = inject(NgZone);
 
-  private tokenClient$ = this.googleApis$.pipe(
+  private tokenClient$ = this.apis$.pipe(
     map((apis) =>
       apis.oauth2.initTokenClient({
-        ['client_id']: environment.googleClientId,
+        ['client_id']: this.clientId,
         scope: SCOPES.join(' '),
         callback: (response) =>
           this.zone.run(() => {
@@ -82,7 +82,7 @@ export class GoogleAuthenticationService implements AuthenticationService {
   );
 
   readonly user$: Observable<Contact> = combineLatest([
-    this.googleApis$,
+    this.apis$,
     this.authorized$.pipe(filter(Boolean)),
   ]).pipe(
     switchMap(([apis]) =>
@@ -133,7 +133,7 @@ export class GoogleAuthenticationService implements AuthenticationService {
   }
 
   revokeAuthorization(): void {
-    combineLatest([this.googleApis$, this.authorization$])
+    combineLatest([this.apis$, this.authorization$])
       .pipe(first())
       .subscribe(([apis, auth]) => {
         if (!auth) throw new UnauthorizedException();
