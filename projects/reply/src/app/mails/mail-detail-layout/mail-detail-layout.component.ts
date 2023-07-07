@@ -11,6 +11,7 @@ import { map, Observable, switchMap, tap } from 'rxjs';
 
 import { AuthenticationService } from '@/app/core/authentication.service';
 import { LAYOUT_CONTEXT } from '@/app/core/layout-context.token';
+import { ContactRepository } from '@/app/data/contact.repository';
 import { Mail } from '@/app/data/mail.model';
 import { MailRepository } from '@/app/data/mail.repository';
 
@@ -24,8 +25,9 @@ import { MailsComponent } from '../mails.component';
 })
 export class MailDetailLayoutComponent implements AfterViewInit {
   user$ = inject(AuthenticationService).user$;
+  mailRepo = inject(MailRepository);
+  contactRepo = inject(ContactRepository);
   private route = inject(ActivatedRoute);
-  private mailRepo = inject(MailRepository);
   private mailsComponent = inject(MailsComponent);
   private layoutContext = inject(LAYOUT_CONTEXT);
 
