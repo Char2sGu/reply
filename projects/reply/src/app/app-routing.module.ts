@@ -19,7 +19,7 @@ const unauthorized: CanMatchFn = () =>
 
 const mailsLoader: CanActivateFn = () =>
   inject(MailService)
-    .loadMailList()
+    .loadMails()
     .pipe(map(() => true));
 
 const userLoader: CanActivateFn = () =>
