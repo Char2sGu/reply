@@ -21,6 +21,7 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": false,
+    "typeRoots": ["node_modules/@angular/material"],
     "paths": {
       "@/*": ["projects/reply/src/*"],
       "@reply/scrolling": ["dist/scrolling"]
