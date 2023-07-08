@@ -10,10 +10,11 @@
         >
           <mat-icon matListIcon fontSet="filled" fontIcon="schedule"></mat-icon>
           <div matLine>{{ mail.subject }}</div>
-          <div matLine>
-            <span>{{
-              (mail.sender | resolveRef : contactRepo | async)?.name
-            }}</span>
+          <div
+            matLine
+            *ngIf="mail.sender | resolveRef : contactRepo | async as sender"
+          >
+            <span>{{ sender.name ?? sender.email }}</span>
             -
             <span>{{ mail.sentAt | readableDate }}</span>
           </div>

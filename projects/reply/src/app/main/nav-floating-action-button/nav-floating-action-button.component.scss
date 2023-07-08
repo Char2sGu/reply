@@ -1,3 +1,6 @@
+@use '@angular/material' as mat;
+@use 'styles/theming' as theming;
+
 :host {
   display: inline-block;
 }
@@ -21,6 +24,7 @@
 
 .text {
   margin: 0 16px;
+  // TODO: use theme typography config
   font-size: 16px;
   font-weight: 900;
   letter-spacing: 0.1em;

@@ -1,3 +1,6 @@
+@use '@angular/material' as mat;
+@use 'styles/theming' as theming;
+
 :host {
   display: inline-block;
   border-radius: 16px;
@@ -32,7 +35,10 @@
 
   .text {
     margin-left: 16px;
-    font-size: 20px;
+    // TODO: use theme typography config
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
   }
 }

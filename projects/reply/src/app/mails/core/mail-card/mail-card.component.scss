@@ -66,11 +66,7 @@
         @include mat.typography-level(theming.$typography-config, 'caption');
       }
       .title {
-        @include mat.typography-level(
-          theming.$typography-config,
-          'subheading-2'
-        );
-        font-weight: 700;
+        @include mat.typography-level(theming.$typography-config, 'title');
         :host.read & {
           color: map.get(
             theming.$theme,

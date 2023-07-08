@@ -1,8 +1,8 @@
 <div class="wrapper">
   <div class="title-line" lpjNode>
-    <h1 class="mat-display-1">
+    <div class="subject">
       {{ mail.subject }}
-    </h1>
+    </div>
     <a mat-icon-button routerLink="..">
       <mat-icon fontSet="filled" fontIcon="expand_more"></mat-icon>
     </a>
@@ -11,7 +11,7 @@
   <div class="info-line" lpjNode>
     <div class="left-group">
       <div class="mat-body-1">
-        <span>{{ sender.name }}</span> -
+        <span>{{ sender.name ?? sender.email }}</span> -
         <span>{{ mail.sentAt | readableDate }}</span>
       </div>
       <div class="mat-small">

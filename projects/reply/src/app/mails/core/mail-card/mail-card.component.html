@@ -7,7 +7,7 @@
     <div class="headline">
       <div class="titles" lpjNode>
         <div class="subtitle">
-          <span>{{ mailSender.name }}</span> -
+          <span>{{ mailSender.name ?? mailSender.email }}</span> -
           <span>{{ mail.sentAt | readableDate }}</span>
         </div>
         <div class="title">
