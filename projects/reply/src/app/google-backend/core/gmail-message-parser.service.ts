@@ -45,21 +45,34 @@ export class GmailMessageParser {
 
     return combineLatest([sender$, ...(recipientsStreams ?? [])]).pipe(
       map(
+        // eslint-disable-next-line complexity
         ([sender, ...recipients]): Partial<Mail> => ({
-          id: message.id,
-          subject: headerData?.subject,
-          sender: sender?.id,
-          recipients: recipients.length
-            ? recipients.map((r) => r.id)
-            : undefined,
-          sentAt: headerData?.sentAt,
-          snippet: message?.snippet,
-          content,
-          isStarred: message.labelIds?.includes('STARRED'),
-          isRead: message.labelIds?.includes('UNREAD'),
-          mailbox:
-            message.labelIds &&
-            this.parseLabelIdsIntoMailboxId(message.labelIds),
+          ...(message.id && {
+            id: message.id,
+          }),
+          ...(headerData?.subject && {
+            subject: headerData.subject,
+          }),
+          ...(sender && {
+            sender: sender.id,
+          }),
+          ...(recipientsStreams && {
+            recipients: recipients.map((r) => r.id),
+          }),
+          ...(headerData?.sentAt && {
+            sentAt: headerData.sentAt,
+          }),
+          ...(message.snippet && {
+            snippet: message.snippet,
+          }),
+          ...(content && {
+            content,
+          }),
+          ...(message.labelIds && {
+            isStarred: message.labelIds.includes('STARRED'),
+            isRead: !message.labelIds.includes('UNREAD'),
+            mailbox: this.parseLabelIdsIntoMailboxId(message.labelIds),
+          }),
         }),
       ),
     );
