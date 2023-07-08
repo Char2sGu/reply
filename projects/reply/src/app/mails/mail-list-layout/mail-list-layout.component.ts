@@ -28,9 +28,10 @@ const mailCardsAnimation = animation([
     ':enter rpl-mail-card',
     [
       style({ opacity: 0 }),
+      style({ transform: 'scale(92%)' }),
       stagger(25, [
-        animate(`225ms ${AnimationCurves.STANDARD_CURVE}`),
-        style({ opacity: 1 }),
+        animate(`225ms ${AnimationCurves.DECELERATION_CURVE}`),
+        style({ opacity: 1, transform: 'scale(1)' }),
       ]),
     ],
     { optional: true },

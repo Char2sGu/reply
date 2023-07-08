@@ -32,11 +32,11 @@
 
 .content {
   display: flex;
-  width: calc(100% - 2 * 24px);
+  width: calc(100% - 2 * 8px);
   flex-direction: column;
   align-items: stretch;
   gap: 16px;
-  padding: 24px 24px 36px;
+  padding: 0 8px;
   color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
 }
 
