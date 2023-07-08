@@ -9,6 +9,7 @@ import { ScrollingModule } from '@reply/scrolling';
 import { ContactSortPipe } from '../data/contact-sort.pipe';
 import { ContactStringifyPipe } from '../data/contact-stringify.pipe';
 import { ResolveRefPipe } from '../data/resolve-ref.pipe';
+import { LayoutContentDirective } from '../shared/layout-content.directive';
 import { ReadableDatePipe } from '../shared/readable-date.pipe';
 import { ReattachOnChangeDirective } from '../shared/reattach-on-change.directive';
 import { ScrollableAreaComponent } from '../shared/scrollable-area/scrollable-area.component';
@@ -48,6 +49,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     ScrollingModule,
     SearchButtonComponent,
     ScrollableAreaComponent,
+    LayoutContentDirective,
     ReadableDatePipe,
     ResolveRefPipe,
     ContactSortPipe,

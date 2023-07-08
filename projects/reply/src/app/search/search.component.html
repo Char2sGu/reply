@@ -18,7 +18,11 @@
     </button>
   </rpl-header>
 
-  <rpl-scrollable-area class="search-result" data-route-animation-target>
+  <rpl-scrollable-area
+    class="search-result"
+    rplLayoutContent
+    data-route-animation-target
+  >
     <rpl-search-result-list [mails]="mails"></rpl-search-result-list>
   </rpl-scrollable-area>
 </ng-container>

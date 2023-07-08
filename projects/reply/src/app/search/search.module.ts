@@ -9,6 +9,7 @@ import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-l
 
 import { ResolveRefPipe } from '../data/resolve-ref.pipe';
 import { HeaderComponent } from '../shared/header/header.component';
+import { LayoutContentDirective } from '../shared/layout-content.directive';
 import { ReadableDatePipe } from '../shared/readable-date.pipe';
 import { ScrollableAreaComponent } from '../shared/scrollable-area/scrollable-area.component';
 import { SearchComponent } from './search.component';
@@ -27,6 +28,7 @@ import { SearchRoutingModule } from './search-routing.module';
     MatInputModule,
     MatListModule,
     ScrollableAreaComponent,
+    LayoutContentDirective,
     ResolveRefPipe,
     HeaderComponent,
     ReadableDatePipe,

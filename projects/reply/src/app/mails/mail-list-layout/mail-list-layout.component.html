@@ -1,6 +1,7 @@
 <ng-container *ngIf="mailboxName$ | async as mailboxName">
   <rpl-scrollable-area
     class="content"
+    rplLayoutContent
     data-route-animation-target
     *rplReattachOnChange="mailboxName"
   >

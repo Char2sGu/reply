@@ -5,11 +5,6 @@
 
 :host {
   display: block;
-}
-
-.wrapper {
-  height: 100%;
-
   @include scrollbar.scrollbar(
     $regular-color:
       color.change(

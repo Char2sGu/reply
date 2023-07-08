@@ -25,6 +25,7 @@ import { LogoComponent } from './shared/logo/logo.component';
 // TODO: attachment
 // TODO: image
 // TODO: schedule
+// TODO: gestures on cards
 
 @NgModule({
   declarations: [AppComponent, LaunchScreenComponent],
