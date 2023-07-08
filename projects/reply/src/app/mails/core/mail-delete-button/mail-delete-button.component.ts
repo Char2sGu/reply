@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { filter, map, shareReplay, switchMap } from 'rxjs';
 
-import { BuiltInMailboxName } from '@/app/data/mailbox.model';
+import { SystemMailboxName } from '@/app/core/mailbox-name.enums';
 import { MailboxRepository } from '@/app/data/mailbox.repository';
 
 import { Mail } from '../../../data/mail.model';
@@ -28,7 +28,7 @@ export class MailDeleteButtonComponent implements OnInit {
   click$ = new EventEmitter();
 
   trashMailbox$ = this.mailboxRepo
-    .query((e) => e.name === BuiltInMailboxName.Trash)
+    .query((e) => e.name === SystemMailboxName.Trash)
     .pipe(
       map((results) => results[0]),
       filter(Boolean),

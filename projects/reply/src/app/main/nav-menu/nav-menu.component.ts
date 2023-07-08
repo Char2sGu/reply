@@ -5,10 +5,13 @@ import {
   inject,
   Input,
 } from '@angular/core';
-import { map, shareReplay } from 'rxjs';
 
+import {
+  SystemMailboxName,
+  VirtualMailboxName,
+} from '@/app/core/mailbox-name.enums';
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
-import { BuiltInMailboxName, Mailbox } from '@/app/data/mailbox.model';
+import { Mailbox } from '@/app/data/mailbox.model';
 import { MailboxRepository } from '@/app/data/mailbox.repository';
 
 @Component({
@@ -18,36 +21,24 @@ import { MailboxRepository } from '@/app/data/mailbox.repository';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavMenuComponent {
-  SystemMailboxName = BuiltInMailboxName;
-  navigationContext = inject(NAVIGATION_CONTEXT);
+  private navigationContext = inject(NAVIGATION_CONTEXT);
   private mailboxRepo = inject(MailboxRepository);
 
   @Input() @HostBinding('class.expanded') expanded = true;
 
-  builtInMailboxNavItems$ = this.mailboxRepo
-    .query((e) => e.type !== 'user')
-    .pipe(
-      map((mailboxes) => {
-        const ids: Record<Mailbox['name'], Mailbox['id']> = {};
-        mailboxes.forEach((m) => (ids[m.name] = m.id));
-        return ids;
-      }),
-      map((ids) => (name: string, icon: string) => {
-        const item = { id: ids[name], name, icon };
-        return item;
-      }),
-      map((item) => [
-        item(BuiltInMailboxName.Inbox, 'inbox'),
-        item(BuiltInMailboxName.Starred, 'star'),
-        item(BuiltInMailboxName.Sent, 'send'),
-        item(BuiltInMailboxName.Trash, 'delete'),
-        item(BuiltInMailboxName.Spam, 'report'),
-        item(BuiltInMailboxName.Drafts, 'drafts'),
-      ]),
-      shareReplay(1),
-    );
+  staticItems = [
+    { name: SystemMailboxName.Inbox, icon: 'inbox' },
+    { name: VirtualMailboxName.Starred, icon: 'star' },
+    { name: VirtualMailboxName.Sent, icon: 'send' },
+    { name: SystemMailboxName.Trash, icon: 'delete' },
+    { name: SystemMailboxName.Spam, icon: 'report' },
+    { name: VirtualMailboxName.Drafts, icon: 'drafts' },
+  ];
 
-  userMailboxes$ = this.mailboxRepo.query((e) => e.type === 'user');
+  mailboxes$ = this.mailboxRepo.query(
+    (e) =>
+      !Object.values(SystemMailboxName).includes(e.name as SystemMailboxName),
+  );
 
   onItemActive(name: Mailbox['name'], index: number): void {
     this.navigationContext.mutate((c) => {

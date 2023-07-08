@@ -6,20 +6,20 @@ import { Mailbox } from '../data/mailbox.model';
 import { MailboxRepository } from '../data/mailbox.repository';
 import { MailboxService } from '../data/mailbox.service';
 import { AUTHORIZED_GOOGLE_APIS } from './core/authorized-google-apis.token';
-import { GMAIL_BUILT_IN_MAILBOXES } from './core/gmail-built-in-mailboxes.token';
+import { GMAIL_SYSTEM_MAILBOXES } from './core/gmail-system-mailboxes.token';
 
 @Injectable()
 export class GoogleMailboxService implements MailboxService {
   private apis$ = inject(AUTHORIZED_GOOGLE_APIS);
   private mailboxRepo = inject(MailboxRepository);
-  private builtInMailboxes = inject(GMAIL_BUILT_IN_MAILBOXES);
+  private systemMailboxes = inject(GMAIL_SYSTEM_MAILBOXES);
 
   loadMailboxes(): Observable<Mailbox[]> {
     return this.apis$.pipe(
       switchMap((apis) => apis.gmail.users.labels.list({ userId: 'me' })),
       map((response) => access(response.result, 'labels')),
       map((labels) => this.parseLabels(labels)),
-      map((mailboxes) => [...this.builtInMailboxes, ...mailboxes]),
+      map((mailboxes) => [...this.systemMailboxes, ...mailboxes]),
       switchMap((mailboxes) =>
         combineLatest(mailboxes.map((m) => this.mailboxRepo.insertOrPatch(m))),
       ),
@@ -36,7 +36,6 @@ export class GoogleMailboxService implements MailboxService {
     return {
       id: access(label, 'id'),
       name: access(label, 'name'),
-      type: 'user',
     };
   }
 }

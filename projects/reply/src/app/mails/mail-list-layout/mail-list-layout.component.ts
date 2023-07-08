@@ -16,9 +16,10 @@ import { map, switchMap } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
+import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
 import { MailRepository } from '@/app/data/mail.repository';
-import { BuiltInMailboxName, Mailbox } from '@/app/data/mailbox.model';
+import { Mailbox } from '@/app/data/mailbox.model';
 
 const mailCardsAnimation = animation([
   query(
@@ -61,7 +62,6 @@ const mailCardsAnimation = animation([
   },
 })
 export class MailListLayoutComponent {
-  AnimationCurves = AnimationCurves;
   breakpoints = inject(BREAKPOINTS);
   navigationContext = inject(NAVIGATION_CONTEXT);
   private route = inject(ActivatedRoute);
@@ -72,7 +72,7 @@ export class MailListLayoutComponent {
   mails$ = this.mailbox$.pipe(
     switchMap((mailbox) =>
       this.mailRepo.query(
-        mailbox.name === BuiltInMailboxName.Starred
+        mailbox.name === VirtualMailboxName.Starred
           ? (e) => e.isStarred
           : (e) => e.mailbox === mailbox.id,
       ),

@@ -9,14 +9,14 @@ import { access, asserted } from '../../core/property-path.utils';
 import { Contact } from '../../data/contact.model';
 import { ContactRepository } from '../../data/contact.repository';
 import { Mail } from '../../data/mail.model';
-import { GMAIL_BUILT_IN_MAILBOXES } from './gmail-built-in-mailboxes.token';
+import { GMAIL_SYSTEM_MAILBOXES } from './gmail-system-mailboxes.token';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GmailMessageParser {
   private contactRepo = inject(ContactRepository);
-  private builtInMailboxes = inject(GMAIL_BUILT_IN_MAILBOXES);
+  private systemMailboxes = inject(GMAIL_SYSTEM_MAILBOXES);
 
   parseMessage(message: gapi.client.gmail.Message): Observable<Mail> {
     const msg = asserted(message, [
@@ -59,6 +59,7 @@ export class GmailMessageParser {
     recipients: EmailAddress[];
     sentAt: Date;
   } {
+    // TODO: subject can be missing
     const subject = headers.find((h) => h.name === 'Subject')?.value;
     if (!subject) throw new InvalidResponseException('Missing subject');
 
@@ -122,15 +123,13 @@ export class GmailMessageParser {
     return { name, email };
   }
 
-  findMailboxIdFromLabelIds(labelIds: string[]): Mailbox['id'] {
-    const systemMailboxIds = this.builtInMailboxes
-      .filter((m) => m.type === 'system')
-      .map((m) => m.id);
-    return (
-      labelIds.find(
-        (id) => systemMailboxIds.includes(id) || id.startsWith('Label_'),
-      ) ?? 'INBOX'
+  private findMailboxIdFromLabelIds(labelIds: string[]): Mailbox['id'] {
+    const systemMailboxIds = this.systemMailboxes.map((m) => m.id);
+    const mailboxId = labelIds.find(
+      (id) => systemMailboxIds.includes(id) || id.startsWith('Label_'),
     );
+    if (!mailboxId) throw new InvalidResponseException('Missing mailbox label');
+    return mailboxId;
   }
 }
 

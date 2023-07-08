@@ -1,7 +1,7 @@
 <mat-nav-list>
   <a
     mat-list-item
-    *ngFor="let item of builtInMailboxNavItems$ | async; let index = index"
+    *ngFor="let item of staticItems; let index = index"
     [routerLink]="getMailboxUrl(item.name)"
     routerLinkActive="active"
     (isActiveChange)="$event && onItemActive(item.name, index)"
@@ -18,11 +18,13 @@
 
     <a
       mat-list-item
-      *ngFor="let mailbox of userMailboxes$ | async; let index = index"
+      *ngFor="let mailbox of mailboxes$ | async; let index = index"
       [routerLink]="getMailboxUrl(mailbox.name)"
       routerLinkActive="active"
-      (isActiveChange)="$event && onItemActive(mailbox.name, index + 6)"
-      (click)="onItemActive(mailbox.name, index + 6)"
+      (isActiveChange)="
+        $event && onItemActive(mailbox.name, index + staticItems.length)
+      "
+      (click)="onItemActive(mailbox.name, index + staticItems.length)"
     >
       <mat-icon matListIcon fontSet="filled" fontIcon="folder_open"></mat-icon>
       <div matLine>{{ mailbox.name }}</div>

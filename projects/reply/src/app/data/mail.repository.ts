@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { ReactiveRepository } from '../core/reactive-repository';
 import { Mail } from './mail.model';
 
+// TODO: react to updates
+
 @Injectable({
   providedIn: 'root',
 })
