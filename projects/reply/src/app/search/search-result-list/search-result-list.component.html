@@ -2,21 +2,23 @@
   <ng-container *ngFor="let group of groups">
     <ng-container *ngIf="group.items.length">
       <div class="subheader">{{ group.name }}</div>
-      <a
-        mat-list-item
-        *ngFor="let mail of group.items"
-        routerLink="/mailboxes/{{ mail.mailboxName }}/mails/{{ mail.id }}"
-      >
-        <mat-icon matListIcon fontSet="filled" fontIcon="schedule"></mat-icon>
-        <div matLine>{{ mail.subject }}</div>
-        <div matLine>
-          <span>{{
-            (mail.sender | resolveRef : contactRepo | async)?.name
-          }}</span>
-          -
-          <span>{{ mail.sentAt | readableDate }}</span>
-        </div>
-      </a>
+      <ng-container *ngFor="let mail of group.items">
+        <a
+          mat-list-item
+          *ngIf="mail.mailbox | resolveRef : mailboxRepo | async as mailbox"
+          routerLink="/mailboxes/{{ mailbox.name }}/mails/{{ mail.id }}"
+        >
+          <mat-icon matListIcon fontSet="filled" fontIcon="schedule"></mat-icon>
+          <div matLine>{{ mail.subject }}</div>
+          <div matLine>
+            <span>{{
+              (mail.sender | resolveRef : contactRepo | async)?.name
+            }}</span>
+            -
+            <span>{{ mail.sentAt | readableDate }}</span>
+          </div>
+        </a>
+      </ng-container>
     </ng-container>
   </ng-container>
 </mat-nav-list>

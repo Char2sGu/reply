@@ -9,10 +9,12 @@ import {
 } from '../core/authentication.service';
 import { INITIALIZER, Initializer } from '../core/initialization';
 import { MailService } from '../data/mail.service';
+import { MailboxService } from '../data/mailbox.service';
 import { GOOGLE_APIS } from './core/google-apis.token';
 import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';
 import { GoogleAuthenticationService } from './google-authentication.service';
 import { GoogleMailService } from './google-mail.service';
+import { GoogleMailboxService } from './google-mailbox.service';
 
 @NgModule({
   providers: [
@@ -58,6 +60,10 @@ import { GoogleMailService } from './google-mail.service';
     {
       provide: MailService,
       useClass: GoogleMailService,
+    },
+    {
+      provide: MailboxService,
+      useClass: GoogleMailboxService,
     },
   ],
 })

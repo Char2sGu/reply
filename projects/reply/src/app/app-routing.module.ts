@@ -8,22 +8,25 @@ import {
   Routes,
   TitleStrategy,
 } from '@angular/router';
-import { map } from 'rxjs';
+import { combineLatest, first, map } from 'rxjs';
 
 import { AuthenticationService } from './core/authentication.service';
 import { MailService } from './data/mail.service';
+import { MailboxService } from './data/mailbox.service';
 
 const authorized: CanMatchFn = () => inject(AuthenticationService).authorized$;
 const unauthorized: CanMatchFn = () =>
   inject(AuthenticationService).authorized$.pipe(map((a) => !a));
 
-const mailsLoader: CanActivateFn = () =>
-  inject(MailService)
-    .loadMails()
-    .pipe(map(() => true));
-
-const userLoader: CanActivateFn = () =>
-  inject(AuthenticationService).user$.pipe(map(() => true));
+const dataInitializer: CanActivateFn = () =>
+  combineLatest([
+    inject(AuthenticationService).user$,
+    inject(MailService).loadMails(),
+    inject(MailboxService).loadMailboxes(),
+  ]).pipe(
+    first(),
+    map(() => true),
+  );
 
 const routes: Routes = [
   {
@@ -45,7 +48,7 @@ const routes: Routes = [
   {
     path: '',
     canMatch: [authorized],
-    canActivate: [userLoader, mailsLoader],
+    canActivate: [dataInitializer],
     children: [
       {
         path: '',

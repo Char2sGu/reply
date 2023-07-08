@@ -1,8 +1,8 @@
-<ng-container *ngIf="mailboxName$ | async as mailboxName">
+<ng-container *ngIf="mailbox$ | async as mailbox">
   <rpl-scrollable-area
     class="content"
     data-route-animation-target
-    *rplReattachOnChange="mailboxName"
+    *rplReattachOnChange="mailbox"
   >
     <ng-container *ngIf="mails$ | async as mails">
       <rpl-mail-card-list
@@ -11,7 +11,7 @@
         [mails]="mails"
       ></rpl-mail-card-list>
       <ng-template #empty>
-        <div class="empty-prompt">Empty in {{ mailboxName }}</div>
+        <div class="empty-prompt">Empty in {{ mailbox.name }}</div>
       </ng-template>
     </ng-container>
   </rpl-scrollable-area>

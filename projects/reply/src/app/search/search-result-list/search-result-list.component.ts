@@ -10,6 +10,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 
 import { ContactRepository } from '@/app/data/contact.repository';
 import { Mail } from '@/app/data/mail.model';
+import { MailboxRepository } from '@/app/data/mailbox.repository';
 
 @Component({
   selector: 'rpl-search-result-list',
@@ -19,6 +20,7 @@ import { Mail } from '@/app/data/mail.model';
 })
 export class SearchResultListComponent implements OnInit {
   contactRepo = inject(ContactRepository);
+  mailboxRepo = inject(MailboxRepository);
 
   @Input() set mails(v: Mail[]) {
     this.mails$.next(v);

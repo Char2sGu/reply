@@ -1,4 +1,5 @@
 import { Contact } from './contact.model';
+import { Mailbox } from './mailbox.model';
 
 export interface Mail {
   id: string;
@@ -10,5 +11,5 @@ export interface Mail {
   content: string;
   isStarred: boolean;
   isRead: boolean;
-  mailboxName: string;
+  mailbox: Mailbox['id'];
 }

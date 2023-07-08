@@ -43,7 +43,7 @@ export class GoogleMessageParser {
           content,
           isStarred: msg.labelIds.includes('STARRED'),
           isRead: !msg.labelIds.includes('UNREAD'),
-          mailboxName: 'Inbox', // TODO: implement parsing
+          mailbox: 'INBOX', // TODO: implement parsing
         }),
       ),
     );

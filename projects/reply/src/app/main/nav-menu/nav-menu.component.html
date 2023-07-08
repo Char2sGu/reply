@@ -1,17 +1,7 @@
 <mat-nav-list>
   <a
     mat-list-item
-    *ngFor="
-      let item of [
-        { name: SystemInbox.Inbox, icon: 'inbox' },
-        { name: SystemInbox.Starred, icon: 'star' },
-        { name: SystemInbox.Sent, icon: 'send' },
-        { name: SystemInbox.Trash, icon: 'delete' },
-        { name: SystemInbox.Spam, icon: 'report' },
-        { name: SystemInbox.Drafts, icon: 'drafts' }
-      ];
-      let index = index
-    "
+    *ngFor="let item of systemMailboxNavItems$ | async; let index = index"
     [routerLink]="getMailboxUrl(item.name)"
     routerLinkActive="active"
     (isActiveChange)="$event && onItemActive(item.name, index)"
@@ -28,24 +18,14 @@
 
     <a
       mat-list-item
-      *ngFor="
-        let item of [
-          { name: 'Receipts' },
-          { name: 'Pine Elementary' },
-          { name: 'Taxes' },
-          { name: 'Vacation' },
-          { name: 'Mortgage' },
-          { name: 'Freelance' }
-        ];
-        let index = index
-      "
-      [routerLink]="getMailboxUrl(item.name)"
+      *ngFor="let mailbox of userMailboxes$ | async; let index = index"
+      [routerLink]="getMailboxUrl(mailbox.name)"
       routerLinkActive="active"
-      (isActiveChange)="$event && onItemActive(item.name, index + 6)"
-      (click)="onItemActive(item.name, index + 6)"
+      (isActiveChange)="$event && onItemActive(mailbox.name, index + 6)"
+      (click)="onItemActive(mailbox.name, index + 6)"
     >
       <mat-icon matListIcon fontSet="filled" fontIcon="folder_open"></mat-icon>
-      <div matLine>{{ item.name }}</div>
+      <div matLine>{{ mailbox.name }}</div>
     </a>
   </ng-container>
 </mat-nav-list>

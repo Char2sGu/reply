@@ -6,6 +6,10 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
+import { filter, map, shareReplay, switchMap } from 'rxjs';
+
+import { SystemMailboxName } from '@/app/data/mailbox.model';
+import { MailboxRepository } from '@/app/data/mailbox.repository';
 
 import { Mail } from '../../../data/mail.model';
 import { MailRepository } from '../../../data/mail.repository';
@@ -18,14 +22,26 @@ import { MailRepository } from '../../../data/mail.repository';
 })
 export class MailDeleteButtonComponent implements OnInit {
   private mailRepo = inject(MailRepository);
+  private mailboxRepo = inject(MailboxRepository);
   @Input() mail!: Mail;
 
   click$ = new EventEmitter();
 
+  trashMailbox$ = this.mailboxRepo
+    .query((e) => e.name === SystemMailboxName.Trash)
+    .pipe(
+      map((results) => results[0]),
+      filter(Boolean),
+      shareReplay(1),
+    );
+
   ngOnInit(): void {
-    this.click$.subscribe(() => {
-      if (this.mail.mailboxName === 'Trash') this.mailRepo.delete(this.mail.id);
-      else this.mailRepo.patch(this.mail.id, { mailboxName: 'Trash' });
-    });
+    this.click$
+      .pipe(switchMap(() => this.trashMailbox$))
+      .subscribe((trashMailbox) => {
+        if (this.mail.mailbox === trashMailbox.id)
+          this.mailRepo.delete(this.mail.id);
+        else this.mailRepo.patch(this.mail.id, { mailbox: trashMailbox.id });
+      });
   }
 }
