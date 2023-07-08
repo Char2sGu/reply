@@ -11,7 +11,9 @@
           <span>{{ mail.sentAt | readableDate }}</span>
         </h5>
         <h1 class="title">
-          <a routerLink="./{{ mail.id }}" #anchor>{{ mail.subject }}</a>
+          <a routerLink="./{{ mail.id }}" #anchor>{{
+            mail.subject ?? '(no subject)'
+          }}</a>
         </h1>
       </div>
       <div class="actions" lpjNode (click)="$event.stopPropagation()">
@@ -31,6 +33,6 @@
         </button>
       </div>
     </div>
-    <div class="overview" *ngIf="!mail.isRead">{{ mail.content }}</div>
+    <div class="overview" *ngIf="!mail.isRead">{{ mail.snippet }}</div>
   </div>
 </ng-container>

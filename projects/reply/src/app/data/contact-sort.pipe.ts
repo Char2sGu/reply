@@ -11,6 +11,8 @@ export class ContactSortPipe implements PipeTransform {
     return entities.sort((a, b) => {
       if (a.id === selfId) return -Infinity;
       if (b.id === selfId) return Infinity;
+      if (!a.name) return 1;
+      if (!b.name) return -1;
       return a.name.localeCompare(b.name);
     });
   }

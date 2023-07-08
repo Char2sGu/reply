@@ -38,10 +38,12 @@ export class SearchComponent implements OnInit {
     ).pipe(
       map((text) => text.split(' ')),
       switchMap((keywords) =>
-        this.mailRepo.query((e) =>
-          keywords.some((keyword) =>
-            e.subject.toLowerCase().includes(keyword.toLowerCase()),
-          ),
+        this.mailRepo.query(
+          ({ subject }) =>
+            !!subject &&
+            keywords.some((keyword) =>
+              subject.toLowerCase().includes(keyword.toLowerCase()),
+            ),
         ),
       ),
     );

@@ -3,7 +3,7 @@ import { Mailbox } from './mailbox.model';
 
 export interface Mail {
   id: string;
-  subject: string;
+  subject?: string;
   sender: Contact['id'];
   recipients: Contact['id'][];
   sentAt: Date;
