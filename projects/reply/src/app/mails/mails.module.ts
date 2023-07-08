@@ -9,13 +9,13 @@ import { ScrollingModule } from '@reply/scrolling';
 import { ContactSortPipe } from '../data/contact-sort.pipe';
 import { ContactStringifyPipe } from '../data/contact-stringify.pipe';
 import { ResolveRefPipe } from '../data/resolve-ref.pipe';
+import { AvatarComponent } from '../shared/avatar/avatar.component';
 import { LayoutContentDirective } from '../shared/layout-content.directive';
 import { ReadableDatePipe } from '../shared/readable-date.pipe';
 import { ReattachOnChangeDirective } from '../shared/reattach-on-change.directive';
 import { ScrollableAreaComponent } from '../shared/scrollable-area/scrollable-area.component';
 import { SearchButtonComponent } from '../shared/search-button/search-button.component';
 import { MailComponent } from './core/mail/mail.component';
-import { MailAvatarComponent } from './core/mail-avatar/mail-avatar.component';
 import { MailCardComponent } from './core/mail-card/mail-card.component';
 import { MailCardAnimationPresenceComponent } from './core/mail-card-animation-presence/mail-card-animation-presence.component';
 import { MailCardListComponent } from './core/mail-card-list/mail-card-list.component';
@@ -34,7 +34,6 @@ import { MailsRoutingModule } from './mails-routing.module';
     MailCardComponent,
     MailCardListComponent,
     MailComponent,
-    MailAvatarComponent,
     MailStarButtonComponent,
     MailDeleteButtonComponent,
     MailCardAnimationPresenceComponent,
@@ -55,6 +54,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     ContactSortPipe,
     ContactStringifyPipe,
     ReattachOnChangeDirective,
+    AvatarComponent,
   ],
 })
 export class MailsModule {}

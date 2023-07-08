@@ -96,7 +96,12 @@
       }
       .avatar-button {
         :host:hover & {
-          background-color: #ffffff;
+          background-color: map.get(
+            theming.$theme,
+            'color',
+            'background',
+            'card'
+          );
         }
       }
     }

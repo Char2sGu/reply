@@ -7,6 +7,7 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
 import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
 import { LayoutProjectionModule } from '@layout-projection/angular';
 
+import { AvatarComponent } from '../shared/avatar/avatar.component';
 import { LogoComponent } from '../shared/logo/logo.component';
 import { ReattachOnChangeDirective } from '../shared/reattach-on-change.directive';
 import { SearchButtonComponent } from '../shared/search-button/search-button.component';
@@ -48,6 +49,7 @@ import { UpperFoundationComponent } from './upper-foundation/upper-foundation.co
     SearchButtonComponent,
     SettingsButtonComponent,
     LogoComponent,
+    AvatarComponent,
   ],
 })
 export class MainModule {}
