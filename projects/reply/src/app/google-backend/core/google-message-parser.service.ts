@@ -3,7 +3,7 @@ import { Base64 } from 'js-base64';
 import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
 import { InvalidResponseException } from '../../core/exceptions';
-import { assertPropertyPaths } from '../../core/property-path.util';
+import { access, asserted } from '../../core/property-path.utils';
 import { Contact } from '../../data/contact.model';
 import { ContactRepository } from '../../data/contact.repository';
 import { Mail } from '../../data/mail.model';
@@ -15,7 +15,7 @@ export class GoogleMessageParser {
   private contactRepo = inject(ContactRepository);
 
   parseMessage(message: gapi.client.gmail.Message): Observable<Mail> {
-    const msg = assertPropertyPaths(message, [
+    const msg = asserted(message, [
       'id',
       'labelIds',
       'snippet',
@@ -82,7 +82,7 @@ export class GoogleMessageParser {
 
   private parseParts(root: gapi.client.gmail.MessagePart): string | null {
     if (root.mimeType === 'text/plain') {
-      const base64Url = assertPropertyPaths(root, ['body.data']).body.data;
+      const base64Url = access(root, 'body.data');
       return Base64.decode(base64Url);
     }
     for (const part of root.parts ?? []) {
