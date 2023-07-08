@@ -28,7 +28,7 @@ export class GoogleMailService implements MailService {
     return this.apis$.pipe(
       switchMap((apis) => apis.gmail.users.messages.get({ userId: 'me', id })),
       map((response) => response.result),
-      switchMap((message) => this.messageParser.parseMessage(message)),
+      switchMap((message) => this.messageParser.parseFullMessage(message)),
       switchMap((mail) => this.mailRepo.insertOrPatch(mail)),
     );
   }
