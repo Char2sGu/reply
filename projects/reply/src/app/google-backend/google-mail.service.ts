@@ -6,12 +6,12 @@ import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';
 import { MailService } from '../data/mail.service';
 import { AUTHORIZED_GOOGLE_APIS } from './core/authorized-google-apis.token';
-import { GoogleMessageParser } from './core/google-message-parser.service';
+import { GmailMessageParser } from './core/gmail-message-parser.service';
 
 @Injectable()
 export class GoogleMailService implements MailService {
   private apis$ = inject(AUTHORIZED_GOOGLE_APIS);
-  private messageParser = inject(GoogleMessageParser);
+  private messageParser = inject(GmailMessageParser);
   private mailRepo = inject(MailRepository);
 
   loadMails(): Observable<Mail[]> {

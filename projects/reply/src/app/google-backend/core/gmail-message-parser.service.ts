@@ -2,17 +2,21 @@ import { inject, Injectable } from '@angular/core';
 import { Base64 } from 'js-base64';
 import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
+import { Mailbox } from '@/app/data/mailbox.model';
+
 import { InvalidResponseException } from '../../core/exceptions';
 import { access, asserted } from '../../core/property-path.utils';
 import { Contact } from '../../data/contact.model';
 import { ContactRepository } from '../../data/contact.repository';
 import { Mail } from '../../data/mail.model';
+import { GMAIL_BUILT_IN_MAILBOXES } from './gmail-built-in-mailboxes.token';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GoogleMessageParser {
+export class GmailMessageParser {
   private contactRepo = inject(ContactRepository);
+  private builtInMailboxes = inject(GMAIL_BUILT_IN_MAILBOXES);
 
   parseMessage(message: gapi.client.gmail.Message): Observable<Mail> {
     const msg = asserted(message, [
@@ -43,7 +47,7 @@ export class GoogleMessageParser {
           content,
           isStarred: msg.labelIds.includes('STARRED'),
           isRead: !msg.labelIds.includes('UNREAD'),
-          mailbox: 'INBOX', // TODO: implement parsing
+          mailbox: this.findMailboxIdFromLabelIds(msg.labelIds),
         }),
       ),
     );
@@ -116,6 +120,17 @@ export class GoogleMessageParser {
     if (!match) return { email: value };
     const [, name, email] = match;
     return { name, email };
+  }
+
+  findMailboxIdFromLabelIds(labelIds: string[]): Mailbox['id'] {
+    const systemMailboxIds = this.builtInMailboxes
+      .filter((m) => m.type === 'system')
+      .map((m) => m.id);
+    return (
+      labelIds.find(
+        (id) => systemMailboxIds.includes(id) || id.startsWith('Label_'),
+      ) ?? 'INBOX'
+    );
   }
 }
 

@@ -18,7 +18,7 @@ import { SharedAxisAnimation } from '@/app/core/animations';
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
 import { MailRepository } from '@/app/data/mail.repository';
-import { Mailbox, SystemMailboxName } from '@/app/data/mailbox.model';
+import { BuiltInMailboxName, Mailbox } from '@/app/data/mailbox.model';
 
 const mailCardsAnimation = animation([
   query(
@@ -72,7 +72,7 @@ export class MailListLayoutComponent {
   mails$ = this.mailbox$.pipe(
     switchMap((mailbox) =>
       this.mailRepo.query(
-        mailbox.name === SystemMailboxName.Starred
+        mailbox.name === BuiltInMailboxName.Starred
           ? (e) => e.isStarred
           : (e) => e.mailbox === mailbox.id,
       ),

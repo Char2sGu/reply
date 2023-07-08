@@ -8,7 +8,7 @@ import {
 import { map, shareReplay } from 'rxjs';
 
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
-import { Mailbox, SystemMailboxName } from '@/app/data/mailbox.model';
+import { BuiltInMailboxName, Mailbox } from '@/app/data/mailbox.model';
 import { MailboxRepository } from '@/app/data/mailbox.repository';
 
 @Component({
@@ -18,14 +18,14 @@ import { MailboxRepository } from '@/app/data/mailbox.repository';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavMenuComponent {
-  SystemMailboxName = SystemMailboxName;
+  SystemMailboxName = BuiltInMailboxName;
   navigationContext = inject(NAVIGATION_CONTEXT);
   private mailboxRepo = inject(MailboxRepository);
 
   @Input() @HostBinding('class.expanded') expanded = true;
 
-  systemMailboxNavItems$ = this.mailboxRepo
-    .query((e) => e.type === 'system')
+  builtInMailboxNavItems$ = this.mailboxRepo
+    .query((e) => e.type !== 'user')
     .pipe(
       map((mailboxes) => {
         const ids: Record<Mailbox['name'], Mailbox['id']> = {};
@@ -37,12 +37,12 @@ export class NavMenuComponent {
         return item;
       }),
       map((item) => [
-        item(SystemMailboxName.Inbox, 'inbox'),
-        item(SystemMailboxName.Starred, 'star'),
-        item(SystemMailboxName.Sent, 'send'),
-        item(SystemMailboxName.Trash, 'delete'),
-        item(SystemMailboxName.Spam, 'report'),
-        item(SystemMailboxName.Drafts, 'drafts'),
+        item(BuiltInMailboxName.Inbox, 'inbox'),
+        item(BuiltInMailboxName.Starred, 'star'),
+        item(BuiltInMailboxName.Sent, 'send'),
+        item(BuiltInMailboxName.Trash, 'delete'),
+        item(BuiltInMailboxName.Spam, 'report'),
+        item(BuiltInMailboxName.Drafts, 'drafts'),
       ]),
       shareReplay(1),
     );

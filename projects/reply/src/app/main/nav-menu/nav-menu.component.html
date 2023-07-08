@@ -1,7 +1,7 @@
 <mat-nav-list>
   <a
     mat-list-item
-    *ngFor="let item of systemMailboxNavItems$ | async; let index = index"
+    *ngFor="let item of builtInMailboxNavItems$ | async; let index = index"
     [routerLink]="getMailboxUrl(item.name)"
     routerLinkActive="active"
     (isActiveChange)="$event && onItemActive(item.name, index)"

@@ -1,10 +1,10 @@
 export interface Mailbox {
   id: string;
-  name: SystemMailboxName | string;
-  type: 'system' | 'user';
+  name: BuiltInMailboxName | string;
+  type: 'system' | 'user' | 'virtual';
 }
 
-export enum SystemMailboxName {
+export enum BuiltInMailboxName {
   Inbox = 'Inbox',
   Starred = 'Starred',
   Sent = 'Sent',
