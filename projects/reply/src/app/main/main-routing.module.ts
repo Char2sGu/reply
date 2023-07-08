@@ -16,7 +16,13 @@ const routes: Routes = [
         data: { animationId: 'base' },
         children: [
           {
-            path: 'mailboxes/:mailboxName/mails',
+            matcher: (segments) => {
+              if (!segments.length) return null;
+              const path = segments.join('/');
+              if (path.startsWith('mail'))
+                return { consumed: [], posParams: {} };
+              return null;
+            },
             loadChildren: () =>
               import('../mails/mails.module').then((m) => m.MailsModule),
           },
