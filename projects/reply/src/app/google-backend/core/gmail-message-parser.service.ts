@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Base64 } from 'js-base64';
 import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
+import { AuthenticationService } from '@/app/core/authentication.service';
 import { Mailbox } from '@/app/data/mailbox.model';
 
 import { InvalidResponseException } from '../../core/exceptions';
@@ -15,6 +16,7 @@ import { GMAIL_SYSTEM_MAILBOXES } from './gmail-system-mailboxes.token';
   providedIn: 'root',
 })
 export class GmailMessageParser {
+  private user$ = inject(AuthenticationService).user$;
   private contactRepo = inject(ContactRepository);
   private systemMailboxes = inject(GMAIL_SYSTEM_MAILBOXES);
 
@@ -54,14 +56,12 @@ export class GmailMessageParser {
   }
 
   private parseHeaders(headers: gapi.client.gmail.MessagePartHeader[]): {
-    subject: string;
+    subject?: string;
     sender: EmailAddress;
     recipients: EmailAddress[];
     sentAt: Date;
   } {
-    // TODO: subject can be missing
     const subject = headers.find((h) => h.name === 'Subject')?.value;
-    if (!subject) throw new InvalidResponseException('Missing subject');
 
     const senderString = headers.find((h) => h.name === 'From')?.value;
     if (!senderString)
@@ -100,20 +100,20 @@ export class GmailMessageParser {
   private getOrCreateContactByAddress(
     address: EmailAddress,
   ): Observable<Contact> {
-    return this.contactRepo
-      .query((e) => e.email === address.email)
-      .pipe(
-        first(),
-        switchMap((results) =>
-          results.length
-            ? this.contactRepo.retrieve(results[0].id)
-            : this.contactRepo.insert({
-                id: address.email,
-                name: address.name ?? '',
-                email: address.email,
-              }),
-        ),
-      );
+    return this.user$.pipe(
+      first(),
+      switchMap(() => this.contactRepo.query((e) => e.email === address.email)),
+      first(),
+      switchMap((results) =>
+        results.length
+          ? this.contactRepo.retrieve(results[0].id)
+          : this.contactRepo.insert({
+              id: address.email,
+              name: address.name,
+              email: address.email,
+            }),
+      ),
+    );
   }
 
   private parseAddressString(value: string): EmailAddress {
