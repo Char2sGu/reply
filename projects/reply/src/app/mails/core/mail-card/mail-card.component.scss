@@ -1,5 +1,6 @@
 @use 'sass:map' as map;
 @use 'sass:color' as color;
+@use '@angular/material' as mat;
 @use 'styles/theming' as theming;
 
 :host {
@@ -57,12 +58,19 @@
     .titles {
       width: 0;
       flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
       .subtitle {
         @extend %single-line-text;
-        margin-bottom: 0;
+        @include mat.typography-level(theming.$typography-config, 'caption');
       }
       .title {
-        margin-bottom: 0;
+        @include mat.typography-level(
+          theming.$typography-config,
+          'subheading-2'
+        );
+        font-weight: 700;
         :host.read & {
           color: map.get(
             theming.$theme,
