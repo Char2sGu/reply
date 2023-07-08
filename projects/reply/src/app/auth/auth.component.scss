@@ -22,6 +22,9 @@
   :host-context(.tablet-landscape) & {
     grid-column: col-4 / col-9;
   }
+  :host-context(.laptop) & {
+    grid-column: col-5 / col-8;
+  }
   display: flex;
   flex-direction: column;
   justify-content: center;
