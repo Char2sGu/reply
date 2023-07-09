@@ -22,6 +22,7 @@ import {
   map,
   merge,
   of,
+  pairwise,
   shareReplay,
   startWith,
   timer,
@@ -107,7 +108,11 @@ export class AppComponent {
   );
 
   constructor() {
-    this.authService.authorized$.subscribe(() => {
+    const authStatusChange$ = this.authService.authorized$.pipe(
+      pairwise(),
+      map((pair) => pair[1]),
+    );
+    authStatusChange$.subscribe(() => {
       this.router.navigateByUrl('/');
     });
   }

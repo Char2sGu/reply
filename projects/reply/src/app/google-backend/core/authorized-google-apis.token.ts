@@ -1,5 +1,5 @@
 import { inject, InjectionToken } from '@angular/core';
-import { combineLatest, filter, map, Observable, shareReplay } from 'rxjs';
+import { combineLatest, filter, map, Observable } from 'rxjs';
 
 import { AuthenticationService } from '@/app/core/authentication.service';
 
@@ -16,6 +16,5 @@ export const AUTHORIZED_GOOGLE_APIS = new InjectionToken<
     ]).pipe(
       filter(([, authorized]) => authorized),
       map(([apis]) => apis),
-      shareReplay(1),
     ),
 });

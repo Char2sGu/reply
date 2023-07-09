@@ -39,21 +39,20 @@ export class GoogleAuthenticationService implements AuthenticationService {
   private contactRepo = inject(ContactRepository);
   private apis$ = inject(GOOGLE_APIS);
   private clientId = inject(GOOGLE_CLIENT_ID);
-  private zone = inject(NgZone);
 
   private tokenClient$ = this.apis$.pipe(
     map((apis) =>
       apis.oauth2.initTokenClient({
         ['client_id']: this.clientId,
         scope: SCOPES.join(' '),
-        callback: (response) =>
-          this.zone.run(() => {
-            this.setAuthorization({
-              token: response['access_token'],
-              issuedAt: new Date(),
-              lifespan: +response['expires_in'],
-            });
-          }),
+        callback: (response) => {
+          NgZone.assertInAngularZone();
+          this.setAuthorization({
+            token: response['access_token'],
+            issuedAt: new Date(),
+            lifespan: +response['expires_in'],
+          });
+        },
       }),
     ),
   );
