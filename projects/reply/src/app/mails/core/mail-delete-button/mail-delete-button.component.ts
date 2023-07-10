@@ -11,9 +11,11 @@ import {
   filter,
   first,
   map,
+  merge,
   Observable,
   shareReplay,
   switchMap,
+  takeUntil,
 } from 'rxjs';
 
 import { SystemMailboxName } from '@/app/core/mailbox-name.enums';
@@ -63,29 +65,29 @@ export class MailDeleteButtonComponent {
   }
 
   moveToMailbox(mail: Mail, mailbox: Mailbox): Observable<void> {
-    // TODO: allow for undoing even when request is not completed
-    return this.mailService.moveMail(mail, mailbox).pipe(
-      catchError((err, caught) =>
-        this.notifier
-          .notify(`Failed to move mail to ${mailbox.name}`, 'Retry')
-          .event$.pipe(
-            filter((e) => e.type === 'action'),
-            switchMap(() => caught),
-          ),
-      ),
-      switchMap(() =>
-        this.notifier
-          .notify(`Mail moved to ${mailbox.name}`, 'Undo')
-          .event$.pipe(
-            filter((e) => e.type === 'action'),
-            switchMap(() =>
-              combineLatest([
-                this.mailRepo.retrieve(mail.id),
-                this.mailboxRepo.retrieve(mail.mailbox),
-              ]).pipe(first()),
+    const undo$ = this.notifier
+      .notify(`Mail moved to ${mailbox.name}`, 'Undo')
+      .event$.pipe(filter((e) => e.type === 'action'));
+    return merge(
+      this.mailService.moveMail(mail, mailbox).pipe(
+        catchError((err, caught) =>
+          this.notifier
+            .notify(`Failed to move mail to ${mailbox.name}`, 'Retry')
+            .event$.pipe(
+              filter((e) => e.type === 'action'),
+              switchMap(() => caught),
             ),
-            switchMap(([m, mb]) => this.moveToMailbox(m, mb)),
-          ),
+        ),
+        takeUntil(undo$),
+      ),
+      undo$.pipe(
+        switchMap(() =>
+          combineLatest([
+            this.mailRepo.retrieve(mail.id),
+            this.mailboxRepo.retrieve(mail.mailbox),
+          ]).pipe(first()),
+        ),
+        switchMap(([m, mb]) => this.moveToMailbox(m, mb)),
       ),
     );
   }
