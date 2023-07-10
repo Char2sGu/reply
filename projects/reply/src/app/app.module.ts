@@ -21,8 +21,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { INITIALIZER, Initializer } from './core/initialization';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
-import { NotificationService } from './core/notification.service';
-import { SnackbarNotificationService } from './core/snackbar-notification.service';
 import { LogoComponent } from './shared/logo/logo.component';
 
 // TODO: attachment
@@ -51,10 +49,6 @@ import { LogoComponent } from './shared/logo/logo.component';
     LogoComponent,
   ],
   providers: [
-    {
-      provide: NotificationService,
-      useClass: SnackbarNotificationService,
-    },
     {
       provide: INITIALIZER,
       useFactory: (): Initializer => {
