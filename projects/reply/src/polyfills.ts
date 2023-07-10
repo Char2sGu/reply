@@ -45,8 +45,11 @@
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
+// eslint-disable-next-line simple-import-sort/imports
 import 'zone.js'; // Included with Angular CLI.
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+import 'symbol-observable';
