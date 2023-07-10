@@ -1,5 +1,6 @@
 import {
   BehaviorSubject,
+  distinctUntilChanged,
   filter,
   InteropObservable,
   map,
@@ -48,6 +49,8 @@ export abstract class ReactiveRepository<Entity> {
         else results.delete(update.id);
       }),
       startWith(null),
+      map(() => results.size),
+      distinctUntilChanged(),
       map(() =>
         [...results].map((id) => {
           const entity = this.entities.get(id);
