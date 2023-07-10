@@ -18,6 +18,7 @@ export class SnackbarNotificationService implements NotificationService {
 
   notify(message: string, action?: string | undefined): NotificationRef {
     const snackbarRef = this.snackbarService.open(message, action, {
+      duration: 15 * 1000,
       ...(this.breakpoints()['tablet-portrait']
         ? { verticalPosition: 'bottom', horizontalPosition: 'right' }
         : { verticalPosition: 'top', horizontalPosition: 'center' }),
