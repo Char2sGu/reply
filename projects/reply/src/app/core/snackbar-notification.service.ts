@@ -16,7 +16,7 @@ export class SnackbarNotificationService implements NotificationService {
 
   notify(message: string, action?: string | undefined): NotificationRef {
     const snackbarRef = this.snackbarService.open(message, action, {
-      verticalPosition: 'bottom',
+      verticalPosition: 'top',
       horizontalPosition: 'center',
     });
     return {

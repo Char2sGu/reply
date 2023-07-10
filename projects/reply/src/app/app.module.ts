@@ -3,6 +3,7 @@ import 'hammerjs';
 import { HttpClientModule } from '@angular/common/http';
 import { inject, NgModule } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
+import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
 import {
   BrowserModule,
   DomSanitizer,
@@ -45,6 +46,7 @@ import { LogoComponent } from './shared/logo/logo.component';
     LayoutProjectionModule.forRoot(),
     ScrollingModule.forRoot(),
     environment.backend,
+    MatSnackBarModule,
     AppRoutingModule,
     LogoComponent,
   ],
