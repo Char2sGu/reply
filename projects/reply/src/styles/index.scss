@@ -75,6 +75,13 @@ textarea {
   padding: initial !important;
 }
 
+.mat-snack-bar-container {
+  border-radius: 0 !important;
+  button {
+    text-transform: uppercase;
+  }
+}
+
 // Prevent <router-outlet> elements from interfering the layout because they
 // can be "blocks" in certain layouts although they should be "inline".
 router-outlet {
