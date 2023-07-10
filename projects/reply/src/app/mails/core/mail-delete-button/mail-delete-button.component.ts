@@ -4,11 +4,22 @@ import {
   EventEmitter,
   inject,
   Input,
-  OnInit,
 } from '@angular/core';
-import { filter, map, shareReplay, switchMap } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  filter,
+  first,
+  map,
+  Observable,
+  shareReplay,
+  switchMap,
+} from 'rxjs';
 
 import { SystemMailboxName } from '@/app/core/mailbox-name.enums';
+import { NotificationService } from '@/app/core/notification.service';
+import { MailService } from '@/app/data/mail.service';
+import { Mailbox } from '@/app/data/mailbox.model';
 import { MailboxRepository } from '@/app/data/mailbox.repository';
 
 import { Mail } from '../../../data/mail.model';
@@ -20,12 +31,15 @@ import { MailRepository } from '../../../data/mail.repository';
   styleUrls: ['./mail-delete-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MailDeleteButtonComponent implements OnInit {
+export class MailDeleteButtonComponent {
   private mailRepo = inject(MailRepository);
   private mailboxRepo = inject(MailboxRepository);
+  private mailService = inject(MailService);
+  private notifier = inject(NotificationService);
+
   @Input() mail!: Mail;
 
-  click$ = new EventEmitter();
+  click = new EventEmitter();
 
   trashMailbox$ = this.mailboxRepo
     .query((e) => e.name === SystemMailboxName.Trash)
@@ -35,13 +49,44 @@ export class MailDeleteButtonComponent implements OnInit {
       shareReplay(1),
     );
 
-  ngOnInit(): void {
-    this.click$
-      .pipe(switchMap(() => this.trashMailbox$))
-      .subscribe((trashMailbox) => {
-        if (this.mail.mailbox === trashMailbox.id)
-          this.mailRepo.delete(this.mail.id);
-        else this.mailRepo.patch(this.mail.id, { mailbox: trashMailbox.id });
-      });
+  constructor() {
+    this.click
+      .pipe(
+        switchMap(() => this.trashMailbox$),
+        switchMap((trashMailbox) => {
+          if (this.mail.mailbox === trashMailbox.id)
+            throw new Error('Not implemented');
+          return this.moveToMailbox(this.mail, trashMailbox);
+        }),
+      )
+      .subscribe();
+  }
+
+  moveToMailbox(mail: Mail, mailbox: Mailbox): Observable<void> {
+    // TODO: allow for undoing even when request is not completed
+    return this.mailService.moveMail(mail, mailbox).pipe(
+      catchError((err, caught) =>
+        this.notifier
+          .notify(`Failed to move mail to ${mailbox.name}`, 'Retry')
+          .event$.pipe(
+            filter((e) => e.type === 'action'),
+            switchMap(() => caught),
+          ),
+      ),
+      switchMap(() =>
+        this.notifier
+          .notify(`Mail moved to ${mailbox.name}`, 'Undo')
+          .event$.pipe(
+            filter((e) => e.type === 'action'),
+            switchMap(() =>
+              combineLatest([
+                this.mailRepo.retrieve(mail.id),
+                this.mailboxRepo.retrieve(mail.mailbox),
+              ]).pipe(first()),
+            ),
+            switchMap(([m, mb]) => this.moveToMailbox(m, mb)),
+          ),
+      ),
+    );
   }
 }
