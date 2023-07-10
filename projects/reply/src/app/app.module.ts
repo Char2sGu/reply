@@ -2,7 +2,8 @@ import 'hammerjs';
 
 import { HttpClientModule } from '@angular/common/http';
 import { inject, NgModule } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
 import {
   BrowserModule,
@@ -21,6 +22,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { INITIALIZER, Initializer } from './core/initialization';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
+import { SnackbarContentComponent } from './core/snackbar-content/snackbar-content.component';
 import { LogoComponent } from './shared/logo/logo.component';
 
 // TODO: attachment
@@ -29,7 +31,7 @@ import { LogoComponent } from './shared/logo/logo.component';
 // TODO: gestures on cards
 
 @NgModule({
-  declarations: [AppComponent, LaunchScreenComponent],
+  declarations: [AppComponent, LaunchScreenComponent, SnackbarContentComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -44,7 +46,9 @@ import { LogoComponent } from './shared/logo/logo.component';
     LayoutProjectionModule.forRoot(),
     ScrollingModule.forRoot(),
     environment.backend,
+    MatIconModule,
     MatSnackBarModule,
+    MatButtonModule,
     AppRoutingModule,
     LogoComponent,
   ],

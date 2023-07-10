@@ -3,6 +3,10 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { map, merge, Observable } from 'rxjs';
 
 import { BREAKPOINTS } from './breakpoint.service';
+import {
+  SnackbarContentComponent,
+  SnackbarContentContext,
+} from './snackbar-content/snackbar-content.component';
 
 @Injectable({
   providedIn: 'root',
@@ -38,12 +42,16 @@ export class SnackbarNotificationService implements NotificationService {
   private snackbarService = inject(MatSnackBar);
 
   notify(message: string, action?: string | undefined): NotificationRef {
-    const snackbarRef = this.snackbarService.open(message, action, {
-      duration: 15 * 1000,
-      ...(this.breakpoints()['tablet-portrait']
-        ? { verticalPosition: 'bottom', horizontalPosition: 'right' }
-        : { verticalPosition: 'top', horizontalPosition: 'center' }),
-    });
+    const snackbarRef = this.snackbarService.openFromComponent(
+      SnackbarContentComponent,
+      {
+        data: { message, action } satisfies SnackbarContentContext,
+        duration: 30 * 1000,
+        ...(this.breakpoints()['tablet-portrait']
+          ? { verticalPosition: 'bottom', horizontalPosition: 'right' }
+          : { verticalPosition: 'top', horizontalPosition: 'center' }),
+      },
+    );
     return {
       event$: merge(
         snackbarRef

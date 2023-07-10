@@ -1,0 +1,12 @@
+<div class="text">{{ context.message }}</div>
+<button
+  mat-button
+  *ngIf="context.action"
+  color="accent"
+  (click)="snackbarRef.dismissWithAction()"
+>
+  {{ context.action }}
+</button>
+<button mat-icon-button (click)="snackbarRef.dismiss()">
+  <mat-icon fontSet="filled" fontIcon="close"></mat-icon>
+</button>
