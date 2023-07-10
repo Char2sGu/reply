@@ -125,7 +125,7 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
 
   async initiateDetailToListLayoutAnimation(mail: Mail): Promise<void> {
     const snapshot = this.listLayoutSnapshots.get(`mail-${mail.id}`);
-    if (!snapshot) throw new Error('Missing snapshot');
+    if (!snapshot) return; // mail removed from the current mailbox
 
     const cardType = MailCardAnimationPresenceComponent;
     const cardRef = this.viewContainer.createComponent(cardType);
