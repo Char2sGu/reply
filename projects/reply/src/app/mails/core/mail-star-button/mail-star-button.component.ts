@@ -6,7 +6,7 @@ import {
   Input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, EMPTY, Observable, switchMap } from 'rxjs';
+import { catchError, filter, Observable, switchMap } from 'rxjs';
 
 import { NotificationService } from '@/app/core/notification.service';
 import { MailService } from '@/app/data/mail.service';
@@ -41,9 +41,15 @@ export class MailStarButtonComponent {
       ? this.mailService.markMailAsNotStarred(this.mail)
       : this.mailService.markMailAsStarred(this.mail);
     return action$.pipe(
-      catchError(() => {
-        this.notificationService.notify('Something went wrong');
-        return EMPTY;
+      catchError((err, caught) => {
+        const notificationRef = this.notificationService.notify(
+          'Failed to update starred status',
+          'Retry',
+        );
+        return notificationRef.event$.pipe(
+          filter((e) => e.type === 'action'),
+          switchMap(() => caught),
+        );
       }),
     );
   }
