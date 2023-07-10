@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { map, merge } from 'rxjs';
 
+import { BREAKPOINTS } from './breakpoint.service';
 import {
   NotificationActionEvent,
   NotificationDismissEvent,
@@ -12,12 +13,14 @@ import {
 
 @Injectable()
 export class SnackbarNotificationService implements NotificationService {
+  private breakpoints = inject(BREAKPOINTS);
   private snackbarService = inject(MatSnackBar);
 
   notify(message: string, action?: string | undefined): NotificationRef {
     const snackbarRef = this.snackbarService.open(message, action, {
-      verticalPosition: 'top',
-      horizontalPosition: 'center',
+      ...(this.breakpoints()['tablet-portrait']
+        ? { verticalPosition: 'bottom', horizontalPosition: 'right' }
+        : { verticalPosition: 'top', horizontalPosition: 'center' }),
     });
     return {
       event$: merge(
