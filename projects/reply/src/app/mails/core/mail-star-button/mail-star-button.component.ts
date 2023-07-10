@@ -1,14 +1,15 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
-  EventEmitter,
   inject,
   Input,
 } from '@angular/core';
-import { BehaviorSubject, filter, tap } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+
+import { MailService } from '@/app/data/mail.service';
 
 import { Mail } from '../../../data/mail.model';
-import { MailRepository } from '../../../data/mail.repository';
 
 @Component({
   selector: 'rpl-mail-star-button',
@@ -17,25 +18,21 @@ import { MailRepository } from '../../../data/mail.repository';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailStarButtonComponent {
-  private mailRepo = inject(MailRepository);
+  private mailService = inject(MailService);
+  private changeDetector = inject(ChangeDetectorRef);
 
   @Input() mail!: Mail;
 
-  click$ = new EventEmitter();
-  busy$ = new BehaviorSubject(false);
+  busy = false;
 
-  constructor() {
-    this.click$
-      .pipe(
-        filter(() => !this.busy$.value),
-        tap(() => this.busy$.next(true)),
-        tap(() => {
-          if (this.mail.isStarred)
-            this.mailRepo.patch(this.mail.id, { isStarred: false });
-          else this.mailRepo.patch(this.mail.id, { isStarred: true });
-        }),
-        tap(() => this.busy$.next(false)),
-      )
-      .subscribe();
+  async onClick(): Promise<void> {
+    if (this.busy) return;
+    const action$ = this.mail.isStarred
+      ? this.mailService.markMailAsNotStarred(this.mail.id)
+      : this.mailService.markMailAsStarred(this.mail.id);
+    this.busy = true;
+    await firstValueFrom(action$);
+    this.busy = false;
+    this.changeDetector.markForCheck();
   }
 }

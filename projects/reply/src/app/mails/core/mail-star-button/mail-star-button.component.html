@@ -1,8 +1,8 @@
 <button
   mat-icon-button
-  [disabled]="busy$ | async"
+  [disabled]="busy"
   [color]="mail.isStarred ? 'accent' : undefined"
-  (click)="click$.emit()"
+  (click)="onClick()"
 >
   <mat-icon svgIcon="star"></mat-icon>
 </button>
