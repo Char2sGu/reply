@@ -5,18 +5,18 @@ import { access } from '../core/property-path.utils';
 import { Mailbox } from '../data/mailbox.model';
 import { MailboxRepository } from '../data/mailbox.repository';
 import { MailboxService } from '../data/mailbox.service';
-import { AUTHORIZED_GOOGLE_APIS } from './core/authorized-google-apis.token';
 import { GMAIL_SYSTEM_MAILBOXES } from './core/gmail-system-mailboxes.token';
+import { useGoogleApi } from './core/google-apis.utils';
 
 @Injectable()
 export class GoogleMailboxService implements MailboxService {
-  private apis$ = inject(AUTHORIZED_GOOGLE_APIS);
   private mailboxRepo = inject(MailboxRepository);
   private systemMailboxes = inject(GMAIL_SYSTEM_MAILBOXES);
 
+  private labelListApi = useGoogleApi((a) => a.gmail.users.labels.list);
+
   loadMailboxes(): Observable<Mailbox[]> {
-    return this.apis$.pipe(
-      switchMap((apis) => apis.gmail.users.labels.list({ userId: 'me' })),
+    return this.labelListApi({ userId: 'me' }).pipe(
       map((response) => access(response.result, 'labels')),
       map((labels) => this.parseLabels(labels)),
       map((mailboxes) => [...this.systemMailboxes, ...mailboxes]),

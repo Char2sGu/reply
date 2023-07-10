@@ -1,7 +1,7 @@
 import { inject, Injectable, NgZone } from '@angular/core';
 import dayjs from 'dayjs';
 import {
-  combineLatest,
+  concatMap,
   distinctUntilChanged,
   filter,
   first,
@@ -12,6 +12,7 @@ import {
   Subject,
   switchMap,
   takeUntil,
+  throwIfEmpty,
   timer,
 } from 'rxjs';
 
@@ -26,6 +27,7 @@ import {
 import { Contact } from '../data/contact.model';
 import { ContactRepository } from '../data/contact.repository';
 import { GOOGLE_APIS } from './core/google-apis.token';
+import { useGoogleApi } from './core/google-apis.utils';
 import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';
 
 const SCOPES = [
@@ -39,6 +41,12 @@ export class GoogleAuthenticationService implements AuthenticationService {
   private contactRepo = inject(ContactRepository);
   private apis$ = inject(GOOGLE_APIS);
   private clientId = inject(GOOGLE_CLIENT_ID);
+
+  private peopleGetApi = useGoogleApi((a) => a.people.people.get);
+  private tokenRevokeApi = useGoogleApi(
+    (a) => (arg: Parameters<typeof a.oauth2.revoke>[0]) =>
+      new Promise<void>((r) => a.oauth2.revoke(arg, r)),
+  );
 
   private tokenClient$ = this.apis$.pipe(
     map((apis) =>
@@ -81,12 +89,10 @@ export class GoogleAuthenticationService implements AuthenticationService {
     shareReplay(1),
   );
 
-  readonly user$: Observable<Contact> = combineLatest([
-    this.apis$,
-    this.authorized$.pipe(filter(Boolean)),
-  ]).pipe(
-    switchMap(([apis]) =>
-      apis.people.people.get({
+  readonly user$: Observable<Contact> = this.authorized$.pipe(
+    filter(Boolean),
+    switchMap(() =>
+      this.peopleGetApi({
         resourceName: 'people/me',
         personFields: 'photos,emailAddresses',
       }),
@@ -133,13 +139,15 @@ export class GoogleAuthenticationService implements AuthenticationService {
   }
 
   revokeAuthorization(): void {
-    combineLatest([this.apis$, this.authorization$])
-      .pipe(first())
-      .subscribe(([apis, auth]) => {
-        if (!auth) throw new UnauthorizedException();
-        apis.oauth2.revoke(auth.token, () => {
-          this.authorizationUpdate$.next({ type: 'revoke' });
-        });
+    this.authorization$
+      .pipe(
+        first(),
+        filter(Boolean),
+        throwIfEmpty(() => new UnauthorizedException()),
+        concatMap((auth) => this.tokenRevokeApi(auth.token)),
+      )
+      .subscribe(() => {
+        this.authorizationUpdate$.next({ type: 'revoke' });
       });
   }
 }

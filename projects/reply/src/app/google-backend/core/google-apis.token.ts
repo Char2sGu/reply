@@ -13,7 +13,7 @@ import {
   tap,
 } from 'rxjs';
 
-import { includePromiseInZone } from '@/app/core/zone.utils';
+import { includeThenableInZone } from '@/app/core/zone.utils';
 
 import { ScriptLoader } from '../../core/script-loader.service';
 
@@ -34,7 +34,7 @@ export const GOOGLE_APIS = new InjectionToken<Observable<GoogleApis>>(
         scriptLoader.load('https://apis.google.com/js/api.js').pipe(
           concatMap(() => {
             const promise = new Promise<void>((r) => gapi.load('client', r));
-            return includePromiseInZone(zone, promise);
+            return includeThenableInZone(zone, promise);
           }),
           concatMap(() => {
             const promise = gapi.client.init({
@@ -43,7 +43,7 @@ export const GOOGLE_APIS = new InjectionToken<Observable<GoogleApis>>(
                 'https://www.googleapis.com/discovery/v1/apis/people/v1/rest',
               ],
             });
-            return includePromiseInZone(zone, promise);
+            return includeThenableInZone(zone, promise);
           }),
         ),
         scriptLoader.load('https://accounts.google.com/gsi/client'),

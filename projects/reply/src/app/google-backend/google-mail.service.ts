@@ -5,18 +5,19 @@ import { access } from '../core/property-path.utils';
 import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';
 import { MailService } from '../data/mail.service';
-import { AUTHORIZED_GOOGLE_APIS } from './core/authorized-google-apis.token';
 import { GmailMessageParser } from './core/gmail-message-parser.service';
+import { useGoogleApi } from './core/google-apis.utils';
 
 @Injectable()
 export class GoogleMailService implements MailService {
-  private apis$ = inject(AUTHORIZED_GOOGLE_APIS);
   private messageParser = inject(GmailMessageParser);
   private mailRepo = inject(MailRepository);
 
+  private messageListApi = useGoogleApi((a) => a.gmail.users.messages.list);
+  private messageGetApi = useGoogleApi((a) => a.gmail.users.messages.get);
+
   loadMails(): Observable<Mail[]> {
-    return this.apis$.pipe(
-      switchMap((apis) => apis.gmail.users.messages.list({ userId: 'me' })),
+    return this.messageListApi({ userId: 'me' }).pipe(
       map((r) => access(r, 'result.messages')),
       switchMap((messages) =>
         combineLatest(messages.map((m) => this.loadMail(access(m, 'id')))),
@@ -25,8 +26,7 @@ export class GoogleMailService implements MailService {
   }
 
   loadMail(id: string): Observable<Mail> {
-    return this.apis$.pipe(
-      switchMap((apis) => apis.gmail.users.messages.get({ userId: 'me', id })),
+    return this.messageGetApi({ userId: 'me', id }).pipe(
       map((response) => response.result),
       switchMap((message) => this.messageParser.parseFullMessage(message)),
       switchMap((mail) => this.mailRepo.insertOrPatch(mail)),
