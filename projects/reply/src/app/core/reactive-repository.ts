@@ -1,6 +1,7 @@
 import {
   BehaviorSubject,
   filter,
+  InteropObservable,
   map,
   Observable,
   shareReplay,
@@ -16,7 +17,7 @@ import {
 
 export abstract class ReactiveRepository<Entity> {
   protected updatesSubject = new Subject<ReactiveRepositoryUpdate<Entity>>();
-  updates$ = this.updatesSubject.asObservable();
+  readonly updates$ = this.updatesSubject.asObservable();
 
   protected entities = new Map<string, BehaviorSubject<Entity>>();
 
@@ -52,37 +53,57 @@ export abstract class ReactiveRepository<Entity> {
     return entity;
   }
 
-  insert(entity: Entity): Observable<Entity> {
+  insert(entity: Entity): ReactiveRepositoryUpdate<Entity> {
     const id = this.identify(entity);
     if (this.entities.has(id)) throw new EntityDuplicateException();
-    const subject = new BehaviorSubject(entity);
-    this.entities.set(id, subject);
-    this.updatesSubject.next({ id, prev: null, curr: entity });
-    return subject;
+    const entity$ = new BehaviorSubject(entity);
+    this.entities.set(id, entity$);
+    return this.createUpdate({
+      id,
+      prev: null,
+      curr: entity,
+      entity$,
+      undo: () => this.delete(id),
+    });
   }
 
-  patch(id: string, payload: Partial<Entity>): Observable<Entity> {
-    const entity = this.entities.get(id);
-    if (!entity) throw new EntityNotFoundException();
-    const prev = entity.value;
-    entity.next({ ...prev, ...payload });
-    this.updatesSubject.next({ id, prev, curr: entity.value });
-    return entity;
+  patch(
+    id: string,
+    payload: Partial<Entity>,
+  ): ReactiveRepositoryUpdate<Entity> {
+    const entity$ = this.entities.get(id);
+    if (!entity$) throw new EntityNotFoundException();
+    const prev = entity$.value;
+    entity$.next({ ...prev, ...payload });
+    return this.createUpdate({
+      id,
+      prev,
+      curr: entity$.value,
+      entity$,
+      undo: () => this.patch(id, prev),
+    });
   }
 
-  insertOrPatch(entity: Entity): Observable<Entity> {
+  insertOrPatch(entity: Entity): ReactiveRepositoryUpdate<Entity> {
     const id = this.identify(entity);
     const existing = this.entities.get(id);
     if (existing) return this.patch(id, entity);
     return this.insert(entity);
   }
 
-  delete(id: string): void {
-    const entity = this.entities.get(id);
-    if (!entity) throw new EntityNotFoundException();
-    entity.complete();
+  delete(id: string): ReactiveRepositoryUpdate<Entity> {
+    const entity$ = this.entities.get(id);
+    if (!entity$) throw new EntityNotFoundException();
+    const prev = entity$.value;
+    entity$.complete();
     this.entities.delete(id);
-    this.updatesSubject.next({ id, prev: entity.value, curr: null });
+    return this.createUpdate({
+      id,
+      prev,
+      curr: null,
+      entity$,
+      undo: () => this.insert(prev),
+    });
   }
 
   exists(id: string): Observable<boolean> {
@@ -97,10 +118,21 @@ export abstract class ReactiveRepository<Entity> {
       map(() => result),
     );
   }
+
+  private createUpdate(
+    fields: Omit<ReactiveRepositoryUpdate<Entity>, symbol>,
+  ): ReactiveRepositoryUpdate<Entity> {
+    const update = { ...fields, [Symbol.observable]: () => fields.entity$ };
+    this.updatesSubject.next(update);
+    return update;
+  }
 }
 
-export interface ReactiveRepositoryUpdate<Entity> {
-  id: string;
-  prev: Entity | null;
-  curr: Entity | null;
+export interface ReactiveRepositoryUpdate<Entity>
+  extends InteropObservable<Entity> {
+  readonly id: string;
+  readonly prev: Entity | null;
+  readonly curr: Entity | null;
+  readonly entity$: Observable<Entity>;
+  undo(): ReactiveRepositoryUpdate<Entity>;
 }
