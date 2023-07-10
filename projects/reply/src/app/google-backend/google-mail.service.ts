@@ -1,5 +1,13 @@
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  first,
+  map,
+  Observable,
+  switchMap,
+  tap,
+} from 'rxjs';
 
 import { access } from '../core/property-path.utils';
 import { Mail } from '../data/mail.model';
@@ -37,37 +45,68 @@ export class GoogleMailService implements MailService {
   }
 
   markMailAsStarred(id: Mail['id']): Observable<void> {
-    return this.modifyMessage(id, { addLabelIds: ['STARRED'] });
+    return this.modifyMessage(
+      id,
+      { addLabelIds: ['STARRED'] },
+      { isStarred: true },
+    );
   }
   markMailAsNotStarred(id: Mail['id']): Observable<void> {
-    return this.modifyMessage(id, { removeLabelIds: ['STARRED'] });
+    return this.modifyMessage(
+      id,
+      { removeLabelIds: ['STARRED'] },
+      { isStarred: false },
+    );
   }
 
   markMailAsRead(id: string): Observable<void> {
-    return this.modifyMessage(id, { removeLabelIds: ['UNREAD'] });
+    return this.modifyMessage(
+      id,
+      { removeLabelIds: ['UNREAD'] },
+      { isRead: true },
+    );
   }
   markMailAsUnread(id: string): Observable<void> {
-    return this.modifyMessage(id, { addLabelIds: ['UNREAD'] });
+    return this.modifyMessage(
+      id,
+      { addLabelIds: ['UNREAD'] },
+      { isRead: false },
+    );
   }
 
   moveMail(id: string, mailboxId: string): Observable<void> {
-    return this.mailboxRepo
-      .retrieve(mailboxId)
-      .pipe(
-        switchMap((mailbox) =>
-          this.modifyMessage(id, { addLabelIds: [mailbox.id] }),
+    return combineLatest([
+      this.mailRepo.retrieve(id),
+      this.mailboxRepo.retrieve(mailboxId),
+    ]).pipe(
+      switchMap(([mail, targetMailbox]) =>
+        this.modifyMessage(
+          id,
+          {
+            removeLabelIds: [mail.mailbox],
+            addLabelIds: [targetMailbox.id],
+          },
+          { mailbox: targetMailbox.id },
         ),
-      );
+      ),
+    );
   }
 
   private modifyMessage(
     id: Mail['id'],
     body: gapi.client.gmail.ModifyMessageRequest,
+    optimisticResult?: Partial<Mail>,
   ): Observable<void> {
+    const optimisticRepoUpdate =
+      optimisticResult && this.mailRepo.patch(id, optimisticResult);
     return this.messageModifyApi({ userId: 'me', id }, body).pipe(
       switchMap((response) => this.messageParser.parseMessage(response.result)),
-      switchMap((mail) => this.mailRepo.patch(id, mail)),
       first(),
+      catchError((e) => {
+        optimisticRepoUpdate?.undo();
+        throw e;
+      }),
+      tap((mail) => this.mailRepo.patch(id, mail)),
       map(() => undefined),
     );
   }
