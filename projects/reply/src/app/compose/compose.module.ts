@@ -6,6 +6,7 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
 import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
 import { HeaderComponent } from '../shared/header/header.component';
 import { ComposeComponent } from './compose.component';
@@ -20,6 +21,7 @@ import { ComposeRoutingModule } from './compose-routing.module';
     MatButtonModule,
     MatChipsModule,
     MatFormFieldModule,
+    MatTooltipModule,
     MatIconModule,
     MatSelectModule,
     HeaderComponent,

@@ -1,6 +1,7 @@
 <button
   mat-icon-button
   [color]="mail.isStarred ? 'accent' : undefined"
+  [matTooltip]="mail.isStarred ? 'Mark as not starred' : 'Mark as starred'"
   (click)="click.emit()"
 >
   <mat-icon svgIcon="star"></mat-icon>

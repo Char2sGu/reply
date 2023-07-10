@@ -82,6 +82,10 @@ textarea {
   }
 }
 
+.mat-tooltip {
+  @include mat.typography-level(theming.$typography-config, 'caption');
+}
+
 // Prevent <router-outlet> elements from interfering the layout because they
 // can be "blocks" in certain layouts although they should be "inline".
 router-outlet {

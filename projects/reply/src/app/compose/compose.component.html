@@ -1,6 +1,6 @@
 <ng-container ngForm>
   <rpl-header class="subject-line">
-    <a mat-icon-button [routerLink]="backUrl$ | async">
+    <a mat-icon-button [routerLink]="backUrl$ | async" matTooltip="Close">
       <mat-icon fontSet="filled" fontIcon="close"></mat-icon>
     </a>
     <input
@@ -10,7 +10,7 @@
       [ngModel]="subject$.value"
       (ngModelChange)="subject$.next($event)"
     />
-    <button mat-icon-button>
+    <button mat-icon-button matTooltip="send">
       <mat-icon svgIcon="send"></mat-icon>
     </button>
   </rpl-header>
@@ -46,7 +46,7 @@
         <span>Recipient2</span>
       </mat-chip>
     </mat-chip-list>
-    <button mat-icon-button>
+    <button mat-icon-button matTooltip="Add recipient">
       <mat-icon fontSet="filled" fontIcon="add_circle_outline"></mat-icon>
     </button>
   </div>

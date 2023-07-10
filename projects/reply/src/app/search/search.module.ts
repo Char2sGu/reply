@@ -6,6 +6,7 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
 import { ResolveRefPipe } from '../data/resolve-ref.pipe';
 import { HeaderComponent } from '../shared/header/header.component';
@@ -27,6 +28,7 @@ import { SearchRoutingModule } from './search-routing.module';
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
+    MatTooltipModule,
     ScrollableAreaComponent,
     LayoutContentDirective,
     ResolveRefPipe,

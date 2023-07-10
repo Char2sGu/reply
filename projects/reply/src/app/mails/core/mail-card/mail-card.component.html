@@ -20,7 +20,7 @@
         <ng-container *ngIf="breakpoints()['tablet-portrait']">
           <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
           <rpl-mail-delete-button [mail]="mail"></rpl-mail-delete-button>
-          <button mat-icon-button>
+          <button mat-icon-button matTooltip="More actions">
             <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
           </button>
         </ng-container>
@@ -28,6 +28,7 @@
           mat-icon-button
           class="avatar-button"
           lpjNode="mail-{{ mail.id }}-avatar"
+          matTooltip="Show details"
         >
           <rpl-avatar [contact]="mailSender"></rpl-avatar>
         </button>

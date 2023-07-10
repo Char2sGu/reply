@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { LayoutProjectionModule } from '@layout-projection/angular';
 
 import { AvatarComponent } from '../shared/avatar/avatar.component';
@@ -45,6 +46,7 @@ import { UpperFoundationComponent } from './upper-foundation/upper-foundation.co
     MatIconModule,
     MatButtonModule,
     MatListModule,
+    MatTooltipModule,
     ReattachOnChangeDirective,
     SearchButtonComponent,
     SettingsButtonComponent,

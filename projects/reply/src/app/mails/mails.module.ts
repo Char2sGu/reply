@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { LayoutProjectionModule } from '@layout-projection/angular';
 import { ScrollingModule } from '@reply/scrolling';
 
@@ -42,6 +43,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     CommonModule,
     MailsRoutingModule,
     MatButtonModule,
+    MatTooltipModule,
     MatRippleModule,
     MatIconModule,
     LayoutProjectionModule,
