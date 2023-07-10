@@ -38,8 +38,8 @@ export class MailStarButtonComponent {
 
   toggleStarred(): Observable<void> {
     const action$ = this.mail.isStarred
-      ? this.mailService.markMailAsNotStarred(this.mail.id)
-      : this.mailService.markMailAsStarred(this.mail.id);
+      ? this.mailService.markMailAsNotStarred(this.mail)
+      : this.mailService.markMailAsStarred(this.mail);
     return action$.pipe(
       catchError(() => {
         this.notificationService.notify('Something went wrong');

@@ -13,7 +13,7 @@ import { access } from '../core/property-path.utils';
 import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';
 import { MailService } from '../data/mail.service';
-import { MailboxRepository } from '../data/mailbox.repository';
+import { Mailbox } from '../data/mailbox.model';
 import { GmailMessageParser } from './core/gmail-message-parser.service';
 import { useGoogleApi } from './core/google-apis.utils';
 
@@ -21,7 +21,6 @@ import { useGoogleApi } from './core/google-apis.utils';
 export class GoogleMailService implements MailService {
   private messageParser = inject(GmailMessageParser);
   private mailRepo = inject(MailRepository);
-  private mailboxRepo = inject(MailboxRepository);
 
   private messageListApi = useGoogleApi((a) => a.gmail.users.messages.list);
   private messageGetApi = useGoogleApi((a) => a.gmail.users.messages.get);
@@ -44,69 +43,62 @@ export class GoogleMailService implements MailService {
     );
   }
 
-  markMailAsStarred(id: Mail['id']): Observable<void> {
-    return this.modifyMessage(
-      id,
+  markMailAsStarred(mail: Mail): Observable<void> {
+    return this.updateMail(
+      mail,
       { addLabelIds: ['STARRED'] },
       { isStarred: true },
     );
   }
-  markMailAsNotStarred(id: Mail['id']): Observable<void> {
-    return this.modifyMessage(
-      id,
+  markMailAsNotStarred(mail: Mail): Observable<void> {
+    return this.updateMail(
+      mail,
       { removeLabelIds: ['STARRED'] },
       { isStarred: false },
     );
   }
 
-  markMailAsRead(id: string): Observable<void> {
-    return this.modifyMessage(
-      id,
+  markMailAsRead(mail: Mail): Observable<void> {
+    return this.updateMail(
+      mail,
       { removeLabelIds: ['UNREAD'] },
       { isRead: true },
     );
   }
-  markMailAsUnread(id: string): Observable<void> {
-    return this.modifyMessage(
-      id,
+  markMailAsUnread(mail: Mail): Observable<void> {
+    return this.updateMail(
+      mail,
       { addLabelIds: ['UNREAD'] },
       { isRead: false },
     );
   }
 
-  moveMail(id: string, mailboxId: string): Observable<void> {
-    return combineLatest([
-      this.mailRepo.retrieve(id),
-      this.mailboxRepo.retrieve(mailboxId),
-    ]).pipe(
-      switchMap(([mail, targetMailbox]) =>
-        this.modifyMessage(
-          id,
-          {
-            removeLabelIds: [mail.mailbox],
-            addLabelIds: [targetMailbox.id],
-          },
-          { mailbox: targetMailbox.id },
-        ),
-      ),
+  moveMail(mail: Mail, mailbox: Mailbox): Observable<void> {
+    return this.updateMail(
+      mail,
+      {
+        removeLabelIds: [mail.mailbox],
+        addLabelIds: [mailbox.id],
+      },
+      { mailbox: mailbox.id },
     );
   }
 
-  private modifyMessage(
-    id: Mail['id'],
+  private updateMail(
+    mail: Mail,
     body: gapi.client.gmail.ModifyMessageRequest,
     optimisticResult?: Partial<Mail>,
   ): Observable<void> {
     const optimisticRepoUpdate =
-      optimisticResult && this.mailRepo.patch(id, optimisticResult);
-    return this.messageModifyApi({ userId: 'me', id }, body).pipe(
+      optimisticResult && this.mailRepo.patch(mail.id, optimisticResult);
+    return this.messageModifyApi({ userId: 'me', id: mail.id }, body).pipe(
       switchMap((response) => this.messageParser.parseMessage(response.result)),
       first(),
       catchError((e) => {
         optimisticRepoUpdate?.undo();
         throw e;
       }),
-      tap((mail) => this.mailRepo.patch(id, mail)),
+      tap((updated) => this.mailRepo.patch(mail.id, updated)),
       map(() => undefined),
     );
   }

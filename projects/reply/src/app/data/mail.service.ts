@@ -8,9 +8,9 @@ import { Mailbox } from './mailbox.model';
 export abstract class MailService {
   abstract loadMails(): Observable<Mail[]>;
   abstract loadMail(id: Mail['id']): Observable<Mail>;
-  abstract markMailAsStarred(id: Mail['id']): Observable<void>;
-  abstract markMailAsNotStarred(id: Mail['id']): Observable<void>;
-  abstract markMailAsRead(id: Mail['id']): Observable<void>;
-  abstract markMailAsUnread(id: Mail['id']): Observable<void>;
-  abstract moveMail(id: Mail['id'], mailboxId: Mailbox['id']): Observable<void>;
+  abstract markMailAsStarred(mail: Mail): Observable<void>;
+  abstract markMailAsNotStarred(mail: Mail): Observable<void>;
+  abstract markMailAsRead(mail: Mail): Observable<void>;
+  abstract markMailAsUnread(mail: Mail): Observable<void>;
+  abstract moveMail(mail: Mail, mailbox: Mailbox): Observable<void>;
 }
