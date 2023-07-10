@@ -5,8 +5,10 @@ import {
   inject,
   Input,
 } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { catchError, EMPTY, Subscription } from 'rxjs';
 
+import { NotificationService } from '@/app/core/notification.service';
+import { MailRepository } from '@/app/data/mail.repository';
 import { MailService } from '@/app/data/mail.service';
 
 import { Mail } from '../../../data/mail.model';
@@ -18,21 +20,36 @@ import { Mail } from '../../../data/mail.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailStarButtonComponent {
+  private mailRepo = inject(MailRepository);
   private mailService = inject(MailService);
   private changeDetector = inject(ChangeDetectorRef);
+  private notificationService = inject(NotificationService);
 
   @Input() mail!: Mail;
 
-  busy = false;
+  actionSubscription = new Subscription();
 
-  async onClick(): Promise<void> {
-    if (this.busy) return;
+  onClick(): void {
+    this.actionSubscription.unsubscribe();
+
+    const repoUpdate = this.mailRepo.patch(
+      this.mail.id, //
+      { isStarred: !this.mail.isStarred },
+    );
+
     const action$ = this.mail.isStarred
       ? this.mailService.markMailAsNotStarred(this.mail.id)
       : this.mailService.markMailAsStarred(this.mail.id);
-    this.busy = true;
-    await firstValueFrom(action$);
-    this.busy = false;
-    this.changeDetector.markForCheck();
+
+    this.actionSubscription = action$
+      .pipe(
+        catchError(() => {
+          repoUpdate.undo();
+          this.changeDetector.markForCheck();
+          this.notificationService.notify('Something went wrong');
+          return EMPTY;
+        }),
+      )
+      .subscribe();
   }
 }
