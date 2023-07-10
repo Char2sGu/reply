@@ -1,6 +1,5 @@
 import {
   BehaviorSubject,
-  distinctUntilChanged,
   filter,
   InteropObservable,
   map,
@@ -44,13 +43,19 @@ export abstract class ReactiveRepository<Entity> {
       if (condition(entity.value)) results.add(id);
 
     return this.updates$.pipe(
-      tap((update) => {
-        if (update.curr && condition(update.curr)) results.add(update.id);
-        else results.delete(update.id);
+      map((update) => {
+        if (update.curr && condition(update.curr)) {
+          results.add(update.id);
+          return true;
+        }
+        if (update.prev && condition(update.prev)) {
+          results.delete(update.id);
+          return true;
+        }
+        return false;
       }),
-      startWith(null),
-      map(() => results.size),
-      distinctUntilChanged(),
+      startWith(true),
+      filter(Boolean),
       map(() =>
         [...results].map((id) => {
           const entity = this.entities.get(id);
