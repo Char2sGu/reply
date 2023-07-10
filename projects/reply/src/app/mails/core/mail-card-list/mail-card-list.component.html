@@ -1,7 +1,12 @@
-<rpl-mail-card
-  *ngFor="let mail of mails; let index = index; trackBy: mailTracker"
-  [mail]="mail"
-  lpjNode="mail-{{ mail.id }}"
+<div
+  class="content"
+  lpjNode="content"
   [lpjAnimation]="{ duration: 250, easing: AnimationCurves.STANDARD_CURVE }"
   [lpjAnimationTrigger]="mails"
-></rpl-mail-card>
+>
+  <ng-container
+    *ngFor="let mail of mails; let index = index; trackBy: mailTracker"
+  >
+    <rpl-mail-card [mail]="mail" lpjNode="mail-{{ mail.id }}"></rpl-mail-card>
+  </ng-container>
+</div>

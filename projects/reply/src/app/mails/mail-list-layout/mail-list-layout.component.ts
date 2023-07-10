@@ -23,6 +23,10 @@ import { MailRepository } from '@/app/data/mail.repository';
 import { Mailbox } from '@/app/data/mailbox.model';
 import { MailboxRepository } from '@/app/data/mailbox.repository';
 
+// TODO: entering animation not correctly cleaned up after finished, causing
+// some element styles unable to work properly: layout projection not working
+// until next navigation.
+
 const mailCardsAnimation = animation([
   query(
     ':enter rpl-mail-card',
