@@ -27,7 +27,7 @@ export class GoogleMailService implements MailService {
   private messageModifyApi = useGoogleApi((a) => a.gmail.users.messages.modify);
 
   loadMails(): Observable<Mail[]> {
-    return this.messageListApi({ userId: 'me' }).pipe(
+    return this.messageListApi({ userId: 'me', includeSpamTrash: true }).pipe(
       map((r) => access(r, 'result.messages')),
       switchMap((messages) =>
         combineLatest(messages.map((m) => this.loadMail(access(m, 'id')))),
