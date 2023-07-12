@@ -18,6 +18,7 @@ export const DEMO_CONTACTS = new InjectionToken<Contact[]>('DEMO_CONTACTS', {
       }),
       $({
         name: 'Google Express',
+        avatarUrl: 'assets/demo/avatar-express.png',
       }),
       $({
         name: 'Ali Connors',
