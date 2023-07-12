@@ -1,36 +1,34 @@
-<ng-container *ngIf="mail$ | async as mail">
-  <ng-container *ngIf="user$ | async as user">
+<ng-container *ngIf="user$ | async as user">
+  <ng-container
+    *ngIf="mail.sender | resolveRef : contactRepo | async as sender"
+  >
     <ng-container
-      *ngIf="mail.sender | resolveRef : contactRepo | async as sender"
+      *ngIf="mail.recipients | resolveRef : contactRepo | async as recipients"
     >
-      <ng-container
-        *ngIf="mail.recipients | resolveRef : contactRepo | async as recipients"
-      >
-        <rpl-scrollable-area rplLayoutContent data-route-animation-target>
-          <rpl-mail
-            [user]="user"
-            [mail]="mail"
-            [sender]="sender"
-            [recipients]="recipients"
-            lpjNode="mail-{{ mail.id }}"
-          ></rpl-mail>
-        </rpl-scrollable-area>
-      </ng-container>
+      <rpl-scrollable-area rplLayoutContent data-route-animation-target>
+        <rpl-mail
+          [user]="user"
+          [mail]="mail"
+          [sender]="sender"
+          [recipients]="recipients"
+          lpjNode="mail-{{ mail.id }}"
+        ></rpl-mail>
+      </rpl-scrollable-area>
     </ng-container>
   </ng-container>
-
-  <ng-template #bottomActions>
-    <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
-    <rpl-mail-delete-button
-      [mail]="mail"
-      routerLink=".."
-    ></rpl-mail-delete-button>
-    <button mat-icon-button>
-      <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
-    </button>
-  </ng-template>
-
-  <ng-template #replyIcon>
-    <mat-icon svgIcon="reply"></mat-icon>
-  </ng-template>
 </ng-container>
+
+<ng-template #bottomActions>
+  <rpl-mail-star-button [mail]="mail"></rpl-mail-star-button>
+  <rpl-mail-delete-button
+    [mail]="mail"
+    routerLink=".."
+  ></rpl-mail-delete-button>
+  <button mat-icon-button>
+    <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
+  </button>
+</ng-template>
+
+<ng-template #replyIcon>
+  <mat-icon svgIcon="reply"></mat-icon>
+</ng-template>

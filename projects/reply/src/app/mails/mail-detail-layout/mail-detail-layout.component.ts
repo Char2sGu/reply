@@ -3,11 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  Input,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { filter, map, Observable, switchMap, tap, timer } from 'rxjs';
+import { timer } from 'rxjs';
 
 import { AuthenticationService } from '@/app/core/authentication.service';
 import { LAYOUT_CONTEXT } from '@/app/core/layout-context.token';
@@ -28,15 +29,7 @@ export class MailDetailLayoutComponent implements AfterViewInit {
   private route = inject(ActivatedRoute);
   private layoutContext = inject(LAYOUT_CONTEXT);
 
-  mail$: Observable<Mail> = this.route.params.pipe(
-    map((p): string => p['mailId']),
-    filter(Boolean),
-    switchMap((id) => this.mailRepo.retrieve(id)),
-    tap((mail) => {
-      if (mail.isRead) return;
-      this.mailRepo.patch(mail.id, { isRead: true });
-    }),
-  );
+  @Input({ required: true }) mail!: Mail;
 
   @ViewChild('replyIcon')
   private navFabIconTemplate!: TemplateRef<never>;
