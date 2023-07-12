@@ -12,11 +12,15 @@ import {
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, Observable, shareReplay, switchMap } from 'rxjs';
+import { map, Observable, of, shareReplay, switchMap } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
-import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
+import {
+  SystemMailboxName,
+  VirtualMailboxName,
+} from '@/app/core/mailbox-name.enums';
+import { useSystemMailboxNameMapping } from '@/app/core/mailbox-name.utils';
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
 import { Mail } from '@/app/data/mail.model';
 import { MailRepository } from '@/app/data/mail.repository';
@@ -75,6 +79,8 @@ export class MailListLayoutComponent {
   private mailRepo = inject(MailRepository);
   private mailboxRepo = inject(MailboxRepository);
 
+  private systemMailboxes$ = useSystemMailboxNameMapping();
+
   mailboxName$ = this.route.params.pipe(
     map((params): string => params['mailboxName']),
   );
@@ -95,11 +101,18 @@ export class MailListLayoutComponent {
     mailboxName: VirtualMailboxName,
   ): Observable<Mail[]> {
     // TODO: implement data query for other virtual mailboxes
-    return this.mailRepo.query(
-      mailboxName === VirtualMailboxName.Starred
-        ? (e) => e.isStarred
-        : () => false,
-    );
+    return mailboxName === VirtualMailboxName.Starred
+      ? this.systemMailboxes$.pipe(
+          switchMap((systemMailboxes) =>
+            this.mailRepo.query(
+              (e) =>
+                e.isStarred &&
+                e.mailbox !== systemMailboxes[SystemMailboxName.Trash].id &&
+                e.mailbox !== systemMailboxes[SystemMailboxName.Spam].id,
+            ),
+          ),
+        )
+      : of([]);
   }
 
   queryRegularMailboxMails(mailboxName: Mailbox['name']): Observable<Mail[]> {
