@@ -11,6 +11,7 @@ import {
 import { combineLatest, first, map } from 'rxjs';
 
 import { AuthenticationService } from './core/authentication.service';
+import { ContactService } from './data/contact.service';
 import { MailService } from './data/mail.service';
 import { MailboxService } from './data/mailbox.service';
 
@@ -21,6 +22,7 @@ const unauthorized: CanMatchFn = () =>
 const dataInitializer: CanActivateFn = () =>
   combineLatest([
     inject(AuthenticationService).user$,
+    inject(ContactService).loadContacts(),
     inject(MailService).loadMails(),
     inject(MailboxService).loadMailboxes(),
   ]).pipe(

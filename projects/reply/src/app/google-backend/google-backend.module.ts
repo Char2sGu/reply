@@ -8,11 +8,13 @@ import {
   Authorization,
 } from '../core/authentication.service';
 import { INITIALIZER, Initializer } from '../core/initialization';
+import { ContactService } from '../data/contact.service';
 import { MailService } from '../data/mail.service';
 import { MailboxService } from '../data/mailbox.service';
 import { GOOGLE_APIS } from './core/google-apis.token';
 import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';
 import { GoogleAuthenticationService } from './google-authentication.service';
+import { GoogleContactService } from './google-contact.service';
 import { GoogleMailService } from './google-mail.service';
 import { GoogleMailboxService } from './google-mailbox.service';
 
@@ -56,6 +58,10 @@ import { GoogleMailboxService } from './google-mailbox.service';
     {
       provide: AuthenticationService,
       useClass: GoogleAuthenticationService,
+    },
+    {
+      provide: ContactService,
+      useClass: GoogleContactService,
     },
     {
       provide: MailService,

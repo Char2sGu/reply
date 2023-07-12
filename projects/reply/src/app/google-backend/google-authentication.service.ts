@@ -20,12 +20,9 @@ import {
   AuthenticationService,
   Authorization,
 } from '../core/authentication.service';
-import {
-  InvalidResponseException,
-  UnauthorizedException,
-} from '../core/exceptions';
+import { UnauthorizedException } from '../core/exceptions';
 import { Contact } from '../data/contact.model';
-import { ContactRepository } from '../data/contact.repository';
+import { ContactService } from '../data/contact.service';
 import { GOOGLE_APIS } from './core/google-apis.token';
 import { useGoogleApi } from './core/google-apis.utils';
 import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';
@@ -34,11 +31,12 @@ const SCOPES = [
   'https://mail.google.com/',
   'https://www.googleapis.com/auth/userinfo.profile',
   'https://www.googleapis.com/auth/userinfo.email',
+  'https://www.googleapis.com/auth/contacts.readonly',
 ] as const;
 
 @Injectable()
 export class GoogleAuthenticationService implements AuthenticationService {
-  private contactRepo = inject(ContactRepository);
+  private contactService = inject(ContactService);
   private apis$ = inject(GOOGLE_APIS);
   private clientId = inject(GOOGLE_CLIENT_ID);
 
@@ -91,25 +89,7 @@ export class GoogleAuthenticationService implements AuthenticationService {
 
   readonly user$: Observable<Contact> = this.authorized$.pipe(
     filter(Boolean),
-    switchMap(() =>
-      this.peopleGetApi({
-        resourceName: 'people/me',
-        personFields: 'photos,emailAddresses',
-      }),
-    ),
-    map((response): Contact => {
-      const { resourceName, photos, emailAddresses } = response.result;
-      const photo = photos?.find((p) => p.metadata?.primary);
-      const email = emailAddresses?.find((e) => e.metadata?.primary);
-      if (!email || !photo) throw new InvalidResponseException();
-      return {
-        id: resourceName,
-        name: email.displayName,
-        email: email.value,
-        avatarUrl: photo.url,
-      };
-    }),
-    switchMap((c) => this.contactRepo.insertOrPatch(c)),
+    switchMap(() => this.contactService.loadUser()),
     shareReplay(1),
   );
 
