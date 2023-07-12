@@ -5,7 +5,7 @@ import {
   AuthenticationService,
   Authorization,
 } from '../core/authentication.service';
-import { ContactRepository } from '../data/contact.repository';
+import { ContactService } from '../data/contact.service';
 
 const AUTHORIZATION: Authorization = {
   token: 'demo',
@@ -15,7 +15,7 @@ const AUTHORIZATION: Authorization = {
 
 @Injectable()
 export class DemoAuthenticationService implements AuthenticationService {
-  private contactRepo = inject(ContactRepository);
+  private contactService = inject(ContactService);
 
   readonly authorization$ = new BehaviorSubject<Authorization | null>(null);
   readonly authorized$ = this.authorization$.pipe(
@@ -23,7 +23,7 @@ export class DemoAuthenticationService implements AuthenticationService {
     distinctUntilChanged(),
     shareReplay(1),
   );
-  readonly user$ = this.contactRepo.retrieve('user');
+  readonly user$ = this.contactService.loadUser();
 
   setAuthorization(auth: Authorization): boolean {
     this.authorization$.next(auth);

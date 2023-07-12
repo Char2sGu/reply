@@ -3,12 +3,13 @@ import { inject, NgModule } from '@angular/core';
 
 import { AuthenticationService } from '../core/authentication.service';
 import { INITIALIZER, Initializer } from '../core/initialization';
-import { ReactiveRepository } from '../core/reactive-repository';
-import { ContactRepository } from '../data/contact.repository';
-import { MailRepository } from '../data/mail.repository';
-import { CONTACTS } from './data/contact.records';
-import { MAILS } from './data/mail.records';
+import { ContactService } from '../data/contact.service';
+import { MailService } from '../data/mail.service';
+import { MailboxService } from '../data/mailbox.service';
 import { DemoAuthenticationService } from './demo-authentication.service';
+import { DemoContactService } from './demo-contact.service';
+import { DemoMailService } from './demo-mail.service';
+import { DemoMailboxService } from './demo-mailbox.service';
 
 @NgModule({
   providers: [
@@ -37,16 +38,18 @@ import { DemoAuthenticationService } from './demo-authentication.service';
       provide: AuthenticationService,
       useClass: DemoAuthenticationService,
     },
+    {
+      provide: ContactService,
+      useClass: DemoContactService,
+    },
+    {
+      provide: MailboxService,
+      useClass: DemoMailboxService,
+    },
+    {
+      provide: MailService,
+      useClass: DemoMailService,
+    },
   ],
 })
-export class DemoBackendModule {
-  constructor() {
-    const populateRepo = <T>(
-      repo: ReactiveRepository<T>,
-      entities: readonly T[],
-    ) => entities.forEach((e) => repo.insert(e));
-
-    populateRepo(inject(ContactRepository), CONTACTS);
-    populateRepo(inject(MailRepository), MAILS);
-  }
-}
+export class DemoBackendModule {}
