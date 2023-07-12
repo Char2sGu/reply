@@ -4,7 +4,7 @@ import { combineLatest, from, Observable, throwError } from 'rxjs';
 import { Contact } from '../data/contact.model';
 import { ContactRepository } from '../data/contact.repository';
 import { ContactService } from '../data/contact.service';
-import { DEMO_CONTACTS } from './core/demo-contacts.token';
+import { DEMO_CONTACTS } from './core/contact/demo-contacts.token';
 
 @Injectable()
 export class DemoContactService implements ContactService {

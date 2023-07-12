@@ -5,7 +5,7 @@ import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';
 import { MailService } from '../data/mail.service';
 import { Mailbox } from '../data/mailbox.model';
-import { DEMO_MAILS } from './core/demo-mails.token';
+import { DEMO_MAILS } from './core/mail/demo-mails.token';
 
 @Injectable()
 export class DemoMailService implements MailService {

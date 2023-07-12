@@ -4,7 +4,7 @@ import dayjs from 'dayjs/esm';
 
 import { Mail } from '@/app/data/mail.model';
 
-import { DemoEntityFactory } from './demo-entity-factory';
+import { DemoEntityFactory } from '../demo-entity-factory';
 
 @Injectable({
   providedIn: 'root',

@@ -2,8 +2,8 @@ import { InjectionToken } from '@angular/core';
 
 import { Contact } from '@/app/data/contact.model';
 
+import { useDemoEntityFactory } from '../demo-entity-factory';
 import { DemoContactFactory } from './demo-contact-factory.service';
-import { useDemoEntityFactory } from './demo-entity-factory';
 
 export const DEMO_CONTACTS = new InjectionToken<Contact[]>('DEMO_CONTACTS', {
   providedIn: 'root',

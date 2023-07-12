@@ -4,7 +4,7 @@ import { InjectionToken } from '@angular/core';
 import { SystemMailboxName } from '@/app/core/mailbox-name.enums';
 import { Mail } from '@/app/data/mail.model';
 
-import { useDemoEntityFactory } from './demo-entity-factory';
+import { useDemoEntityFactory } from '../demo-entity-factory';
 import { DemoMailFactory } from './demo-mail-factory.service';
 
 export const DEMO_MAILS = new InjectionToken<Mail[]>('DEMO_MAILS', {
