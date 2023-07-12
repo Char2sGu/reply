@@ -48,11 +48,7 @@ export abstract class ReactiveRepository<Entity> {
           results.add(update.id);
           return true;
         }
-        if (update.prev && condition(update.prev)) {
-          results.delete(update.id);
-          return true;
-        }
-        return false;
+        return results.delete(update.id);
       }),
       startWith(true),
       filter(Boolean),
