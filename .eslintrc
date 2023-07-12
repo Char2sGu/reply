@@ -37,7 +37,11 @@
     ],
     "@typescript-eslint/no-unused-vars": [
       "error",
-      { "argsIgnorePattern": "args" }
+      {
+        "argsIgnorePattern": "args",
+        "destructuredArrayIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
     ],
     "@typescript-eslint/naming-convention": [
       "error",
