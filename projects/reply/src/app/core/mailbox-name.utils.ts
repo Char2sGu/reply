@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { filter, map, Observable } from 'rxjs';
+import { filter, map, Observable, shareReplay } from 'rxjs';
 
 import { Mailbox } from '../data/mailbox.model';
 import { MailboxRepository } from '../data/mailbox.repository';
@@ -25,5 +25,6 @@ export function useSystemMailboxNameMapping(): Observable<SystemMailboxNameMappi
         }
         return mapping as Required<typeof mapping>;
       }),
+      shareReplay(1),
     );
 }

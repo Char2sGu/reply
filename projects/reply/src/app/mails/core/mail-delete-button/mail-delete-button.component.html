@@ -1,3 +1,8 @@
-<button mat-icon-button matTooltip="Delete" (click)="click.emit()">
+<button
+  mat-icon-button
+  *ngIf="action$ | async as action"
+  [matTooltip]="action === 'delete' ? 'Delete permanently' : 'Move to Trash'"
+  (click)="click.emit()"
+>
   <mat-icon svgIcon="delete"></mat-icon>
 </button>

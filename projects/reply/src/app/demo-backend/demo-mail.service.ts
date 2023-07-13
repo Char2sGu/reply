@@ -44,4 +44,9 @@ export class DemoMailService implements MailService {
     this.mailRepo.patch(mail.id, { mailbox: mailbox.id });
     return of(undefined);
   }
+
+  deleteMail(mail: Mail): Observable<void> {
+    this.mailRepo.delete(mail.id);
+    return of(undefined);
+  }
 }
