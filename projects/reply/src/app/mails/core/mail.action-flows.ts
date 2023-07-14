@@ -4,19 +4,23 @@ import {
   combineLatest,
   filter,
   first,
+  map,
   merge,
   Observable,
   switchMap,
   takeUntil,
 } from 'rxjs';
 
-import { ActionFlow } from '@/app/core/action-flow';
-import { NotificationService } from '@/app/core/notification.service';
+import { ActionFlow, useActionFlow } from '@/app/core/action-flow';
+import { NotificationService } from '@/app/core/notification/notification.service';
+import { PopupService } from '@/app/core/popup/popup.service';
 import { Mail } from '@/app/data/mail.model';
 import { MailRepository } from '@/app/data/mail.repository';
 import { MailService } from '@/app/data/mail.service';
 import { Mailbox } from '@/app/data/mailbox.model';
 import { MailboxRepository } from '@/app/data/mailbox.repository';
+
+import { MailboxSelectionPopupComponent } from './mailbox-selection-popup/mailbox-selection-popup.component';
 
 @Injectable({
   providedIn: 'root',
@@ -37,6 +41,28 @@ export class ToggleMailStarredStatusActionFlow implements ActionFlow {
             filter((e) => e.type === 'action'),
             switchMap(() => caught),
           ),
+      ),
+    );
+  }
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MoveMailActionFlow implements ActionFlow {
+  private popupService = inject(PopupService);
+  private moveMailToMailbox = useActionFlow(MoveMailToMailboxActionFlow);
+
+  execute(payload: { mail: Mail }): Observable<void> {
+    const popupRef = this.popupService.popup(
+      MailboxSelectionPopupComponent,
+      null,
+    );
+    return popupRef.event$.pipe(
+      map((e) => (e.type === 'output' ? e.payload : null)),
+      filter(Boolean),
+      switchMap((mailbox) =>
+        this.moveMailToMailbox({ mail: payload.mail, mailbox }),
       ),
     );
   }

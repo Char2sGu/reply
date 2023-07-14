@@ -20,7 +20,7 @@
         <ng-container *ngIf="breakpoints()['tablet-portrait']">
           <rpl-mail-star-button [mail]="mail" />
           <rpl-mail-delete-button [mail]="mail" />
-          <rpl-mail-action-menu-button />
+          <rpl-mail-action-menu-button [mail]="mail" />
         </ng-container>
         <button
           mat-icon-button

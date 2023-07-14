@@ -1,5 +1,15 @@
-import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  ViewChild,
+} from '@angular/core';
 import { MatLegacyMenu as MatMenu } from '@angular/material/legacy-menu';
+
+import { useActionFlow } from '@/app/core/action-flow';
+import { Mail } from '@/app/data/mail.model';
+
+import { MoveMailActionFlow } from '../mail.action-flows';
 
 @Component({
   selector: 'rpl-mail-action-menu-def',
@@ -8,5 +18,7 @@ import { MatLegacyMenu as MatMenu } from '@angular/material/legacy-menu';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailActionMenuDefComponent {
+  moveMail = useActionFlow(MoveMailActionFlow);
+  @Input({ required: true }) mail!: Mail;
   @ViewChild(MatMenu) menuRef!: MatMenu;
 }

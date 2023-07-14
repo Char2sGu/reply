@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+import { Mail } from '@/app/data/mail.model';
 
 @Component({
   selector: 'rpl-mail-action-menu-button',
@@ -6,4 +8,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['./mail-action-menu-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MailActionMenuButtonComponent {}
+export class MailActionMenuButtonComponent {
+  @Input({ required: true }) mail!: Mail;
+}

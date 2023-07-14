@@ -1,0 +1,9 @@
+<mat-action-list>
+  <button
+    mat-list-item
+    *ngFor="let mailbox of mailboxes$ | async"
+    (click)="popupRef.output(mailbox); popupRef.close()"
+  >
+    {{ mailbox.name }}
+  </button>
+</mat-action-list>
