@@ -1,7 +1,8 @@
-<button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="More actions">
+<button
+  mat-icon-button
+  [matMenuTriggerFor]="menuDef.menuRef"
+  matTooltip="More actions"
+>
   <mat-icon fontSet="filled" fontIcon="more_vert"></mat-icon>
 </button>
-<mat-menu #menu>
-  <button mat-menu-item>Move to</button>
-  <button mat-menu-item>Mark as read</button>
-</mat-menu>
+<rpl-mail-action-menu-def #menuDef></rpl-mail-action-menu-def>

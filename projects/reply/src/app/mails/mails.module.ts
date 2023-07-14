@@ -19,6 +19,7 @@ import { ScrollableAreaComponent } from '../shared/scrollable-area/scrollable-ar
 import { SearchButtonComponent } from '../shared/search-button/search-button.component';
 import { MailComponent } from './core/mail/mail.component';
 import { MailActionMenuButtonComponent } from './core/mail-action-menu-button/mail-action-menu-button.component';
+import { MailActionMenuDefComponent } from './core/mail-action-menu-def/mail-action-menu-def.component';
 import { MailCardComponent } from './core/mail-card/mail-card.component';
 import { MailCardAnimationPresenceComponent } from './core/mail-card-animation-presence/mail-card-animation-presence.component';
 import { MailCardListComponent } from './core/mail-card-list/mail-card-list.component';
@@ -43,6 +44,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     MailDeleteButtonComponent,
     MailCardAnimationPresenceComponent,
     MailActionMenuButtonComponent,
+    MailActionMenuDefComponent,
   ],
   imports: [
     CommonModule,
