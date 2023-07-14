@@ -2,16 +2,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  inject,
   Input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, filter, Observable, switchMap } from 'rxjs';
+import { switchMap } from 'rxjs';
 
-import { NotificationService } from '@/app/core/notification.service';
-import { MailService } from '@/app/data/mail.service';
+import { useActionFlow } from '@/app/core/action-flow';
 
 import { Mail } from '../../../data/mail.model';
+import { ToggleMailStarredStatusActionFlow } from '../mail.action-flows';
 
 @Component({
   selector: 'rpl-mail-star-button',
@@ -20,8 +19,7 @@ import { Mail } from '../../../data/mail.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailStarButtonComponent {
-  private mailService = inject(MailService);
-  private notificationService = inject(NotificationService);
+  private toggleStarred = useActionFlow(ToggleMailStarredStatusActionFlow);
 
   @Input() mail!: Mail;
 
@@ -30,27 +28,9 @@ export class MailStarButtonComponent {
   constructor() {
     this.click
       .pipe(
-        switchMap(() => this.toggleStarred()),
+        switchMap(() => this.toggleStarred({ mail: this.mail })),
         takeUntilDestroyed(),
       )
       .subscribe();
-  }
-
-  toggleStarred(): Observable<void> {
-    const action$ = this.mail.isStarred
-      ? this.mailService.markMailAsNotStarred(this.mail)
-      : this.mailService.markMailAsStarred(this.mail);
-    return action$.pipe(
-      catchError((err, caught) => {
-        const notificationRef = this.notificationService.notify(
-          'Failed to update starred status',
-          'Retry',
-        );
-        return notificationRef.event$.pipe(
-          filter((e) => e.type === 'action'),
-          switchMap(() => caught),
-        );
-      }),
-    );
   }
 }
