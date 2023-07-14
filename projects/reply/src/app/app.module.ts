@@ -24,7 +24,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { INITIALIZER, Initializer } from './core/initialization';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
-import { SnackbarContentComponent } from './core/snackbar-content/snackbar-content.component';
 import { LogoComponent } from './shared/logo/logo.component';
 
 // TODO: attachment
@@ -33,7 +32,7 @@ import { LogoComponent } from './shared/logo/logo.component';
 // TODO: gestures on cards
 
 @NgModule({
-  declarations: [AppComponent, LaunchScreenComponent, SnackbarContentComponent],
+  declarations: [AppComponent, LaunchScreenComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

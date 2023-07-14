@@ -1,42 +1,23 @@
-import { forwardRef, inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { map, merge, Observable } from 'rxjs';
+import { map, merge } from 'rxjs';
 
-import { BREAKPOINTS } from './breakpoint.service';
+import { BREAKPOINTS } from '../breakpoint.service';
+import {
+  NotificationActionEvent,
+  NotificationDismissEvent,
+  NotificationDisplayEvent,
+  NotificationRef,
+  NotificationService,
+} from './notification.service';
 import {
   SnackbarContentComponent,
   SnackbarContentContext,
-} from './snackbar-content/snackbar-content.component';
+} from './snackbar-content.component';
 
 @Injectable({
   providedIn: 'root',
-  useClass: forwardRef(() => SnackbarNotificationService),
 })
-export abstract class NotificationService {
-  abstract notify(message: string, action?: string): NotificationRef;
-}
-
-export interface NotificationRef {
-  event$: Observable<NotificationEvent>;
-  dismiss(): void;
-}
-
-export type NotificationEvent =
-  | NotificationDisplayEvent
-  | NotificationDismissEvent
-  | NotificationActionEvent;
-
-export interface NotificationDisplayEvent {
-  type: 'display';
-}
-export interface NotificationDismissEvent {
-  type: 'dismiss';
-}
-export interface NotificationActionEvent {
-  type: 'action';
-}
-
-@Injectable()
 export class SnackbarNotificationService implements NotificationService {
   private breakpoints = inject(BREAKPOINTS);
   private snackbarService = inject(MatSnackBar);
