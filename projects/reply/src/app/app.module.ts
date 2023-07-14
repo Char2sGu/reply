@@ -2,8 +2,10 @@ import 'hammerjs';
 
 import { HttpClientModule } from '@angular/common/http';
 import { inject, NgModule } from '@angular/core';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
 import {
   BrowserModule,
@@ -48,6 +50,8 @@ import { LogoComponent } from './shared/logo/logo.component';
     environment.backend,
     MatIconModule,
     MatSnackBarModule,
+    MatDialogModule,
+    MatBottomSheetModule,
     MatButtonModule,
     AppRoutingModule,
     LogoComponent,
