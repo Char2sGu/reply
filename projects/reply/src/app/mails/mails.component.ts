@@ -32,7 +32,7 @@ import {
   takeUntil,
 } from 'rxjs';
 
-import { NotificationService } from '../core/notification.service';
+import { NotificationService } from '../core/notification/notification.service';
 import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';
 import { MailService } from '../data/mail.service';
