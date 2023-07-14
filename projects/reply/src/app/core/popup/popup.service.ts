@@ -24,13 +24,13 @@ export interface PopupRef<Input, Output> {
   readonly input: Input;
   readonly event$: Observable<PopupEvent<Output>>;
   output(payload: Output): void;
-  dismiss(): void;
+  close(): void;
 }
 
 export type PopupEvent<Payload> =
   | PopupDisplayEvent
   | PopupOutputEvent<Payload>
-  | PopupDismissEvent;
+  | PopupCloseEvent;
 
 export interface PopupDisplayEvent {
   type: 'display';
@@ -39,6 +39,6 @@ export interface PopupOutputEvent<Payload> {
   type: 'output';
   payload: Payload;
 }
-export interface PopupDismissEvent {
-  type: 'dismiss';
+export interface PopupCloseEvent {
+  type: 'close';
 }

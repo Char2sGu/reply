@@ -4,7 +4,7 @@ import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dia
 import { map, merge, Subject } from 'rxjs';
 
 import {
-  PopupDismissEvent,
+  PopupCloseEvent,
   PopupDisplayEvent,
   PopupOutputEvent,
   PopupRef,
@@ -28,7 +28,7 @@ export class DialogOrBottomSheetPopupRefFactory {
       event$: merge(
         dialogRef
           .afterClosed()
-          .pipe(map((): PopupDismissEvent => ({ type: 'dismiss' }))),
+          .pipe(map((): PopupCloseEvent => ({ type: 'close' }))),
         dialogRef
           .afterOpened()
           .pipe(map((): PopupDisplayEvent => ({ type: 'display' }))),
@@ -41,7 +41,8 @@ export class DialogOrBottomSheetPopupRefFactory {
       output: (payload) => {
         output$.next(payload);
       },
-      dismiss: () => {
+      close: () => {
+        output$.complete();
         dialogRef.close();
       },
     };
@@ -59,7 +60,7 @@ export class DialogOrBottomSheetPopupRefFactory {
       event$: merge(
         bottomSheetRef
           .afterDismissed()
-          .pipe(map((): PopupDismissEvent => ({ type: 'dismiss' }))),
+          .pipe(map((): PopupCloseEvent => ({ type: 'close' }))),
         bottomSheetRef
           .afterOpened()
           .pipe(map((): PopupDisplayEvent => ({ type: 'display' }))),
@@ -72,7 +73,8 @@ export class DialogOrBottomSheetPopupRefFactory {
       output: (payload) => {
         output$.next(payload);
       },
-      dismiss: () => {
+      close: () => {
+        output$.complete();
         bottomSheetRef.dismiss();
       },
     };
