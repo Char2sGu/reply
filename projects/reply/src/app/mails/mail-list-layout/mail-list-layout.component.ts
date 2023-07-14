@@ -27,10 +27,6 @@ import { MailRepository } from '@/app/data/mail.repository';
 import { Mailbox } from '@/app/data/mailbox.model';
 import { MailboxRepository } from '@/app/data/mailbox.repository';
 
-// TODO: entering animation not correctly cleaned up after finished, causing
-// some element styles unable to work properly: layout projection not working
-// until next navigation.
-
 const mailCardsAnimation = animation([
   query(
     ':enter rpl-mail-card',
@@ -52,8 +48,10 @@ const mailCardsAnimation = animation([
   styleUrls: ['./mail-list-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-    trigger('content', [
+    trigger('host-entrance', [
       transition(':enter', [useAnimation(mailCardsAnimation)]),
+    ]),
+    trigger('host-mailboxChange', [
       transition(':increment', [
         group([
           SharedAxisAnimation.apply('y', 'forward'),
@@ -69,10 +67,12 @@ const mailCardsAnimation = animation([
     ]),
   ],
   host: {
-    ['[@content]']: 'navigationContext().latestMailboxIndex',
+    ['[@host-entrance]']: '',
+    ['[@host-mailboxChange]']: 'navigationContext().latestMailboxIndex',
   },
 })
 export class MailListLayoutComponent {
+  console = console;
   breakpoints = inject(BREAKPOINTS);
   navigationContext = inject(NAVIGATION_CONTEXT);
   private route = inject(ActivatedRoute);
