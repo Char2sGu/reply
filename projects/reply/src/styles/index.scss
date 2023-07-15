@@ -80,6 +80,10 @@ textarea {
   padding: 8px 16px !important;
 }
 
+.mat-dialog-container {
+  border-radius: 0 !important;
+}
+
 .mat-tooltip {
   @include mat.typography-level(theming.$typography-config, 'caption');
 }
