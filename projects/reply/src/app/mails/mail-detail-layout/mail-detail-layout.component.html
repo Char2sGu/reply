@@ -3,7 +3,9 @@
     *ngIf="mail.sender | resolveRef : contactRepo | async as sender"
   >
     <ng-container
-      *ngIf="mail.recipients | resolveRef : contactRepo | async as recipients"
+      *ngIf="
+        mail.recipients ?? [] | resolveRef : contactRepo | async as recipients
+      "
     >
       <rpl-scrollable-area rplLayoutContent data-route-animation-target>
         <rpl-mail

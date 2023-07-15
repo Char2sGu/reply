@@ -74,14 +74,14 @@ export class GoogleMailService implements MailService {
     ).pipe(map(() => undefined));
   }
 
-  moveMail(mail: Mail, mailbox: Mailbox): Observable<void> {
+  moveMail(mail: Mail, mailbox: Mailbox | null): Observable<void> {
     return this.updateMail(
       mail,
       {
-        removeLabelIds: [mail.mailbox],
-        addLabelIds: [mailbox.id],
+        removeLabelIds: mail.mailbox ? [mail.mailbox] : [],
+        addLabelIds: mailbox ? [mailbox.id] : [],
       },
-      { mailbox: mailbox.id },
+      { mailbox: mailbox ? mailbox.id : undefined },
     ).pipe(map(() => undefined));
   }
 

@@ -5,11 +5,14 @@ export interface Mail {
   id: string;
   subject?: string;
   sender: Contact['id'];
-  recipients: Contact['id'][];
+  recipients?: Contact['id'][];
   sentAt: Date;
-  snippet: string;
+  snippet?: string;
   content: string;
   isStarred: boolean;
   isRead: boolean;
-  mailbox: Mailbox['id'];
+  type: MailType;
+  mailbox?: Mailbox['id'];
 }
+
+export type MailType = 'received' | 'sent' | 'draft';

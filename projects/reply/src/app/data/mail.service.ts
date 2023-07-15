@@ -12,6 +12,6 @@ export abstract class MailService {
   abstract markMailAsNotStarred(mail: Mail): Observable<void>;
   abstract markMailAsRead(mail: Mail): Observable<void>;
   abstract markMailAsUnread(mail: Mail): Observable<void>;
-  abstract moveMail(mail: Mail, mailbox: Mailbox): Observable<void>;
+  abstract moveMail(mail: Mail, mailbox: Mailbox | null): Observable<void>;
   abstract deleteMail(mail: Mail): Observable<void>;
 }

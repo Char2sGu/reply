@@ -1,20 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { Base64 } from 'js-base64';
-import {
-  catchError,
-  combineLatest,
-  EMPTY,
-  first,
-  map,
-  Observable,
-  of,
-  switchMap,
-} from 'rxjs';
+import { combineLatest, first, map, Observable, of, switchMap } from 'rxjs';
 
 import { AuthenticationService } from '@/app/core/authentication.service';
 import { Mailbox } from '@/app/data/mailbox.model';
 
-import { InvalidResponseException } from '../../core/exceptions';
 import { access, asserted, PropertyPath } from '../../core/property-path.utils';
 import { Contact } from '../../data/contact.model';
 import { ContactRepository } from '../../data/contact.repository';
@@ -71,7 +61,9 @@ export class GmailMessageParser {
           ...(message.labelIds && {
             isStarred: message.labelIds.includes('STARRED'),
             isRead: !message.labelIds.includes('UNREAD'),
-            mailbox: this.parseLabelIdsIntoMailboxId(message.labelIds),
+            type: this.parseLabelIdsIntoMailType(message.labelIds),
+            mailbox:
+              this.parseLabelIdsIntoMailboxId(message.labelIds) ?? undefined,
           }),
         }),
       ),
@@ -79,15 +71,14 @@ export class GmailMessageParser {
   }
 
   parseFullMessage(message: gapi.client.gmail.Message): Observable<Mail> {
-    const paths = <P extends PropertyPath<Mail>>(paths: P[]) => paths;
+    const paths = <P extends PropertyPath<Mail>>(...paths: P[]) => paths;
     return this.parseMessage(message).pipe(
       map((m) =>
         asserted(m, [
-          ...paths(['id', 'subject', 'sender', 'recipients', 'sentAt']),
-          ...paths(['snippet', 'content', 'isStarred', 'isRead', 'mailbox']),
+          ...paths('id', 'sender', 'sentAt', 'content', 'isStarred'),
+          ...paths('isRead', 'type'),
         ]),
       ),
-      catchError(() => EMPTY),
     );
   }
 
@@ -136,13 +127,18 @@ export class GmailMessageParser {
     return { name, email };
   }
 
-  private parseLabelIdsIntoMailboxId(labelIds: string[]): Mailbox['id'] {
+  private parseLabelIdsIntoMailType(labelIds: string[]): Mail['type'] {
+    if (labelIds.includes('SENT')) return 'sent';
+    if (labelIds.includes('DRAFT')) return 'draft';
+    return 'received';
+  }
+
+  private parseLabelIdsIntoMailboxId(labelIds: string[]): Mailbox['id'] | null {
     const systemMailboxIds = this.systemMailboxes.map((m) => m.id);
     const mailboxId = labelIds.find(
       (id) => systemMailboxIds.includes(id) || id.startsWith('Label_'),
     );
-    if (!mailboxId) throw new InvalidResponseException('Missing mailbox label');
-    return mailboxId;
+    return mailboxId ?? null;
   }
 
   private getOrCreateContactByAddress(

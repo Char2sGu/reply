@@ -7,6 +7,7 @@ import {
   map,
   merge,
   Observable,
+  of,
   switchMap,
   takeUntil,
 } from 'rxjs';
@@ -104,19 +105,26 @@ export class MoveMailToMailboxActionFlow implements ActionFlow {
   private mailService = inject(MailService);
   private notifier = inject(NotificationService);
 
-  execute(payload: { mail: Mail; mailbox: Mailbox }): Observable<void> {
-    const undo$ = this.notifier
-      .notify(`Mail moved to ${payload.mailbox.name}`, 'Undo')
-      .event$.pipe(filter((e) => e.type === 'action'));
+  execute(payload: { mail: Mail; mailbox: Mailbox | null }): Observable<void> {
+    const currentMailbox$: Observable<Mailbox | null> = payload.mail.mailbox
+      ? this.mailboxRepo.retrieve(payload.mail.mailbox).pipe(first())
+      : of(null);
+
+    const undo$ = currentMailbox$.pipe(
+      map((m) => this.generateActionMessage(m, payload.mailbox)),
+      map((msg) => this.notifier.notify(msg, 'Undo')),
+      switchMap((n) => n.event$),
+      filter((e) => e.type === 'action'),
+    );
     return merge(
       this.mailService.moveMail(payload.mail, payload.mailbox).pipe(
         catchError((err, caught) =>
-          this.notifier
-            .notify(`Failed to move mail to ${payload.mailbox.name}`, 'Retry')
-            .event$.pipe(
-              filter((e) => e.type === 'action'),
-              switchMap(() => caught),
-            ),
+          currentMailbox$.pipe(
+            map((m) => this.generateErrorMessage(m, payload.mailbox)),
+            switchMap((msg) => this.notifier.notify(msg, 'Retry').event$),
+            filter((e) => e.type === 'action'),
+            switchMap(() => caught),
+          ),
         ),
         takeUntil(undo$),
       ),
@@ -124,12 +132,28 @@ export class MoveMailToMailboxActionFlow implements ActionFlow {
         switchMap(() =>
           combineLatest([
             this.mailRepo.retrieve(payload.mail.id),
-            this.mailboxRepo.retrieve(payload.mail.mailbox),
+            currentMailbox$,
           ]).pipe(first()),
         ),
         switchMap(([mail, mailbox]) => this.execute({ mail, mailbox })),
       ),
     );
+  }
+
+  generateActionMessage(from: Mailbox | null, to: Mailbox | null): string {
+    return to
+      ? `Mail moved to ${to.name}`
+      : from
+      ? `Mail removed from ${from.name}`
+      : `Mail moved`;
+  }
+
+  generateErrorMessage(from: Mailbox | null, to: Mailbox | null): string {
+    return to
+      ? `Failed to move mail to ${to.name}`
+      : from
+      ? `Failed to remove mail from ${from.name}`
+      : `Failed to move mail`;
   }
 }
 

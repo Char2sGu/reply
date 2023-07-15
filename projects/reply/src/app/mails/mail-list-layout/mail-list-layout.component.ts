@@ -16,14 +16,7 @@ import {
   Input,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
-import {
-  map,
-  Observable,
-  of,
-  ReplaySubject,
-  shareReplay,
-  switchMap,
-} from 'rxjs';
+import { map, Observable, ReplaySubject, shareReplay, switchMap } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
@@ -114,19 +107,22 @@ export class MailListLayoutComponent {
   );
 
   queryVirtualMailboxMails(mailbox: VirtualMailboxName): Observable<Mail[]> {
-    // TODO: implement data query for other virtual mailboxes
-    return mailbox === VirtualMailboxName.Starred
-      ? this.systemMailboxes$.pipe(
-          switchMap((systemMailboxes) =>
-            this.mailRepo.query(
-              (e) =>
-                e.isStarred &&
-                e.mailbox !== systemMailboxes[SystemMailboxName.Trash].id &&
-                e.mailbox !== systemMailboxes[SystemMailboxName.Spam].id,
-            ),
+    if (mailbox === VirtualMailboxName.Starred)
+      return this.systemMailboxes$.pipe(
+        switchMap((systemMailboxes) =>
+          this.mailRepo.query(
+            (e) =>
+              e.isStarred &&
+              e.mailbox !== systemMailboxes[SystemMailboxName.Trash].id &&
+              e.mailbox !== systemMailboxes[SystemMailboxName.Spam].id,
           ),
-        )
-      : of([]);
+        ),
+      );
+    if (mailbox === VirtualMailboxName.Sent)
+      return this.mailRepo.query((e) => e.type === 'sent');
+    if (mailbox === VirtualMailboxName.Drafts)
+      return this.mailRepo.query((e) => e.type === 'draft');
+    throw new Error(`Unknown virtual mailbox: ${mailbox}`);
   }
 
   queryRegularMailboxMails(mailbox: Mailbox): Observable<Mail[]> {

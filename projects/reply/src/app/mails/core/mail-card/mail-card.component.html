@@ -35,6 +35,6 @@
         </button>
       </div>
     </div>
-    <div class="overview" *ngIf="!mail.isRead">{{ mail.snippet }}</div>
+    <div class="overview" *ngIf="!mail.isRead">{{ mail | mailSnippet }}</div>
   </div>
 </ng-container>

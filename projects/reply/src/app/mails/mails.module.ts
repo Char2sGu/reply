@@ -11,6 +11,7 @@ import { ScrollingModule } from '@reply/scrolling';
 
 import { ContactSortPipe } from '../data/contact-sort.pipe';
 import { ContactStringifyPipe } from '../data/contact-stringify.pipe';
+import { MailSnippetPipe } from '../data/mail-snippet.pipe';
 import { ResolveRefPipe } from '../data/resolve-ref.pipe';
 import { AvatarComponent } from '../shared/avatar/avatar.component';
 import { LayoutContentDirective } from '../shared/layout-content.directive';
@@ -67,6 +68,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     ResolveRefPipe,
     ContactSortPipe,
     ContactStringifyPipe,
+    MailSnippetPipe,
     ReattachOnChangeDirective,
     AvatarComponent,
   ],
