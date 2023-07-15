@@ -54,7 +54,7 @@ export class MoveMailActionFlow implements ActionFlow {
   private moveMailToMailbox = useActionFlow(MoveMailToMailboxActionFlow);
 
   execute(payload: { mail: Mail; currentMailbox?: Mailbox }): Observable<void> {
-    const popupRef = this.popupService.popup(
+    const popupRef = this.popupService.popupDialog(
       MailboxSelectionPopupComponent, //
       { title: 'Move to', current: payload.currentMailbox },
     );
