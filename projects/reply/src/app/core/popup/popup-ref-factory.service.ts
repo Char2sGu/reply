@@ -5,22 +5,20 @@ import { map, merge, Subject } from 'rxjs';
 
 import {
   PopupCloseEvent,
+  PopupContext,
   PopupDisplayEvent,
   PopupOutputEvent,
   PopupRef,
-} from '../popup/popup.service';
-import { DialogOrBottomSheetPopupContext } from './dialog-or-bottom-sheet-popup.service';
-import { DialogOrBottomSheetPopupContainerComponent } from './dialog-or-bottom-sheet-popup-container.component';
+} from './popup.core';
+import { PopupContainerComponent } from './popup-container.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DialogOrBottomSheetPopupRefFactory {
-  createFromDialogRef<Input, Output>(
-    context: DialogOrBottomSheetPopupContext<Input, Output>,
-    dialogRef: MatDialogRef<
-      DialogOrBottomSheetPopupContainerComponent<Input, Output>
-    >,
+  fromDialogRef<Input, Output>(
+    context: PopupContext<Input, Output>,
+    dialogRef: MatDialogRef<PopupContainerComponent<Input, Output>>,
   ): PopupRef<Input, Output> {
     const output$ = new Subject<Output>();
     return {
@@ -48,11 +46,9 @@ export class DialogOrBottomSheetPopupRefFactory {
     };
   }
 
-  createFromBottomSheetRef<Input, Output>(
-    context: DialogOrBottomSheetPopupContext<Input, Output>,
-    bottomSheetRef: MatBottomSheetRef<
-      DialogOrBottomSheetPopupContainerComponent<Input, Output>
-    >,
+  fromBottomSheetRef<Input, Output>(
+    context: PopupContext<Input, Output>,
+    bottomSheetRef: MatBottomSheetRef<PopupContainerComponent<Input, Output>>,
   ): PopupRef<Input, Output> {
     const output$ = new Subject<Output>();
     return {

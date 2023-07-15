@@ -15,12 +15,11 @@ import {
   MatLegacyDialogRef as MatDialogRef,
 } from '@angular/material/legacy-dialog';
 
-import { POPUP_REF, PopupRef } from '../popup/popup.service';
-import { DialogOrBottomSheetPopupContext } from './dialog-or-bottom-sheet-popup.service';
-import { DialogOrBottomSheetPopupRefFactory } from './dialog-or-bottom-sheet-popup-ref-factory.service';
+import { POPUP_REF, PopupContext, PopupRef } from './popup.core';
+import { DialogOrBottomSheetPopupRefFactory } from './popup-ref-factory.service';
 
 @Component({
-  selector: 'rpl-dialog-or-bottom-sheet-popup-container',
+  selector: 'rpl-popup-container',
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -35,9 +34,9 @@ import { DialogOrBottomSheetPopupRefFactory } from './dialog-or-bottom-sheet-pop
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DialogOrBottomSheetPopupContainerComponent<Input, Output> {
+export class PopupContainerComponent<Input, Output> {
   private viewContainer = inject(ViewContainerRef);
-  private context: DialogOrBottomSheetPopupContext<Input, Output> =
+  private context: PopupContext<Input, Output> =
     inject(MAT_DIALOG_DATA, { optional: true }) ??
     inject(MAT_BOTTOM_SHEET_DATA);
   private dialogOrBottomSheetRef =
@@ -57,11 +56,11 @@ export class DialogOrBottomSheetPopupContainerComponent<Input, Output> {
 
   private createPopupRef(): PopupRef<Input, Output> {
     return this.dialogOrBottomSheetRef instanceof MatDialogRef
-      ? this.popupRefFactory.createFromDialogRef(
+      ? this.popupRefFactory.fromDialogRef(
           this.context,
           this.dialogOrBottomSheetRef,
         )
-      : this.popupRefFactory.createFromBottomSheetRef(
+      : this.popupRefFactory.fromBottomSheetRef(
           this.context,
           this.dialogOrBottomSheetRef,
         );

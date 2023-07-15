@@ -1,44 +1,50 @@
-import { inject, Injectable, InjectionToken, Type } from '@angular/core';
-import { Observable } from 'rxjs';
+import { inject, Injectable, Type } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
-import { DialogOrBottomSheetPopupService } from './dialog-or-bottom-sheet-popup.service';
+import { BREAKPOINTS } from '../breakpoint.service';
+import { POPUP_REF, PopupComponent, PopupRef } from './popup.core';
+import { PopupContainerComponent } from './popup-container.component';
 
 @Injectable({
   providedIn: 'root',
-  useExisting: DialogOrBottomSheetPopupService,
 })
 export abstract class PopupService {
-  abstract popup<Input, Output>(
+  private dialogService = inject(MatDialog);
+  private bottomSheetService = inject(MatBottomSheet);
+  private breakpoints = inject(BREAKPOINTS);
+
+  popup<Input, Output>(
     content: Type<PopupComponent<Input, Output>>,
     input: Input,
-  ): PopupRef<Input, Output>;
-}
+  ): PopupRef<Input, Output> {
+    if (this.breakpoints()['tablet-portrait'])
+      return this.popupDialog(content, input);
+    return this.popupBottomSheet(content, input);
+  }
 
-export const POPUP_REF = new InjectionToken<PopupRef<void, void>>('POPUP_REF');
+  popupDialog<Input, Output>(
+    content: Type<PopupComponent<Input, Output>>,
+    input: Input,
+  ): PopupRef<Input, Output> {
+    const dialogRef = this.dialogService.open(PopupContainerComponent, {
+      data: { content, input },
+    });
+    return dialogRef.componentInstance.contentInjector.get<
+      PopupRef<Input, Output>
+    >(POPUP_REF);
+  }
 
-export abstract class PopupComponent<Input, Output> {
-  readonly popupRef = inject<PopupRef<Input, Output>>(POPUP_REF);
-}
-
-export interface PopupRef<Input, Output> {
-  readonly input: Input;
-  readonly event$: Observable<PopupEvent<Output>>;
-  output(payload: Output): void;
-  close(): void;
-}
-
-export type PopupEvent<Payload> =
-  | PopupDisplayEvent
-  | PopupOutputEvent<Payload>
-  | PopupCloseEvent;
-
-export interface PopupDisplayEvent {
-  type: 'display';
-}
-export interface PopupOutputEvent<Payload> {
-  type: 'output';
-  payload: Payload;
-}
-export interface PopupCloseEvent {
-  type: 'close';
+  popupBottomSheet<Input, Output>(
+    content: Type<PopupComponent<Input, Output>>,
+    input: Input,
+  ): PopupRef<Input, Output> {
+    const bottomSheetRef = this.bottomSheetService.open(
+      PopupContainerComponent,
+      { data: { content, input } },
+    );
+    return bottomSheetRef.instance.contentInjector.get<PopupRef<Input, Output>>(
+      POPUP_REF,
+    );
+  }
 }
