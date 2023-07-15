@@ -20,20 +20,17 @@ export class GmailMessageParser {
   private systemMailboxes = inject(GMAIL_SYSTEM_MAILBOXES);
 
   parseMessage(message: gapi.client.gmail.Message): Observable<Partial<Mail>> {
-    const content =
-      message.payload &&
-      (this.parseBody(message.payload) ?? '<content not supported>');
+    const bodyData =
+      message.payload && this.parseBodyIntoContentAndType(message.payload);
     const headerData =
       message.payload?.headers && this.parseHeaders(message.payload.headers);
-
     const sender$ = headerData?.sender
       ? this.getOrCreateContactByAddress(headerData.sender)
       : of(null);
-    const recipientsStreams = headerData?.recipients?.map((addr) =>
+    const recipientStreams = headerData?.recipients?.map((addr) =>
       this.getOrCreateContactByAddress(addr),
     );
-
-    return combineLatest([sender$, ...(recipientsStreams ?? [])]).pipe(
+    return combineLatest([sender$, ...(recipientStreams ?? [])]).pipe(
       map(
         // eslint-disable-next-line complexity
         ([sender, ...recipients]): Partial<Mail> => ({
@@ -46,7 +43,7 @@ export class GmailMessageParser {
           ...(sender && {
             sender: sender.id,
           }),
-          ...(recipientsStreams && {
+          ...(recipientStreams && {
             recipients: recipients.map((r) => r.id),
           }),
           ...(headerData?.sentAt && {
@@ -55,8 +52,9 @@ export class GmailMessageParser {
           ...(message.snippet && {
             snippet: message.snippet,
           }),
-          ...(content && {
-            content,
+          ...(bodyData && {
+            content: bodyData.content,
+            contentType: bodyData.contentType,
           }),
           ...(message.labelIds && {
             isStarred: message.labelIds.includes('STARRED'),
@@ -75,8 +73,8 @@ export class GmailMessageParser {
     return this.parseMessage(message).pipe(
       map((m) =>
         asserted(m, [
-          ...paths('id', 'sender', 'sentAt', 'content', 'isStarred'),
-          ...paths('isRead', 'type'),
+          ...paths('id', 'sender', 'sentAt', 'content', 'contentType'),
+          ...paths('isRead', 'type', 'isStarred'),
         ]),
       ),
     );
@@ -108,16 +106,30 @@ export class GmailMessageParser {
     return { subject, sender, recipients, sentAt };
   }
 
-  private parseBody(root: gapi.client.gmail.MessagePart): string | null {
-    if (root.mimeType === 'text/plain') {
+  private parseBody(
+    root: gapi.client.gmail.MessagePart,
+    mimeType: string,
+  ): string | null {
+    if (root.mimeType === mimeType) {
       const base64Url = access(root, 'body.data');
       return Base64.decode(base64Url);
     }
     for (const part of root.parts ?? []) {
-      const result = this.parseBody(part);
+      const result = this.parseBody(part, mimeType);
       if (result) return result;
     }
     return null;
+  }
+
+  private parseBodyIntoContentAndType(
+    root: gapi.client.gmail.MessagePart,
+  ): Pick<Mail, 'content' | 'contentType'> {
+    const contentInHtml = this.parseBody(root, 'text/html');
+    if (contentInHtml) return { content: contentInHtml, contentType: 'html' };
+    const contentInPlainText = this.parseBody(root, 'text/plain');
+    if (contentInPlainText)
+      return { content: contentInPlainText, contentType: 'plain-text' };
+    return { content: '<content not supported>', contentType: 'plain-text' };
   }
 
   private parseAddressString(value: string): EmailAddress {

@@ -14,6 +14,7 @@ import { ContactStringifyPipe } from '../data/contact-stringify.pipe';
 import { MailSnippetPipe } from '../data/mail-snippet.pipe';
 import { ResolveRefPipe } from '../data/resolve-ref.pipe';
 import { AvatarComponent } from '../shared/avatar/avatar.component';
+import { HtmlRendererComponent } from '../shared/html-renderer/html-renderer.component';
 import { LayoutContentDirective } from '../shared/layout-content.directive';
 import { ReadableDatePipe } from '../shared/readable-date.pipe';
 import { ReattachOnChangeDirective } from '../shared/reattach-on-change.directive';
@@ -71,6 +72,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     MailSnippetPipe,
     ReattachOnChangeDirective,
     AvatarComponent,
+    HtmlRendererComponent,
   ],
 })
 export class MailsModule {}

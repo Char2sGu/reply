@@ -32,9 +32,11 @@ export class DemoMailFactory implements DemoEntityFactory {
       recipients: payload.recipients,
       snippet: payload.content.split('\n')[0],
       content: payload.content,
+      contentType: 'plain-text',
       sentAt: payload.sentAt(this.now).toDate(),
       isStarred: payload.isStarred ?? false,
       isRead: payload.isRead ?? false,
+      type: 'received',
       mailbox: payload.mailbox,
     };
   }

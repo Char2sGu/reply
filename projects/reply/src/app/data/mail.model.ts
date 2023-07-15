@@ -9,10 +9,9 @@ export interface Mail {
   sentAt: Date;
   snippet?: string;
   content: string;
+  contentType: 'plain-text' | 'html';
   isStarred: boolean;
   isRead: boolean;
-  type: MailType;
+  type: 'received' | 'sent' | 'draft';
   mailbox?: Mailbox['id'];
 }
-
-export type MailType = 'received' | 'sent' | 'draft';
