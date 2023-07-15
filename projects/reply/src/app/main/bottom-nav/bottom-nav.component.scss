@@ -10,7 +10,13 @@ $height: 56px;
   display: block;
   height: $height;
   position: relative;
-  z-index: 2000; // make nav on top of overlay
+}
+
+:host {
+  z-index: 10; // make nav on top of overlay
+}
+::ng-deep .cdk-overlay-container:has(rpl-nav-bottom-menu) {
+  z-index: 1 !important;
 }
 
 %fill-host {
