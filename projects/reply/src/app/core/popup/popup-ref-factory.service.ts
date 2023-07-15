@@ -23,6 +23,7 @@ export class DialogOrBottomSheetPopupRefFactory {
     const output$ = new Subject<Output>();
     return {
       input: context.input,
+      appearance: 'dialog',
       event$: merge(
         dialogRef
           .afterClosed()
@@ -53,6 +54,7 @@ export class DialogOrBottomSheetPopupRefFactory {
     const output$ = new Subject<Output>();
     return {
       input: context.input,
+      appearance: 'bottom-sheet',
       event$: merge(
         bottomSheetRef
           .afterDismissed()

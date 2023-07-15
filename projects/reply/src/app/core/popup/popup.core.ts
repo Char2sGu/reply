@@ -5,10 +5,13 @@ export const POPUP_REF = new InjectionToken<PopupRef<void, void>>('POPUP_REF');
 
 export interface PopupRef<Input, Output> {
   readonly input: Input;
+  readonly appearance: PopupAppearance;
   readonly event$: Observable<PopupEvent<Output>>;
   output(payload: Output): void;
   close(): void;
 }
+
+export type PopupAppearance = 'dialog' | 'bottom-sheet';
 
 export type PopupEvent<Payload> =
   | PopupDisplayEvent
