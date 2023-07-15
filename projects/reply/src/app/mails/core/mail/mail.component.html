@@ -1,40 +1,44 @@
-<div class="wrapper">
-  <div class="title-line" lpjNode>
-    <div class="subject">
-      {{ mail.subject }}
-    </div>
-    <a mat-icon-button routerLink=".." matTooltip="Back">
-      <mat-icon fontSet="filled" fontIcon="expand_more"></mat-icon>
-    </a>
-  </div>
-
-  <div class="info-line" lpjNode>
-    <div class="left-group">
-      <div class="mat-body-1">
-        <span>{{ sender.name ?? sender.email }}</span> -
-        <span>{{ mail.sentAt | readableDate }}</span>
+<rpl-scrollable-area rplLayoutContent>
+  <div class="wrapper">
+    <div class="title-line" lpjNode>
+      <div class="subject">
+        {{ mail.subject }}
       </div>
-      <div class="mat-small">
-        <span>
-          To
-          {{ recipients | contactSort : user.id | contactStringify : user.id }}
-        </span>
+      <a mat-icon-button routerLink=".." matTooltip="Back">
+        <mat-icon fontSet="filled" fontIcon="expand_more"></mat-icon>
+      </a>
+    </div>
+
+    <div class="info-line" lpjNode>
+      <div class="left-group">
+        <div class="mat-body-1">
+          <span>{{ sender.name ?? sender.email }}</span> -
+          <span>{{ mail.sentAt | readableDate }}</span>
+        </div>
+        <div class="mat-small">
+          <span>
+            To
+            {{
+              recipients | contactSort : user.id | contactStringify : user.id
+            }}
+          </span>
+        </div>
+      </div>
+      <div class="right-group">
+        <rpl-avatar
+          lpjNode="mail-{{ mail.id }}-avatar"
+          [contact]="sender"
+        ></rpl-avatar>
       </div>
     </div>
-    <div class="right-group">
-      <rpl-avatar
-        lpjNode="mail-{{ mail.id }}-avatar"
-        [contact]="sender"
-      ></rpl-avatar>
+
+    <div class="content" lpjNode>
+      <ng-container *ngIf="mail.contentType === 'plain-text'">
+        {{ mail.content }}
+      </ng-container>
+      <ng-container *ngIf="mail.contentType === 'html'">
+        <rpl-html-renderer [content]="mail.content"></rpl-html-renderer>
+      </ng-container>
     </div>
   </div>
-
-  <div class="content" lpjNode>
-    <ng-container *ngIf="mail.contentType === 'plain-text'">
-      {{ mail.content }}
-    </ng-container>
-    <ng-container *ngIf="mail.contentType === 'html'">
-      <rpl-html-renderer [content]="mail.content"></rpl-html-renderer>
-    </ng-container>
-  </div>
-</div>
+</rpl-scrollable-area>

@@ -5,7 +5,10 @@
 :host {
   display: block;
   background-color: map.get(theming.$theme, 'color', 'background', 'card');
-  overflow: hidden;
+}
+
+rpl-scrollable-area {
+  height: 100%;
 }
 
 .wrapper {

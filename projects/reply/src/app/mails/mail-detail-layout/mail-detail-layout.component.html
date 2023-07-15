@@ -7,15 +7,14 @@
         mail.recipients ?? [] | resolveRef : contactRepo | async as recipients
       "
     >
-      <rpl-scrollable-area rplLayoutContent data-route-animation-target>
-        <rpl-mail
-          [user]="user"
-          [mail]="mail"
-          [sender]="sender"
-          [recipients]="recipients"
-          lpjNode="mail-{{ mail.id }}"
-        ></rpl-mail>
-      </rpl-scrollable-area>
+      <rpl-mail
+        data-route-animation-target
+        [user]="user"
+        [mail]="mail"
+        [sender]="sender"
+        [recipients]="recipients"
+        lpjNode="mail-{{ mail.id }}"
+      ></rpl-mail>
     </ng-container>
   </ng-container>
 </ng-container>

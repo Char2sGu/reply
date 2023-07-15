@@ -2,7 +2,7 @@
   display: contents;
 }
 
-rpl-scrollable-area {
+rpl-mail {
   grid-row: 1;
   grid-column: margin-left / margin-right;
   :host-context(.tablet-portrait) & {
@@ -14,10 +14,9 @@ rpl-scrollable-area {
   :host-context(.laptop) & {
     grid-column: col-4 / col-12;
   }
-  z-index: 1; // cover the mail list in layout animation
-}
 
-rpl-mail {
+  height: calc(100% - 4px * 2);
   padding: 4px;
-  min-height: calc(100% - 4px * 2);
+
+  z-index: 1; // cover the mail list in layout animation
 }
