@@ -10,7 +10,10 @@ import { useActionFlow } from '@/app/core/action-flow';
 import { Mail } from '@/app/data/mail.model';
 import { Mailbox } from '@/app/data/mailbox.model';
 
-import { MoveMailActionFlow } from '../mail.action-flows';
+import {
+  MoveMailActionFlow,
+  ToggleMailReadStatusActionFlow,
+} from '../mail.action-flows';
 
 @Component({
   selector: 'rpl-mail-action-menu-def',
@@ -20,6 +23,7 @@ import { MoveMailActionFlow } from '../mail.action-flows';
 })
 export class MailActionMenuDefComponent {
   moveMail = useActionFlow(MoveMailActionFlow);
+  toggleMailReadStatus = useActionFlow(ToggleMailReadStatusActionFlow);
   @Input({ required: true }) mail!: Mail;
   @Input() currentMailbox?: Mailbox;
   @ViewChild(MatMenu) menuRef!: MatMenu;

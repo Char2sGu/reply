@@ -19,12 +19,10 @@ import {
 } from '@layout-projection/core';
 import {
   animationFrames,
-  catchError,
   filter,
   first,
   firstValueFrom,
   map,
-  Observable,
   of,
   pairwise,
   shareReplay,
@@ -32,12 +30,12 @@ import {
   takeUntil,
 } from 'rxjs';
 
+import { useActionFlow } from '../core/action-flow';
 import { VirtualMailboxName } from '../core/mailbox-name.enums';
-import { NotificationService } from '../core/notification/notification.service';
 import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';
-import { MailService } from '../data/mail.service';
 import { MailboxRepository } from '../data/mailbox.repository';
+import { ToggleMailReadStatusActionFlow } from './core/mail.action-flows';
 import { MailCardAnimationPresenceComponent } from './core/mail-card-animation-presence/mail-card-animation-presence.component';
 
 @Component({
@@ -51,13 +49,13 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private mailRepo = inject(MailRepository);
-  private mailService = inject(MailService);
   private mailboxRepo = inject(MailboxRepository);
-  private notifier = inject(NotificationService);
   private hostNode = inject(ProjectionNode);
   private layoutSnapper = inject(ProjectionNodeSnapper);
   private layoutAnimator = inject(LayoutAnimator);
   private viewContainer = inject(ViewContainerRef);
+
+  private toggleMailReadStatus = useActionFlow(ToggleMailReadStatusActionFlow);
 
   mailId$ = this.route.params.pipe(map((p) => p['mailId']));
   mail$ = this.mailId$.pipe(
@@ -110,7 +108,9 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
             first(),
             filter(Boolean),
             filter((m) => !m.isRead),
-            switchMap((mail) => this.markAsRead(mail)),
+            switchMap((mail) =>
+              this.toggleMailReadStatus({ mail, to: 'read' }),
+            ),
           ),
         ),
       )
@@ -186,18 +186,5 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
     cardNode.detach();
     cardRef.destroy();
     this.listLayoutNode.activate();
-  }
-
-  markAsRead(mail: Mail): Observable<void> {
-    return this.mailService.markMailAsRead(mail).pipe(
-      catchError((err, caught) =>
-        this.notifier
-          .notify('Failed to mark mail as read', 'Retry')
-          .event$.pipe(
-            filter((e) => e.type === 'action'),
-            switchMap(() => caught),
-          ),
-      ),
-    );
   }
 }

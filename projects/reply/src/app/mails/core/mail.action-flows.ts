@@ -49,6 +49,33 @@ export class ToggleMailStarredStatusActionFlow implements ActionFlow {
 @Injectable({
   providedIn: 'root',
 })
+export class ToggleMailReadStatusActionFlow implements ActionFlow {
+  private mailService = inject(MailService);
+  private notifier = inject(NotificationService);
+
+  execute(payload: { mail: Mail; to?: 'read' | 'unread' }): Observable<void> {
+    const targetStatus =
+      payload.to ?? (payload.mail.isRead ? 'unread' : 'read');
+    const action$ =
+      targetStatus === 'read'
+        ? this.mailService.markMailAsRead(payload.mail)
+        : this.mailService.markMailAsUnread(payload.mail);
+    return action$.pipe(
+      catchError((err, caught) =>
+        this.notifier
+          .notify(`Failed to mark mail as ${targetStatus}`, 'Retry')
+          .event$.pipe(
+            filter((e) => e.type === 'action'),
+            switchMap(() => caught),
+          ),
+      ),
+    );
+  }
+}
+
+@Injectable({
+  providedIn: 'root',
+})
 export class MoveMailActionFlow implements ActionFlow {
   private popupService = inject(PopupService);
   private moveMailToMailbox = useActionFlow(MoveMailToMailboxActionFlow);
