@@ -12,7 +12,7 @@ import { MailboxRepository } from '@/app/data/mailbox.repository';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailboxSelectionPopupComponent extends PopupComponent<
-  { current?: Mailbox },
+  { title?: string; current?: Mailbox },
   Mailbox
 > {
   private mailboxRepo = inject(MailboxRepository);

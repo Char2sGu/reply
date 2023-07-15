@@ -56,7 +56,7 @@ export class MoveMailActionFlow implements ActionFlow {
   execute(payload: { mail: Mail; currentMailbox?: Mailbox }): Observable<void> {
     const popupRef = this.popupService.popup(
       MailboxSelectionPopupComponent, //
-      { current: payload.currentMailbox },
+      { title: 'Move to', current: payload.currentMailbox },
     );
     return popupRef.event$.pipe(
       map((e) => (e.type === 'output' ? e.payload : null)),

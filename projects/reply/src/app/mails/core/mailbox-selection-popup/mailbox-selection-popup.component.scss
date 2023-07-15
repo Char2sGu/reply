@@ -1,4 +1,6 @@
 :host {
   display: block;
-  width: 240px;
+  :host-context([data-appearance='dialog']) & {
+    width: 240px;
+  }
 }

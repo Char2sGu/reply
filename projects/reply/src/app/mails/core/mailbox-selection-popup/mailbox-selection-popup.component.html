@@ -1,3 +1,6 @@
+<h2 *ngIf="popupRef.appearance === 'dialog'">
+  {{ popupRef.input.title ?? 'Mailboxes' }}
+</h2>
 <mat-action-list>
   <button
     mat-list-item
