@@ -30,7 +30,9 @@ import { LogoComponent } from './shared/logo/logo.component';
 // TODO: image
 // TODO: schedule
 // TODO: gestures on cards
-
+// TODO: mail list pagination
+// TODO: mail local storage and sync
+// TODO: better mail html render
 @NgModule({
   declarations: [AppComponent, LaunchScreenComponent],
   imports: [
