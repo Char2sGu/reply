@@ -33,6 +33,9 @@ import { DialogOrBottomSheetPopupRefFactory } from './popup-ref-factory.service'
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    ['[attr.data-appearance]']: 'popupRef.appearance',
+  },
 })
 export class PopupContainerComponent<Input, Output> {
   private viewContainer = inject(ViewContainerRef);
@@ -44,13 +47,14 @@ export class PopupContainerComponent<Input, Output> {
     inject(MatBottomSheetRef);
   private popupRefFactory = inject(DialogOrBottomSheetPopupRefFactory);
 
+  popupRef = this.createPopupRef();
   contentType = this.context.content;
   contentInjector = this.createContentInjector();
 
   private createContentInjector(): Injector {
     return Injector.create({
       parent: this.viewContainer.injector,
-      providers: [{ provide: POPUP_REF, useValue: this.createPopupRef() }],
+      providers: [{ provide: POPUP_REF, useValue: this.popupRef }],
     });
   }
 
