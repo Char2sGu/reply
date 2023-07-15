@@ -7,6 +7,10 @@
   <ng-container
     *ngFor="let mail of mails; let index = index; trackBy: mailTracker"
   >
-    <rpl-mail-card [mail]="mail" lpjNode="mail-{{ mail.id }}"></rpl-mail-card>
+    <rpl-mail-card
+      [mail]="mail"
+      [currentMailbox]="currentMailbox"
+      lpjNode="mail-{{ mail.id }}"
+    ></rpl-mail-card>
   </ng-container>
 </div>

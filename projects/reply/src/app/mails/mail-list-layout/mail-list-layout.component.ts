@@ -9,10 +9,21 @@ import {
   trigger,
   useAnimation,
 } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+} from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
-import { ActivatedRoute } from '@angular/router';
-import { map, Observable, of, shareReplay, switchMap } from 'rxjs';
+import {
+  map,
+  Observable,
+  of,
+  ReplaySubject,
+  shareReplay,
+  switchMap,
+} from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
@@ -25,7 +36,6 @@ import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
 import { Mail } from '@/app/data/mail.model';
 import { MailRepository } from '@/app/data/mail.repository';
 import { Mailbox } from '@/app/data/mailbox.model';
-import { MailboxRepository } from '@/app/data/mailbox.repository';
 
 const mailCardsAnimation = animation([
   query(
@@ -75,21 +85,27 @@ export class MailListLayoutComponent {
   console = console;
   breakpoints = inject(BREAKPOINTS);
   navigationContext = inject(NAVIGATION_CONTEXT);
-  private route = inject(ActivatedRoute);
   private mailRepo = inject(MailRepository);
-  private mailboxRepo = inject(MailboxRepository);
 
   private systemMailboxes$ = useSystemMailboxNameMapping();
 
-  mailboxName$ = this.route.params.pipe(
-    map((params): string => params['mailboxName']),
+  // prettier-ignore
+  @Input({ required: true }) set mailbox(v: Mailbox | VirtualMailboxName) { this.mailbox$.next(v) }
+  mailbox$ = new ReplaySubject<Mailbox | VirtualMailboxName>(1);
+
+  mailboxName$ = this.mailbox$.pipe(
+    map((mailbox) => (typeof mailbox === 'string' ? mailbox : mailbox.name)),
   );
 
-  mails$ = this.mailboxName$.pipe(
-    switchMap((mailboxName) =>
-      Object.values(VirtualMailboxName).includes(mailboxName as any)
-        ? this.queryVirtualMailboxMails(mailboxName as VirtualMailboxName)
-        : this.queryRegularMailboxMails(mailboxName),
+  mailboxAsEntity$ = this.mailbox$.pipe(
+    map((mailbox) => (typeof mailbox === 'string' ? null : mailbox)),
+  );
+
+  mails$ = this.mailbox$.pipe(
+    switchMap((mailbox) =>
+      typeof mailbox === 'string'
+        ? this.queryVirtualMailboxMails(mailbox)
+        : this.queryRegularMailboxMails(mailbox),
     ),
     map((mails) =>
       mails.sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime()),
@@ -97,11 +113,9 @@ export class MailListLayoutComponent {
     shareReplay(1),
   );
 
-  queryVirtualMailboxMails(
-    mailboxName: VirtualMailboxName,
-  ): Observable<Mail[]> {
+  queryVirtualMailboxMails(mailbox: VirtualMailboxName): Observable<Mail[]> {
     // TODO: implement data query for other virtual mailboxes
-    return mailboxName === VirtualMailboxName.Starred
+    return mailbox === VirtualMailboxName.Starred
       ? this.systemMailboxes$.pipe(
           switchMap((systemMailboxes) =>
             this.mailRepo.query(
@@ -115,13 +129,7 @@ export class MailListLayoutComponent {
       : of([]);
   }
 
-  queryRegularMailboxMails(mailboxName: Mailbox['name']): Observable<Mail[]> {
-    return this.mailboxRepo
-      .query((e) => e.name === mailboxName)
-      .pipe(
-        switchMap(([mailbox]) =>
-          this.mailRepo.query((e) => e.mailbox === mailbox.id),
-        ),
-      );
+  queryRegularMailboxMails(mailbox: Mailbox): Observable<Mail[]> {
+    return this.mailRepo.query((e) => e.mailbox === mailbox.id);
   }
 }

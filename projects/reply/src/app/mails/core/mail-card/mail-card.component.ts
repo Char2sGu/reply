@@ -12,6 +12,7 @@ import {
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
 import { ContactRepository } from '@/app/data/contact.repository';
 import { Mail } from '@/app/data/mail.model';
+import { Mailbox } from '@/app/data/mailbox.model';
 
 @Component({
   selector: 'rpl-mail-card',
@@ -24,6 +25,7 @@ export class MailCardComponent {
   contactRepo = inject(ContactRepository);
 
   @Input({ required: true }) mail!: Mail;
+  @Input() currentMailbox?: Mailbox;
 
   @HostBinding('class.read') get mailIsRead(): boolean {
     return this.mail.isRead;

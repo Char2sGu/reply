@@ -1,5 +1,8 @@
 <mat-menu>
-  <button mat-menu-item (click)="moveMail({ mail }).subscribe()">
+  <button
+    mat-menu-item
+    (click)="moveMail({ mail, currentMailbox }).subscribe()"
+  >
     Move to...
   </button>
   <button mat-menu-item>Mark as read</button>

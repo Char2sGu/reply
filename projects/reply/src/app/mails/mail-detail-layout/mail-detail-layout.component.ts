@@ -12,9 +12,11 @@ import { timer } from 'rxjs';
 
 import { AuthenticationService } from '@/app/core/authentication.service';
 import { LAYOUT_CONTEXT } from '@/app/core/layout-context.token';
+import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
 import { ContactRepository } from '@/app/data/contact.repository';
 import { Mail } from '@/app/data/mail.model';
 import { MailRepository } from '@/app/data/mail.repository';
+import { Mailbox } from '@/app/data/mailbox.model';
 
 @Component({
   selector: 'rpl-mail-detail-layout',
@@ -30,6 +32,11 @@ export class MailDetailLayoutComponent implements AfterViewInit {
   private layoutContext = inject(LAYOUT_CONTEXT);
 
   @Input({ required: true }) mail!: Mail;
+  @Input({ required: true }) mailbox!: Mailbox | VirtualMailboxName;
+
+  get mailboxAsEntity(): Mailbox | undefined {
+    return typeof this.mailbox === 'object' ? this.mailbox : undefined;
+  }
 
   @ViewChild('replyIcon')
   private navFabIconTemplate!: TemplateRef<never>;

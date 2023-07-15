@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { Mail } from '@/app/data/mail.model';
+import { Mailbox } from '@/app/data/mailbox.model';
 
 @Component({
   selector: 'rpl-mail-action-menu-button',
@@ -10,4 +11,5 @@ import { Mail } from '@/app/data/mail.model';
 })
 export class MailActionMenuButtonComponent {
   @Input({ required: true }) mail!: Mail;
+  @Input() currentMailbox?: Mailbox;
 }

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { PopupComponent } from '@/app/core/popup/popup.service';
 import { Mailbox } from '@/app/data/mailbox.model';
@@ -11,9 +12,16 @@ import { MailboxRepository } from '@/app/data/mailbox.repository';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailboxSelectionPopupComponent extends PopupComponent<
-  void,
+  { current?: Mailbox },
   Mailbox
 > {
   private mailboxRepo = inject(MailboxRepository);
-  mailboxes$ = this.mailboxRepo.query();
+  mailboxes$ = this.queryMailboxes();
+
+  private queryMailboxes(): Observable<Mailbox[]> {
+    const current = this.popupRef.input.current;
+    return current
+      ? this.mailboxRepo.query((e) => e.id !== current.id)
+      : this.mailboxRepo.query();
+  }
 }

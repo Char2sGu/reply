@@ -1,12 +1,16 @@
 <ng-container *lpjAnimationScope>
-  <rpl-mail-list-layout
-    lpjNode="list-layout"
-    #listLayoutNode="lpjNode"
-  ></rpl-mail-list-layout>
-  <rpl-mail-detail-layout
-    *ngIf="mail$ | async as mail"
-    [mail]="mail"
-    lpjNode="detail-layout"
-    #detailLayoutNode="lpjNode"
-  ></rpl-mail-detail-layout>
+  <ng-container *ngIf="mailbox$ | async as mailbox">
+    <rpl-mail-list-layout
+      [mailbox]="mailbox"
+      lpjNode="list-layout"
+      #listLayoutNode="lpjNode"
+    ></rpl-mail-list-layout>
+    <rpl-mail-detail-layout
+      *ngIf="mail$ | async as mail"
+      [mailbox]="mailbox"
+      [mail]="mail"
+      lpjNode="detail-layout"
+      #detailLayoutNode="lpjNode"
+    ></rpl-mail-detail-layout>
+  </ng-container>
 </ng-container>

@@ -32,10 +32,12 @@ import {
   takeUntil,
 } from 'rxjs';
 
+import { VirtualMailboxName } from '../core/mailbox-name.enums';
 import { NotificationService } from '../core/notification/notification.service';
 import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';
 import { MailService } from '../data/mail.service';
+import { MailboxRepository } from '../data/mailbox.repository';
 import { MailCardAnimationPresenceComponent } from './core/mail-card-animation-presence/mail-card-animation-presence.component';
 
 @Component({
@@ -50,16 +52,31 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private mailRepo = inject(MailRepository);
   private mailService = inject(MailService);
+  private mailboxRepo = inject(MailboxRepository);
   private notifier = inject(NotificationService);
   private hostNode = inject(ProjectionNode);
   private layoutSnapper = inject(ProjectionNodeSnapper);
   private layoutAnimator = inject(LayoutAnimator);
   private viewContainer = inject(ViewContainerRef);
 
-  mailId$ = this.route.params.pipe(map((params) => params['mailId']));
+  mailId$ = this.route.params.pipe(map((p) => p['mailId']));
   mail$ = this.mailId$.pipe(
     switchMap((id) => (id ? this.mailRepo.retrieve(id) : of(null))),
     shareReplay(1),
+  );
+
+  mailboxName$ = this.route.params.pipe(map((p): string => p['mailboxName']));
+  mailbox$ = this.mailboxName$.pipe(
+    switchMap((mailboxName) =>
+      Object.values(VirtualMailboxName).includes(mailboxName as any)
+        ? of(mailboxName as VirtualMailboxName)
+        : this.mailboxRepo
+            .query((e) => e.name === mailboxName)
+            .pipe(
+              map(([e]) => e),
+              filter(Boolean),
+            ),
+    ),
   );
 
   @ViewChild('listLayoutNode') private listLayoutNode!: ProjectionNode;
