@@ -1,0 +1,1 @@
+import{T as o}from"./chunk-LCFD4RLU.js";var i=(()=>{let t=class{},e=t;return(()=>{t.\u0275fac=function(n){return new(n||t)}})(),(()=>{t.\u0275prov=o({token:t,factory:t.\u0275fac})})(),e})();export{i as a};
