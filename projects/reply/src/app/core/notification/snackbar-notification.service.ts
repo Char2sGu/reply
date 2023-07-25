@@ -29,8 +29,16 @@ export class SnackbarNotificationService implements NotificationService {
         data: { message, action } satisfies SnackbarContentContext,
         duration: 30 * 1000,
         ...(this.breakpoints()['tablet-portrait']
-          ? { verticalPosition: 'bottom', horizontalPosition: 'right' }
-          : { verticalPosition: 'top', horizontalPosition: 'center' }),
+          ? {
+              verticalPosition: 'bottom',
+              horizontalPosition: 'right',
+              panelClass: ['snackbar-notification-panel'],
+            }
+          : {
+              verticalPosition: 'bottom',
+              horizontalPosition: 'center',
+              panelClass: ['snackbar-notification-panel', 'centered'],
+            }),
       },
     );
     return {

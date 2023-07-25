@@ -75,9 +75,16 @@ textarea {
   padding: initial !important;
 }
 
+.snackbar-notification-panel {
+  &.centered {
+    margin-bottom: 88px !important; // TODO: computed value
+  }
+}
+
 .mat-snack-bar-container {
   border-radius: 0 !important;
   padding: 8px 16px !important;
+  box-shadow: none !important;
 }
 
 .mat-dialog-container {
