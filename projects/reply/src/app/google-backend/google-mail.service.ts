@@ -1,15 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import {
-  catchError,
-  combineLatest,
-  first,
-  map,
-  Observable,
-  switchMap,
-} from 'rxjs';
+import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
 import { access } from '../core/property-path.utils';
-import { ReactiveRepositoryUpdate } from '../core/reactive-repository';
+import { onErrorUndo } from '../core/reactive-repository.utils';
 import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';
 import { MailService } from '../data/mail.service';
@@ -86,10 +79,11 @@ export class GoogleMailService implements MailService {
   }
 
   deleteMail(mail: Mail): Observable<void> {
-    return this.initiateOptimisticMutation(
-      () => this.mailRepo.delete(mail.id),
-      () => this.messageDeleteApi({ userId: 'me', id: mail.id }),
-    ).pipe(map(() => undefined));
+    const update = this.mailRepo.delete(mail.id);
+    return this.messageDeleteApi({ userId: 'me', id: mail.id }).pipe(
+      map(() => undefined),
+      onErrorUndo(update),
+    );
   }
 
   private updateMail(
@@ -97,29 +91,12 @@ export class GoogleMailService implements MailService {
     body: gapi.client.gmail.ModifyMessageRequest,
     optimisticResult: Partial<Mail>,
   ): Observable<Mail> {
-    return this.initiateOptimisticMutation(
-      () => this.mailRepo.patch(mail.id, optimisticResult),
-      () =>
-        this.messageModifyApi({ userId: 'me', id: mail.id }, body).pipe(
-          switchMap((response) =>
-            this.messageParser.parseMessage(response.result),
-          ),
-          first(),
-          switchMap((updated) => this.mailRepo.patch(mail.id, updated)),
-        ),
-    );
-  }
-
-  private initiateOptimisticMutation<T>(
-    optimisticRepoUpdateFactory: () => ReactiveRepositoryUpdate<Mail>,
-    mutation: () => Observable<T>,
-  ): Observable<T> {
-    const optimisticRepoUpdate = optimisticRepoUpdateFactory();
-    return mutation().pipe(
-      catchError((e) => {
-        optimisticRepoUpdate.undo();
-        throw e;
-      }),
+    const update = this.mailRepo.patch(mail.id, optimisticResult);
+    return this.messageModifyApi({ userId: 'me', id: mail.id }, body).pipe(
+      switchMap((response) => this.messageParser.parseMessage(response.result)),
+      first(),
+      switchMap((updated) => this.mailRepo.patch(mail.id, updated)),
+      onErrorUndo(update),
     );
   }
 }
