@@ -1,3 +1,4 @@
+import { EventEmitter } from '@angular/core';
 import {
   BehaviorSubject,
   filter,
@@ -6,8 +7,6 @@ import {
   Observable,
   shareReplay,
   startWith,
-  Subject,
-  tap,
 } from 'rxjs';
 
 import {
@@ -20,8 +19,8 @@ import {
  * entities of a given type.
  */
 export abstract class ReactiveRepository<Entity> {
-  protected updatesSubject = new Subject<ReactiveRepositoryUpdate<Entity>>();
-  readonly updates$ = this.updatesSubject.asObservable();
+  protected update = new EventEmitter<ReactiveRepositoryUpdate<Entity>>();
+  readonly updates$ = this.update.asObservable();
 
   protected entities = new Map<string, BehaviorSubject<Entity>>();
 
@@ -64,6 +63,19 @@ export abstract class ReactiveRepository<Entity> {
   }
 
   /**
+   * @returns An observable of the first entity matching the given condition
+   * or null. A new value is emitted when the query result is updated.
+   */
+  queryOne(
+    condition: (entity: Entity) => boolean = () => true,
+  ): Observable<Entity | null> {
+    return this.query(condition).pipe(
+      map((entities) => entities[0] ?? null),
+      shareReplay(1),
+    );
+  }
+
+  /**
    * @throws An {@link EntityNotFoundException} if entity with the given id
    * doesn't exist.
    * @returns An observable of the entity with the given id. A new value is
@@ -85,7 +97,7 @@ export abstract class ReactiveRepository<Entity> {
     if (this.entities.has(id)) throw new EntityDuplicateException();
     const entity$ = new BehaviorSubject(entity);
     this.entities.set(id, entity$);
-    return this.createUpdate({
+    return this.performUpdate({
       id,
       prev: null,
       curr: entity,
@@ -106,7 +118,7 @@ export abstract class ReactiveRepository<Entity> {
     if (!entity$) throw new EntityNotFoundException();
     const prev = entity$.value;
     entity$.next({ ...prev, ...payload });
-    return this.createUpdate({
+    return this.performUpdate({
       id,
       prev,
       curr: entity$.value,
@@ -136,7 +148,7 @@ export abstract class ReactiveRepository<Entity> {
     const prev = entity$.value;
     entity$.complete();
     this.entities.delete(id);
-    return this.createUpdate({
+    return this.performUpdate({
       id,
       prev,
       curr: null,
@@ -145,28 +157,11 @@ export abstract class ReactiveRepository<Entity> {
     });
   }
 
-  /**
-   * @returns An observable of whether an entity with the given id exists. A new
-   * value is emitted when the result is updated.
-   */
-  exists(id: string): Observable<boolean> {
-    let result = this.entities.has(id);
-    return this.updates$.pipe(
-      filter((u) => u.id === id),
-      tap((update) => {
-        if (update.curr === null) result = false;
-        else result = true;
-      }),
-      startWith(null),
-      map(() => result),
-    );
-  }
-
-  private createUpdate(
+  private performUpdate(
     fields: Omit<ReactiveRepositoryUpdate<Entity>, symbol>,
   ): ReactiveRepositoryUpdate<Entity> {
     const update = { ...fields, [Symbol.observable]: () => fields.entity$ };
-    this.updatesSubject.next(update);
+    this.update.emit(update);
     return update;
   }
 }

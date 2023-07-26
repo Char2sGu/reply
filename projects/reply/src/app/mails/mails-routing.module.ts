@@ -16,12 +16,8 @@ const mailboxNameValid: CanActivateFn = (route) => {
   const virtualMailboxNames = Object.values(VirtualMailboxName) as string[];
   if (virtualMailboxNames.includes(mailboxName)) return true;
   return inject(MailboxRepository)
-    .query((e) => e.name === route.params['mailboxName'])
-    .pipe(
-      map((results) => results.at(0)),
-      map(Boolean),
-      first(),
-    );
+    .queryOne((e) => e.name === route.params['mailboxName'])
+    .pipe(map(Boolean), first());
 };
 
 const routes: Routes = [

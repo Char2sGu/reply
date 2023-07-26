@@ -69,11 +69,8 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
       Object.values(VirtualMailboxName).includes(mailboxName as any)
         ? of(mailboxName as VirtualMailboxName)
         : this.mailboxRepo
-            .query((e) => e.name === mailboxName)
-            .pipe(
-              map(([e]) => e),
-              filter(Boolean),
-            ),
+            .queryOne((e) => e.name === mailboxName)
+            .pipe(filter(Boolean)),
     ),
   );
 

@@ -158,11 +158,14 @@ export class GmailMessageParser {
   ): Observable<Contact> {
     return this.user$.pipe(
       first(),
-      switchMap(() => this.contactRepo.query((e) => e.email === address.email)),
-      first(),
-      switchMap((results) =>
-        results.length
-          ? this.contactRepo.retrieve(results[0].id)
+      switchMap(() =>
+        this.contactRepo
+          .queryOne((e) => e.email === address.email)
+          .pipe(first()),
+      ),
+      switchMap((contact) =>
+        contact
+          ? this.contactRepo.retrieve(contact.id)
           : this.contactRepo.insert({
               id: address.email,
               name: address.name,
