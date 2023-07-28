@@ -11,10 +11,9 @@ import {
 import { AuthenticationService } from '../core/authentication.service';
 import { access } from '../core/property-path.utils';
 import { onErrorUndo } from '../core/reactive-repository.utils';
-import { ContactRepository } from '../data/contact.repository';
 import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';
-import { MailService } from '../data/mail.service';
+import { MailPage, MailService } from '../data/mail.service';
 import { Mailbox } from '../data/mailbox.model';
 import { GmailMessageParser } from './core/gmail-message-parser.service';
 import { useGoogleApi } from './core/google-apis.utils';
@@ -24,18 +23,28 @@ export class GoogleMailService implements MailService {
   private user$ = inject(AuthenticationService).user$;
   private messageParser = inject(GmailMessageParser);
   private mailRepo = inject(MailRepository);
-  private contactRepo = inject(ContactRepository);
 
   private messageListApi = useGoogleApi((a) => a.gmail.users.messages.list);
   private messageGetApi = useGoogleApi((a) => a.gmail.users.messages.get);
   private messageModifyApi = useGoogleApi((a) => a.gmail.users.messages.modify);
   private messageDeleteApi = useGoogleApi((a) => a.gmail.users.messages.delete);
+  private historyListApi = useGoogleApi((a) => a.gmail.users.history.list);
 
-  loadMails(): Observable<Mail[]> {
-    return this.messageListApi({ userId: 'me', includeSpamTrash: true }).pipe(
-      map((r) => access(r, 'result.messages')),
-      switchMap((messages) =>
-        combineLatest(messages.map((m) => this.loadMail(access(m, 'id')))),
+  loadMails(page?: string): Observable<MailPage> {
+    return this.messageListApi({
+      userId: 'me',
+      pageToken: page,
+      includeSpamTrash: true,
+    }).pipe(
+      map(
+        (response): MailPage => ({
+          results$: combineLatest(
+            access(response.result, 'messages').map((m) =>
+              this.loadMail(access(m, 'id')),
+            ),
+          ),
+          next: response.result.nextPageToken,
+        }),
       ),
     );
   }
@@ -46,6 +55,52 @@ export class GoogleMailService implements MailService {
       withLatestFrom(this.user$.pipe(first())),
       map(([msg, user]) => this.messageParser.parseFullMessage(msg, user)),
       switchMap((mail) => this.mailRepo.insertOrPatch(mail)),
+    );
+  }
+
+  syncMails(syncToken: string): Observable<Mail[]> {
+    return this.historyListApi({
+      userId: 'me',
+      startHistoryId: syncToken,
+    }).pipe(
+      withLatestFrom(this.user$.pipe(first())),
+      switchMap(([response, user]) => {
+        const mails = new Map<Mail['id'], Observable<Mail>>();
+        response.result.history?.forEach((history) => {
+          [
+            ...(history.labelsAdded ?? []),
+            ...(history.labelsRemoved ?? []),
+          ].forEach((entry) => {
+            const message = access(entry, 'message');
+            const mail = this.messageParser.parseMessage(message, user);
+            this.mailRepo.patch(access(mail, 'id'), mail);
+            const mail$ = this.mailRepo.retrieve(access(message, 'id'));
+            mails.set(access(message, 'id'), mail$);
+          });
+          history.messagesAdded?.forEach((entry) => {
+            const message = access(entry, 'message');
+            const mail$ = this.loadMail(access(message, 'id'));
+            mails.set(access(message, 'id'), mail$);
+          });
+          history.messagesDeleted?.forEach((entry) => {
+            const message = access(entry, 'message');
+            this.mailRepo.delete(access(message, 'id'));
+          });
+        });
+        return combineLatest([...mails.values()]);
+      }),
+    );
+  }
+
+  obtainSyncToken(): Observable<string> {
+    return this.messageListApi({
+      userId: 'me',
+      maxResults: 1,
+    }).pipe(
+      map((response) => access(response.result, 'messages')),
+      map((msgs) => access(msgs[0], 'id')),
+      switchMap((msgId) => this.messageGetApi({ userId: 'me', id: msgId })),
+      map((response) => access(response.result, 'historyId')),
     );
   }
 

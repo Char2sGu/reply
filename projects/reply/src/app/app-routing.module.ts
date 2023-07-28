@@ -8,7 +8,7 @@ import {
   Routes,
   TitleStrategy,
 } from '@angular/router';
-import { combineLatest, first, map } from 'rxjs';
+import { combineLatest, first, map, switchMap } from 'rxjs';
 
 import { AuthenticationService } from './core/authentication.service';
 import { ContactService } from './data/contact.service';
@@ -23,7 +23,9 @@ const dataInitializer: CanActivateFn = () =>
   combineLatest([
     inject(AuthenticationService).user$,
     inject(ContactService).loadContacts(),
-    inject(MailService).loadMails(),
+    inject(MailService)
+      .loadMails()
+      .pipe(switchMap((p) => p.results$)),
     inject(MailboxService).loadMailboxes(),
   ]).pipe(
     first(),

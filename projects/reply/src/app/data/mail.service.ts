@@ -6,12 +6,19 @@ import { Mailbox } from './mailbox.model';
 
 @Injectable()
 export abstract class MailService {
-  abstract loadMails(): Observable<Mail[]>;
+  abstract loadMails(page?: string): Observable<MailPage>;
   abstract loadMail(id: Mail['id']): Observable<Mail>;
+  abstract syncMails(syncToken: string): Observable<Mail[]>;
+  abstract obtainSyncToken(): Observable<string>;
   abstract markMailAsStarred(mail: Mail): Observable<void>;
   abstract markMailAsNotStarred(mail: Mail): Observable<void>;
   abstract markMailAsRead(mail: Mail): Observable<void>;
   abstract markMailAsUnread(mail: Mail): Observable<void>;
   abstract moveMail(mail: Mail, mailbox: Mailbox | null): Observable<void>;
   abstract deleteMail(mail: Mail): Observable<void>;
+}
+
+export interface MailPage {
+  results$: Observable<Mail[]>;
+  next?: string;
 }
