@@ -9,7 +9,7 @@ export abstract class AuthenticationService {
   abstract readonly authorized$: Observable<boolean>;
   abstract readonly user$: Observable<Contact>;
   abstract setAuthorization(auth: Authorization): boolean;
-  abstract requestAuthorization(): void;
+  abstract requestAuthorization(hint?: string): void;
   abstract revokeAuthorization(): void;
 }
 

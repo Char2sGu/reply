@@ -40,7 +40,6 @@ export class GoogleAuthenticationService implements AuthenticationService {
   private apis$ = inject(GOOGLE_APIS);
   private clientId = inject(GOOGLE_CLIENT_ID);
 
-  private peopleGetApi = useGoogleApi((a) => a.people.people.get);
   private tokenRevokeApi = useGoogleApi(
     (a) => (arg: Parameters<typeof a.oauth2.revoke>[0]) =>
       new Promise<void>((r) => a.oauth2.revoke(arg, r)),
@@ -112,9 +111,9 @@ export class GoogleAuthenticationService implements AuthenticationService {
     return true;
   }
 
-  requestAuthorization(): void {
+  requestAuthorization(hint?: string): void {
     this.tokenClient$.pipe(first()).subscribe((client) => {
-      client.requestAccessToken();
+      client.requestAccessToken({ hint });
     });
   }
 
