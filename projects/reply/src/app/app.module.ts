@@ -33,9 +33,9 @@ import { LogoComponent } from './shared/logo/logo.component';
 // TODO: schedule
 // TODO: gestures on cards
 // TODO: mail list pagination
-// TODO: mail local storage and sync
 // TODO: better mail html render
 // TODO: settings page with mailbox management
+// TODO: load partial mails on init
 
 @NgModule({
   declarations: [AppComponent, LaunchScreenComponent],
