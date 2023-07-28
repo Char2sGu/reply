@@ -10,7 +10,7 @@ import {
 
 import { AuthenticationService } from '../core/authentication.service';
 import { access } from '../core/property-path.utils';
-import { onErrorUndo } from '../core/reactive-repository.utils';
+import { onErrorUndo } from '../data/core/reactive-repository.utils';
 import { MailDatabase } from '../data/mail.database';
 import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';

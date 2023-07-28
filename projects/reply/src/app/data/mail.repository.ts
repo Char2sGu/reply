@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ReactiveRepository } from '../core/reactive-repository';
+import { ReactiveRepository } from './core/reactive-repository';
 import { Mail } from './mail.model';
 
 @Injectable({

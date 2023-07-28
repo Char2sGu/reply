@@ -9,11 +9,11 @@ import {
   startWith,
 } from 'rxjs';
 
+import { PropertiesNonNullable } from '../../core/property.utils';
 import {
   EntityDuplicateException,
   EntityNotFoundException,
-} from './exceptions';
-import { PropertiesNonNullable } from './property.utils';
+} from './reactive-repository.exceptions';
 
 /**
  * A reactive repository serves as the one and only source of truth for any
