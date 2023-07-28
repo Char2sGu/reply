@@ -46,8 +46,8 @@ export class GmailMessageParser {
           ...(recipientStreams && {
             recipients: recipients.map((r) => r.id),
           }),
-          ...(headerData?.sentAt && {
-            sentAt: headerData.sentAt,
+          ...(message.internalDate && {
+            sentAt: new Date(Number(message.internalDate)),
           }),
           ...(message.snippet && {
             snippet: message.snippet,
@@ -84,7 +84,6 @@ export class GmailMessageParser {
     subject?: string;
     sender?: EmailAddress;
     recipients?: EmailAddress[];
-    sentAt?: Date;
   } {
     const subject = headers.find((h) => h.name === 'Subject')?.value;
 
@@ -100,10 +99,7 @@ export class GmailMessageParser {
       .map((s) => s.trim())
       .map((s) => this.parseAddressString(s));
 
-    const sentAtString = headers.find((h) => h.name === 'Date')?.value;
-    const sentAt = sentAtString ? new Date(sentAtString) : undefined;
-
-    return { subject, sender, recipients, sentAt };
+    return { subject, sender, recipients };
   }
 
   private parseBody(
