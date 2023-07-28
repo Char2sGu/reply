@@ -1,8 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
+import { AuthenticationService } from '../core/authentication.service';
 import { access } from '../core/property-path.utils';
 import { onErrorUndo } from '../core/reactive-repository.utils';
+import { ContactRepository } from '../data/contact.repository';
 import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';
 import { MailService } from '../data/mail.service';
@@ -12,8 +14,10 @@ import { useGoogleApi } from './core/google-apis.utils';
 
 @Injectable()
 export class GoogleMailService implements MailService {
+  private user$ = inject(AuthenticationService).user$;
   private messageParser = inject(GmailMessageParser);
   private mailRepo = inject(MailRepository);
+  private contactRepo = inject(ContactRepository);
 
   private messageListApi = useGoogleApi((a) => a.gmail.users.messages.list);
   private messageGetApi = useGoogleApi((a) => a.gmail.users.messages.get);
@@ -32,7 +36,7 @@ export class GoogleMailService implements MailService {
   loadMail(id: Mail['id']): Observable<Mail> {
     return this.messageGetApi({ userId: 'me', id }).pipe(
       map((response) => response.result),
-      switchMap((message) => this.messageParser.parseFullMessage(message)),
+      switchMap((message) => this.parseMessage(message)),
       switchMap((mail) => this.mailRepo.insertOrPatch(mail)),
     );
   }
@@ -93,10 +97,32 @@ export class GoogleMailService implements MailService {
   ): Observable<Mail> {
     const update = this.mailRepo.patch(mail.id, optimisticResult);
     return this.messageModifyApi({ userId: 'me', id: mail.id }, body).pipe(
-      switchMap((response) => this.messageParser.parseMessage(response.result)),
-      first(),
+      switchMap((response) => this.parseMessage(response.result)),
       switchMap((updated) => this.mailRepo.patch(mail.id, updated)),
       onErrorUndo(update),
+    );
+  }
+
+  private parseMessage(message: gapi.client.gmail.Message): Observable<Mail> {
+    // Wait for the user to be loaded into the repository.
+    return this.user$.pipe(
+      first(),
+      map(() =>
+        this.messageParser.parseFullMessage(
+          message,
+          (address) =>
+            this.contactRepo.queryOne((e) => e.email === address.email)
+              .snapshot ??
+            access(
+              this.contactRepo.insert({
+                id: address.email,
+                name: address.name,
+                email: address.email,
+              }),
+              'curr',
+            ),
+        ),
+      ),
     );
   }
 }
