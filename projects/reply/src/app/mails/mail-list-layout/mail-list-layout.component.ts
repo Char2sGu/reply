@@ -26,9 +26,9 @@ import {
 } from '@/app/core/mailbox-name.enums';
 import { useSystemMailboxNameMapping } from '@/app/core/mailbox-name.utils';
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
-import { Mail } from '@/app/data/mail.model';
-import { MailRepository } from '@/app/data/mail.repository';
-import { Mailbox } from '@/app/data/mailbox.model';
+import { Mail } from '@/app/data/mail/mail.model';
+import { MailRepository } from '@/app/data/mail/mail.repository';
+import { Mailbox } from '@/app/data/mailbox/mailbox.model';
 
 const mailCardsAnimation = animation([
   query(

@@ -2,9 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import { combineLatest, map, Observable, switchMap } from 'rxjs';
 
 import { access } from '../core/property-path.utils';
-import { Mailbox } from '../data/mailbox.model';
-import { MailboxRepository } from '../data/mailbox.repository';
-import { MailboxService } from '../data/mailbox.service';
+import { Mailbox } from '../data/mailbox/mailbox.model';
+import { MailboxRepository } from '../data/mailbox/mailbox.repository';
+import { MailboxService } from '../data/mailbox/mailbox.service';
 import { GMAIL_SYSTEM_MAILBOXES } from './core/gmail-system-mailboxes.token';
 import { useGoogleApi } from './core/google-apis.utils';
 

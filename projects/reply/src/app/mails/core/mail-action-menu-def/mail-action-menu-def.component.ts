@@ -7,8 +7,8 @@ import {
 import { MatLegacyMenu as MatMenu } from '@angular/material/legacy-menu';
 
 import { useActionFlow } from '@/app/core/action-flow';
-import { Mail } from '@/app/data/mail.model';
-import { Mailbox } from '@/app/data/mailbox.model';
+import { Mail } from '@/app/data/mail/mail.model';
+import { Mailbox } from '@/app/data/mailbox/mailbox.model';
 
 import {
   MoveMailActionFlow,

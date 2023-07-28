@@ -11,9 +11,9 @@ import {
 import { combineLatest, first, map, switchMap } from 'rxjs';
 
 import { AuthenticationService } from './core/authentication.service';
-import { ContactService } from './data/contact.service';
-import { MailService } from './data/mail.service';
-import { MailboxService } from './data/mailbox.service';
+import { ContactService } from './data/contact/contact.service';
+import { MailService } from './data/mail/mail.service';
+import { MailboxService } from './data/mailbox/mailbox.service';
 
 const authorized: CanMatchFn = () => inject(AuthenticationService).authorized$;
 const unauthorized: CanMatchFn = () =>

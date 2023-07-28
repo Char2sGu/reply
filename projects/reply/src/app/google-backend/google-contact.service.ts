@@ -3,9 +3,9 @@ import { from, map, Observable, of, switchMap } from 'rxjs';
 
 import { InvalidResponseException } from '../core/exceptions';
 import { access, asserted } from '../core/property-path.utils';
-import { Contact } from '../data/contact.model';
-import { ContactRepository } from '../data/contact.repository';
-import { ContactService } from '../data/contact.service';
+import { Contact } from '../data/contact/contact.model';
+import { ContactRepository } from '../data/contact/contact.repository';
+import { ContactService } from '../data/contact/contact.service';
 import { useGoogleApi } from './core/google-apis.utils';
 
 @Injectable()

@@ -21,8 +21,8 @@ import {
   Authorization,
 } from '../core/authentication.service';
 import { UnauthorizedException } from '../core/exceptions';
-import { Contact } from '../data/contact.model';
-import { ContactService } from '../data/contact.service';
+import { Contact } from '../data/contact/contact.model';
+import { ContactService } from '../data/contact/contact.service';
 import { GOOGLE_APIS } from './core/google-apis.token';
 import { useGoogleApi } from './core/google-apis.utils';
 import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';

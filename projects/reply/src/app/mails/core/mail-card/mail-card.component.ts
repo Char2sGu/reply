@@ -10,9 +10,9 @@ import {
 } from '@angular/core';
 
 import { BREAKPOINTS } from '@/app/core/breakpoint.service';
-import { ContactRepository } from '@/app/data/contact.repository';
-import { Mail } from '@/app/data/mail.model';
-import { Mailbox } from '@/app/data/mailbox.model';
+import { ContactRepository } from '@/app/data/contact/contact.repository';
+import { Mail } from '@/app/data/mail/mail.model';
+import { Mailbox } from '@/app/data/mailbox/mailbox.model';
 
 @Component({
   selector: 'rpl-mail-card',

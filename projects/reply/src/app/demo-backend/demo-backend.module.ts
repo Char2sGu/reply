@@ -3,9 +3,9 @@ import { inject, NgModule } from '@angular/core';
 
 import { AuthenticationService } from '../core/authentication.service';
 import { INITIALIZER, Initializer } from '../core/initialization';
-import { ContactService } from '../data/contact.service';
-import { MailService } from '../data/mail.service';
-import { MailboxService } from '../data/mailbox.service';
+import { ContactService } from '../data/contact/contact.service';
+import { MailService } from '../data/mail/mail.service';
+import { MailboxService } from '../data/mailbox/mailbox.service';
 import { DemoAuthenticationService } from './demo-authentication.service';
 import { DemoContactService } from './demo-contact.service';
 import { DemoMailService } from './demo-mail.service';

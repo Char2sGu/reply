@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { Base64 } from 'js-base64';
 
-import { ContactRepository } from '@/app/data/contact.repository';
-import { Mailbox } from '@/app/data/mailbox.model';
+import { ContactRepository } from '@/app/data/contact/contact.repository';
+import { Mailbox } from '@/app/data/mailbox/mailbox.model';
 
 import { access, asserted, PropertyPath } from '../../core/property-path.utils';
-import { Contact } from '../../data/contact.model';
-import { Mail } from '../../data/mail.model';
+import { Contact } from '../../data/contact/contact.model';
+import { Mail } from '../../data/mail/mail.model';
 import { GMAIL_SYSTEM_MAILBOXES } from './gmail-system-mailboxes.token';
 
 @Injectable({

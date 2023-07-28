@@ -8,7 +8,7 @@ import {
 import { first, map } from 'rxjs';
 
 import { VirtualMailboxName } from '../core/mailbox-name.enums';
-import { MailboxRepository } from '../data/mailbox.repository';
+import { MailboxRepository } from '../data/mailbox/mailbox.repository';
 import { MailsComponent } from './mails.component';
 
 const mailboxNameValid: CanActivateFn = (route) => {

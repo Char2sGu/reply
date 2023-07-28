@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { Contact } from '@/app/data/contact.model';
-import { Mail } from '@/app/data/mail.model';
+import { Contact } from '@/app/data/contact/contact.model';
+import { Mail } from '@/app/data/mail/mail.model';
 
 @Component({
   selector: 'rpl-mail',

@@ -8,9 +8,9 @@ import {
   Authorization,
 } from '../core/authentication.service';
 import { INITIALIZER, Initializer } from '../core/initialization';
-import { ContactService } from '../data/contact.service';
-import { MailService } from '../data/mail.service';
-import { MailboxService } from '../data/mailbox.service';
+import { ContactService } from '../data/contact/contact.service';
+import { MailService } from '../data/mail/mail.service';
+import { MailboxService } from '../data/mailbox/mailbox.service';
 import { GOOGLE_APIS } from './core/google-apis.token';
 import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';
 import { GoogleAuthenticationService } from './google-authentication.service';

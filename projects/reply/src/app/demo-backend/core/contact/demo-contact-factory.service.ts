@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Contact } from '@/app/data/contact.model';
+import { Contact } from '@/app/data/contact/contact.model';
 
 import { DemoEntityFactory } from '../demo-entity-factory';
 

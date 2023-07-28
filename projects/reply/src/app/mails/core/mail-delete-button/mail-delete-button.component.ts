@@ -10,7 +10,7 @@ import { useActionFlow } from '@/app/core/action-flow';
 import { SystemMailboxName } from '@/app/core/mailbox-name.enums';
 import { useSystemMailboxNameMapping } from '@/app/core/mailbox-name.utils';
 
-import { Mail } from '../../../data/mail.model';
+import { Mail } from '../../../data/mail/mail.model';
 import {
   DeleteMailActionFlow,
   MoveMailToMailboxActionFlow,

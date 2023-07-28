@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Mailbox } from '@/app/data/mailbox.model';
+import { Mailbox } from '@/app/data/mailbox/mailbox.model';
 
 import { DemoEntityFactory } from '../demo-entity-factory';
 

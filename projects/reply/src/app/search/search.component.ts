@@ -15,8 +15,8 @@ import {
 } from 'rxjs';
 
 import { NAVIGATION_CONTEXT } from '../core/navigation-context.token';
-import { Mail } from '../data/mail.model';
-import { MailRepository } from '../data/mail.repository';
+import { Mail } from '../data/mail/mail.model';
+import { MailRepository } from '../data/mail/mail.repository';
 
 @Component({
   selector: 'rpl-search',

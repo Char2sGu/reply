@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { combineLatest, from, Observable, throwError } from 'rxjs';
 
-import { Contact } from '../data/contact.model';
-import { ContactRepository } from '../data/contact.repository';
-import { ContactService } from '../data/contact.service';
+import { Contact } from '../data/contact/contact.model';
+import { ContactRepository } from '../data/contact/contact.repository';
+import { ContactService } from '../data/contact/contact.service';
 import { DEMO_CONTACTS } from './core/contact/demo-contacts.token';
 
 @Injectable()

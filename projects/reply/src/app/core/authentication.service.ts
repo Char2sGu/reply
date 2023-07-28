@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Contact } from '../data/contact.model';
+import { Contact } from '../data/contact/contact.model';
 
 @Injectable()
 export abstract class AuthenticationService {

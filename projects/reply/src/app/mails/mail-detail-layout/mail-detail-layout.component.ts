@@ -13,10 +13,10 @@ import { timer } from 'rxjs';
 import { AuthenticationService } from '@/app/core/authentication.service';
 import { LAYOUT_CONTEXT } from '@/app/core/layout-context.token';
 import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
-import { ContactRepository } from '@/app/data/contact.repository';
-import { Mail } from '@/app/data/mail.model';
-import { MailRepository } from '@/app/data/mail.repository';
-import { Mailbox } from '@/app/data/mailbox.model';
+import { ContactRepository } from '@/app/data/contact/contact.repository';
+import { Mail } from '@/app/data/mail/mail.model';
+import { MailRepository } from '@/app/data/mail/mail.repository';
+import { Mailbox } from '@/app/data/mailbox/mailbox.model';
 
 @Component({
   selector: 'rpl-mail-detail-layout',

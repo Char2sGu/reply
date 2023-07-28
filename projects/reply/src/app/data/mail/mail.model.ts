@@ -1,5 +1,5 @@
-import { Contact } from './contact.model';
-import { Mailbox } from './mailbox.model';
+import { Contact } from '../contact/contact.model';
+import { Mailbox } from '../mailbox/mailbox.model';
 
 export interface Mail {
   id: string;

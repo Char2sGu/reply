@@ -5,7 +5,7 @@ import {
   AuthenticationService,
   Authorization,
 } from '../core/authentication.service';
-import { ContactService } from '../data/contact.service';
+import { ContactService } from '../data/contact/contact.service';
 
 const AUTHORIZATION: Authorization = {
   token: 'demo',

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { ReactiveRepository } from '../core/reactive-repository';
 import { Contact } from './contact.model';
-import { ReactiveRepository } from './core/reactive-repository';
 
 @Injectable({
   providedIn: 'root',

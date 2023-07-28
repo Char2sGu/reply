@@ -11,11 +11,11 @@ import {
 import { AuthenticationService } from '../core/authentication.service';
 import { access } from '../core/property-path.utils';
 import { onErrorUndo } from '../data/core/reactive-repository.utils';
-import { MailDatabase } from '../data/mail.database';
-import { Mail } from '../data/mail.model';
-import { MailRepository } from '../data/mail.repository';
-import { MailPage, MailService } from '../data/mail.service';
-import { Mailbox } from '../data/mailbox.model';
+import { MailDatabase } from '../data/mail/mail.database';
+import { Mail } from '../data/mail/mail.model';
+import { MailRepository } from '../data/mail/mail.repository';
+import { MailPage, MailService } from '../data/mail/mail.service';
+import { Mailbox } from '../data/mailbox/mailbox.model';
 import { GmailMessageParser } from './core/gmail-message-parser.service';
 import { useGoogleApi } from './core/google-apis.utils';
 

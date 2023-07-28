@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { Mailbox } from '../mailbox/mailbox.model';
 import { Mail } from './mail.model';
-import { Mailbox } from './mailbox.model';
 
 @Injectable()
 export abstract class MailService {

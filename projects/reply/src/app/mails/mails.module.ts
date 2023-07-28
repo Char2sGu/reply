@@ -9,9 +9,9 @@ import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/le
 import { LayoutProjectionModule } from '@layout-projection/angular';
 import { ScrollingModule } from '@reply/scrolling';
 
-import { ContactSortPipe } from '../data/contact-sort.pipe';
-import { ContactStringifyPipe } from '../data/contact-stringify.pipe';
-import { MailSnippetPipe } from '../data/mail-snippet.pipe';
+import { ContactSortPipe } from '../data/contact/contact-sort.pipe';
+import { ContactStringifyPipe } from '../data/contact/contact-stringify.pipe';
+import { MailSnippetPipe } from '../data/mail/mail-snippet.pipe';
 import { ResolveRefPipe } from '../data/resolve-ref.pipe';
 import { AvatarComponent } from '../shared/avatar/avatar.component';
 import { HtmlRendererComponent } from '../shared/html-renderer/html-renderer.component';

@@ -8,9 +8,9 @@ import {
 import dayjs from 'dayjs/esm';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
-import { ContactRepository } from '@/app/data/contact.repository';
-import { Mail } from '@/app/data/mail.model';
-import { MailboxRepository } from '@/app/data/mailbox.repository';
+import { ContactRepository } from '@/app/data/contact/contact.repository';
+import { Mail } from '@/app/data/mail/mail.model';
+import { MailboxRepository } from '@/app/data/mailbox/mailbox.repository';
 
 @Component({
   selector: 'rpl-search-result-list',

@@ -11,8 +11,8 @@ import {
   VirtualMailboxName,
 } from '@/app/core/mailbox-name.enums';
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
-import { Mailbox } from '@/app/data/mailbox.model';
-import { MailboxRepository } from '@/app/data/mailbox.repository';
+import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+import { MailboxRepository } from '@/app/data/mailbox/mailbox.repository';
 
 @Component({
   selector: 'rpl-nav-menu',
