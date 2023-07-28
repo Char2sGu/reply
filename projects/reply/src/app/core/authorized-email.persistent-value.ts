@@ -16,7 +16,7 @@ export class AuthorizedEmailPersistentValue extends PersistentValue<string> {
         const auth = inject(AuthenticationService);
         const value = inject(this);
         return () => {
-          combineLatest([auth.authorized$, auth.user$])
+          combineLatest([auth.authorization$.pipe(map(Boolean)), auth.user$])
             .pipe(map(([authorized, user]) => (authorized ? user : null)))
             .subscribe((user) => {
               if (user) value.set(user.email);

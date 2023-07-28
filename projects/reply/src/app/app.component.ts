@@ -108,9 +108,10 @@ export class AppComponent {
   );
 
   constructor() {
-    const authStatusChange$ = this.authService.authorized$.pipe(
+    const authStatusChange$ = this.authService.authorization$.pipe(
+      map(Boolean),
       pairwise(),
-      map((pair) => pair[1]),
+      map((pair) => pair[0] !== pair[1]),
     );
     authStatusChange$.subscribe(() => {
       this.router.navigateByUrl('/');

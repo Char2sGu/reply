@@ -1,15 +1,13 @@
-import { inject, Injectable, NgZone } from '@angular/core';
+import { EventEmitter, inject, Injectable, NgZone } from '@angular/core';
 import dayjs from 'dayjs';
 import {
   concatMap,
-  distinctUntilChanged,
   filter,
   first,
   map,
   Observable,
   shareReplay,
   startWith,
-  Subject,
   switchMap,
   takeUntil,
   throwIfEmpty,
@@ -62,7 +60,7 @@ export class GoogleAuthenticationService implements AuthenticationService {
     ),
   );
 
-  private authorizationUpdate$ = new Subject<
+  private authorizationUpdate = new EventEmitter<
     | {
         type: 'obtain';
         value: Authorization;
@@ -72,7 +70,7 @@ export class GoogleAuthenticationService implements AuthenticationService {
   >();
 
   readonly authorization$: Observable<Authorization | null> =
-    this.authorizationUpdate$.pipe(
+    this.authorizationUpdate.pipe(
       map((update): Authorization | null =>
         update.type === 'obtain' ? update.value : null,
       ),
@@ -80,13 +78,7 @@ export class GoogleAuthenticationService implements AuthenticationService {
       shareReplay(1),
     );
 
-  readonly authorized$: Observable<boolean> = this.authorization$.pipe(
-    map((auth) => !!auth),
-    distinctUntilChanged(),
-    shareReplay(1),
-  );
-
-  readonly user$: Observable<Contact> = this.authorized$.pipe(
+  readonly user$: Observable<Contact> = this.authorization$.pipe(
     filter(Boolean),
     switchMap(() => this.contactService.loadUser()),
     shareReplay(1),
@@ -99,14 +91,14 @@ export class GoogleAuthenticationService implements AuthenticationService {
 
     if (isAboutToExpire()) return false;
 
-    this.authorizationUpdate$.next({ type: 'obtain', value: auth });
+    this.authorizationUpdate.emit({ type: 'obtain', value: auth });
     timer(0, 30 * 1000)
       .pipe(
-        takeUntil(this.authorizationUpdate$),
+        takeUntil(this.authorizationUpdate),
         filter(() => isAboutToExpire()),
       )
       .subscribe(() => {
-        this.authorizationUpdate$.next({ type: 'expire' });
+        this.authorizationUpdate.emit({ type: 'expire' });
       });
     return true;
   }
@@ -126,7 +118,7 @@ export class GoogleAuthenticationService implements AuthenticationService {
         concatMap((auth) => this.tokenRevokeApi(auth.token)),
       )
       .subscribe(() => {
-        this.authorizationUpdate$.next({ type: 'revoke' });
+        this.authorizationUpdate.emit({ type: 'revoke' });
       });
   }
 }

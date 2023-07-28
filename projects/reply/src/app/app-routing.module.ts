@@ -15,9 +15,10 @@ import { ContactService } from './data/contact/contact.service';
 import { MailService } from './data/mail/mail.service';
 import { MailboxService } from './data/mailbox/mailbox.service';
 
-const authorized: CanMatchFn = () => inject(AuthenticationService).authorized$;
+const authorized: CanMatchFn = () =>
+  inject(AuthenticationService).authorization$.pipe(map((a) => !!a));
 const unauthorized: CanMatchFn = () =>
-  inject(AuthenticationService).authorized$.pipe(map((a) => !a));
+  inject(AuthenticationService).authorization$.pipe(map((a) => !a));
 
 const dataInitializer: CanActivateFn = () =>
   combineLatest([
