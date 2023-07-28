@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Base64 } from 'js-base64';
 
+import { ContactRepository } from '@/app/data/contact.repository';
 import { Mailbox } from '@/app/data/mailbox.model';
 
 import { access, asserted, PropertyPath } from '../../core/property-path.utils';
@@ -13,21 +14,22 @@ import { GMAIL_SYSTEM_MAILBOXES } from './gmail-system-mailboxes.token';
 })
 export class GmailMessageParser {
   private systemMailboxes = inject(GMAIL_SYSTEM_MAILBOXES);
+  private contactRepo = inject(ContactRepository);
 
   // eslint-disable-next-line complexity
   parseMessage(
     message: gapi.client.gmail.Message,
-    addressResolver: EmailAddressResolver,
+    user: Contact,
   ): Partial<Mail> {
     const bodyData =
       message.payload && this.parseBodyIntoContentAndType(message.payload);
     const headerData =
       message.payload?.headers && this.parseHeaders(message.payload.headers);
     const sender = headerData?.sender
-      ? addressResolver(headerData.sender)
+      ? this.resolveEmailAddress(headerData.sender, user)
       : null;
     const recipients = headerData?.recipients?.map((addr) =>
-      addressResolver(addr),
+      this.resolveEmailAddress(addr, user),
     );
     return {
       ...(message.id && {
@@ -61,12 +63,9 @@ export class GmailMessageParser {
     };
   }
 
-  parseFullMessage(
-    message: gapi.client.gmail.Message,
-    addressResolver: EmailAddressResolver,
-  ): Mail {
+  parseFullMessage(message: gapi.client.gmail.Message, user: Contact): Mail {
     const paths = <P extends PropertyPath<Mail>>(...paths: P[]) => paths;
-    const mail = this.parseMessage(message, addressResolver);
+    const mail = this.parseMessage(message, user);
     return asserted(mail, [
       ...paths('id', 'sender', 'sentAt', 'content', 'contentType'),
       ...paths('isRead', 'type', 'isStarred'),
@@ -141,13 +140,23 @@ export class GmailMessageParser {
     );
     return mailboxId ?? null;
   }
+
+  // Accepting user is not necessary, but it can help us ensure that the user
+  // is in the repository so that we won't accidentally create a duplicate.
+  private resolveEmailAddress(address: EmailAddress, user: Contact): Contact {
+    if (address.email === user.email) return user;
+    return (
+      this.contactRepo.queryOne((e) => e.email === address.email).snapshot ??
+      this.contactRepo.insert({
+        id: address.email,
+        name: address.name,
+        email: address.email,
+      }).curr
+    );
+  }
 }
 
-export interface EmailAddressResolver {
-  (address: EmailAddress): Contact;
-}
-
-export interface EmailAddress {
+interface EmailAddress {
   name?: string;
   email: string;
 }

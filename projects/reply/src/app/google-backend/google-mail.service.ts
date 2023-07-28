@@ -1,5 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
+import {
+  combineLatest,
+  first,
+  map,
+  Observable,
+  switchMap,
+  withLatestFrom,
+} from 'rxjs';
 
 import { AuthenticationService } from '../core/authentication.service';
 import { access } from '../core/property-path.utils';
@@ -36,7 +43,8 @@ export class GoogleMailService implements MailService {
   loadMail(id: Mail['id']): Observable<Mail> {
     return this.messageGetApi({ userId: 'me', id }).pipe(
       map((response) => response.result),
-      switchMap((message) => this.parseMessage(message)),
+      withLatestFrom(this.user$.pipe(first())),
+      map(([msg, user]) => this.messageParser.parseFullMessage(msg, user)),
       switchMap((mail) => this.mailRepo.insertOrPatch(mail)),
     );
   }
@@ -97,32 +105,11 @@ export class GoogleMailService implements MailService {
   ): Observable<Mail> {
     const update = this.mailRepo.patch(mail.id, optimisticResult);
     return this.messageModifyApi({ userId: 'me', id: mail.id }, body).pipe(
-      switchMap((response) => this.parseMessage(response.result)),
+      map((response) => response.result),
+      withLatestFrom(this.user$.pipe(first())),
+      map(([msg, user]) => this.messageParser.parseFullMessage(msg, user)),
       switchMap((updated) => this.mailRepo.patch(mail.id, updated)),
       onErrorUndo(update),
-    );
-  }
-
-  private parseMessage(message: gapi.client.gmail.Message): Observable<Mail> {
-    // Wait for the user to be loaded into the repository.
-    return this.user$.pipe(
-      first(),
-      map(() =>
-        this.messageParser.parseFullMessage(
-          message,
-          (address) =>
-            this.contactRepo.queryOne((e) => e.email === address.email)
-              .snapshot ??
-            access(
-              this.contactRepo.insert({
-                id: address.email,
-                name: address.name,
-                email: address.email,
-              }),
-              'curr',
-            ),
-        ),
-      ),
     );
   }
 }
