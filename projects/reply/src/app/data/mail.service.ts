@@ -8,7 +8,7 @@ import { Mailbox } from './mailbox.model';
 export abstract class MailService {
   abstract loadMails(page?: string): Observable<MailPage>;
   abstract loadMail(id: Mail['id']): Observable<Mail>;
-  abstract syncMails(syncToken: string): Observable<Mail[]>;
+  abstract syncMails(syncToken: string): Observable<void>;
   abstract obtainSyncToken(): Observable<string>;
   abstract markMailAsStarred(mail: Mail): Observable<void>;
   abstract markMailAsNotStarred(mail: Mail): Observable<void>;

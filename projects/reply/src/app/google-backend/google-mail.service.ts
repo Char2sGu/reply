@@ -11,6 +11,7 @@ import {
 import { AuthenticationService } from '../core/authentication.service';
 import { access } from '../core/property-path.utils';
 import { onErrorUndo } from '../core/reactive-repository.utils';
+import { MailDatabase } from '../data/mail.database';
 import { Mail } from '../data/mail.model';
 import { MailRepository } from '../data/mail.repository';
 import { MailPage, MailService } from '../data/mail.service';
@@ -23,6 +24,7 @@ export class GoogleMailService implements MailService {
   private user$ = inject(AuthenticationService).user$;
   private messageParser = inject(GmailMessageParser);
   private mailRepo = inject(MailRepository);
+  private mailDb = inject(MailDatabase);
 
   private messageListApi = useGoogleApi((a) => a.gmail.users.messages.list);
   private messageGetApi = useGoogleApi((a) => a.gmail.users.messages.get);
@@ -54,18 +56,19 @@ export class GoogleMailService implements MailService {
       map((response) => response.result),
       withLatestFrom(this.user$.pipe(first())),
       map(([msg, user]) => this.messageParser.parseFullMessage(msg, user)),
+      switchMap((mail) => this.mailDb.persist(mail)),
       switchMap((mail) => this.mailRepo.insertOrPatch(mail)),
     );
   }
 
-  syncMails(syncToken: string): Observable<Mail[]> {
+  syncMails(syncToken: string): Observable<void> {
     return this.historyListApi({
       userId: 'me',
       startHistoryId: syncToken,
     }).pipe(
       withLatestFrom(this.user$.pipe(first())),
       switchMap(([response, user]) => {
-        const mails = new Map<Mail['id'], Observable<Mail>>();
+        const actions: Observable<unknown>[] = [];
         response.result.history?.forEach((history) => {
           [
             ...(history.labelsAdded ?? []),
@@ -73,22 +76,29 @@ export class GoogleMailService implements MailService {
           ].forEach((entry) => {
             const message = access(entry, 'message');
             const mail = this.messageParser.parseMessage(message, user);
-            this.mailRepo.patch(access(mail, 'id'), mail);
-            const mail$ = this.mailRepo.retrieve(access(message, 'id'));
-            mails.set(access(message, 'id'), mail$);
+            const update = this.mailRepo.patch(access(mail, 'id'), mail);
+            const action = this.mailDb
+              .persist(update.curr)
+              .pipe(onErrorUndo(update));
+            actions.push(action);
           });
           history.messagesAdded?.forEach((entry) => {
             const message = access(entry, 'message');
-            const mail$ = this.loadMail(access(message, 'id'));
-            mails.set(access(message, 'id'), mail$);
+            const action = this.loadMail(access(message, 'id'));
+            actions.push(action);
           });
           history.messagesDeleted?.forEach((entry) => {
             const message = access(entry, 'message');
-            this.mailRepo.delete(access(message, 'id'));
+            const update = this.mailRepo.delete(access(message, 'id'));
+            const action = this.mailDb
+              .delete(update.id)
+              .pipe(onErrorUndo(update));
+            actions.push(action);
           });
         });
-        return combineLatest([...mails.values()]);
+        return combineLatest(actions);
       }),
+      map(() => undefined),
     );
   }
 
@@ -158,13 +168,16 @@ export class GoogleMailService implements MailService {
     body: gapi.client.gmail.ModifyMessageRequest,
     optimisticResult: Partial<Mail>,
   ): Observable<Mail> {
-    const update = this.mailRepo.patch(mail.id, optimisticResult);
+    const optimisticUpdate = this.mailRepo.patch(mail.id, optimisticResult);
     return this.messageModifyApi({ userId: 'me', id: mail.id }, body).pipe(
       map((response) => response.result),
       withLatestFrom(this.user$.pipe(first())),
-      map(([msg, user]) => this.messageParser.parseFullMessage(msg, user)),
-      switchMap((updated) => this.mailRepo.patch(mail.id, updated)),
-      onErrorUndo(update),
+      map(([msg, user]) => this.messageParser.parseMessage(msg, user)),
+      onErrorUndo(optimisticUpdate),
+      map((updatedFields) => this.mailRepo.patch(mail.id, updatedFields)),
+      switchMap((actualUpdate) =>
+        this.mailDb.persist(actualUpdate.curr).pipe(onErrorUndo(actualUpdate)),
+      ),
     );
   }
 }
