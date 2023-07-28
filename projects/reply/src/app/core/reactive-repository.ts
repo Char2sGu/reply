@@ -13,6 +13,7 @@ import {
   EntityDuplicateException,
   EntityNotFoundException,
 } from './exceptions';
+import { PropertiesNonNullable } from './property.utils';
 
 /**
  * A reactive repository serves as the one and only source of truth for any
@@ -98,7 +99,9 @@ export abstract class ReactiveRepository<Entity> {
    * @throws An {@link EntityDuplicateException} if entity with the same id
    * already exists.
    */
-  insert(entity: Entity): ReactiveRepositoryUpdate<Entity> {
+  insert(
+    entity: Entity,
+  ): PropertiesNonNullable<ReactiveRepositoryUpdate<Entity>, 'curr'> {
     const id = this.identify(entity);
     if (this.entities.has(id)) throw new EntityDuplicateException();
     const entity$ = new BehaviorSubject(entity);
@@ -108,7 +111,7 @@ export abstract class ReactiveRepository<Entity> {
       prev: null,
       curr: entity,
       undo: () => this.delete(id),
-    });
+    }) as any;
   }
 
   /**
@@ -118,7 +121,7 @@ export abstract class ReactiveRepository<Entity> {
   patch(
     id: string,
     payload: Partial<Entity>,
-  ): ReactiveRepositoryUpdate<Entity> {
+  ): PropertiesNonNullable<ReactiveRepositoryUpdate<Entity>, 'prev' | 'curr'> {
     const entity$ = this.entities.get(id);
     if (!entity$) throw new EntityNotFoundException();
     const prev = entity$.value;
@@ -128,14 +131,16 @@ export abstract class ReactiveRepository<Entity> {
       prev,
       curr: entity$.value,
       undo: () => this.patch(id, prev),
-    });
+    }) as any;
   }
 
   /**
    * {@link insert Insert} the entity if it doesn't exist, otherwise
    * {@link patch} the existing one.
    */
-  insertOrPatch(entity: Entity): ReactiveRepositoryUpdate<Entity> {
+  insertOrPatch(
+    entity: Entity,
+  ): PropertiesNonNullable<ReactiveRepositoryUpdate<Entity>, 'curr'> {
     const id = this.identify(entity);
     const existing = this.entities.get(id);
     if (existing) return this.patch(id, entity);
@@ -146,7 +151,9 @@ export abstract class ReactiveRepository<Entity> {
    * @throws An {@link EntityNotFoundException} if entity with the given id
    * doesn't exist.
    */
-  delete(id: string): ReactiveRepositoryUpdate<Entity> {
+  delete(
+    id: string,
+  ): PropertiesNonNullable<ReactiveRepositoryUpdate<Entity>, 'prev'> {
     const entity$ = this.entities.get(id);
     if (!entity$) throw new EntityNotFoundException();
     const prev = entity$.value;
@@ -157,7 +164,7 @@ export abstract class ReactiveRepository<Entity> {
       prev,
       curr: null,
       undo: () => this.insert(prev),
-    });
+    }) as any;
   }
 
   private performUpdate(
