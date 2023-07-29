@@ -104,7 +104,7 @@ export class GoogleContactBackend implements ContactBackend {
 
   private parsePerson(
     person: gapi.client.people.Person,
-  ): Pick<Contact, 'id' | 'temporary'> & Partial<Contact> {
+  ): Pick<Contact, 'id' | 'type'> & Partial<Contact> {
     const { resourceName, names, photos, emailAddresses } = person;
     const id = resourceName?.split('/').pop();
     if (!id) throw new InvalidResponseException();
@@ -116,7 +116,7 @@ export class GoogleContactBackend implements ContactBackend {
       ...(name && { name }),
       ...(email && { email }),
       ...(photo && { avatarUrl: photo.url }),
-      temporary: false,
+      type: 'user',
     };
   }
 

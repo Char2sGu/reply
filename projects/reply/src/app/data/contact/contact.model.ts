@@ -3,5 +3,5 @@ export interface Contact {
   name?: string;
   email: string;
   avatarUrl?: string;
-  temporary: boolean;
+  type: 'user' | 'temporary';
 }

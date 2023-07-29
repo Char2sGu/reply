@@ -8,7 +8,7 @@ import {
   Routes,
   TitleStrategy,
 } from '@angular/router';
-import { combineLatest, first, map, switchMap } from 'rxjs';
+import { combineLatest, firstValueFrom, map } from 'rxjs';
 
 import { AuthenticationService } from './core/auth/authentication.service';
 import { ContactService } from './data/contact/contact.service';
@@ -21,23 +21,25 @@ const authorized: CanMatchFn = () =>
 const unauthorized: CanMatchFn = () =>
   inject(AuthenticationService).authorization$.pipe(map((a) => !a));
 
-const dataInitializer: CanActivateFn = () => {
+const dataInitializer: CanActivateFn = async () => {
   const authService = inject(AuthenticationService);
   const contactService = inject(ContactService);
   const mailboxService = inject(MailboxService);
   const mailService = inject(MailService);
   const mailDb = inject(MailDatabase);
-  return authService.user$.pipe(
-    switchMap(() =>
-      combineLatest([
-        contactService.loadContacts(),
-        mailboxService.loadMailboxes(),
-        mailDb.clear(),
-        mailService.loadMails(),
-      ]).pipe(first()),
-    ),
-    map(() => true),
+
+  await firstValueFrom(authService.user$);
+  await firstValueFrom(
+    combineLatest([
+      mailboxService.loadMailboxes(),
+      contactService.loadContacts(),
+    ]),
   );
+  await firstValueFrom(
+    combineLatest([mailDb.clear(), mailService.loadMails()]),
+  );
+
+  return true;
 };
 
 const routes: Routes = [

@@ -48,7 +48,8 @@ export class GmailMessageResolver {
   resolveEmailAndName(email: string, name?: string): Contact {
     const result =
       this.contactRepo.queryOne((e) => e.email === email).snapshot ??
-      this.contactRepo.insert({ id: email, name, email, temporary: true }).curr;
+      this.contactRepo.insert({ id: email, name, email, type: 'temporary' })
+        .curr;
     return result;
   }
 }
