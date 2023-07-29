@@ -1,32 +1,19 @@
-import { inject, Injectable } from '@angular/core';
-import { from, map, Observable, of, switchMap } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { map, Observable, of } from 'rxjs';
 
 import { InvalidResponseException } from '../core/exceptions';
 import { access, asserted } from '../core/property-path.utils';
+import { ContactBackend } from '../data/contact/contact.backend';
 import { Contact } from '../data/contact/contact.model';
-import { ContactRepository } from '../data/contact/contact.repository';
-import { ContactService } from '../data/contact/contact.service';
 import { useGoogleApi } from './core/google-apis.utils';
 
 @Injectable()
-export class GoogleContactService implements ContactService {
-  private contactRepo = inject(ContactRepository);
-
+export class GoogleContactBackend implements ContactBackend {
   private peopleGetApi = useGoogleApi((a) => a.people.people.get);
-  private peopleListApi = useGoogleApi((a) => a.people.people.connections.list);
-  private peopleSearchApi = useGoogleApi((a) => a.people.people.searchContacts);
 
   // TODO: implement
   loadContacts(): Observable<Contact[]> {
     return of([]);
-    // return this.peopleListApi({
-    //   resourceName: 'people/me',
-    //   personFields: 'photos,emailAddresses',
-    // }).pipe(
-    //   map((response) => response.result.connections ?? []), // response would be empty if no contacts
-    //   map((people) => people.map((p) => this.parseFullPersonAndSave(p))),
-    //   switchMap((contactStreams) => combineLatest(contactStreams)),
-    // );
   }
 
   loadContact(id: string): Observable<Contact> {
@@ -35,7 +22,7 @@ export class GoogleContactService implements ContactService {
       personFields: 'names,photos,emailAddresses',
     }).pipe(
       map((response) => access(response, 'result')),
-      switchMap((person) => this.parseFullPersonAndSave(person)),
+      map((person) => this.parseFullPerson(person)),
     );
   }
 
@@ -63,12 +50,5 @@ export class GoogleContactService implements ContactService {
   private parseFullPerson(person: gapi.client.people.Person): Contact {
     const parsed = this.parsePerson(person);
     return asserted(parsed, ['name', 'email', 'avatarUrl']);
-  }
-
-  private parseFullPersonAndSave(
-    person: gapi.client.people.Person,
-  ): Observable<Contact> {
-    const contact = this.parseFullPerson(person);
-    return from(this.contactRepo.record(contact));
   }
 }

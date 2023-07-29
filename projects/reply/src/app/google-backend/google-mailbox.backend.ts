@@ -1,16 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, map, Observable, switchMap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { access } from '../core/property-path.utils';
+import { MailboxBackend } from '../data/mailbox/mailbox.backend';
 import { Mailbox } from '../data/mailbox/mailbox.model';
-import { MailboxRepository } from '../data/mailbox/mailbox.repository';
-import { MailboxService } from '../data/mailbox/mailbox.service';
 import { GMAIL_SYSTEM_MAILBOXES } from './core/gmail-system-mailboxes.token';
 import { useGoogleApi } from './core/google-apis.utils';
 
 @Injectable()
-export class GoogleMailboxService implements MailboxService {
-  private mailboxRepo = inject(MailboxRepository);
+export class GoogleMailboxBackend implements MailboxBackend {
   private systemMailboxes = inject(GMAIL_SYSTEM_MAILBOXES);
 
   private labelListApi = useGoogleApi((a) => a.gmail.users.labels.list);
@@ -20,9 +18,6 @@ export class GoogleMailboxService implements MailboxService {
       map((response) => access(response.result, 'labels')),
       map((labels) => this.parseLabels(labels)),
       map((mailboxes) => [...this.systemMailboxes, ...mailboxes]),
-      switchMap((mailboxes) =>
-        combineLatest(mailboxes.map((m) => this.mailboxRepo.record(m))),
-      ),
     );
   }
 

@@ -8,15 +8,15 @@ import {
   Authorization,
 } from '../core/authentication.service';
 import { INITIALIZER, Initializer } from '../core/initialization';
-import { ContactService } from '../data/contact/contact.service';
-import { MailService } from '../data/mail/mail.service';
-import { MailboxService } from '../data/mailbox/mailbox.service';
+import { ContactBackend } from '../data/contact/contact.backend';
+import { MailBackend } from '../data/mail/mail.backend';
+import { MailboxBackend } from '../data/mailbox/mailbox.backend';
 import { GOOGLE_APIS } from './core/google-apis.token';
 import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';
 import { GoogleAuthenticationService } from './google-authentication.service';
-import { GoogleContactService } from './google-contact.service';
-import { GoogleMailService } from './google-mail.service';
-import { GoogleMailboxService } from './google-mailbox.service';
+import { GoogleContactBackend } from './google-contact.backend';
+import { GoogleMailBackend } from './google-mail.backend';
+import { GoogleMailboxBackend } from './google-mailbox.backend';
 
 @NgModule({
   providers: [
@@ -60,16 +60,16 @@ import { GoogleMailboxService } from './google-mailbox.service';
       useClass: GoogleAuthenticationService,
     },
     {
-      provide: ContactService,
-      useClass: GoogleContactService,
+      provide: ContactBackend,
+      useClass: GoogleContactBackend,
     },
     {
-      provide: MailService,
-      useClass: GoogleMailService,
+      provide: MailBackend,
+      useClass: GoogleMailBackend,
     },
     {
-      provide: MailboxService,
-      useClass: GoogleMailboxService,
+      provide: MailboxBackend,
+      useClass: GoogleMailboxBackend,
     },
   ],
 })
