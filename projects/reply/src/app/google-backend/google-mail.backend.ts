@@ -28,7 +28,7 @@ export class GoogleMailBackend implements MailBackend {
       userId: 'me',
       pageToken: page,
       includeSpamTrash: true,
-      maxResults: 5, // TODO: temporary
+      maxResults: 20, // TODO: temporary
     }).pipe(
       map((response): MailPage => {
         const msgs = access(response.result, 'messages');
@@ -47,7 +47,7 @@ export class GoogleMailBackend implements MailBackend {
   loadMail(id: Mail['id']): Observable<Mail> {
     return this.messageGetApi({ userId: 'me', id }).pipe(
       map((response) => response.result),
-      switchMap((msg) => this.messageResolver.resolveFullMessage(msg)),
+      map((msg) => this.messageResolver.resolveFullMessage(msg)),
     );
   }
 
@@ -118,15 +118,13 @@ export class GoogleMailBackend implements MailBackend {
     [...(history.labelsAdded ?? []), ...(history.labelsRemoved ?? [])].forEach(
       (entry) => {
         const message = access(entry, 'message');
-        const mail$ = this.messageResolver.resolveMessage(message);
+        const mail = this.messageResolver.resolveMessage(message);
         changes.push(
-          mail$.pipe(
-            map((mail) => ({
-              type: 'update',
-              id: mail.id,
-              payload: mail,
-            })),
-          ),
+          of({
+            type: 'update',
+            id: mail.id,
+            payload: mail,
+          }),
         );
       },
     );
