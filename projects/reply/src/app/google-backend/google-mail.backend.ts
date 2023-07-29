@@ -9,7 +9,7 @@ import {
   withLatestFrom,
 } from 'rxjs';
 
-import { AuthenticationService } from '../core/authentication.service';
+import { AuthenticationService } from '../core/auth/authentication.service';
 import { access } from '../core/property-path.utils';
 import { Contact } from '../data/contact/contact.model';
 import {

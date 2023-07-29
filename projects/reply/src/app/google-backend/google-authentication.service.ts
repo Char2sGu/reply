@@ -17,7 +17,7 @@ import {
 import {
   AuthenticationService,
   Authorization,
-} from '../core/authentication.service';
+} from '../core/auth/authentication.service';
 import { UnauthorizedException } from '../core/exceptions';
 import { Contact } from '../data/contact/contact.model';
 import { ContactService } from '../data/contact/contact.service';

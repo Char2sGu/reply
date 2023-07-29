@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { map } from 'rxjs';
 
-import { AuthenticationService } from '../core/authentication.service';
+import { AuthenticationService } from '../core/auth/authentication.service';
 
 @Component({
   selector: 'rpl-auth',

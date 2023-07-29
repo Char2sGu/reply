@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { AuthenticationService } from '@/app/core/authentication.service';
+import { AuthenticationService } from '@/app/core/auth/authentication.service';
 
 @Component({
   selector: 'rpl-nav-avatar-button',

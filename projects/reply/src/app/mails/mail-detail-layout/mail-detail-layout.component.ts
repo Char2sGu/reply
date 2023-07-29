@@ -10,7 +10,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { timer } from 'rxjs';
 
-import { AuthenticationService } from '@/app/core/authentication.service';
+import { AuthenticationService } from '@/app/core/auth/authentication.service';
 import { LAYOUT_CONTEXT } from '@/app/core/layout-context.token';
 import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
 import { ContactRepository } from '@/app/data/contact/contact.repository';

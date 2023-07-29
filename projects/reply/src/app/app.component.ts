@@ -29,7 +29,7 @@ import {
 } from 'rxjs';
 
 import { injectAnimationIdFactory } from './core/animations';
-import { AuthenticationService } from './core/authentication.service';
+import { AuthenticationService } from './core/auth/authentication.service';
 import { BreakpointMap, BREAKPOINTS } from './core/breakpoint.service';
 import { INITIALIZER } from './core/initialization';
 

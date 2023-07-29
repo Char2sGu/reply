@@ -6,7 +6,7 @@ import { environment } from '@/environments/environment';
 import {
   AuthenticationService,
   Authorization,
-} from '../core/authentication.service';
+} from '../core/auth/authentication.service';
 import { INITIALIZER, Initializer } from '../core/initialization';
 import { ContactBackend } from '../data/contact/contact.backend';
 import { MailBackend } from '../data/mail/mail.backend';
