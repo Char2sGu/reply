@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, map, Observable, of } from 'rxjs';
+import { catchError, combineLatest, map, Observable, of } from 'rxjs';
 
 import { InvalidResponseException } from '../core/exceptions';
 import { access, asserted } from '../core/property-path.utils';
@@ -62,7 +62,10 @@ export class GoogleContactBackend implements ContactBackend {
           'DIRECTORY_SOURCE_TYPE_DOMAIN_PROFILE',
           'DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT', // TODO: check if this would cause duplicates
         ],
-      }).pipe(map((response) => response.result.people ?? [])),
+      }).pipe(
+        map((response) => response.result.people ?? []),
+        catchError(() => of([])),
+      ),
     ]).pipe(
       map((results) => results.flat()),
       map((results) => results.map((p) => this.parseFullPerson(p))),
@@ -88,6 +91,6 @@ export class GoogleContactBackend implements ContactBackend {
 
   private parseFullPerson(person: gapi.client.people.Person): Contact {
     const parsed = this.parsePerson(person);
-    return asserted(parsed, ['name', 'email', 'avatarUrl']);
+    return asserted(parsed, ['email']);
   }
 }

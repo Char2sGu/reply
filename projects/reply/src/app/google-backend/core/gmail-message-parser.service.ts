@@ -1,126 +1,64 @@
 import { inject, Injectable } from '@angular/core';
-import { Base64 } from 'js-base64';
+import parseMessage from 'gmail-api-parse-message';
 
-import { ContactRepository } from '@/app/data/contact/contact.repository';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';
 
-import { access, asserted, PropertyPath } from '../../core/property-path.utils';
-import { Contact } from '../../data/contact/contact.model';
 import { Mail } from '../../data/mail/mail.model';
 import { GMAIL_SYSTEM_MAILBOXES } from './gmail-system-mailboxes.token';
+
+export type GmailMessageParseResult = Pick<Mail, 'id'> &
+  Partial<Omit<Mail, 'id' | 'sender' | 'recipients'>> & {
+    sender?: EmailAddress;
+    recipients?: EmailAddress[];
+  };
 
 @Injectable({
   providedIn: 'root',
 })
 export class GmailMessageParser {
   private systemMailboxes = inject(GMAIL_SYSTEM_MAILBOXES);
-  private contactRepo = inject(ContactRepository);
 
   // eslint-disable-next-line complexity
-  parseMessage(
-    message: gapi.client.gmail.Message,
-    user: Contact,
-  ): Partial<Mail> {
-    const bodyData =
-      message.payload && this.parseBodyIntoContentAndType(message.payload);
-    const headerData =
-      message.payload?.headers && this.parseHeaders(message.payload.headers);
-    const sender = headerData?.sender
-      ? this.resolveEmailAddress(headerData.sender, user)
-      : null;
-    const recipients = headerData?.recipients?.map((addr) =>
-      this.resolveEmailAddress(addr, user),
-    );
+  parseMessage(message: gapi.client.gmail.Message): GmailMessageParseResult {
+    const parsed = parseMessage(message);
     return {
-      ...(message.id && {
-        id: message.id,
+      id: parsed.id,
+      ...(parsed.headers?.subject && {
+        subject: parsed.headers?.subject,
       }),
-      ...(headerData?.subject && {
-        subject: headerData.subject,
+      ...(parsed.headers?.from && {
+        sender: this.parseEmailAddressString(parsed.headers.from),
       }),
-      ...(sender && {
-        sender: sender.id,
+      ...(parsed.headers?.to && {
+        recipients: parsed.headers.to
+          .split(',')
+          .map((s) => s.trim())
+          .map((s) => this.parseEmailAddressString(s)),
       }),
-      ...(recipients && {
-        recipients: recipients.map((r) => r.id),
+      ...(parsed.internalDate && {
+        sentAt: new Date(Number(parsed.internalDate)),
       }),
-      ...(message.internalDate && {
-        sentAt: new Date(Number(message.internalDate)),
+      ...(parsed.snippet && {
+        snippet: parsed.snippet,
       }),
-      ...(message.snippet && {
-        snippet: message.snippet,
+      ...(parsed.textPlain && {
+        content: parsed.textPlain,
+        contentType: 'plain-text',
       }),
-      ...(bodyData && {
-        content: bodyData.content,
-        contentType: bodyData.contentType,
+      ...(parsed.textHtml && {
+        content: parsed.textHtml,
+        contentType: 'html',
       }),
-      ...(message.labelIds && {
-        isStarred: message.labelIds.includes('STARRED'),
-        isRead: !message.labelIds.includes('UNREAD'),
-        type: this.parseLabelIdsIntoMailType(message.labelIds),
-        mailbox: this.parseLabelIdsIntoMailboxId(message.labelIds) ?? undefined,
+      ...(parsed.labelIds && {
+        isStarred: parsed.labelIds.includes('STARRED'),
+        isRead: !parsed.labelIds.includes('UNREAD'),
+        type: this.parseLabelIdsIntoMailType(parsed.labelIds),
+        mailbox: this.parseLabelIdsIntoMailboxId(parsed.labelIds) ?? undefined,
       }),
     };
   }
 
-  parseFullMessage(message: gapi.client.gmail.Message, user: Contact): Mail {
-    const paths = <P extends PropertyPath<Mail>>(...paths: P[]) => paths;
-    const mail = this.parseMessage(message, user);
-    return asserted(mail, [
-      ...paths('id', 'sender', 'sentAt', 'content', 'contentType'),
-      ...paths('isRead', 'type', 'isStarred'),
-    ]);
-  }
-
-  private parseHeaders(headers: gapi.client.gmail.MessagePartHeader[]): {
-    subject?: string;
-    sender?: EmailAddress;
-    recipients?: EmailAddress[];
-  } {
-    const subject = headers.find((h) => h.name === 'Subject')?.value;
-
-    const senderString = headers.find((h) => h.name === 'From')?.value;
-    const sender = senderString
-      ? this.parseAddressString(senderString)
-      : undefined;
-
-    const recipientsString = headers //
-      .find((h) => h.name === 'To')?.value;
-    const recipients = recipientsString
-      ?.split(',')
-      .map((s) => s.trim())
-      .map((s) => this.parseAddressString(s));
-
-    return { subject, sender, recipients };
-  }
-
-  private parseBody(
-    root: gapi.client.gmail.MessagePart,
-    mimeType: string,
-  ): string | null {
-    if (root.mimeType === mimeType) {
-      const base64Url = access(root, 'body.data');
-      return Base64.decode(base64Url);
-    }
-    for (const part of root.parts ?? []) {
-      const result = this.parseBody(part, mimeType);
-      if (result) return result;
-    }
-    return null;
-  }
-
-  private parseBodyIntoContentAndType(
-    root: gapi.client.gmail.MessagePart,
-  ): Pick<Mail, 'content' | 'contentType'> {
-    const contentInHtml = this.parseBody(root, 'text/html');
-    if (contentInHtml) return { content: contentInHtml, contentType: 'html' };
-    const contentInPlainText = this.parseBody(root, 'text/plain');
-    if (contentInPlainText)
-      return { content: contentInPlainText, contentType: 'plain-text' };
-    return { content: '<content not supported>', contentType: 'plain-text' };
-  }
-
-  private parseAddressString(value: string): EmailAddress {
+  private parseEmailAddressString(value: string): EmailAddress {
     const match = value.match(/^(.+?)\s+<(.+?)>$/u);
     if (!match) return { email: value };
     const [, name, email] = match;
@@ -139,20 +77,6 @@ export class GmailMessageParser {
       (id) => systemMailboxIds.includes(id) || id.startsWith('Label_'),
     );
     return mailboxId ?? null;
-  }
-
-  // Accepting user is not necessary, but it can help us ensure that the user
-  // is in the repository so that we won't accidentally create a duplicate.
-  private resolveEmailAddress(address: EmailAddress, user: Contact): Contact {
-    if (address.email === user.email) return user;
-    return (
-      this.contactRepo.queryOne((e) => e.email === address.email).snapshot ??
-      this.contactRepo.insert({
-        id: address.email,
-        name: address.name,
-        email: address.email,
-      }).curr
-    );
   }
 }
 

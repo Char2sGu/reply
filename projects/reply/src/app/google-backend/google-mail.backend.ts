@@ -1,17 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import {
-  combineLatest,
-  first,
-  map,
-  Observable,
-  of,
-  switchMap,
-  withLatestFrom,
-} from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 
-import { AuthenticationService } from '../core/auth/authentication.service';
 import { access } from '../core/property-path.utils';
-import { Contact } from '../data/contact/contact.model';
 import {
   MailBackend,
   MailPage,
@@ -20,13 +10,12 @@ import {
 } from '../data/mail/mail.backend';
 import { Mail } from '../data/mail/mail.model';
 import { Mailbox } from '../data/mailbox/mailbox.model';
-import { GmailMessageParser } from './core/gmail-message-parser.service';
+import { GmailMessageResolver } from './core/gmail-message-resolver.service';
 import { useGoogleApi } from './core/google-apis.utils';
 
 @Injectable()
 export class GoogleMailBackend implements MailBackend {
-  private user$ = inject(AuthenticationService).user$;
-  private messageParser = inject(GmailMessageParser);
+  private messageResolver = inject(GmailMessageResolver);
 
   private messageListApi = useGoogleApi((a) => a.gmail.users.messages.list);
   private messageGetApi = useGoogleApi((a) => a.gmail.users.messages.get);
@@ -39,6 +28,7 @@ export class GoogleMailBackend implements MailBackend {
       userId: 'me',
       pageToken: page,
       includeSpamTrash: true,
+      maxResults: 5, // TODO: temporary
     }).pipe(
       map((response): MailPage => {
         const msgs = access(response.result, 'messages');
@@ -57,8 +47,7 @@ export class GoogleMailBackend implements MailBackend {
   loadMail(id: Mail['id']): Observable<Mail> {
     return this.messageGetApi({ userId: 'me', id }).pipe(
       map((response) => response.result),
-      withLatestFrom(this.user$.pipe(first())),
-      map(([msg, user]) => this.messageParser.parseFullMessage(msg, user)),
+      switchMap((msg) => this.messageResolver.resolveFullMessage(msg)),
     );
   }
 
@@ -67,10 +56,9 @@ export class GoogleMailBackend implements MailBackend {
       userId: 'me',
       startHistoryId: syncToken,
     }).pipe(
-      withLatestFrom(this.user$.pipe(first())),
-      switchMap(([response, user]) => {
+      switchMap((response) => {
         const histories = access(response.result, 'history');
-        const changes = histories.flatMap((h) => this.resolveHistory(h, user));
+        const changes = histories.flatMap((h) => this.resolveHistory(h));
         const syncToken = access(response.result, 'historyId');
         return combineLatest(changes).pipe(
           map((changes) => ({ changes, syncToken })),
@@ -112,8 +100,7 @@ export class GoogleMailBackend implements MailBackend {
   ): Observable<Mail> {
     return this.messageModifyApi({ userId: 'me', id: mail.id }, body).pipe(
       map((response) => response.result),
-      withLatestFrom(this.user$.pipe(first())),
-      map(([msg, user]) => this.messageParser.parseMessage(msg, user)),
+      map((msg) => this.messageResolver.resolveMessage(msg)),
       map((updates) => Object.assign(mail, updates)),
     );
   }
@@ -126,19 +113,20 @@ export class GoogleMailBackend implements MailBackend {
 
   private resolveHistory(
     history: gapi.client.gmail.History,
-    user: Contact,
   ): Observable<MailSyncChange>[] {
     const changes: Observable<MailSyncChange>[] = [];
     [...(history.labelsAdded ?? []), ...(history.labelsRemoved ?? [])].forEach(
       (entry) => {
         const message = access(entry, 'message');
-        const mail = this.messageParser.parseMessage(message, user);
+        const mail$ = this.messageResolver.resolveMessage(message);
         changes.push(
-          of({
-            type: 'update',
-            id: access(mail, 'id'),
-            payload: mail,
-          }),
+          mail$.pipe(
+            map((mail) => ({
+              type: 'update',
+              id: mail.id,
+              payload: mail,
+            })),
+          ),
         );
       },
     );
