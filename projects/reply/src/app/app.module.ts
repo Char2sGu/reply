@@ -22,7 +22,6 @@ import { catchError, of } from 'rxjs';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthorizedEmailPersistentValue } from './core/authorized-email.persistent-value';
 import { INITIALIZER, Initializer } from './core/initialization';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { LOCAL_STORAGE } from './core/native-api.tokens';
@@ -66,7 +65,6 @@ import { LogoComponent } from './shared/logo/logo.component';
       provide: LOCAL_STORAGE,
       useValue: window.localStorage,
     },
-    AuthorizedEmailPersistentValue.provideInitializer(),
     {
       provide: INITIALIZER,
       useFactory: (): Initializer => {
