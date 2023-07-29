@@ -6,10 +6,9 @@ import { Mail } from './mail.model';
 
 @Injectable()
 export abstract class MailService {
-  abstract loadMails(page?: string): Observable<MailPage>;
+  abstract loadMails(pageToken?: string): Observable<MailPage>;
   abstract loadMail(id: Mail['id']): Observable<Mail>;
   abstract syncMails(syncToken: string): Observable<void>;
-  abstract obtainSyncToken(): Observable<string>;
   abstract markMailAsStarred(mail: Mail): Observable<void>;
   abstract markMailAsNotStarred(mail: Mail): Observable<void>;
   abstract markMailAsRead(mail: Mail): Observable<void>;
@@ -20,5 +19,6 @@ export abstract class MailService {
 
 export interface MailPage {
   results$: Observable<Mail[]>;
-  next?: string;
+  syncToken: string;
+  nextPageToken?: string;
 }

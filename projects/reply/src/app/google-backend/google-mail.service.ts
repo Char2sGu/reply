@@ -38,16 +38,16 @@ export class GoogleMailService implements MailService {
       pageToken: page,
       includeSpamTrash: true,
     }).pipe(
-      map(
-        (response): MailPage => ({
+      map((response): MailPage => {
+        const msgs = access(response.result, 'messages');
+        return {
           results$: combineLatest(
-            access(response.result, 'messages').map((m) =>
-              this.loadMail(access(m, 'id')),
-            ),
+            msgs.map((m) => this.loadMail(access(m, 'id'))),
           ),
-          next: response.result.nextPageToken,
-        }),
-      ),
+          syncToken: access(msgs[0], 'historyId'),
+          nextPageToken: response.result.nextPageToken,
+        };
+      }),
     );
   }
 

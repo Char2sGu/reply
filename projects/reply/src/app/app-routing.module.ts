@@ -8,26 +8,36 @@ import {
   Routes,
   TitleStrategy,
 } from '@angular/router';
-import { map } from 'rxjs';
+import { combineLatest, first, map } from 'rxjs';
 
-import { useActionFlow } from './core/action-flow';
 import { AuthenticationService } from './core/authentication.service';
-import {
-  LoadIncrementalDataActionFlow,
-  ResetAndLoadInitialDataActionFlow,
-} from './data/data.action-flows';
-import { MailSyncTokenPersistentValue } from './data/mail/mail-sync-token.persistent-value';
+import { ContactService } from './data/contact/contact.service';
+import { MailDatabase } from './data/mail/mail.database';
+import { MailService } from './data/mail/mail.service';
+import { MailboxService } from './data/mailbox/mailbox.service';
 
 const authorized: CanMatchFn = () =>
   inject(AuthenticationService).authorization$.pipe(map((a) => !!a));
 const unauthorized: CanMatchFn = () =>
   inject(AuthenticationService).authorization$.pipe(map((a) => !a));
 
-const dataInitializer: CanActivateFn = () =>
-  (inject(MailSyncTokenPersistentValue).get()
-    ? useActionFlow(LoadIncrementalDataActionFlow)()
-    : useActionFlow(ResetAndLoadInitialDataActionFlow)()
-  ).pipe(map(() => true));
+const dataInitializer: CanActivateFn = () => {
+  const authService = inject(AuthenticationService);
+  const contactService = inject(ContactService);
+  const mailboxService = inject(MailboxService);
+  const mailService = inject(MailService);
+  const mailDb = inject(MailDatabase);
+  return combineLatest([
+    authService.user$,
+    contactService.loadContacts(),
+    mailboxService.loadMailboxes(),
+    mailDb.clear(),
+    mailService.loadMails(),
+  ]).pipe(
+    first(),
+    map(() => true),
+  );
+};
 
 const routes: Routes = [
   {
