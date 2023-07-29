@@ -11,10 +11,6 @@ import {
 } from 'rxjs';
 
 import {
-  switchToAllPersisted,
-  switchToPersisted,
-} from '../core/entity-database.utils';
-import {
   onErrorUndo,
   switchToAllRecorded,
   switchToRecorded,
@@ -48,15 +44,12 @@ export class MailService {
           switchMap(() => page.results$),
         );
       }),
-      switchToAllPersisted(this.database),
       switchToAllRecorded(this.repo),
     );
   }
 
   loadMail(id: Mail['id']): Observable<Mail> {
-    return this.backend
-      .loadMail(id)
-      .pipe(switchToPersisted(this.database), switchToRecorded(this.repo));
+    return this.backend.loadMail(id).pipe(switchToRecorded(this.repo));
   }
 
   syncMails(): Observable<void> {
@@ -148,7 +141,6 @@ export class MailService {
   ): Observable<void> {
     const optimisticUpdate = this.repo.patch(mail.id, optimisticResult);
     return action().pipe(
-      switchToPersisted(this.database),
       switchToRecorded(this.repo),
       onErrorUndo(optimisticUpdate),
       map(() => undefined),
