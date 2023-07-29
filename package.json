@@ -44,7 +44,7 @@
     "@angular/compiler-cli": "^16.1.3",
     "@types/gapi": "^0.0.44",
     "@types/gapi.client.gmail-v1": "^0.0.1",
-    "@types/gapi.people": "^1.0.9",
+    "@types/gapi.client.people-v1": "^0.0.1",
     "@types/google.accounts": "^0.0.7",
     "@types/jasmine": "~4.0.0",
     "@typescript-eslint/eslint-plugin": "^5.40.1",

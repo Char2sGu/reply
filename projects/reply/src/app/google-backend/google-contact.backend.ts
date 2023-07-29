@@ -34,9 +34,9 @@ export class GoogleContactBackend implements ContactBackend {
     person: gapi.client.people.Person,
   ): Pick<Contact, 'id'> & Partial<Contact> {
     const { resourceName, names, photos, emailAddresses } = person;
-    const id = resourceName.split('/').pop();
+    const id = resourceName?.split('/').pop();
     if (!id) throw new InvalidResponseException();
-    const name = names.find((n) => n.metadata?.primary)?.displayName;
+    const name = names?.find((n) => n.metadata?.primary)?.displayName;
     const photo = photos?.find((p) => p.metadata?.primary);
     const email = emailAddresses?.find((e) => e.metadata?.primary)?.value;
     return {

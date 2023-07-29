@@ -1,6 +1,6 @@
 /// <reference types="gapi" />
 /// <reference types="gapi.client.gmail-v1" />
-/// <reference types="gapi.people" />
+/// <reference types="gapi.client.people-v1" />
 /// <reference types="google.accounts" />
 
 import { inject, InjectionToken, NgZone } from '@angular/core';
