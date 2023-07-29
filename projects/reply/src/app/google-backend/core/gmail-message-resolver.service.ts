@@ -22,11 +22,11 @@ export class GmailMessageResolver {
     return {
       ...fields,
       ...(sender && {
-        sender: this.recordTemporaryContact(sender.email, sender.name).id,
+        sender: this.resolveEmailAndName(sender.email, sender.name).id,
       }),
       ...(recipients && {
         recipients: recipients.map(
-          (r) => this.recordTemporaryContact(r.email, r.name).id,
+          (r) => this.resolveEmailAndName(r.email, r.name).id,
         ),
       }),
     };
@@ -45,13 +45,10 @@ export class GmailMessageResolver {
     ]);
   }
 
-  recordTemporaryContact(email: string, name?: string): Contact {
-    const update = this.contactRepo.record({
-      id: email,
-      name,
-      email,
-      temporary: true,
-    });
-    return update.curr;
+  resolveEmailAndName(email: string, name?: string): Contact {
+    const result =
+      this.contactRepo.queryOne((e) => e.email === email).snapshot ??
+      this.contactRepo.insert({ id: email, name, email, temporary: true }).curr;
+    return result;
   }
 }

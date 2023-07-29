@@ -28,7 +28,6 @@ export class GoogleMailBackend implements MailBackend {
       userId: 'me',
       pageToken: page,
       includeSpamTrash: true,
-      maxResults: 20, // TODO: temporary
     }).pipe(
       map((response): MailPage => {
         const msgs = access(response.result, 'messages');

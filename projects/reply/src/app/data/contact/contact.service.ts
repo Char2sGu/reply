@@ -14,23 +14,27 @@ import { ContactRepository } from './contact.repository';
 })
 export class ContactService {
   private backend = inject(ContactBackend);
-  private repo = inject(ContactRepository);
+  private contactRepo = inject(ContactRepository);
 
   loadContacts(): Observable<Contact[]> {
-    return this.backend.loadContacts().pipe(switchToAllRecorded(this.repo));
+    return this.backend
+      .loadContacts()
+      .pipe(switchToAllRecorded(this.contactRepo));
   }
 
   loadContact(id: Contact['id']): Observable<Contact> {
-    return this.backend.loadContact(id).pipe(switchToRecorded(this.repo));
+    return this.backend
+      .loadContact(id)
+      .pipe(switchToRecorded(this.contactRepo));
   }
 
   loadUser(): Observable<Contact> {
-    return this.backend.loadUser().pipe(switchToRecorded(this.repo));
+    return this.backend.loadUser().pipe(switchToRecorded(this.contactRepo));
   }
 
   searchContactsByEmail(email: string): Observable<Contact[]> {
     return this.backend
       .searchContactsByEmail(email)
-      .pipe(switchToAllRecorded(this.repo));
+      .pipe(switchToAllRecorded(this.contactRepo));
   }
 }
