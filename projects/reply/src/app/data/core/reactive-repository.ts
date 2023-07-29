@@ -138,7 +138,7 @@ export abstract class ReactiveRepository<Entity> {
    * {@link insert Insert} the entity if it doesn't exist, otherwise
    * {@link patch} the existing one.
    */
-  insertOrPatch(
+  record(
     entity: Entity,
   ): PropertiesNonNullable<ReactiveRepositoryUpdate<Entity>, 'curr'> {
     const id = this.identify(entity);

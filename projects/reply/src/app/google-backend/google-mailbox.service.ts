@@ -21,7 +21,7 @@ export class GoogleMailboxService implements MailboxService {
       map((labels) => this.parseLabels(labels)),
       map((mailboxes) => [...this.systemMailboxes, ...mailboxes]),
       switchMap((mailboxes) =>
-        combineLatest(mailboxes.map((m) => this.mailboxRepo.insertOrPatch(m))),
+        combineLatest(mailboxes.map((m) => this.mailboxRepo.record(m))),
       ),
     );
   }

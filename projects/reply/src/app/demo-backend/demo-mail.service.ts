@@ -13,13 +13,13 @@ export class DemoMailService implements MailService {
   private mailRepo = inject(MailRepository);
 
   loadMails(): Observable<Mail[]> {
-    return combineLatest(this.mails.map((m) => this.mailRepo.insertOrPatch(m)));
+    return combineLatest(this.mails.map((m) => this.mailRepo.record(m)));
   }
 
   loadMail(id: string): Observable<Mail> {
     const mail = this.mails.find((m) => m.id === id);
     if (!mail) return throwError(() => new Error(`Mail ${id} not found`));
-    return from(this.mailRepo.insertOrPatch(mail));
+    return from(this.mailRepo.record(mail));
   }
 
   markMailAsStarred(mail: Mail): Observable<void> {

@@ -57,7 +57,7 @@ export class GoogleMailService implements MailService {
       withLatestFrom(this.user$.pipe(first())),
       map(([msg, user]) => this.messageParser.parseFullMessage(msg, user)),
       switchMap((mail) => this.mailDb.persist(mail)),
-      switchMap((mail) => this.mailRepo.insertOrPatch(mail)),
+      switchMap((mail) => this.mailRepo.record(mail)),
     );
   }
 

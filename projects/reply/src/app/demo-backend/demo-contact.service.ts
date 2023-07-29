@@ -12,15 +12,13 @@ export class DemoContactService implements ContactService {
   private contactRepo = inject(ContactRepository);
 
   loadContacts(): Observable<Contact[]> {
-    return combineLatest(
-      this.contacts.map((c) => this.contactRepo.insertOrPatch(c)),
-    );
+    return combineLatest(this.contacts.map((c) => this.contactRepo.record(c)));
   }
 
   loadContact(id: string): Observable<Contact> {
     const contact = this.contacts.find((c) => c.id === id);
     if (!contact) return throwError(() => new Error(`Contact ${id} not found`));
-    return from(this.contactRepo.insertOrPatch(contact));
+    return from(this.contactRepo.record(contact));
   }
 
   loadUser(): Observable<Contact> {

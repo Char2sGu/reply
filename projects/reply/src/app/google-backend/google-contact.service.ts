@@ -69,6 +69,6 @@ export class GoogleContactService implements ContactService {
     person: gapi.client.people.Person,
   ): Observable<Contact> {
     const contact = this.parseFullPerson(person);
-    return from(this.contactRepo.insertOrPatch(contact));
+    return from(this.contactRepo.record(contact));
   }
 }

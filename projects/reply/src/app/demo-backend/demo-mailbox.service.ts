@@ -11,8 +11,6 @@ export class DemoMailboxService implements MailboxService {
   private mailboxRepo = inject(MailboxRepository);
 
   loadMailboxes(): Observable<Mailbox[]> {
-    return combineLatest(
-      this.mailboxes.map((m) => this.mailboxRepo.insertOrPatch(m)),
-    );
+    return combineLatest(this.mailboxes.map((m) => this.mailboxRepo.record(m)));
   }
 }
