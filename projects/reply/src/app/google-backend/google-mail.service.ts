@@ -61,7 +61,7 @@ export class GoogleMailService implements MailService {
     );
   }
 
-  syncMails(syncToken: string): Observable<void> {
+  syncMails(syncToken: string): Observable<string> {
     return this.historyListApi({
       userId: 'me',
       startHistoryId: syncToken,
@@ -96,21 +96,10 @@ export class GoogleMailService implements MailService {
             actions.push(action);
           });
         });
-        return combineLatest(actions);
+        return combineLatest(actions).pipe(
+          map(() => access(response.result, 'historyId')),
+        );
       }),
-      map(() => undefined),
-    );
-  }
-
-  obtainSyncToken(): Observable<string> {
-    return this.messageListApi({
-      userId: 'me',
-      maxResults: 1,
-    }).pipe(
-      map((response) => access(response.result, 'messages')),
-      map((msgs) => access(msgs[0], 'id')),
-      switchMap((msgId) => this.messageGetApi({ userId: 'me', id: msgId })),
-      map((response) => access(response.result, 'historyId')),
     );
   }
 
