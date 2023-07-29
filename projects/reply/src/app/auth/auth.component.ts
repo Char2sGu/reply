@@ -16,6 +16,6 @@ export class AuthComponent {
   loading$ = this.authService.authorization$.pipe(map(Boolean));
 
   onButtonClick(): void {
-    this.authService.requestAuthorization();
+    this.authService.requestAuthorization().subscribe();
   }
 }

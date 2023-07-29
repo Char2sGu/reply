@@ -1,4 +1,4 @@
-import { EventEmitter, inject, Injectable, NgZone } from '@angular/core';
+import { EventEmitter, inject, Injectable } from '@angular/core';
 import dayjs from 'dayjs';
 import {
   concatMap,
@@ -6,10 +6,13 @@ import {
   first,
   map,
   Observable,
+  race,
   shareReplay,
   startWith,
+  Subject,
   switchMap,
   takeUntil,
+  tap,
   throwIfEmpty,
   timer,
 } from 'rxjs';
@@ -47,18 +50,17 @@ export class GoogleAuthenticationService implements AuthenticationService {
     map((apis) =>
       apis.oauth2.initTokenClient({
         ['client_id']: this.clientId,
-        scope: SCOPES.join(' '),
-        callback: (response) => {
-          NgZone.assertInAngularZone();
-          this.setAuthorization({
-            token: response['access_token'],
-            issuedAt: new Date(),
-            lifespan: +response['expires_in'],
-          });
-        },
+        ['scope']: SCOPES.join(' '),
+        ['callback']: (response) => this.tokenClientResponse$.next(response),
+        ['error_callback']: (error) => this.tokenClientError$.next(error),
       }),
     ),
+    shareReplay(1),
   );
+  private tokenClientResponse$ =
+    new Subject<google.accounts.oauth2.TokenResponse>();
+  private tokenClientError$ =
+    new Subject<google.accounts.oauth2.ClientConfigError>();
 
   private authorizationUpdate = new EventEmitter<
     | {
@@ -103,22 +105,34 @@ export class GoogleAuthenticationService implements AuthenticationService {
     return true;
   }
 
-  requestAuthorization(hint?: string): void {
-    this.tokenClient$.pipe(first()).subscribe((client) => {
-      client.requestAccessToken({ hint });
-    });
+  requestAuthorization(hint?: string): Observable<boolean> {
+    return this.tokenClient$.pipe(
+      tap((client) => client.requestAccessToken({ hint })),
+      switchMap(() =>
+        race(
+          this.tokenClientResponse$.pipe(
+            tap((resp) =>
+              this.setAuthorization({
+                token: resp['access_token'],
+                issuedAt: new Date(),
+                lifespan: +resp['expires_in'],
+              }),
+            ),
+            map(() => true),
+          ),
+          this.tokenClientError$.pipe(map(() => false)),
+        ).pipe(first()),
+      ),
+    );
   }
 
-  revokeAuthorization(): void {
-    this.authorization$
-      .pipe(
-        first(),
-        filter(Boolean),
-        throwIfEmpty(() => new UnauthorizedException()),
-        concatMap((auth) => this.tokenRevokeApi(auth.token)),
-      )
-      .subscribe(() => {
-        this.authorizationUpdate.emit({ type: 'revoke' });
-      });
+  revokeAuthorization(): Observable<void> {
+    return this.authorization$.pipe(
+      first(),
+      filter(Boolean),
+      throwIfEmpty(() => new UnauthorizedException()),
+      concatMap((auth) => this.tokenRevokeApi(auth.token)),
+      tap(() => this.authorizationUpdate.emit({ type: 'revoke' })),
+    );
   }
 }
