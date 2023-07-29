@@ -8,27 +8,15 @@ import {
   Routes,
   TitleStrategy,
 } from '@angular/router';
-import {
-  catchError,
-  combineLatest,
-  first,
-  map,
-  Observable,
-  switchMap,
-} from 'rxjs';
+import { map } from 'rxjs';
 
 import { useActionFlow } from './core/action-flow';
 import { AuthenticationService } from './core/authentication.service';
-import { ContactService } from './data/contact/contact.service';
-import { populateRepositoryWithDatabase } from './data/core/entity-database.utils';
 import {
-  ReloadAllMailsActionFlow,
-  SyncMailsActionFlow,
-} from './data/mail/mail.action-flows';
-import { MailDatabase } from './data/mail/mail.database';
-import { MailRepository } from './data/mail/mail.repository';
+  LoadIncrementalDataActionFlow,
+  ResetAndLoadInitialDataActionFlow,
+} from './data/data.action-flows';
 import { MailSyncTokenPersistentValue } from './data/mail/mail-sync-token.persistent-value';
-import { MailboxService } from './data/mailbox/mailbox.service';
 
 const authorized: CanMatchFn = () =>
   inject(AuthenticationService).authorization$.pipe(map((a) => !!a));
@@ -36,28 +24,10 @@ const unauthorized: CanMatchFn = () =>
   inject(AuthenticationService).authorization$.pipe(map((a) => !a));
 
 const dataInitializer: CanActivateFn = () =>
-  combineLatest([
-    inject(AuthenticationService).user$,
-    inject(ContactService).loadContacts(),
-    initializeMails(),
-    inject(MailboxService).loadMailboxes(),
-  ]).pipe(
-    first(),
-    map(() => true),
-  );
-
-function initializeMails(): Observable<unknown> {
-  const mailDb = inject(MailDatabase);
-  const mailRepo = inject(MailRepository);
-  const mailSyncToken = inject(MailSyncTokenPersistentValue);
-  const syncMails = useActionFlow(SyncMailsActionFlow);
-  const reloadAllMails = useActionFlow(ReloadAllMailsActionFlow);
-  if (!mailSyncToken.get()) return reloadAllMails();
-  return populateRepositoryWithDatabase(mailRepo, mailDb).pipe(
-    switchMap(() => syncMails()),
-    catchError(() => reloadAllMails()),
-  );
-}
+  (inject(MailSyncTokenPersistentValue).get()
+    ? useActionFlow(LoadIncrementalDataActionFlow)()
+    : useActionFlow(ResetAndLoadInitialDataActionFlow)()
+  ).pipe(map(() => true));
 
 const routes: Routes = [
   {

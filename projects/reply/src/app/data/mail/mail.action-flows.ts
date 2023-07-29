@@ -1,9 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
+import { map, Observable, switchMap, tap } from 'rxjs';
 
 import { ActionFlow, useActionFlow } from '@/app/core/action-flow';
 
-import { MailDatabase } from './mail.database';
 import { MailService } from './mail.service';
 import { MailSyncTokenPersistentValue } from './mail-sync-token.persistent-value';
 
@@ -25,35 +24,6 @@ export class UpdateMailSyncTokenActionFlow implements ActionFlow {
 @Injectable({
   providedIn: 'root',
 })
-export class ReloadAllMailsActionFlow implements ActionFlow {
-  private mailDb = inject(MailDatabase);
-  private mailService = inject(MailService);
-  private updateSyncToken = useActionFlow(UpdateMailSyncTokenActionFlow);
-
-  execute(): Observable<void> {
-    return combineLatest([
-      this.mailDb.clear(),
-      this.loadMails(),
-      this.updateSyncToken(),
-    ]).pipe(map(() => undefined));
-  }
-
-  private loadMails(page?: string): Observable<void> {
-    return this.mailService.loadMails(page).pipe(
-      switchMap((page) =>
-        combineLatest([
-          page.results$,
-          page.next ? this.loadMails(page.next) : of(null),
-        ]),
-      ),
-      map(() => undefined),
-    );
-  }
-}
-
-@Injectable({
-  providedIn: 'root',
-})
 export class SyncMailsActionFlow implements ActionFlow {
   private mailService = inject(MailService);
   private mailSyncToken = inject(MailSyncTokenPersistentValue);
@@ -65,5 +35,23 @@ export class SyncMailsActionFlow implements ActionFlow {
     return this.mailService
       .syncMails(syncToken)
       .pipe(switchMap(() => this.updateSyncToken()));
+  }
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class LoadMoreMailsActionFlow implements ActionFlow {
+  private mailService = inject(MailService);
+
+  private next?: string;
+
+  execute(payload?: { reset?: boolean }): Observable<void> {
+    if (payload?.reset) this.next = undefined;
+    return this.mailService.loadMails(this.next).pipe(
+      tap((page) => (this.next = page.next)),
+      switchMap((page) => page.results$),
+      map(() => undefined),
+    );
   }
 }
