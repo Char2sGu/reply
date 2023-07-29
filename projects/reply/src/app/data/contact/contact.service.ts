@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { concatMap, map, Observable, of } from 'rxjs';
 
 import {
   switchToAllRecorded,
@@ -26,5 +26,24 @@ export class ContactService {
 
   loadUser(): Observable<Contact> {
     return this.backend.loadUser().pipe(switchToRecorded(this.repo));
+  }
+
+  searchContactsByEmail(email: string): Observable<Contact[]> {
+    return this.backend
+      .searchContactsByEmail(email)
+      .pipe(switchToAllRecorded(this.repo));
+  }
+
+  resolveEmailAndName(email: string, name: string): Observable<Contact> {
+    const contactFromRepo$ = this.repo.queryOne((e) => e.email === email);
+    const contactFromSearch$ = this.searchContactsByEmail(email).pipe(
+      map((contacts) => contacts.find((c) => c.email === email)),
+    );
+    return contactFromRepo$.pipe(
+      concatMap((contact) => (contact ? of(contact) : contactFromSearch$)),
+      concatMap((contact) =>
+        contact ? of(contact) : this.repo.insert({ id: email, name, email }),
+      ),
+    );
   }
 }
