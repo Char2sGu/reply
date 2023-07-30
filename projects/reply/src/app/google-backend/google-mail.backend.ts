@@ -23,7 +23,7 @@ export class GoogleMailBackend implements MailBackend {
   private messageDeleteApi = useGoogleApi((a) => a.gmail.users.messages.delete);
   private historyListApi = useGoogleApi((a) => a.gmail.users.history.list);
 
-  loadMails(page?: string): Observable<MailPage> {
+  loadMailPage(page?: string): Observable<MailPage> {
     return this.messageListApi({
       userId: 'me',
       pageToken: page,

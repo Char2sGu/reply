@@ -1,14 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import {
-  combineLatest,
-  last,
-  map,
-  merge,
-  Observable,
-  switchMap,
-  tap,
-  throwError,
-} from 'rxjs';
+import { map, Observable, switchMap, tap, throwError } from 'rxjs';
 
 import {
   onErrorUndo,
@@ -17,7 +8,6 @@ import {
 } from '../core/reactive-repository.utils';
 import { Mailbox } from '../mailbox/mailbox.model';
 import { MailBackend } from './mail.backend';
-import { MailDatabase } from './mail.database';
 import { Mail } from './mail.model';
 import { MailRepository } from './mail.repository';
 
@@ -27,15 +17,14 @@ import { MailRepository } from './mail.repository';
 export class MailService {
   private backend = inject(MailBackend);
   private repo = inject(MailRepository);
-  private database = inject(MailDatabase);
 
-  syncToken?: string;
-  nextPageToken?: string;
+  private syncToken?: string;
+  private nextPageToken?: string;
 
   loadMails(options?: { initial?: boolean }): Observable<Mail[]> {
     if (options?.initial) this.nextPageToken = undefined;
     const isFirstPage = !this.nextPageToken;
-    return this.backend.loadMails(this.nextPageToken).pipe(
+    return this.backend.loadMailPage(this.nextPageToken).pipe(
       tap((page) => (this.nextPageToken = page.nextPageToken)),
       switchMap((page) => {
         if (!isFirstPage) return page.results$;
@@ -57,30 +46,25 @@ export class MailService {
       return throwError(() => new Error('Missing sync token'));
     return this.backend.syncMails(this.syncToken).pipe(
       tap(({ syncToken }) => (this.syncToken = syncToken)),
-      switchMap(({ changes }) => {
-        const streams: Observable<unknown>[] = changes.map((change) => {
+      tap(({ changes }) => {
+        changes.forEach((change) => {
           switch (change.type) {
             case 'deletion': {
-              return this.database
-                .delete(change.id)
-                .pipe(tap(() => this.repo.delete(change.id)));
+              this.repo.delete(change.id);
+              break;
             }
             case 'creation': {
-              return this.database
-                .persist(change.payload)
-                .pipe(tap(() => this.repo.insert(change.payload)));
+              this.repo.insert(change.payload);
+              break;
             }
             case 'update': {
-              const update = this.repo.patch(change.id, change.payload);
-              return this.database
-                .persist(update.curr)
-                .pipe(onErrorUndo(update));
+              this.repo.patch(change.id, change.payload);
+              break;
             }
             default:
               throw new Error(`Unknown change ${change}`);
           }
         });
-        return combineLatest(streams);
       }),
       map(() => undefined),
     );
@@ -128,10 +112,7 @@ export class MailService {
 
   deleteMail(mail: Mail): Observable<void> {
     const optimisticUpdate = this.repo.delete(mail.id);
-    return merge(
-      this.database.delete(mail.id),
-      this.backend.deleteMail(mail),
-    ).pipe(onErrorUndo(optimisticUpdate), last());
+    return this.backend.deleteMail(mail).pipe(onErrorUndo(optimisticUpdate));
   }
 
   private initiateMailUpdateAction(

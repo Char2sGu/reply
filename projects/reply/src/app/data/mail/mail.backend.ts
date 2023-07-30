@@ -6,7 +6,7 @@ import { Mail } from './mail.model';
 
 @Injectable()
 export abstract class MailBackend {
-  abstract loadMails(pageToken?: string): Observable<MailPage>;
+  abstract loadMailPage(pageToken?: string): Observable<MailPage>;
   abstract loadMail(id: Mail['id']): Observable<Mail>;
   abstract syncMails(syncToken: string): Observable<MailSyncResult>;
   abstract markMailAsStarred(mail: Mail): Observable<Mail>;
