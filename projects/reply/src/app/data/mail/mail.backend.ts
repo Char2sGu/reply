@@ -18,8 +18,8 @@ export abstract class MailBackend {
 }
 
 export interface MailPage {
-  results$: Observable<Mail[]>;
-  syncToken$: Observable<string>;
+  results: Mail[];
+  syncToken: string;
   nextPageToken?: string;
 }
 

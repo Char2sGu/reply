@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
 
 import { access } from '../core/property-path.utils';
 import {
@@ -23,22 +23,40 @@ export class GoogleMailBackend implements MailBackend {
   private messageDeleteApi = useGoogleApi((a) => a.gmail.users.messages.delete);
   private historyListApi = useGoogleApi((a) => a.gmail.users.history.list);
 
-  loadMailPage(page?: string): Observable<MailPage> {
+  private latestHistoryId?: string;
+
+  loadMailPage(pageToken?: string): Observable<MailPage> {
+    const isFirstPage = !pageToken;
     return this.messageListApi({
       userId: 'me',
-      pageToken: page,
+      pageToken,
       includeSpamTrash: true,
     }).pipe(
-      map((response): MailPage => {
-        const msgs = access(response.result, 'messages');
+      switchMap((response) => {
+        const messages = response.result.messages ?? [];
         const mails$ = combineLatest(
-          msgs.map((m) => this.loadMail(access(m, 'id'))),
+          messages.map((m) => this.loadMail(access(m, 'id'))),
         );
-        return {
-          results$: mails$,
-          syncToken$: this.loadMessageHistoryId(access(msgs[0], 'id')),
-          nextPageToken: response.result.nextPageToken,
-        };
+        const latestHistoryIdOfPage$ = this.loadMessageHistoryId(
+          access(messages[0], 'id'),
+        ).pipe(
+          tap((historyId) => {
+            this.latestHistoryId = historyId;
+          }),
+        );
+        const latestHistoryId$ =
+          isFirstPage || !this.latestHistoryId
+            ? latestHistoryIdOfPage$
+            : of(this.latestHistoryId);
+        return combineLatest([mails$, latestHistoryId$]).pipe(
+          map(
+            ([mails, latestHistoryId]): MailPage => ({
+              results: mails,
+              syncToken: latestHistoryId,
+              nextPageToken: response.result.nextPageToken,
+            }),
+          ),
+        );
       }),
     );
   }

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, switchMap, tap, throwError } from 'rxjs';
+import { map, Observable, tap, throwError } from 'rxjs';
 
 import {
   onErrorUndo,
@@ -21,18 +21,14 @@ export class MailService {
   private syncToken?: string;
   private nextPageToken?: string;
 
-  loadMails(options?: { initial?: boolean }): Observable<Mail[]> {
-    if (options?.initial) this.nextPageToken = undefined;
-    const isFirstPage = !this.nextPageToken;
+  loadMails(options?: { continuous?: boolean }): Observable<Mail[]> {
+    if (!options?.continuous) this.nextPageToken = undefined;
     return this.backend.loadMailPage(this.nextPageToken).pipe(
-      tap((page) => (this.nextPageToken = page.nextPageToken)),
-      switchMap((page) => {
-        if (!isFirstPage) return page.results$;
-        return page.syncToken$.pipe(
-          tap((syncToken) => (this.syncToken = syncToken)),
-          switchMap(() => page.results$),
-        );
+      tap((page) => {
+        this.syncToken = page.syncToken;
+        this.nextPageToken = page.nextPageToken;
       }),
+      map((page) => page.results),
       switchToAllRecorded(this.repo),
     );
   }
