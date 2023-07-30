@@ -8,6 +8,7 @@ import { Mail } from './mail.model';
 export abstract class MailBackend {
   abstract loadMailPage(pageToken?: string): Observable<MailPage>;
   abstract loadMail(id: Mail['id']): Observable<Mail>;
+  abstract obtainSyncToken(): Observable<string>;
   abstract syncMails(syncToken: string): Observable<MailSyncResult>;
   abstract markMailAsStarred(mail: Mail): Observable<Mail>;
   abstract markMailAsNotStarred(mail: Mail): Observable<Mail>;
@@ -19,7 +20,6 @@ export abstract class MailBackend {
 
 export interface MailPage {
   results: Mail[];
-  syncToken: string;
   nextPageToken?: string;
 }
 

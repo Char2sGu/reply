@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 
 import { access } from '../core/property-path.utils';
 import {
@@ -23,10 +23,7 @@ export class GoogleMailBackend implements MailBackend {
   private messageDeleteApi = useGoogleApi((a) => a.gmail.users.messages.delete);
   private historyListApi = useGoogleApi((a) => a.gmail.users.history.list);
 
-  private latestHistoryId?: string;
-
   loadMailPage(pageToken?: string): Observable<MailPage> {
-    const isFirstPage = !pageToken;
     return this.messageListApi({
       userId: 'me',
       pageToken,
@@ -37,22 +34,10 @@ export class GoogleMailBackend implements MailBackend {
         const mails$ = combineLatest(
           messages.map((m) => this.loadMail(access(m, 'id'))),
         );
-        const latestHistoryIdOfPage$ = this.loadMessageHistoryId(
-          access(messages[0], 'id'),
-        ).pipe(
-          tap((historyId) => {
-            this.latestHistoryId = historyId;
-          }),
-        );
-        const latestHistoryId$ =
-          isFirstPage || !this.latestHistoryId
-            ? latestHistoryIdOfPage$
-            : of(this.latestHistoryId);
-        return combineLatest([mails$, latestHistoryId$]).pipe(
+        return mails$.pipe(
           map(
-            ([mails, latestHistoryId]): MailPage => ({
+            (mails): MailPage => ({
               results: mails,
-              syncToken: latestHistoryId,
               nextPageToken: response.result.nextPageToken,
             }),
           ),
@@ -65,6 +50,21 @@ export class GoogleMailBackend implements MailBackend {
     return this.messageGetApi({ userId: 'me', id }).pipe(
       map((response) => response.result),
       map((msg) => this.messageResolver.resolveFullMessage(msg)),
+    );
+  }
+
+  obtainSyncToken(): Observable<string> {
+    return this.messageListApi({
+      userId: 'me',
+      maxResults: 1,
+      includeSpamTrash: true,
+    }).pipe(
+      map((response) => response.result.messages ?? []),
+      map((m) => access(m[0], 'id')),
+      switchMap((id) =>
+        this.messageGetApi({ userId: 'me', id, fields: 'historyId' }),
+      ),
+      map((response) => access(response.result, 'historyId')),
     );
   }
 
