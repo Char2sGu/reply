@@ -12,7 +12,6 @@ import { combineLatest, firstValueFrom, map } from 'rxjs';
 
 import { AuthenticationService } from './core/auth/authentication.service';
 import { ContactService } from './data/contact/contact.service';
-import { MailDatabase } from './data/mail/mail.database';
 import { MailService } from './data/mail/mail.service';
 import { MailboxService } from './data/mailbox/mailbox.service';
 
@@ -26,7 +25,6 @@ const dataInitializer: CanActivateFn = async () => {
   const contactService = inject(ContactService);
   const mailboxService = inject(MailboxService);
   const mailService = inject(MailService);
-  const mailDb = inject(MailDatabase);
 
   await firstValueFrom(authService.user$);
   await firstValueFrom(
@@ -35,9 +33,7 @@ const dataInitializer: CanActivateFn = async () => {
       contactService.loadContacts(),
     ]),
   );
-  await firstValueFrom(
-    combineLatest([mailDb.clear(), mailService.loadMails()]),
-  );
+  await firstValueFrom(mailService.loadMails());
 
   return true;
 };

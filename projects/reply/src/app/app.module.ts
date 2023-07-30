@@ -25,9 +25,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { INITIALIZER, Initializer } from './core/initialization';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { LOCAL_STORAGE } from './core/native-api.tokens';
-import { EntityDataSourceSynchronizer } from './data/core/entity-data-source-synchronizer.service';
-import { MailDatabase } from './data/mail/mail.database';
-import { MailRepository } from './data/mail/mail.repository';
 import { LogoComponent } from './shared/logo/logo.component';
 
 // TODO: attachment
@@ -85,18 +82,6 @@ import { LogoComponent } from './shared/logo/logo.component';
           );
           iconRegistry.addSvgIconSet(trusted('assets/icons.svg'));
           return loadAllSvgIconSets();
-        };
-      },
-      multi: true,
-    },
-    {
-      provide: INITIALIZER,
-      useFactory: (): Initializer => {
-        const synchronizer = inject(EntityDataSourceSynchronizer);
-        const mailRepo = inject(MailRepository);
-        const mailDb = inject(MailDatabase);
-        return () => {
-          synchronizer.sync(mailRepo, mailDb).subscribe();
         };
       },
       multi: true,

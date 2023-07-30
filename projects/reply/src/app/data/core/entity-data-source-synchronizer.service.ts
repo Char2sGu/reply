@@ -1,12 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  combineLatest,
-  concatMap,
-  map,
-  Observable,
-  tap,
-  throwError,
-} from 'rxjs';
+import { concatMap, map, Observable, tap, throwError } from 'rxjs';
 
 import { EntityDatabase } from './entity-database';
 import { ReactiveRepository } from './reactive-repository';
@@ -15,27 +8,7 @@ import { ReactiveRepository } from './reactive-repository';
   providedIn: 'root',
 })
 export class EntityDataSourceSynchronizer {
-  sync<Entity>(
-    repository: ReactiveRepository<Entity>,
-    database: EntityDatabase<Entity, any>,
-  ): Observable<void> {
-    return combineLatest([
-      this.populateRepositoryWithDatabase(repository, database),
-      this.syncUpdates(repository, database),
-    ]).pipe(map(() => undefined));
-  }
-
-  private populateRepositoryWithDatabase<Entity>(
-    repository: ReactiveRepository<Entity>,
-    database: EntityDatabase<Entity, any>,
-  ): Observable<void> {
-    return database.list().pipe(
-      tap((entities) => entities.forEach((e) => repository.insert(e))),
-      map(() => undefined),
-    );
-  }
-
-  private syncUpdates<Entity>(
+  syncDatabaseWithRepo<Entity>(
     repository: ReactiveRepository<Entity>,
     database: EntityDatabase<Entity, any>,
   ): Observable<void> {
@@ -45,6 +18,16 @@ export class EntityDataSourceSynchronizer {
         if (update.prev) return database.delete(update.id);
         return throwError(() => new Error('Invalid update'));
       }),
+    );
+  }
+
+  syncRepoWithDatabase<Entity>(
+    repository: ReactiveRepository<Entity>,
+    database: EntityDatabase<Entity, any>,
+  ): Observable<void> {
+    return database.list().pipe(
+      tap((entities) => entities.forEach((e) => repository.insert(e))),
+      map(() => undefined),
     );
   }
 }
