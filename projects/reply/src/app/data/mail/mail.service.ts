@@ -1,6 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, switchMap, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  map,
+  Observable,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 
+import { BackendSyncApplier } from '../core/backend-sync-applier.service';
 import {
   onErrorUndo,
   switchMapToAllRecorded,
@@ -17,24 +25,28 @@ import { MailRepository } from './mail.repository';
 export class MailService {
   private backend = inject(MailBackend);
   private repo = inject(MailRepository);
+  private syncApplier = inject(BackendSyncApplier);
 
-  private syncToken?: string;
-  private nextPageToken?: string;
+  private syncToken$ = new BehaviorSubject<string | null>(null);
+  private nextPageToken$ = new BehaviorSubject<string | null>(null);
 
   loadMails(options?: { continuous?: boolean }): Observable<Mail[]> {
-    if (!options?.continuous) this.nextPageToken = undefined;
-    const isFirstPage = !this.nextPageToken;
-    const loadMails$ = this.backend.loadMailPage(this.nextPageToken).pipe(
-      tap((page) => (this.nextPageToken = page.nextPageToken)),
+    if (!options?.continuous) this.nextPageToken$.next(null);
+    return this.nextPageToken$.pipe(
+      switchMap((pageToken) => {
+        const isFirstPage = !pageToken;
+        const loadMails$ = this.backend.loadMailPage(pageToken ?? undefined);
+        return isFirstPage
+          ? this.backend.obtainSyncToken().pipe(
+              tap((token) => this.syncToken$.next(token)),
+              switchMap(() => loadMails$),
+            )
+          : loadMails$;
+      }),
+      tap((page) => this.nextPageToken$.next(page.nextPageToken ?? null)),
       map((page) => page.results),
       switchMapToAllRecorded(this.repo),
     );
-    return isFirstPage
-      ? this.backend.obtainSyncToken().pipe(
-          tap((token) => (this.syncToken = token)),
-          switchMap(() => loadMails$),
-        )
-      : loadMails$;
   }
 
   loadMail(id: Mail['id']): Observable<Mail> {
@@ -42,30 +54,14 @@ export class MailService {
   }
 
   syncMails(): Observable<void> {
-    if (!this.syncToken)
-      return throwError(() => new Error('Missing sync token'));
-    return this.backend.syncMails(this.syncToken).pipe(
-      tap(({ syncToken }) => (this.syncToken = syncToken)),
-      tap(({ changes }) => {
-        changes.forEach((change) => {
-          switch (change.type) {
-            case 'deletion': {
-              this.repo.delete(change.id);
-              break;
-            }
-            case 'creation': {
-              this.repo.insert(change.payload);
-              break;
-            }
-            case 'update': {
-              this.repo.patch(change.id, change.payload);
-              break;
-            }
-            default:
-              throw new Error(`Unknown change ${change}`);
-          }
-        });
+    return this.syncToken$.pipe(
+      switchMap((syncToken) => {
+        if (!syncToken)
+          return throwError(() => new Error('Missing sync token'));
+        return this.backend.syncMails(syncToken);
       }),
+      tap((r) => this.syncToken$.next(r.syncToken)),
+      tap((r) => this.syncApplier.applyChanges(this.repo, r.changes)),
       map(() => undefined),
     );
   }
