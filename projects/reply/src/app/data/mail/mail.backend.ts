@@ -1,49 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { Page, SyncResult } from '../core/backend.models';
 import { Mailbox } from '../mailbox/mailbox.model';
 import { Mail } from './mail.model';
 
 @Injectable()
 export abstract class MailBackend {
-  abstract loadMailPage(pageToken?: string): Observable<MailPage>;
+  abstract loadMailPage(pageToken?: string): Observable<Page<Mail>>;
   abstract loadMail(id: Mail['id']): Observable<Mail>;
   abstract obtainSyncToken(): Observable<string>;
-  abstract syncMails(syncToken: string): Observable<MailSyncResult>;
+  abstract syncMails(syncToken: string): Observable<SyncResult<Mail>>;
   abstract markMailAsStarred(mail: Mail): Observable<Mail>;
   abstract markMailAsNotStarred(mail: Mail): Observable<Mail>;
   abstract markMailAsRead(mail: Mail): Observable<Mail>;
   abstract markMailAsUnread(mail: Mail): Observable<Mail>;
   abstract moveMail(mail: Mail, mailbox: Mailbox | null): Observable<Mail>;
   abstract deleteMail(mail: Mail): Observable<void>;
-}
-
-export interface MailPage {
-  results: Mail[];
-  nextPageToken?: string;
-}
-
-export interface MailSyncResult {
-  changes: MailSyncChange[];
-  syncToken: string;
-}
-
-export type MailSyncChange =
-  | MailSyncDeletion
-  | MailSyncCreation
-  | MailSyncUpdate;
-
-export interface MailSyncDeletion {
-  type: 'deletion';
-  id: string;
-}
-export interface MailSyncCreation {
-  type: 'creation';
-  id: string;
-  payload: Mail;
-}
-export interface MailSyncUpdate {
-  type: 'update';
-  id: string;
-  payload: Partial<Mail>;
 }

@@ -2,12 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 
 import { access } from '../core/property-path.utils';
-import {
-  MailBackend,
-  MailPage,
-  MailSyncChange,
-  MailSyncResult,
-} from '../data/mail/mail.backend';
+import { Page, SyncChange, SyncResult } from '../data/core/backend.models';
+import { MailBackend } from '../data/mail/mail.backend';
 import { Mail } from '../data/mail/mail.model';
 import { Mailbox } from '../data/mailbox/mailbox.model';
 import { GmailMessageResolver } from './core/gmail-message-resolver.service';
@@ -23,7 +19,7 @@ export class GoogleMailBackend implements MailBackend {
   private messageDeleteApi = useGoogleApi((a) => a.gmail.users.messages.delete);
   private historyListApi = useGoogleApi((a) => a.gmail.users.history.list);
 
-  loadMailPage(pageToken?: string): Observable<MailPage> {
+  loadMailPage(pageToken?: string): Observable<Page<Mail>> {
     return this.messageListApi({
       userId: 'me',
       pageToken,
@@ -36,7 +32,7 @@ export class GoogleMailBackend implements MailBackend {
         );
         return mails$.pipe(
           map(
-            (mails): MailPage => ({
+            (mails): Page<Mail> => ({
               results: mails,
               nextPageToken: response.result.nextPageToken,
             }),
@@ -68,7 +64,7 @@ export class GoogleMailBackend implements MailBackend {
     );
   }
 
-  syncMails(syncToken: string): Observable<MailSyncResult> {
+  syncMails(syncToken: string): Observable<SyncResult<Mail>> {
     return this.historyListApi({
       userId: 'me',
       startHistoryId: syncToken,
@@ -130,8 +126,8 @@ export class GoogleMailBackend implements MailBackend {
 
   private resolveHistory(
     history: gapi.client.gmail.History,
-  ): Observable<MailSyncChange>[] {
-    const changes: Observable<MailSyncChange>[] = [];
+  ): Observable<SyncChange<Mail>>[] {
+    const changes: Observable<SyncChange<Mail>>[] = [];
     [...(history.labelsAdded ?? []), ...(history.labelsRemoved ?? [])].forEach(
       (entry) => {
         const message = access(entry, 'message');

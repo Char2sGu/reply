@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { switchToAllRecorded } from '../core/reactive-repository.utils';
+import { switchMapToAllRecorded } from '../core/reactive-repository.utils';
 import { MailboxBackend } from './mailbox.backend';
 import { Mailbox } from './mailbox.model';
 import { MailboxRepository } from './mailbox.repository';
@@ -14,6 +14,6 @@ export class MailboxService {
   private repo = inject(MailboxRepository);
 
   loadMailboxes(): Observable<Mailbox[]> {
-    return this.backend.loadMailboxes().pipe(switchToAllRecorded(this.repo));
+    return this.backend.loadMailboxes().pipe(switchMapToAllRecorded(this.repo));
   }
 }

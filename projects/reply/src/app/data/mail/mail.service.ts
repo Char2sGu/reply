@@ -3,8 +3,8 @@ import { map, Observable, switchMap, tap, throwError } from 'rxjs';
 
 import {
   onErrorUndo,
-  switchToAllRecorded,
-  switchToRecorded,
+  switchMapToAllRecorded,
+  switchMapToRecorded,
 } from '../core/reactive-repository.utils';
 import { Mailbox } from '../mailbox/mailbox.model';
 import { MailBackend } from './mail.backend';
@@ -24,21 +24,21 @@ export class MailService {
   loadMails(options?: { continuous?: boolean }): Observable<Mail[]> {
     if (!options?.continuous) this.nextPageToken = undefined;
     const isFirstPage = !this.nextPageToken;
-    const mails$ = this.backend.loadMailPage(this.nextPageToken).pipe(
+    const loadMails$ = this.backend.loadMailPage(this.nextPageToken).pipe(
       tap((page) => (this.nextPageToken = page.nextPageToken)),
       map((page) => page.results),
-      switchToAllRecorded(this.repo),
+      switchMapToAllRecorded(this.repo),
     );
     return isFirstPage
       ? this.backend.obtainSyncToken().pipe(
           tap((token) => (this.syncToken = token)),
-          switchMap(() => mails$),
+          switchMap(() => loadMails$),
         )
-      : mails$;
+      : loadMails$;
   }
 
   loadMail(id: Mail['id']): Observable<Mail> {
-    return this.backend.loadMail(id).pipe(switchToRecorded(this.repo));
+    return this.backend.loadMail(id).pipe(switchMapToRecorded(this.repo));
   }
 
   syncMails(): Observable<void> {
@@ -122,7 +122,7 @@ export class MailService {
   ): Observable<void> {
     const optimisticUpdate = this.repo.patch(mail.id, optimisticResult);
     return action().pipe(
-      switchToRecorded(this.repo),
+      switchMapToRecorded(this.repo),
       onErrorUndo(optimisticUpdate),
       map(() => undefined),
     );

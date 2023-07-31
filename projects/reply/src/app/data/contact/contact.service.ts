@@ -2,8 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import {
-  switchToAllRecorded,
-  switchToRecorded,
+  switchMapToAllRecorded,
+  switchMapToRecorded,
 } from '../core/reactive-repository.utils';
 import { ContactBackend } from './contact.backend';
 import { Contact } from './contact.model';
@@ -19,22 +19,22 @@ export class ContactService {
   loadContacts(): Observable<Contact[]> {
     return this.backend
       .loadContacts()
-      .pipe(switchToAllRecorded(this.contactRepo));
+      .pipe(switchMapToAllRecorded(this.contactRepo));
   }
 
   loadContact(id: Contact['id']): Observable<Contact> {
     return this.backend
       .loadContact(id)
-      .pipe(switchToRecorded(this.contactRepo));
+      .pipe(switchMapToRecorded(this.contactRepo));
   }
 
   loadUser(): Observable<Contact> {
-    return this.backend.loadUser().pipe(switchToRecorded(this.contactRepo));
+    return this.backend.loadUser().pipe(switchMapToRecorded(this.contactRepo));
   }
 
   searchContactsByEmail(email: string): Observable<Contact[]> {
     return this.backend
       .searchContactsByEmail(email)
-      .pipe(switchToAllRecorded(this.contactRepo));
+      .pipe(switchMapToAllRecorded(this.contactRepo));
   }
 }

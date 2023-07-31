@@ -12,14 +12,14 @@ import {
   ReactiveRepositoryUpdate,
 } from './reactive-repository';
 
-export const switchToRecorded =
+export const switchMapToRecorded =
   <Entity>(
     repo: ReactiveRepository<Entity>,
   ): OperatorFunction<Entity, Entity> =>
   (source) =>
     source.pipe(switchMap((entity) => repo.record(entity)));
 
-export const switchToAllRecorded =
+export const switchMapToAllRecorded =
   <Entity>(
     repo: ReactiveRepository<Entity>,
   ): OperatorFunction<Entity[], Entity[]> =>
