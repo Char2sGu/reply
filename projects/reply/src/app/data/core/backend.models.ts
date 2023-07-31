@@ -11,7 +11,8 @@ export interface SyncResult<Entity> {
 export type SyncChange<Entity> =
   | SyncDeletion
   | SyncCreation<Entity>
-  | SyncUpdate<Entity>;
+  | SyncUpdate<Entity>
+  | SyncCreationOrUpdate<Entity>;
 
 export interface SyncDeletion {
   type: 'deletion';
@@ -26,4 +27,9 @@ export interface SyncUpdate<Entity> {
   type: 'update';
   id: string;
   payload: Partial<Entity>;
+}
+export interface SyncCreationOrUpdate<Entity> {
+  type: 'creation-or-update';
+  id: string;
+  payload: Entity;
 }

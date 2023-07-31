@@ -1,6 +1,11 @@
+import { Injectable } from '@angular/core';
+
 import { SyncChange } from './backend.models';
 import { ReactiveRepository } from './reactive-repository';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class BackendSyncApplier {
   applyChange<Entity>(
     repo: ReactiveRepository<Entity>,
@@ -19,6 +24,9 @@ export class BackendSyncApplier {
         repo.patch(change.id, change.payload);
         break;
       }
+      case 'creation-or-update':
+        repo.record(change.payload);
+        break;
       default:
         throw new Error(`Unknown change ${change}`);
     }

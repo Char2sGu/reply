@@ -7,6 +7,8 @@ import { Mail } from '@/app/data/mail/mail.model';
 
 import { GmailMessageParser } from './gmail-message-parser.service';
 
+// TODO: avoid involving repos in this service
+
 @Injectable({
   providedIn: 'root',
 })

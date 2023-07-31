@@ -64,6 +64,7 @@ export class GoogleMailBackend implements MailBackend {
     );
   }
 
+  // TODO: load all history pages?
   syncMails(syncToken: string): Observable<SyncResult<Mail>> {
     return this.historyListApi({
       userId: 'me',
