@@ -64,21 +64,8 @@ export class GoogleMailBackend implements MailBackend {
     );
   }
 
-  // TODO: load all history pages?
   syncMails(syncToken: string): Observable<SyncResult<Mail>> {
-    return this.historyListApi({
-      userId: 'me',
-      startHistoryId: syncToken,
-    }).pipe(
-      switchMap((response) => {
-        const histories = access(response.result, 'history');
-        const changes = histories.flatMap((h) => this.resolveHistory(h));
-        const syncToken = access(response.result, 'historyId');
-        return combineLatest(changes).pipe(
-          map((changes) => ({ changes, syncToken })),
-        );
-      }),
-    );
+    return this.loadHistoryPages(syncToken);
   }
 
   markMailAsStarred(mail: Mail): Observable<Mail> {
@@ -119,9 +106,35 @@ export class GoogleMailBackend implements MailBackend {
     );
   }
 
-  private loadMessageHistoryId(id: string): Observable<string> {
-    return this.messageGetApi({ userId: 'me', id, fields: 'historyId' }).pipe(
-      map((response) => access(response.result, 'historyId')),
+  private loadHistoryPages(
+    startHistoryId: string,
+    startPageToken?: string,
+  ): Observable<SyncResult<Mail>> {
+    return this.historyListApi({
+      userId: 'me',
+      startHistoryId,
+      pageToken: startPageToken,
+    }).pipe(
+      switchMap((response) => {
+        const histories = response.result.history ?? [];
+        const changes = histories.flatMap((h) => this.resolveHistory(h));
+        const syncToken = access(response.result, 'historyId');
+        return combineLatest(changes).pipe(
+          map((changes) => ({ changes, syncToken })),
+          switchMap((result) => {
+            if (!response.result.nextPageToken) return of(result);
+            return this.loadHistoryPages(
+              startHistoryId,
+              response.result.nextPageToken,
+            ).pipe(
+              map((nextPagesResult) => ({
+                changes: [...result.changes, ...nextPagesResult.changes],
+                syncToken: result.syncToken,
+              })),
+            );
+          }),
+        );
+      }),
     );
   }
 

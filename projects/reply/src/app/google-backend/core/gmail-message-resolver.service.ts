@@ -7,12 +7,14 @@ import { Mail } from '@/app/data/mail/mail.model';
 
 import { GmailMessageParser } from './gmail-message-parser.service';
 
-// TODO: avoid involving repos in this service
-
 @Injectable({
   providedIn: 'root',
 })
 export class GmailMessageResolver {
+  // TODO: try not to involve repositories in this service.
+  // It is an exception to involve repositories in this service because we
+  // are unable to get the ids of the involved contacts from a Gmail message,
+  // which shouldn't happen when handling other entities.
   private contactRepo = inject(ContactRepository);
   private messageParser = inject(GmailMessageParser);
 
