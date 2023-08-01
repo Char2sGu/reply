@@ -8,6 +8,8 @@ import {
   throwError,
 } from 'rxjs';
 
+import { Exception } from '@/app/core/exceptions';
+
 import { BackendSyncApplier } from '../core/backend-sync-applier.service';
 import {
   onErrorUndo,
@@ -56,8 +58,11 @@ export class MailService {
   syncMails(): Observable<void> {
     return this.syncToken$.pipe(
       switchMap((syncToken) => {
-        if (!syncToken)
-          return throwError(() => new Error('Missing sync token'));
+        if (!syncToken) {
+          const errFactory = () =>
+            new MailSyncTokenMissingException('Missing sync token');
+          return throwError(errFactory);
+        }
         return this.backend.syncMails(syncToken);
       }),
       tap((r) => this.syncToken$.next(r.syncToken)),
@@ -124,3 +129,6 @@ export class MailService {
     );
   }
 }
+
+export class MailServiceException extends Exception {}
+export class MailSyncTokenMissingException extends MailServiceException {}

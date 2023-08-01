@@ -9,7 +9,10 @@ import {
 } from 'rxjs';
 
 import { access } from '../core/property-path.utils';
-import { ContactBackend } from '../data/contact/contact.backend';
+import {
+  ContactBackend,
+  ContactBackendException,
+} from '../data/contact/contact.backend';
 import { Contact } from '../data/contact/contact.model';
 import { SyncChange, SyncResult } from '../data/core/backend.models';
 import { useGoogleApi as useApi } from './core/google-apis.utils';
@@ -141,7 +144,7 @@ export class GoogleContactBackend implements ContactBackend {
       switchMap(({ result: { nextPageToken, nextSyncToken } }) => {
         if (nextSyncToken) return of(nextSyncToken);
         if (nextPageToken) return this.obtainContactSyncToken(nextPageToken);
-        throw new Error('Invalid response');
+        throw new ContactBackendException('Invalid response');
       }),
     );
   }
@@ -156,7 +159,7 @@ export class GoogleContactBackend implements ContactBackend {
         if (nextSyncToken) return of(nextSyncToken);
         if (nextPageToken)
           return this.obtainOtherContactSyncToken(nextPageToken);
-        throw new Error('Invalid response');
+        throw new ContactBackendException('Invalid response');
       }),
     );
   }

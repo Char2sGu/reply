@@ -8,6 +8,8 @@ import {
   throwError,
 } from 'rxjs';
 
+import { Exception } from '@/app/core/exceptions';
+
 import { BackendSyncApplier } from '../core/backend-sync-applier.service';
 import {
   switchMapToAllRecorded,
@@ -56,7 +58,7 @@ export class ContactService {
     return this.syncToken$.pipe(
       switchMap((syncToken) => {
         if (!syncToken)
-          return throwError(() => new Error('Missing sync token'));
+          return throwError(() => new ContactSyncTokenMissingException());
         return this.backend.syncContacts(syncToken);
       }),
       tap((result) => this.syncToken$.next(result.syncToken)),
@@ -65,3 +67,6 @@ export class ContactService {
     );
   }
 }
+
+export class ContactServiceException extends Exception {}
+export class ContactSyncTokenMissingException extends ContactServiceException {}

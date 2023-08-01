@@ -3,7 +3,7 @@ import { combineLatest, from, Observable, of, throwError } from 'rxjs';
 
 import { Mail } from '../data/mail/mail.model';
 import { MailRepository } from '../data/mail/mail.repository';
-import { MailService } from '../data/mail/mail.service';
+import { MailService, MailServiceException } from '../data/mail/mail.service';
 import { Mailbox } from '../data/mailbox/mailbox.model';
 import { DEMO_MAILS } from './core/mail/demo-mails.token';
 
@@ -18,7 +18,10 @@ export class DemoMailService implements MailService {
 
   loadMail(id: string): Observable<Mail> {
     const mail = this.mails.find((m) => m.id === id);
-    if (!mail) return throwError(() => new Error(`Mail ${id} not found`));
+    if (!mail) {
+      const msg = `Mail ${id} not found`;
+      return throwError(() => new MailServiceException(msg));
+    }
     return from(this.mailRepo.record(mail));
   }
 

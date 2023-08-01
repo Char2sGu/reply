@@ -9,6 +9,8 @@ import {
   shareReplay,
 } from 'rxjs';
 
+import { Exception } from './exceptions';
+
 export abstract class AggregationResolver<P, R> {
   protected readonly resolveRequest = new EventEmitter<P>();
   protected readonly resolveResults$ = this.resolveRequest.pipe(
@@ -25,7 +27,8 @@ export abstract class AggregationResolver<P, R> {
       first(),
       map((results) => {
         const result = results.get(payload);
-        if (!result) throw new Error('Missing resolve result');
+        if (!result)
+          throw new AggregationResolveException('Missing resolve result');
         return result;
       }),
     );
@@ -39,3 +42,5 @@ export abstract class AggregationResolver<P, R> {
     );
   }
 }
+
+export class AggregationResolveException extends Exception {}

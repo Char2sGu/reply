@@ -16,7 +16,9 @@ export class EntityDataSourceSynchronizer {
       concatMap((update) => {
         if (update.curr) return database.persist(update.curr);
         if (update.prev) return database.delete(update.id);
-        return throwError(() => new Error('Invalid update'));
+        return throwError(
+          () => new EntityDataSourceSynchronizationException('Invalid update'),
+        );
       }),
     );
   }
@@ -31,3 +33,5 @@ export class EntityDataSourceSynchronizer {
     );
   }
 }
+
+export class EntityDataSourceSynchronizationException extends Error {}

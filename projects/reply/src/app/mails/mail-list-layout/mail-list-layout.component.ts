@@ -122,7 +122,7 @@ export class MailListLayoutComponent {
       return this.mailRepo.query((e) => e.type === 'sent');
     if (mailbox === VirtualMailboxName.Drafts)
       return this.mailRepo.query((e) => e.type === 'draft');
-    throw new Error(`Unknown virtual mailbox: ${mailbox}`);
+    throw new Error(`Invalid virtual mailbox: ${mailbox}`);
   }
 
   queryRegularMailboxMails(mailbox: Mailbox): Observable<Mail[]> {

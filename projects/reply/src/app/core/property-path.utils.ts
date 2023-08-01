@@ -7,6 +7,8 @@
 //   f: { ff: 'ff'; fff: 'fff' };
 // }
 
+import { Exception } from './exceptions';
+
 export type PropertyPath<T extends object> = {
   [K in string & keyof T]: NonNullable<T[K]> extends infer O extends object
     ? K | `${K}.${PropertyPath<O>}`
@@ -24,8 +26,7 @@ export function asserted<T extends object, P extends PropertyPath<T>>(
       current = current[segment as keyof typeof current];
       if (current === undefined || current === null) {
         const currentPath = segments.slice(0, index + 1).join('.');
-        const msg = `When asserting path "${path}", "${currentPath}" is "${current}"`;
-        throw new Error(msg);
+        throw new PropertyPathAssertionException(path, currentPath, current);
       }
     }
   }
@@ -78,8 +79,7 @@ export function access<T extends object, P extends PropertyPath<T>>(
     current = current[segment as keyof typeof current];
     if (current === undefined || current === null) {
       const currentPath = segments.slice(0, index + 1).join('.');
-      const msg = `When accessing path "${path}", "${currentPath}" is "${current}".`;
-      throw new Error(msg);
+      throw new PropertyPathAssertionException(path, currentPath, current);
     }
   }
   return current as NonNullable<PropertyPathValue<T, P>>;
@@ -102,3 +102,10 @@ export type PropertyPathValue<
 // declare const test2: PropertyPathValue<TestingObj, 'c'>;
 // const assertion2: 'c' = test2;
 // /* eslint-enable @typescript-eslint/no-unused-vars */
+
+export class PropertyPathAssertionException extends Exception {
+  constructor(path: string, currentPath: string, currentValue: unknown) {
+    const msg = `When asserting path "${path}", "${currentPath}" is "${currentValue}"`;
+    super(msg);
+  }
+}

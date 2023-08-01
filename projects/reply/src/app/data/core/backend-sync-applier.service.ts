@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { Exception } from '@/app/core/exceptions';
+
 import { SyncChange } from './backend.models';
 import { ReactiveRepository } from './reactive-repository';
 
@@ -28,7 +30,7 @@ export class BackendSyncApplier {
         repo.record(change.payload);
         break;
       default:
-        throw new Error(`Unknown change ${change}`);
+        throw new InvalidSyncChangeTypeException(change);
     }
   }
 
@@ -39,5 +41,12 @@ export class BackendSyncApplier {
     changes.forEach((change) => {
       this.applyChange(repo, change);
     });
+  }
+}
+
+export class BackendSyncApplierException extends Exception {}
+export class InvalidSyncChangeTypeException extends BackendSyncApplierException {
+  constructor(change: SyncChange<unknown>) {
+    super(`Invalid sync change type "${change.type}"`);
   }
 }

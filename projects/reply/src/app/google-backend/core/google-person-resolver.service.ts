@@ -13,7 +13,10 @@ export class GooglePersonResolver {
   ): Pick<Contact, 'id' | 'type'> & Partial<Contact> {
     const { resourceName, names, photos, emailAddresses } = person;
     const id = resourceName?.split('/').pop();
-    if (!id) throw new Exception('Failed to parse person resource name');
+    if (!id) {
+      const msg = 'Failed to parse person resource name';
+      throw new GooglePersonResolveException(msg);
+    }
     const name = names?.find((n) => n.metadata?.primary)?.displayName;
     const photo = photos?.find((p) => p.metadata?.primary);
     const email = emailAddresses?.find((e) => e.metadata?.primary)?.value;
@@ -39,3 +42,5 @@ export class GooglePersonResolver {
     }
   }
 }
+
+export class GooglePersonResolveException extends Exception {}

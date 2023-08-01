@@ -20,7 +20,7 @@ export function useSystemMailboxNameMapping(): Observable<SystemMailboxNameMappi
         for (const name of Object.values(SystemMailboxName)) {
           const mailbox = mailboxes.find((m) => m.name === name);
           if (!mailbox)
-            throw new Error('Error resolving system mailbox from query result');
+            throw new SystemMailboxNameMappingMissingItemException();
           mapping[name] = mailbox;
         }
         return mapping as Required<typeof mapping>;
@@ -28,3 +28,5 @@ export function useSystemMailboxNameMapping(): Observable<SystemMailboxNameMappi
       shareReplay(1),
     );
 }
+
+export class SystemMailboxNameMappingMissingItemException extends Error {}
