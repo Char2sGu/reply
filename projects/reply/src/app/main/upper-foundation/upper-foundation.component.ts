@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import {
   FadeThroughAnimation,
-  injectAnimationIdFactory,
+  usePrimaryChildRouteAnimationId,
 } from '@/app/core/animations';
 
 @Component({
@@ -23,5 +23,5 @@ import {
   ],
 })
 export class UpperFoundationComponent {
-  animationId = injectAnimationIdFactory();
+  animationId = usePrimaryChildRouteAnimationId();
 }

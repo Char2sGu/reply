@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 
 import {
-  injectAnimationIdFactory,
   SharedAxisAnimation,
+  usePrimaryChildRouteAnimationId,
 } from '../core/animations';
 import { BREAKPOINTS } from '../core/breakpoint.service';
 
@@ -37,8 +37,9 @@ import { BREAKPOINTS } from '../core/breakpoint.service';
   ],
 })
 export class MainComponent {
-  routeAnimationId = injectAnimationIdFactory();
   private breakpoints = inject(BREAKPOINTS);
+
+  animationId = usePrimaryChildRouteAnimationId();
 
   navShouldRender = computed(() => this.breakpoints()['tablet-portrait']);
   navShouldExpand = computed(() => this.breakpoints()['laptop']);

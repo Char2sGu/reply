@@ -12,8 +12,7 @@ import { inject } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ChildrenOutletContexts } from '@angular/router';
 
-// TODO: rename to `usePrimaryRouteAnimationId`
-export function injectAnimationIdFactory(): () => string {
+export function usePrimaryChildRouteAnimationId(): () => string {
   const contexts = inject(ChildrenOutletContexts);
   return () =>
     contexts.getContext('primary')?.route?.snapshot?.data?.['animationId'] ??

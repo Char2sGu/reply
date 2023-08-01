@@ -28,7 +28,7 @@ import {
   timer,
 } from 'rxjs';
 
-import { injectAnimationIdFactory } from './core/animations';
+import { usePrimaryChildRouteAnimationId } from './core/animations';
 import { AuthenticationService } from './core/auth/authentication.service';
 import { BreakpointMap, BREAKPOINTS } from './core/breakpoint.service';
 import { INITIALIZER } from './core/initialization';
@@ -82,7 +82,6 @@ import { INITIALIZER } from './core/initialization';
   },
 })
 export class AppComponent {
-  animationId = injectAnimationIdFactory();
   private breakpoints = inject(BREAKPOINTS);
   private router = inject(Router);
   private authService = inject(AuthenticationService);
@@ -95,6 +94,8 @@ export class AppComponent {
       ),
     () => timer(500),
   ];
+
+  animationId = usePrimaryChildRouteAnimationId();
 
   @HostBinding('class') get breakpointsClassBindings(): BreakpointMap {
     return this.breakpoints();
