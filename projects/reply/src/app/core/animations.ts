@@ -12,6 +12,7 @@ import { inject } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { ChildrenOutletContexts } from '@angular/router';
 
+// TODO: rename to `usePrimaryRouteAnimationId`
 export function injectAnimationIdFactory(): () => string {
   const contexts = inject(ChildrenOutletContexts);
   return () =>

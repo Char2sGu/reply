@@ -31,10 +31,12 @@ import { LogoComponent } from './shared/logo/logo.component';
 // TODO: image
 // TODO: schedule
 // TODO: gestures on cards
-// TODO: mail list pagination
+// TODO: mail list lazy loading
+// TODO: mail total displaying
 // TODO: better mail html render
 // TODO: settings page with mailbox management
-// TODO: load partial mails on init
+
+// TODO: contact database
 
 @NgModule({
   declarations: [AppComponent, LaunchScreenComponent],

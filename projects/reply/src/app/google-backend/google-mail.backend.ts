@@ -1,5 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  map,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
 
 import { access } from '../core/property-path.utils';
 import { Page, SyncChange, SyncResult } from '../data/core/backend.models';
@@ -117,36 +124,39 @@ export class GoogleMailBackend implements MailBackend {
     }).pipe(
       switchMap((response) => {
         const histories = response.result.history ?? [];
-        const changes = histories.flatMap((h) => this.resolveHistory(h));
+        const changes = histories.map((h) => this.resolveHistory(h));
         const syncToken = access(response.result, 'historyId');
-        return combineLatest(changes).pipe(
-          map((changes) => ({ changes, syncToken })),
-          switchMap((result) => {
-            if (!response.result.nextPageToken) return of(result);
-            return this.loadHistoryPages(
-              startHistoryId,
-              response.result.nextPageToken,
-            ).pipe(
-              map((nextPagesResult) => ({
-                changes: [...result.changes, ...nextPagesResult.changes],
-                syncToken: result.syncToken,
-              })),
-            );
-          }),
-        );
+        const result$ = changes.length
+          ? combineLatest(changes).pipe(
+              map((changes) => ({ changes: changes.flat(), syncToken })),
+              switchMap((result) => {
+                if (!response.result.nextPageToken) return of(result);
+                return this.loadHistoryPages(
+                  startHistoryId,
+                  response.result.nextPageToken,
+                ).pipe(
+                  map((nextPagesResult) => ({
+                    changes: [...result.changes, ...nextPagesResult.changes],
+                    syncToken: result.syncToken,
+                  })),
+                );
+              }),
+            )
+          : of({ changes: [], syncToken });
+        return result$;
       }),
     );
   }
 
   private resolveHistory(
     history: gapi.client.gmail.History,
-  ): Observable<SyncChange<Mail>>[] {
-    const changes: Observable<SyncChange<Mail>>[] = [];
+  ): Observable<SyncChange<Mail>[]> {
+    const syncChangeStreams: Observable<SyncChange<Mail> | null>[] = [];
     [...(history.labelsAdded ?? []), ...(history.labelsRemoved ?? [])].forEach(
       (entry) => {
         const message = access(entry, 'message');
         const mail = this.messageResolver.resolveMessage(message);
-        changes.push(
+        syncChangeStreams.push(
           of({
             type: 'update',
             id: mail.id,
@@ -158,25 +168,32 @@ export class GoogleMailBackend implements MailBackend {
     history.messagesAdded?.forEach((entry) => {
       const message = access(entry, 'message');
       const mail$ = this.loadMail(access(message, 'id'));
-      changes.push(
+      syncChangeStreams.push(
         mail$.pipe(
-          map((mail) => ({
-            type: 'creation',
-            id: mail.id,
-            payload: mail,
-          })),
+          map(
+            (mail): SyncChange<Mail> => ({
+              type: 'creation',
+              id: mail.id,
+              payload: mail,
+            }),
+          ),
+          catchError(() => of(null)), // `messagesAdded` sometimes includes ids that cannot be retrieved
         ),
       );
     });
     history.messagesDeleted?.forEach((entry) => {
       const message = access(entry, 'message');
-      changes.push(
+      syncChangeStreams.push(
         of({
           type: 'deletion',
           id: access(message, 'id'),
         }),
       );
     });
-    return changes;
+    return combineLatest(syncChangeStreams).pipe(
+      map((syncChanges) =>
+        syncChanges.filter((c): c is NonNullable<typeof c> => !!c),
+      ),
+    );
   }
 }
