@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import {
   BehaviorSubject,
+  first,
   map,
   Observable,
   switchMap,
@@ -56,6 +57,7 @@ export class ContactService {
 
   syncContacts(): Observable<void> {
     return this.syncToken$.pipe(
+      first(),
       switchMap((syncToken) => {
         if (!syncToken)
           return throwError(() => new ContactSyncTokenMissingException());

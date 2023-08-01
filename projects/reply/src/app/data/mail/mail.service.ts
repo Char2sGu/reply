@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import {
   BehaviorSubject,
+  first,
   map,
   Observable,
   switchMap,
@@ -35,6 +36,7 @@ export class MailService {
   loadMails(options?: { continuous?: boolean }): Observable<Mail[]> {
     if (!options?.continuous) this.nextPageToken$.next(null);
     return this.nextPageToken$.pipe(
+      first(),
       switchMap((pageToken) => {
         const isFirstPage = !pageToken;
         const loadMails$ = this.backend.loadMailPage(pageToken ?? undefined);
@@ -57,6 +59,7 @@ export class MailService {
 
   syncMails(): Observable<void> {
     return this.syncToken$.pipe(
+      first(),
       switchMap((syncToken) => {
         if (!syncToken) {
           const errFactory = () =>
