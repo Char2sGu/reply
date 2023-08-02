@@ -19,13 +19,13 @@ import { AnimationCurves } from '@angular/material/core';
 import { map, Observable, ReplaySubject, shareReplay, switchMap } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
-import { BREAKPOINTS } from '@/app/core/breakpoints.token';
+import { BREAKPOINTS } from '@/app/core/breakpoints.object';
 import {
   SystemMailboxName,
   VirtualMailboxName,
 } from '@/app/core/mailbox-name.enums';
 import { useSystemMailboxNameMapping } from '@/app/core/mailbox-name.utils';
-import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
+import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.object';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';

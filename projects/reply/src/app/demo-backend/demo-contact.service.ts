@@ -7,7 +7,7 @@ import {
   ContactService,
   ContactServiceException,
 } from '../data/contact/contact.service';
-import { DEMO_CONTACTS } from './core/contact/demo-contacts.token';
+import { DEMO_CONTACTS } from './core/contact/demo-contacts.object';
 
 @Injectable()
 export class DemoContactService implements ContactService {

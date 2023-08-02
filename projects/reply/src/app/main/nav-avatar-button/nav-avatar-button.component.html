@@ -1,3 +1,3 @@
 <button mat-icon-button matTooltip="Edit profile">
-  <rpl-avatar *ngIf="user$ | async as user" [contact]="user"></rpl-avatar>
+  <rpl-avatar *ngIf="user() as user" [contact]="user"></rpl-avatar>
 </button>

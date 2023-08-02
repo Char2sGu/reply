@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { map, merge } from 'rxjs';
 
-import { BREAKPOINTS } from '../breakpoints.token';
+import { BREAKPOINTS } from '../breakpoints.object';
 import {
   NotificationActionEvent,
   NotificationDismissEvent,

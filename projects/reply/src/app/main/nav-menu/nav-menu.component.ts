@@ -10,7 +10,7 @@ import {
   SystemMailboxName,
   VirtualMailboxName,
 } from '@/app/core/mailbox-name.enums';
-import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.token';
+import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.object';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';
 import { MailboxRepository } from '@/app/data/mailbox/mailbox.repository';
 

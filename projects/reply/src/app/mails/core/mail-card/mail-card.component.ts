@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { BREAKPOINTS } from '@/app/core/breakpoints.token';
+import { BREAKPOINTS } from '@/app/core/breakpoints.object';
 import { ContactRepository } from '@/app/data/contact/contact.repository';
 import { Mail } from '@/app/data/mail/mail.model';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';

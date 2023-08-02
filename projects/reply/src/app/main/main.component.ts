@@ -11,7 +11,7 @@ import {
   SharedAxisAnimation,
   usePrimaryChildRouteAnimationId,
 } from '../core/animations';
-import { BREAKPOINTS } from '../core/breakpoints.token';
+import { BREAKPOINTS } from '../core/breakpoints.object';
 
 @Component({
   selector: 'rpl-main',

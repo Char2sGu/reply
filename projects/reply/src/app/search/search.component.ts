@@ -14,7 +14,7 @@ import {
   switchMap,
 } from 'rxjs';
 
-import { NAVIGATION_CONTEXT } from '../core/navigation-context.token';
+import { NAVIGATION_CONTEXT } from '../core/navigation-context.object';
 import { Mail } from '../data/mail/mail.model';
 import { MailRepository } from '../data/mail/mail.repository';
 

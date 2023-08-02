@@ -2,7 +2,7 @@ import { inject, Injectable, Type } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
-import { BREAKPOINTS } from '../breakpoints.token';
+import { BREAKPOINTS } from '../breakpoints.object';
 import { POPUP_REF, PopupComponent, PopupRef } from './popup.core';
 import { PopupContainerComponent } from './popup-container.component';
 

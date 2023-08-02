@@ -8,7 +8,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 
-import { NAVIGATION_CONTEXT } from '../core/navigation-context.token';
+import { NAVIGATION_CONTEXT } from '../core/navigation-context.object';
 
 @Component({
   selector: 'rpl-compose',

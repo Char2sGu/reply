@@ -1,4 +1,4 @@
-<ng-container *ngIf="user$ | async as user">
+<ng-container *ngIf="user() as user">
   <ng-container
     *ngIf="mail.sender | resolveRef : contactRepo | async as sender"
   >

@@ -2,7 +2,7 @@ import { Directive, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ScrollDirectionDirective } from '@reply/scrolling';
 
-import { LAYOUT_CONTEXT } from '../core/layout-context.token';
+import { LAYOUT_CONTEXT } from '../core/layout-context.object';
 
 @Directive({
   selector: '[rplLayoutContent]',

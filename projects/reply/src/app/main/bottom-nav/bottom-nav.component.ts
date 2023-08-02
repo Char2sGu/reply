@@ -28,7 +28,7 @@ import { AnimationCurves } from '@angular/material/core';
 import { NavigationStart, Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs';
 
-import { LAYOUT_CONTEXT } from '@/app/core/layout-context.token';
+import { LAYOUT_CONTEXT } from '@/app/core/layout-context.object';
 
 @Component({
   selector: 'rpl-bottom-nav',

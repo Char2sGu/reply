@@ -4,7 +4,7 @@ import { map, Observable } from 'rxjs';
 import { access } from '../core/property-path.utils';
 import { MailboxBackend } from '../data/mailbox/mailbox.backend';
 import { Mailbox } from '../data/mailbox/mailbox.model';
-import { GMAIL_SYSTEM_MAILBOXES } from './core/gmail-system-mailboxes.token';
+import { GMAIL_SYSTEM_MAILBOXES } from './core/gmail-system-mailboxes.object';
 import { useGoogleApi } from './core/google-apis.utils';
 
 @Injectable()

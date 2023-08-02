@@ -3,7 +3,7 @@ import { concatMap, map, Observable } from 'rxjs';
 
 import { includeThenableInZone } from '@/app/core/zone.utils';
 
-import { GOOGLE_APIS, GoogleApis } from './google-apis.token';
+import { GOOGLE_APIS, GoogleApis } from './google-apis.object';
 
 type GoogleApi = (...args: any[]) => PromiseLike<any>;
 

@@ -4,7 +4,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { Mailbox } from '../data/mailbox/mailbox.model';
 import { MailboxRepository } from '../data/mailbox/mailbox.repository';
 import { MailboxService } from '../data/mailbox/mailbox.service';
-import { DEMO_MAILBOXES } from './core/mailbox/demo-mailboxes.token';
+import { DEMO_MAILBOXES } from './core/mailbox/demo-mailboxes.object';
 
 export class DemoMailboxService implements MailboxService {
   private mailboxes = inject(DEMO_MAILBOXES);

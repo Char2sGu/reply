@@ -9,7 +9,7 @@ import {
 import { AnimationCurves } from '@angular/material/core';
 
 import { FadeThroughAnimation } from '../../core/animations';
-import { LAYOUT_CONTEXT } from '../../core/layout-context.token';
+import { LAYOUT_CONTEXT } from '../../core/layout-context.object';
 
 @Component({
   selector: 'rpl-nav-floating-action-button',
