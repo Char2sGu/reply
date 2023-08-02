@@ -13,9 +13,6 @@ import {
   timer,
 } from 'rxjs';
 
-import { ContactService } from '@/app/data/contact/contact.service';
-
-import { Contact } from '../../data/contact/contact.model';
 import { AuthenticationBackend } from './authentication.backend';
 import { Authorization } from './authorization.model';
 
@@ -24,19 +21,12 @@ import { Authorization } from './authorization.model';
 })
 export abstract class AuthenticationService {
   private backend = inject(AuthenticationBackend);
-  private contactService = inject(ContactService);
 
   private authorizationChange = new EventEmitter<Authorization | null>();
 
   readonly authorization$ = this.authorizationChange
     .asObservable()
     .pipe(startWith(null), shareReplay(1));
-
-  readonly user$: Observable<Contact> = this.authorization$.pipe(
-    filter(Boolean),
-    switchMap(() => this.contactService.loadUser()),
-    shareReplay(1),
-  );
 
   requestAuthorization(hint?: string): Observable<boolean> {
     return this.backend.requestAuthorization(hint).pipe(

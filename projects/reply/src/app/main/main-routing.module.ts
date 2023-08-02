@@ -2,7 +2,7 @@ import { inject, NgModule } from '@angular/core';
 import { CanActivateFn, RouterModule, Routes } from '@angular/router';
 import { combineLatest, firstValueFrom } from 'rxjs';
 
-import { AuthenticationService } from '../core/auth/authentication.service';
+import { useUser } from '../core/user.state';
 import { ContactService } from '../data/contact/contact.service';
 import { MailService } from '../data/mail/mail.service';
 import { MailboxService } from '../data/mailbox/mailbox.service';
@@ -11,12 +11,12 @@ import { MainComponent } from './main.component';
 import { UpperFoundationComponent } from './upper-foundation/upper-foundation.component';
 
 const dataInitializer: CanActivateFn = async () => {
-  const authService = inject(AuthenticationService);
   const contactService = inject(ContactService);
   const mailboxService = inject(MailboxService);
   const mailService = inject(MailService);
+  const user$ = useUser();
 
-  await firstValueFrom(authService.user$);
+  await firstValueFrom(user$);
   await firstValueFrom(
     combineLatest([
       mailboxService.loadMailboxes(),

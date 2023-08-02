@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { map } from 'rxjs';
 
+import { useActionFlow } from '../core/action-flow';
 import { AuthenticationService } from '../core/auth/authentication.service';
+import { AuthenticateActionFlow } from './auth.action-flows';
 
 @Component({
   selector: 'rpl-auth',
@@ -11,11 +13,12 @@ import { AuthenticationService } from '../core/auth/authentication.service';
 })
 export class AuthComponent {
   private authService = inject(AuthenticationService);
+  private authenticate = useActionFlow(AuthenticateActionFlow);
 
   checked = false;
   loading$ = this.authService.authorization$.pipe(map(Boolean));
 
   onButtonClick(): void {
-    this.authService.requestAuthorization().subscribe();
+    this.authenticate().subscribe();
   }
 }
