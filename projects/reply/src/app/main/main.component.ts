@@ -6,12 +6,17 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationStart, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 import {
   SharedAxisAnimation,
   usePrimaryChildRouteAnimationId,
 } from '../core/animations';
 import { BREAKPOINTS } from '../core/breakpoints.object';
+import { LAYOUT_CONTEXT } from '../core/layout-context.state';
+import { useWritableState } from '../core/state';
 
 @Component({
   selector: 'rpl-main',
@@ -38,6 +43,9 @@ import { BREAKPOINTS } from '../core/breakpoints.object';
 })
 export class MainComponent {
   private breakpoints = inject(BREAKPOINTS);
+  private router = inject(Router);
+
+  private layoutContext = useWritableState(LAYOUT_CONTEXT);
 
   animationId = usePrimaryChildRouteAnimationId();
 
@@ -45,4 +53,17 @@ export class MainComponent {
   navShouldExpand = computed(() => this.breakpoints()['laptop']);
 
   navExpanded = signal<boolean | undefined>(undefined);
+
+  constructor() {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationStart),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        this.layoutContext.mutate((c) => {
+          c.contentFavored = false;
+        });
+      });
+  }
 }

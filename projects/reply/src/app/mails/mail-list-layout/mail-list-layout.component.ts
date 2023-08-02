@@ -25,7 +25,7 @@ import {
   VirtualMailboxName,
 } from '@/app/core/mailbox-name.enums';
 import { useSystemMailboxNameMapping } from '@/app/core/mailbox-name.utils';
-import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.object';
+import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.state';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';

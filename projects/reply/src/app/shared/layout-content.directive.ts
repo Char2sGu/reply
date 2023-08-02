@@ -2,7 +2,8 @@ import { Directive, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ScrollDirectionDirective } from '@reply/scrolling';
 
-import { LAYOUT_CONTEXT } from '../core/layout-context.object';
+import { LAYOUT_CONTEXT } from '../core/layout-context.state';
+import { useWritableState } from '../core/state';
 
 @Directive({
   selector: '[rplLayoutContent]',
@@ -10,7 +11,7 @@ import { LAYOUT_CONTEXT } from '../core/layout-context.object';
   hostDirectives: [ScrollDirectionDirective],
 })
 export class LayoutContentDirective {
-  private layoutContext = inject(LAYOUT_CONTEXT);
+  private layoutContext = useWritableState(LAYOUT_CONTEXT);
   private scrollDirections = inject(ScrollDirectionDirective);
   constructor() {
     this.scrollDirections.scrollUp.pipe(takeUntilDestroyed()).subscribe(() => {

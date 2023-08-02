@@ -4,11 +4,11 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, from, map, Observable } from 'rxjs';
 
-import { NAVIGATION_CONTEXT } from '../core/navigation-context.object';
+import { NAVIGATION_CONTEXT } from '../core/navigation-context.state';
+import { useState } from '../core/state';
 
 @Component({
   selector: 'rpl-compose',
@@ -18,7 +18,7 @@ import { NAVIGATION_CONTEXT } from '../core/navigation-context.object';
 })
 export class ComposeComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  private navigationContext = inject(NAVIGATION_CONTEXT);
+  private navigationContext = useState(NAVIGATION_CONTEXT);
 
   subject$ = new BehaviorSubject('');
   senderEmail$ = new BehaviorSubject(0);
@@ -33,7 +33,7 @@ export class ComposeComponent implements OnInit {
   constructor() {
     this.backUrl$ = combineLatest([
       this.mailId$,
-      toObservable(this.navigationContext).pipe(map((c) => c.latestMailboxUrl)),
+      from(this.navigationContext).pipe(map((c) => c.latestMailboxUrl)),
     ]).pipe(
       map(([mailId, mailboxUrl]) =>
         mailboxUrl ? (mailId ? `${mailboxUrl}/${mailId}` : mailboxUrl) : '/',

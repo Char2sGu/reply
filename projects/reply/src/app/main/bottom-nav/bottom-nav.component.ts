@@ -28,7 +28,8 @@ import { AnimationCurves } from '@angular/material/core';
 import { NavigationStart, Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs';
 
-import { LAYOUT_CONTEXT } from '@/app/core/layout-context.object';
+import { LAYOUT_CONTEXT } from '@/app/core/layout-context.state';
+import { useState } from '@/app/core/state';
 
 @Component({
   selector: 'rpl-bottom-nav',
@@ -72,13 +73,14 @@ import { LAYOUT_CONTEXT } from '@/app/core/layout-context.object';
   ],
 })
 export class BottomNavComponent implements OnInit, OnDestroy {
-  layoutContext = inject(LAYOUT_CONTEXT);
   private router = inject(Router);
   private overlayContainerRef = inject(OverlayContainer);
   private overlayManager = inject(Overlay);
   private elementRef = inject(ElementRef<HTMLElement>);
   private viewContainerRef = inject(ViewContainerRef);
   private changeDetectorRef = inject(ChangeDetectorRef);
+
+  layoutContext = useState(LAYOUT_CONTEXT);
 
   logoClick$ = new EventEmitter();
 

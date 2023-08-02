@@ -3,13 +3,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  inject,
   Input,
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 
+import { useState } from '@/app/core/state';
+
 import { FadeThroughAnimation } from '../../core/animations';
-import { LAYOUT_CONTEXT } from '../../core/layout-context.object';
+import { LAYOUT_CONTEXT } from '../../core/layout-context.state';
 
 @Component({
   selector: 'rpl-nav-floating-action-button',
@@ -34,6 +35,6 @@ import { LAYOUT_CONTEXT } from '../../core/layout-context.object';
   ],
 })
 export class NavFloatingActionButtonComponent {
-  layoutContext = inject(LAYOUT_CONTEXT);
+  layoutContext = useState(LAYOUT_CONTEXT);
   @Input() @HostBinding('class.expanded') expanded = false;
 }

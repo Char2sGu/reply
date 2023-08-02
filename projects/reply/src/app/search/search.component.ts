@@ -14,7 +14,8 @@ import {
   switchMap,
 } from 'rxjs';
 
-import { NAVIGATION_CONTEXT } from '../core/navigation-context.object';
+import { NAVIGATION_CONTEXT } from '../core/navigation-context.state';
+import { useState } from '../core/state';
 import { Mail } from '../data/mail/mail.model';
 import { MailRepository } from '../data/mail/mail.repository';
 
@@ -25,7 +26,7 @@ import { MailRepository } from '../data/mail/mail.repository';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent implements OnInit {
-  navigationContext = inject(NAVIGATION_CONTEXT);
+  navigationContext = useState(NAVIGATION_CONTEXT);
   private mailRepo = inject(MailRepository);
 
   searchText$ = new BehaviorSubject('');

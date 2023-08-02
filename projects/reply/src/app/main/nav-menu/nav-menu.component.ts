@@ -10,7 +10,8 @@ import {
   SystemMailboxName,
   VirtualMailboxName,
 } from '@/app/core/mailbox-name.enums';
-import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.object';
+import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.state';
+import { useWritableState } from '@/app/core/state';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';
 import { MailboxRepository } from '@/app/data/mailbox/mailbox.repository';
 
@@ -21,8 +22,8 @@ import { MailboxRepository } from '@/app/data/mailbox/mailbox.repository';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavMenuComponent {
-  private navigationContext = inject(NAVIGATION_CONTEXT);
   private mailboxRepo = inject(MailboxRepository);
+  private navigationContext = useWritableState(NAVIGATION_CONTEXT);
 
   @Input() @HostBinding('class.expanded') expanded = true;
 

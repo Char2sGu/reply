@@ -10,8 +10,9 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { timer } from 'rxjs';
 
-import { LAYOUT_CONTEXT } from '@/app/core/layout-context.object';
+import { LAYOUT_CONTEXT } from '@/app/core/layout-context.state';
 import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
+import { useWritableState } from '@/app/core/state';
 import { USER } from '@/app/core/user.object';
 import { ContactRepository } from '@/app/data/contact/contact.repository';
 import { Mail } from '@/app/data/mail/mail.model';
@@ -29,7 +30,8 @@ export class MailDetailLayoutComponent implements AfterViewInit {
   mailRepo = inject(MailRepository);
   contactRepo = inject(ContactRepository);
   private route = inject(ActivatedRoute);
-  private layoutContext = inject(LAYOUT_CONTEXT);
+
+  private layoutContext = useWritableState(LAYOUT_CONTEXT);
 
   @Input({ required: true }) mail!: Mail;
   @Input({ required: true }) mailbox!: Mailbox | VirtualMailboxName;
