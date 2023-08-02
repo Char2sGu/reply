@@ -26,6 +26,7 @@ import {
 } from '@/app/core/mailbox-name.enums';
 import { useSystemMailboxNameMapping } from '@/app/core/mailbox-name.utils';
 import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.state';
+import { useState } from '@/app/core/state';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';
@@ -77,9 +78,9 @@ const mailCardsAnimation = animation([
 export class MailListLayoutComponent {
   console = console;
   breakpoints = inject(BREAKPOINTS);
-  navigationContext = inject(NAVIGATION_CONTEXT);
   private mailRepo = inject(MailRepository);
 
+  navigationContext = useState(NAVIGATION_CONTEXT);
   private systemMailboxes$ = useSystemMailboxNameMapping();
 
   // prettier-ignore

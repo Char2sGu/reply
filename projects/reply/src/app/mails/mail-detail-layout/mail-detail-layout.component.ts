@@ -12,8 +12,8 @@ import { timer } from 'rxjs';
 
 import { LAYOUT_CONTEXT } from '@/app/core/layout-context.state';
 import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
-import { useWritableState } from '@/app/core/state';
-import { USER } from '@/app/core/user.object';
+import { useState, useWritableState } from '@/app/core/state';
+import { USER } from '@/app/core/user.state';
 import { ContactRepository } from '@/app/data/contact/contact.repository';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';
@@ -26,11 +26,11 @@ import { Mailbox } from '@/app/data/mailbox/mailbox.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailDetailLayoutComponent implements AfterViewInit {
-  user = inject(USER);
   mailRepo = inject(MailRepository);
   contactRepo = inject(ContactRepository);
   private route = inject(ActivatedRoute);
 
+  user = useState(USER);
   private layoutContext = useWritableState(LAYOUT_CONTEXT);
 
   @Input({ required: true }) mail!: Mail;

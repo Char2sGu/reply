@@ -1,9 +1,9 @@
 import { inject, NgModule } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { CanActivateFn, RouterModule, Routes } from '@angular/router';
-import { combineLatest, filter, firstValueFrom } from 'rxjs';
+import { combineLatest, filter, firstValueFrom, from } from 'rxjs';
 
-import { USER } from '../core/user.object';
+import { useState } from '../core/state';
+import { USER } from '../core/user.state';
 import { ContactService } from '../data/contact/contact.service';
 import { MailService } from '../data/mail/mail.service';
 import { MailboxService } from '../data/mailbox/mailbox.service';
@@ -15,9 +15,9 @@ const dataInitializer: CanActivateFn = async () => {
   const contactService = inject(ContactService);
   const mailboxService = inject(MailboxService);
   const mailService = inject(MailService);
-  const user = inject(USER);
+  const user = useState(USER);
 
-  await firstValueFrom(toObservable(user).pipe(filter(Boolean)));
+  await firstValueFrom(from(user).pipe(filter(Boolean)));
   await firstValueFrom(
     combineLatest([
       mailboxService.loadMailboxes(),

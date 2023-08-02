@@ -9,6 +9,7 @@ import {
   throwError,
 } from 'rxjs';
 
+import { AuthenticationService } from '@/app/core/auth/authentication.service';
 import { Exception } from '@/app/core/exceptions';
 
 import { BackendSyncApplier } from '../core/backend-sync-applier.service';
@@ -26,6 +27,7 @@ import { ContactRepository } from './contact.repository';
 export class ContactService {
   private backend = inject(ContactBackend);
   private repo = inject(ContactRepository);
+  private authService = inject(AuthenticationService);
   private syncApplier = inject(BackendSyncApplier);
 
   private syncToken$ = new BehaviorSubject<string | null>(null);
@@ -45,7 +47,7 @@ export class ContactService {
     return this.backend.loadContact(id).pipe(switchMapToRecorded(this.repo));
   }
 
-  loadUser(): Observable<Contact> {
+  loadUser(): Observable<Contact | null> {
     return this.backend.loadUser().pipe(switchMapToRecorded(this.repo));
   }
 

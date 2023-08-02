@@ -1,4 +1,4 @@
-import { inject, InjectionToken, Signal } from '@angular/core';
+import { inject, InjectionToken, Signal, WritableSignal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, InteropObservable } from 'rxjs';
 
@@ -20,11 +20,9 @@ export function useState<T>(token: StateInjectionToken<T>): State<T> {
   return Object.assign(signal, { [Symbol.observable]: () => source });
 }
 
-export interface WritableState<T> extends State<T> {
-  set(value: T): void;
-  update(updateFn: (value: T) => T): void;
-  mutate(mutatorFn: (value: T) => void): void;
-}
+export interface WritableState<T>
+  extends State<T>,
+    Pick<WritableSignal<T>, 'set' | 'update' | 'mutate'> {}
 
 export function useWritableState<T>(
   token: StateInjectionToken<T>,

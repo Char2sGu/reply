@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { USER } from '@/app/core/user.object';
+import { useState } from '@/app/core/state';
+import { USER } from '@/app/core/user.state';
 
 @Component({
   selector: 'rpl-nav-avatar-button',
@@ -9,5 +10,5 @@ import { USER } from '@/app/core/user.object';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavAvatarButtonComponent {
-  user = inject(USER);
+  user = useState(USER);
 }

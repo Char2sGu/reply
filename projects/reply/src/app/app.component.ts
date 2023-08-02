@@ -25,6 +25,7 @@ import {
   pairwise,
   shareReplay,
   startWith,
+  switchMap,
   timer,
 } from 'rxjs';
 
@@ -33,6 +34,9 @@ import { AuthenticationService } from './core/auth/authentication.service';
 import { BreakpointMap } from './core/breakpoint.service';
 import { BREAKPOINTS } from './core/breakpoints.object';
 import { INITIALIZER } from './core/initialization';
+import { useWritableState } from './core/state';
+import { USER } from './core/user.state';
+import { ContactService } from './data/contact/contact.service';
 
 @Component({
   selector: 'rpl-root',
@@ -86,6 +90,7 @@ export class AppComponent {
   private breakpoints = inject(BREAKPOINTS);
   private router = inject(Router);
   private authService = inject(AuthenticationService);
+  private contactService = inject(ContactService);
   private initializers = [
     ...inject(INITIALIZER),
     () =>
@@ -97,6 +102,7 @@ export class AppComponent {
   ];
 
   animationId = usePrimaryChildRouteAnimationId();
+  private user = useWritableState(USER);
 
   @HostBinding('class') get breakpointsClassBindings(): BreakpointMap {
     return this.breakpoints();
@@ -110,13 +116,23 @@ export class AppComponent {
   );
 
   constructor() {
-    const authStatusChange$ = this.authService.authorization$.pipe(
-      map(Boolean),
-      pairwise(),
-      map((pair) => pair[0] !== pair[1]),
-    );
-    authStatusChange$.subscribe(() => {
-      this.router.navigateByUrl('/');
-    });
+    this.authService.authorization$
+      .pipe(
+        map(Boolean),
+        pairwise(),
+        map((pair) => pair[0] !== pair[1]),
+      )
+      .subscribe(() => {
+        this.router.navigateByUrl('/');
+      });
+
+    this.authService.authorization$
+      .pipe(
+        map(Boolean),
+        switchMap((authorized) =>
+          authorized ? this.contactService.loadUser() : of(null),
+        ),
+      )
+      .subscribe((v) => this.user.set(v));
   }
 }
