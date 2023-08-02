@@ -19,7 +19,7 @@ import { AnimationCurves } from '@angular/material/core';
 import { map, Observable, ReplaySubject, shareReplay, switchMap } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
-import { BREAKPOINTS } from '@/app/core/breakpoint.service';
+import { BREAKPOINTS } from '@/app/core/breakpoints.token';
 import {
   SystemMailboxName,
   VirtualMailboxName,

@@ -30,7 +30,8 @@ import {
 
 import { usePrimaryChildRouteAnimationId } from './core/animations';
 import { AuthenticationService } from './core/auth/authentication.service';
-import { BreakpointMap, BREAKPOINTS } from './core/breakpoint.service';
+import { BreakpointMap } from './core/breakpoint.service';
+import { BREAKPOINTS } from './core/breakpoints.token';
 import { INITIALIZER } from './core/initialization';
 
 @Component({

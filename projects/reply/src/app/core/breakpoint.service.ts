@@ -1,55 +1,32 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { inject, Injectable, InjectionToken, Signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map, Observable, shareReplay } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BreakpointService {
-  readonly breakpoints$: Observable<BreakpointMap>;
+  private observer = inject(BreakpointObserver);
 
-  private config: BreakpointConfig;
-
-  constructor(private observer: BreakpointObserver) {
-    this.config = {
-      ['tablet-portrait']: '(min-width: 600px)',
-      ['tablet-landscape']: '(min-width: 905px)',
-      ['laptop']: '(min-width: 1240px)',
-      ['desktop']: '(min-width: 1440px)',
-    };
-    this.breakpoints$ = this.observer.observe(Object.values(this.config)).pipe(
-      map((state) => this.parseState(state)),
-      shareReplay(1),
-    );
+  observeBreakpoints(config: BreakpointConfig): Observable<BreakpointMap> {
+    return this.observer
+      .observe(Object.values(config))
+      .pipe(map((state) => this.parseState(config, state)));
   }
 
-  private parseState(state: BreakpointState): BreakpointMap {
+  private parseState(
+    config: BreakpointConfig,
+    state: BreakpointState,
+  ): BreakpointMap {
     const map: Partial<Record<BreakpointName, boolean>> = {};
-    for (const k in this.config) {
+    for (const k in config) {
       const className = k as BreakpointName;
-      const query = this.config[className];
+      const query = config[className];
       map[className] = state.breakpoints[query];
     }
     return map as Required<typeof map>;
   }
 }
-
-export const BREAKPOINTS = new InjectionToken<Signal<BreakpointMap>>(
-  'BREAKPOINTS',
-  {
-    providedIn: 'root',
-    factory: () =>
-      toSignal(inject(BreakpointService).breakpoints$, {
-        initialValue: {
-          ['tablet-portrait']: false,
-          ['tablet-landscape']: false,
-          ['laptop']: false,
-          ['desktop']: false,
-        },
-      }),
-  },
-);
 
 export type BreakpointName =
   | 'tablet-portrait'

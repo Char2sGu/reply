@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { BREAKPOINTS } from '@/app/core/breakpoint.service';
+import { BREAKPOINTS } from '@/app/core/breakpoints.token';
 
 @Component({
   selector: 'rpl-base-foundation',
