@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { map, merge } from 'rxjs';
 
-import { BREAKPOINTS } from '../breakpoints.object';
+import { useBreakpoints } from '../breakpoint.utils';
 import {
   NotificationActionEvent,
   NotificationDismissEvent,
@@ -19,8 +19,8 @@ import {
   providedIn: 'root',
 })
 export class SnackbarNotificationService implements NotificationService {
-  private breakpoints = inject(BREAKPOINTS);
   private snackbarService = inject(MatSnackBar);
+  private breakpoints = useBreakpoints();
 
   notify(message: string, action?: string | undefined): NotificationRef {
     const snackbarRef = this.snackbarService.openFromComponent(

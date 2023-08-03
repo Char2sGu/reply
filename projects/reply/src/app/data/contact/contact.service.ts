@@ -4,6 +4,8 @@ import {
   first,
   map,
   Observable,
+  of,
+  shareReplay,
   switchMap,
   tap,
   throwError,
@@ -32,6 +34,11 @@ export class ContactService {
 
   private syncToken$ = new BehaviorSubject<string | null>(null);
 
+  readonly user$ = this.authService.authorization$.pipe(
+    switchMap((auth) => (auth ? this.backend.loadUser() : of(null))),
+    shareReplay(1),
+  );
+
   // TODO: load other pages
   loadContacts(): Observable<Contact[]> {
     const results$ = this.backend
@@ -45,10 +52,6 @@ export class ContactService {
 
   loadContact(id: Contact['id']): Observable<Contact> {
     return this.backend.loadContact(id).pipe(switchMapToRecorded(this.repo));
-  }
-
-  loadUser(): Observable<Contact | null> {
-    return this.backend.loadUser().pipe(switchMapToRecorded(this.repo));
   }
 
   searchContactsByEmail(email: string): Observable<Contact[]> {

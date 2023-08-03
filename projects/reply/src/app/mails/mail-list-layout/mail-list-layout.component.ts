@@ -19,7 +19,7 @@ import { AnimationCurves } from '@angular/material/core';
 import { map, Observable, ReplaySubject, shareReplay, switchMap } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
-import { BREAKPOINTS } from '@/app/core/breakpoints.object';
+import { useBreakpoints } from '@/app/core/breakpoint.utils';
 import {
   SystemMailboxName,
   VirtualMailboxName,
@@ -76,10 +76,9 @@ const mailCardsAnimation = animation([
   },
 })
 export class MailListLayoutComponent {
-  console = console;
-  breakpoints = inject(BREAKPOINTS);
   private mailRepo = inject(MailRepository);
 
+  breakpoints = useBreakpoints();
   navigationContext = useState(NAVIGATION_CONTEXT);
   private systemMailboxes$ = useSystemMailboxNameMapping();
 

@@ -23,10 +23,10 @@ export abstract class AuthenticationService {
   private backend = inject(AuthenticationBackend);
 
   private authorizationChange = new EventEmitter<Authorization | null>();
-
-  readonly authorization$ = this.authorizationChange
-    .asObservable()
-    .pipe(startWith(null), shareReplay(1));
+  readonly authorization$ = this.authorizationChange.pipe(
+    startWith(null),
+    shareReplay(1),
+  );
 
   requestAuthorization(hint?: string): Observable<boolean> {
     return this.backend.requestAuthorization(hint).pipe(

@@ -1,8 +1,7 @@
 import { DOCUMENT } from '@angular/common';
-import { inject, NgModule } from '@angular/core';
+import { APP_INITIALIZER, inject, NgModule } from '@angular/core';
 
 import { AuthenticationService } from '../core/auth/authentication.service';
-import { INITIALIZER, Initializer } from '../core/initialization';
 import { ContactService } from '../data/contact/contact.service';
 import { MailService } from '../data/mail/mail.service';
 import { MailboxService } from '../data/mailbox/mailbox.service';
@@ -14,8 +13,8 @@ import { DemoMailboxService } from './demo-mailbox.service';
 @NgModule({
   providers: [
     {
-      provide: INITIALIZER,
-      useFactory: (): Initializer => {
+      provide: APP_INITIALIZER,
+      useFactory: () => {
         const document = inject(DOCUMENT);
         return () => {
           const mark = document.createElement('div');

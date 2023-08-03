@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { BREAKPOINTS } from '@/app/core/breakpoints.object';
+import { useBreakpoints } from '@/app/core/breakpoint.utils';
 
 @Component({
   selector: 'rpl-base-foundation',
@@ -9,5 +9,5 @@ import { BREAKPOINTS } from '@/app/core/breakpoints.object';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaseFoundationComponent {
-  breakpoints = inject(BREAKPOINTS);
+  breakpoints = useBreakpoints();
 }

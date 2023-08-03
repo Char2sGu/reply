@@ -25,18 +25,14 @@ import {
   pairwise,
   shareReplay,
   startWith,
-  switchMap,
   timer,
 } from 'rxjs';
 
 import { usePrimaryChildRouteAnimationId } from './core/animations';
 import { AuthenticationService } from './core/auth/authentication.service';
 import { BreakpointMap } from './core/breakpoint.service';
-import { BREAKPOINTS } from './core/breakpoints.object';
-import { INITIALIZER } from './core/initialization';
-import { useWritableState } from './core/state';
-import { USER } from './core/user.state';
-import { ContactService } from './data/contact/contact.service';
+import { useBreakpoints } from './core/breakpoint.utils';
+import { APP_PREPARER } from './core/preparation';
 
 @Component({
   selector: 'rpl-root',
@@ -87,12 +83,10 @@ import { ContactService } from './data/contact/contact.service';
   },
 })
 export class AppComponent {
-  private breakpoints = inject(BREAKPOINTS);
   private router = inject(Router);
   private authService = inject(AuthenticationService);
-  private contactService = inject(ContactService);
-  private initializers = [
-    ...inject(INITIALIZER),
+  private preparers = [
+    ...inject(APP_PREPARER),
     () =>
       this.router.events.pipe(
         filter((e) => e instanceof NavigationEnd),
@@ -102,14 +96,14 @@ export class AppComponent {
   ];
 
   animationId = usePrimaryChildRouteAnimationId();
-  private user = useWritableState(USER);
+  private breakpoints = useBreakpoints();
 
   @HostBinding('class') get breakpointsClassBindings(): BreakpointMap {
     return this.breakpoints();
   }
 
-  initialized$ = merge(...this.initializers.map((i) => i() ?? of(null))).pipe(
-    bufferCount(this.initializers.length),
+  prepared$ = merge(...this.preparers.map((i) => i() ?? of(null))).pipe(
+    bufferCount(this.preparers.length),
     map(() => true),
     startWith(false),
     shareReplay(1),
@@ -125,14 +119,5 @@ export class AppComponent {
       .subscribe(() => {
         this.router.navigateByUrl('/');
       });
-
-    this.authService.authorization$
-      .pipe(
-        map(Boolean),
-        switchMap((authorized) =>
-          authorized ? this.contactService.loadUser() : of(null),
-        ),
-      )
-      .subscribe((v) => this.user.set(v));
   }
 }

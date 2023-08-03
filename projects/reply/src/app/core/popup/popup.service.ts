@@ -2,7 +2,7 @@ import { inject, Injectable, Type } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
-import { BREAKPOINTS } from '../breakpoints.object';
+import { useBreakpoints } from '../breakpoint.utils';
 import { POPUP_REF, PopupComponent, PopupRef } from './popup.core';
 import { PopupContainerComponent } from './popup-container.component';
 
@@ -12,7 +12,7 @@ import { PopupContainerComponent } from './popup-container.component';
 export abstract class PopupService {
   private dialogService = inject(MatDialog);
   private bottomSheetService = inject(MatBottomSheet);
-  private breakpoints = inject(BREAKPOINTS);
+  private breakpoints = useBreakpoints();
 
   popup<Input, Output>(
     content: Type<PopupComponent<Input, Output>>,

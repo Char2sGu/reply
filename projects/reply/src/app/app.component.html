@@ -1,6 +1,6 @@
 <router-outlet></router-outlet>
 <rpl-launch-screen
   class="launch-screen"
-  *ngIf="!(initialized$ | async)"
+  *ngIf="!(prepared$ | async)"
   @launchScreen
 ></rpl-launch-screen>

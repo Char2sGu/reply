@@ -1,7 +1,7 @@
 import 'hammerjs';
 
 import { HttpClientModule } from '@angular/common/http';
-import { inject, NgModule } from '@angular/core';
+import { APP_INITIALIZER, inject, NgModule } from '@angular/core';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
@@ -22,9 +22,10 @@ import { catchError, of } from 'rxjs';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { INITIALIZER, Initializer } from './core/initialization';
+import { BreakpointService } from './core/breakpoint.service';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { LOCAL_STORAGE } from './core/native-api.tokens';
+import { APP_PREPARER, AppPreparer } from './core/preparation';
 import { LogoComponent } from './shared/logo/logo.component';
 
 // TODO: attachment
@@ -37,6 +38,8 @@ import { LogoComponent } from './shared/logo/logo.component';
 // TODO: settings page with mailbox management
 
 // TODO: contact database
+// TODO: list all accounts in auth page and use non-prompt authentication process
+// TODO: extract sync logics from services to some "synchronizers"
 
 @NgModule({
   declarations: [AppComponent, LaunchScreenComponent],
@@ -68,14 +71,28 @@ import { LogoComponent } from './shared/logo/logo.component';
       useValue: window.localStorage,
     },
     {
-      provide: INITIALIZER,
-      useFactory: (): Initializer => {
+      provide: APP_INITIALIZER,
+      multi: true,
+      useFactory: () => {
+        const breakpointService = inject(BreakpointService);
+        return () => {
+          breakpointService.applyConfig({
+            ['tablet-portrait']: '(min-width: 600px)',
+            ['tablet-landscape']: '(min-width: 905px)',
+            ['laptop']: '(min-width: 1240px)',
+            ['desktop']: '(min-width: 1440px)',
+          });
+        };
+      },
+    },
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      useFactory: () => {
         const iconRegistry = inject(MatIconRegistry);
         const domSanitizer = inject(DomSanitizer);
         const trusted = (v: string): SafeValue =>
           domSanitizer.bypassSecurityTrustResourceUrl(v);
-        const loadAllSvgIconSets = () =>
-          iconRegistry.getNamedSvgIcon('').pipe(catchError(() => of(null)));
         return () => {
           iconRegistry.setDefaultFontSetClass();
           iconRegistry.registerFontClassAlias(
@@ -83,6 +100,16 @@ import { LogoComponent } from './shared/logo/logo.component';
             'material-icons mat-ligature-font',
           );
           iconRegistry.addSvgIconSet(trusted('assets/icons.svg'));
+        };
+      },
+    },
+    {
+      provide: APP_PREPARER,
+      useFactory: (): AppPreparer => {
+        const iconRegistry = inject(MatIconRegistry);
+        return () => {
+          const loadAllSvgIconSets = () =>
+            iconRegistry.getNamedSvgIcon('').pipe(catchError(() => of(null)));
           return loadAllSvgIconSets();
         };
       },

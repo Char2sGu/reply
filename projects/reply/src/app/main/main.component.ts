@@ -14,7 +14,7 @@ import {
   SharedAxisAnimation,
   usePrimaryChildRouteAnimationId,
 } from '../core/animations';
-import { BREAKPOINTS } from '../core/breakpoints.object';
+import { useBreakpoints } from '../core/breakpoint.utils';
 import { LAYOUT_CONTEXT } from '../core/layout-context.state';
 import { useWritableState } from '../core/state';
 
@@ -42,9 +42,9 @@ import { useWritableState } from '../core/state';
   ],
 })
 export class MainComponent {
-  private breakpoints = inject(BREAKPOINTS);
   private router = inject(Router);
 
+  private breakpoints = useBreakpoints();
   private layoutContext = useWritableState(LAYOUT_CONTEXT);
 
   animationId = usePrimaryChildRouteAnimationId();
