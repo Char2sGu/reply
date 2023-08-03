@@ -19,7 +19,7 @@ import { MainComponent } from './main.component';
 import { MainRoutingModule } from './main-routing.module';
 import { NavAvatarButtonComponent } from './nav-avatar-button/nav-avatar-button.component';
 import { NavBottomMenuComponent } from './nav-bottom-menu/nav-bottom-menu.component';
-import { NavFloatingActionButtonComponent } from './nav-floating-action-button/nav-floating-action-button.component';
+import { NavFabComponent } from './nav-fab/nav-fab.component';
 import { NavLogoButtonComponent } from './nav-logo-button/nav-logo-button.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
@@ -32,7 +32,7 @@ import { UpperFoundationComponent } from './upper-foundation/upper-foundation.co
     NavLogoButtonComponent,
     NavMenuComponent,
     NavAvatarButtonComponent,
-    NavFloatingActionButtonComponent,
+    NavFabComponent,
     NavBottomMenuComponent,
     BaseFoundationComponent,
     UpperFoundationComponent,

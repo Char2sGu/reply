@@ -36,11 +36,7 @@
   </div>
 </div>
 
-<rpl-nav-floating-action-button
-  class="fab"
-  *ngIf="!bottomMenuOpened"
-  @fab
-></rpl-nav-floating-action-button>
+<rpl-nav-fab class="fab" *ngIf="!bottomMenuOpened" @fab></rpl-nav-fab>
 
 <ng-template #bottomMenu>
   <rpl-nav-bottom-menu

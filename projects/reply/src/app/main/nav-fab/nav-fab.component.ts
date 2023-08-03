@@ -13,9 +13,9 @@ import { FadeThroughAnimation } from '../../core/animations';
 import { LAYOUT_CONTEXT } from '../../core/layout-context.state';
 
 @Component({
-  selector: 'rpl-nav-floating-action-button',
-  templateUrl: './nav-floating-action-button.component.html',
-  styleUrls: ['./nav-floating-action-button.component.scss'],
+  selector: 'rpl-nav-fab',
+  templateUrl: './nav-fab.component.html',
+  styleUrls: ['./nav-fab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('host', [
@@ -34,7 +34,7 @@ import { LAYOUT_CONTEXT } from '../../core/layout-context.state';
     ]),
   ],
 })
-export class NavFloatingActionButtonComponent {
+export class NavFabComponent {
   layoutContext = useState(LAYOUT_CONTEXT);
   @Input() @HostBinding('class.expanded') expanded = false;
 }
