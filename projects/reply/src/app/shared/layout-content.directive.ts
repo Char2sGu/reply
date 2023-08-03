@@ -2,8 +2,7 @@ import { Directive, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ScrollDirectionDirective } from '@reply/scrolling';
 
-import { LAYOUT_CONTEXT } from '../core/layout-context.state';
-import { useWritableState } from '../core/state';
+import { BottomNavService } from '../main/bottom-nav/bottom-nav.service';
 
 @Directive({
   selector: '[rplLayoutContent]',
@@ -11,16 +10,16 @@ import { useWritableState } from '../core/state';
   hostDirectives: [ScrollDirectionDirective],
 })
 export class LayoutContentDirective {
-  private layoutContext = useWritableState(LAYOUT_CONTEXT);
+  private bottomNavService = inject(BottomNavService);
   private scrollDirections = inject(ScrollDirectionDirective);
   constructor() {
     this.scrollDirections.scrollUp.pipe(takeUntilDestroyed()).subscribe(() => {
-      this.layoutContext.mutate((c) => (c.contentFavored = false));
+      this.bottomNavService.setStatus('expanded');
     });
     this.scrollDirections.scrollDown
       .pipe(takeUntilDestroyed())
       .subscribe(() => {
-        this.layoutContext.mutate((c) => (c.contentFavored = true));
+        this.bottomNavService.setStatus('collapsed');
       });
   }
 }

@@ -19,8 +19,7 @@
       *ngIf="
         bottomMenuOpened
           ? settingsButtonTemplate
-          : layoutContext().navBottomActions ??
-            searchButtonTemplate as bottomActionsTemplate
+          : actionsTemplate() ?? searchButtonTemplate as bottomActionsTemplate
       "
     >
       <div class="wrapper" [@bottomActions]="bottomActionsTemplate">

@@ -2,22 +2,24 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   inject,
   Input,
+  OnDestroy,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { timer } from 'rxjs';
+import { combineLatest, delay, first } from 'rxjs';
 
-import { LAYOUT_CONTEXT } from '@/app/core/layout-context.state';
 import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
-import { useWritableState } from '@/app/core/state';
 import { ContactRepository } from '@/app/data/contact/contact.repository';
 import { useUser } from '@/app/data/contact/contact.utils';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+import { BottomNavService } from '@/app/main/bottom-nav/bottom-nav.service';
+import { NavFabService } from '@/app/main/nav-fab/nav-fab.service';
 
 @Component({
   selector: 'rpl-mail-detail-layout',
@@ -25,13 +27,25 @@ import { Mailbox } from '@/app/data/mailbox/mailbox.model';
   styleUrls: ['./mail-detail-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MailDetailLayoutComponent implements AfterViewInit {
+export class MailDetailLayoutComponent implements AfterViewInit, OnDestroy {
   mailRepo = inject(MailRepository);
   contactRepo = inject(ContactRepository);
-  private route = inject(ActivatedRoute);
-
   user = useUser();
-  private layoutContext = useWritableState(LAYOUT_CONTEXT);
+  private route = inject(ActivatedRoute);
+  private bottomNavService = inject(BottomNavService);
+  private navFabService = inject(NavFabService);
+
+  private viewInit = new EventEmitter();
+  ngAfterViewInit(): void {
+    this.viewInit.emit();
+    this.viewInit.complete();
+  }
+
+  private destroy = new EventEmitter();
+  ngOnDestroy(): void {
+    this.destroy.emit();
+    this.destroy.complete();
+  }
 
   @Input({ required: true }) mail!: Mail;
   @Input({ required: true }) mailbox!: Mailbox | VirtualMailboxName;
@@ -42,32 +56,27 @@ export class MailDetailLayoutComponent implements AfterViewInit {
 
   @ViewChild('replyIcon')
   private navFabIconTemplate!: TemplateRef<never>;
-  private navFabConfigBackup = this.layoutContext().navFabConfig;
-
   @ViewChild('bottomActions')
   private navBottomActionsTemplate!: TemplateRef<never>;
-  private navBottomActionsBackup = this.layoutContext().navBottomActions;
 
-  ngAfterViewInit(): void {
-    timer(0).subscribe(() => {
-      this.layoutContext.mutate((c) => {
-        c.navFabConfig = {
-          text: 'Reply',
-          icon: this.navFabIconTemplate,
-          link: '/compose',
-          linkParams: { reply: this.route.snapshot.params['mailId'] },
-        };
-        c.navBottomActions = this.navBottomActionsTemplate;
+  constructor() {
+    this.viewInit.pipe(delay(0)).subscribe(() => {
+      this.bottomNavService.useActions(this.navBottomActionsTemplate);
+      this.navFabService.useConfig({
+        text: 'Reply',
+        icon: this.navFabIconTemplate,
+        link: '/compose',
+        linkParams: { reply: this.route.snapshot.params['mailId'] },
       });
     });
-  }
 
-  ngOnDestroy(): void {
-    timer(0).subscribe(() => {
-      this.layoutContext.mutate((c) => {
-        c.navFabConfig = this.navFabConfigBackup;
-        c.navBottomActions = this.navBottomActionsBackup;
-      });
+    combineLatest([
+      this.bottomNavService.actions$.pipe(first()),
+      this.navFabService.config$.pipe(first()),
+      this.destroy.pipe(delay(0)),
+    ]).subscribe(([bottomNavActionsBackup, navFabConfigBackup]) => {
+      this.bottomNavService.useActions(bottomNavActionsBackup);
+      this.navFabService.useConfig(navFabConfigBackup);
     });
   }
 }

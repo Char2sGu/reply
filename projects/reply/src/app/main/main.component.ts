@@ -3,20 +3,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  inject,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationStart, Router } from '@angular/router';
-import { filter } from 'rxjs';
 
 import {
   SharedAxisAnimation,
   usePrimaryChildRouteAnimationId,
 } from '../core/animations';
 import { useBreakpoints } from '../core/breakpoint.utils';
-import { LAYOUT_CONTEXT } from '../core/layout-context.state';
-import { useWritableState } from '../core/state';
 
 @Component({
   selector: 'rpl-main',
@@ -42,10 +36,7 @@ import { useWritableState } from '../core/state';
   ],
 })
 export class MainComponent {
-  private router = inject(Router);
-
   private breakpoints = useBreakpoints();
-  private layoutContext = useWritableState(LAYOUT_CONTEXT);
 
   animationId = usePrimaryChildRouteAnimationId();
 
@@ -53,17 +44,4 @@ export class MainComponent {
   navShouldExpand = computed(() => this.breakpoints()['laptop']);
 
   navExpanded = signal<boolean | undefined>(undefined);
-
-  constructor() {
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationStart),
-        takeUntilDestroyed(),
-      )
-      .subscribe(() => {
-        this.layoutContext.mutate((c) => {
-          c.contentFavored = false;
-        });
-      });
-  }
 }

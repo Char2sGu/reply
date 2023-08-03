@@ -3,14 +3,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  inject,
   Input,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AnimationCurves } from '@angular/material/core';
 
-import { useState } from '@/app/core/state';
-
 import { FadeThroughAnimation } from '../../core/animations';
-import { LAYOUT_CONTEXT } from '../../core/layout-context.state';
+import { NavFabService } from './nav-fab.service';
 
 @Component({
   selector: 'rpl-nav-fab',
@@ -35,6 +35,7 @@ import { LAYOUT_CONTEXT } from '../../core/layout-context.state';
   ],
 })
 export class NavFabComponent {
-  layoutContext = useState(LAYOUT_CONTEXT);
+  private service = inject(NavFabService);
+  config = toSignal(this.service.config$, { requireSync: true });
   @Input() @HostBinding('class.expanded') expanded = false;
 }

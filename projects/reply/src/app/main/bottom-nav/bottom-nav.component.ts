@@ -24,12 +24,12 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AnimationCurves } from '@angular/material/core';
 import { NavigationStart, Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs';
 
-import { LAYOUT_CONTEXT } from '@/app/core/layout-context.state';
-import { useState } from '@/app/core/state';
+import { BottomNavService, BottomNavStatus } from './bottom-nav.service';
 
 @Component({
   selector: 'rpl-bottom-nav',
@@ -74,13 +74,15 @@ import { useState } from '@/app/core/state';
 })
 export class BottomNavComponent implements OnInit, OnDestroy {
   private router = inject(Router);
+  private service = inject(BottomNavService);
   private overlayContainerRef = inject(OverlayContainer);
   private overlayManager = inject(Overlay);
   private elementRef = inject(ElementRef<HTMLElement>);
   private viewContainerRef = inject(ViewContainerRef);
   private changeDetectorRef = inject(ChangeDetectorRef);
 
-  layoutContext = useState(LAYOUT_CONTEXT);
+  actionsTemplate = toSignal(this.service.actions$, { requireSync: true });
+  status = toSignal(this.service.status$, { requireSync: true });
 
   logoClick$ = new EventEmitter();
 
@@ -92,11 +94,11 @@ export class BottomNavComponent implements OnInit, OnDestroy {
   private bottomMenuPortal!: TemplatePortal;
   @ViewChild('bottomMenu') private bottomMenuTemplate!: TemplateRef<unknown>;
 
-  @HostBinding('class.unfavored') get unfavored(): boolean {
-    return this.layoutContext().contentFavored;
-  }
-
   private destroy$ = new EventEmitter();
+
+  @HostBinding('attr.data-status') get statusAttrBinding(): BottomNavStatus {
+    return this.status();
+  }
 
   ngOnInit(): void {
     this.logoClick$.subscribe(() => {
