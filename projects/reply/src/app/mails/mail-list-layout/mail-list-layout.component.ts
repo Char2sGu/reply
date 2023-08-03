@@ -15,6 +15,7 @@ import {
   inject,
   Input,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AnimationCurves } from '@angular/material/core';
 import { map, Observable, ReplaySubject, shareReplay, switchMap } from 'rxjs';
 
@@ -25,8 +26,7 @@ import {
   VirtualMailboxName,
 } from '@/app/core/mailbox-name.enums';
 import { useSystemMailboxNameMapping } from '@/app/core/mailbox-name.utils';
-import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.state';
-import { useState } from '@/app/core/state';
+import { NavigationService } from '@/app/core/navigation.service';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';
@@ -72,15 +72,20 @@ const mailCardsAnimation = animation([
   ],
   host: {
     ['[@host-entrance]']: '',
-    ['[@host-mailboxChange]']: 'navigationContext().latestMailboxIndex',
+    ['[@host-mailboxChange]']: 'activeNavItemIndex()',
   },
 })
 export class MailListLayoutComponent {
   private mailRepo = inject(MailRepository);
+  private navService = inject(NavigationService);
 
   breakpoints = useBreakpoints();
-  navigationContext = useState(NAVIGATION_CONTEXT);
   private systemMailboxes$ = useSystemMailboxNameMapping();
+
+  activeNavItemIndex = toSignal(
+    this.navService.activeItemIndex$, //
+    { requireSync: true },
+  );
 
   // prettier-ignore
   @Input({ required: true }) set mailbox(v: Mailbox | VirtualMailboxName) { this.mailbox$.next(v) }

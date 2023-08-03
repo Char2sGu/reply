@@ -1,10 +1,6 @@
 <ng-container *ngIf="mails$ | async as mails">
   <rpl-header ngForm class="search-bar">
-    <a
-      mat-icon-button
-      [routerLink]="navigationContext().latestMailboxUrl ?? '/'"
-      matTooltip="Back"
-    >
+    <a mat-icon-button [routerLink]="activeNavItem()?.url" matTooltip="Back">
       <mat-icon fontSet="filled" fontIcon="arrow_back"></mat-icon>
     </a>
     <input

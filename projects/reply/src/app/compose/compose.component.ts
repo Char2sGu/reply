@@ -1,14 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, combineLatest, from, map, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 
-import { NAVIGATION_CONTEXT } from '../core/navigation-context.state';
-import { useState } from '../core/state';
+import { NavigationService } from '../core/navigation.service';
 
 @Component({
   selector: 'rpl-compose',
@@ -16,9 +10,9 @@ import { useState } from '../core/state';
   styleUrls: ['./compose.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ComposeComponent implements OnInit {
+export class ComposeComponent {
   private route = inject(ActivatedRoute);
-  private navigationContext = useState(NAVIGATION_CONTEXT);
+  private navService = inject(NavigationService);
 
   subject$ = new BehaviorSubject('');
   senderEmail$ = new BehaviorSubject(0);
@@ -28,18 +22,14 @@ export class ComposeComponent implements OnInit {
     map((params) => params['reply']),
   );
 
-  backUrl$: Observable<string>;
-
-  constructor() {
-    this.backUrl$ = combineLatest([
-      this.mailId$,
-      from(this.navigationContext).pipe(map((c) => c.latestMailboxUrl)),
-    ]).pipe(
-      map(([mailId, mailboxUrl]) =>
-        mailboxUrl ? (mailId ? `${mailboxUrl}/${mailId}` : mailboxUrl) : '/',
-      ),
-    );
-  }
-
-  ngOnInit(): void {}
+  // TODO: refactor to decouple from nav item details
+  backUrl$ = combineLatest([
+    this.mailId$,
+    this.navService.activeItem$.pipe(map((i) => i?.url)),
+  ]).pipe(
+    map(([mailId, mailboxUrl]) => {
+      if (!mailboxUrl) return '/';
+      return mailId ? `${mailboxUrl}/${mailId}` : mailboxUrl;
+    }),
+  );
 }

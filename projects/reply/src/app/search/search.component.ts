@@ -1,9 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   BehaviorSubject,
   concat,
@@ -14,8 +10,7 @@ import {
   switchMap,
 } from 'rxjs';
 
-import { NAVIGATION_CONTEXT } from '../core/navigation-context.state';
-import { useState } from '../core/state';
+import { NavigationService } from '../core/navigation.service';
 import { Mail } from '../data/mail/mail.model';
 import { MailRepository } from '../data/mail/mail.repository';
 
@@ -25,28 +20,27 @@ import { MailRepository } from '../data/mail/mail.repository';
   styleUrls: ['./search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchComponent implements OnInit {
-  navigationContext = useState(NAVIGATION_CONTEXT);
+export class SearchComponent {
+  private navService = inject(NavigationService);
   private mailRepo = inject(MailRepository);
 
-  searchText$ = new BehaviorSubject('');
-  mails$!: Observable<Mail[]>;
+  activeNavItem = toSignal(this.navService.activeItem$, { requireSync: true });
 
-  ngOnInit(): void {
-    this.mails$ = concat(
-      this.searchText$.pipe(first()),
-      this.searchText$.pipe(debounceTime(200)),
-    ).pipe(
-      map((text) => text.split(' ')),
-      switchMap((keywords) =>
-        this.mailRepo.query(
-          ({ subject }) =>
-            !!subject &&
-            keywords.some((keyword) =>
-              subject.toLowerCase().includes(keyword.toLowerCase()),
-            ),
-        ),
+  searchText$ = new BehaviorSubject('');
+
+  mails$: Observable<Mail[]> = concat(
+    this.searchText$.pipe(first()),
+    this.searchText$.pipe(debounceTime(200)),
+  ).pipe(
+    map((text) => text.split(' ')),
+    switchMap((keywords) =>
+      this.mailRepo.query(
+        ({ subject }) =>
+          !!subject &&
+          keywords.some((keyword) =>
+            subject.toLowerCase().includes(keyword.toLowerCase()),
+          ),
       ),
-    );
-  }
+    ),
+  );
 }

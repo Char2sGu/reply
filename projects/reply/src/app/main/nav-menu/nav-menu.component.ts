@@ -5,15 +5,9 @@ import {
   inject,
   Input,
 } from '@angular/core';
+import { map } from 'rxjs';
 
-import {
-  SystemMailboxName,
-  VirtualMailboxName,
-} from '@/app/core/mailbox-name.enums';
-import { NAVIGATION_CONTEXT } from '@/app/core/navigation-context.state';
-import { useWritableState } from '@/app/core/state';
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
-import { MailboxRepository } from '@/app/data/mailbox/mailbox.repository';
+import { NavigationService } from '@/app/core/navigation.service';
 
 @Component({
   selector: 'rpl-nav-menu',
@@ -22,33 +16,16 @@ import { MailboxRepository } from '@/app/data/mailbox/mailbox.repository';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavMenuComponent {
-  private mailboxRepo = inject(MailboxRepository);
-  private navigationContext = useWritableState(NAVIGATION_CONTEXT);
+  private navService = inject(NavigationService);
 
   @Input() @HostBinding('class.expanded') expanded = true;
 
-  staticItems = [
-    { name: SystemMailboxName.Inbox, icon: 'inbox' },
-    { name: VirtualMailboxName.Starred, icon: 'star' },
-    { name: VirtualMailboxName.Sent, icon: 'send' },
-    { name: SystemMailboxName.Trash, icon: 'delete' },
-    { name: SystemMailboxName.Spam, icon: 'report' },
-    { name: VirtualMailboxName.Drafts, icon: 'drafts' },
-  ];
+  items$ = this.navService.items$;
 
-  mailboxes$ = this.mailboxRepo.query(
-    (e) =>
-      !Object.values(SystemMailboxName).includes(e.name as SystemMailboxName),
+  itemsWithIcons$ = this.navService.items$.pipe(
+    map((items) => items.flatMap((i) => (i.icon ? i : []))),
   );
-
-  onItemActive(name: Mailbox['name'], index: number): void {
-    this.navigationContext.mutate((c) => {
-      c.latestMailboxUrl = this.getMailboxUrl(name);
-      c.latestMailboxIndex = index;
-    });
-  }
-
-  getMailboxUrl(name: Mailbox['name']): string {
-    return `/mailboxes/${name}/mails`;
-  }
+  itemsWithoutIcons$ = this.navService.items$.pipe(
+    map((items) => items.flatMap((i) => (i.icon ? [] : i))),
+  );
 }
