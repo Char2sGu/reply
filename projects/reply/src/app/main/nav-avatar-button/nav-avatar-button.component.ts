@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { useUser } from '@/app/data/contact/contact.utils';
+import { useUser } from '@/app/core/session.utils';
 
 @Component({
   selector: 'rpl-nav-avatar-button',

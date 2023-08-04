@@ -10,7 +10,7 @@ import {
 import { LOCAL_STORAGE } from './native-api.tokens';
 
 @Injectable()
-export abstract class PersistentValue<T>
+export abstract class PersistentValueAccessor<T>
   implements InteropObservable<T | null>
 {
   protected storage = inject(LOCAL_STORAGE);

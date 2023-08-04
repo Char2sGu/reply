@@ -4,14 +4,11 @@ import {
   first,
   map,
   Observable,
-  of,
-  shareReplay,
   switchMap,
   tap,
   throwError,
 } from 'rxjs';
 
-import { AuthenticationService } from '@/app/core/auth/authentication.service';
 import { Exception } from '@/app/core/exceptions';
 
 import { BackendSyncApplier } from '../core/backend-sync-applier.service';
@@ -29,15 +26,9 @@ import { ContactRepository } from './contact.repository';
 export class ContactService {
   private backend = inject(ContactBackend);
   private repo = inject(ContactRepository);
-  private authService = inject(AuthenticationService);
   private syncApplier = inject(BackendSyncApplier);
 
   private syncToken$ = new BehaviorSubject<string | null>(null);
-
-  readonly user$ = this.authService.authorization$.pipe(
-    switchMap((auth) => (auth ? this.backend.loadUser() : of(null))),
-    shareReplay(1),
-  );
 
   // TODO: load other pages
   loadContacts(): Observable<Contact[]> {
@@ -52,6 +43,10 @@ export class ContactService {
 
   loadContact(id: Contact['id']): Observable<Contact> {
     return this.backend.loadContact(id).pipe(switchMapToRecorded(this.repo));
+  }
+
+  loadUser(): Observable<Contact> {
+    return this.backend.loadUser().pipe(switchMapToRecorded(this.repo));
   }
 
   searchContactsByEmail(email: string): Observable<Contact[]> {

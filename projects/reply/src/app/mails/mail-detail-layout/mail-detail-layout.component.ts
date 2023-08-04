@@ -13,8 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest, delay, first } from 'rxjs';
 
 import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
+import { useUser } from '@/app/core/session.utils';
 import { ContactRepository } from '@/app/data/contact/contact.repository';
-import { useUser } from '@/app/data/contact/contact.utils';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';
