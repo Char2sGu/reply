@@ -51,15 +51,15 @@ export class GoogleContactBackend implements ContactBackend {
         resourceName: 'people/me',
         personFields: PERSON_FIELDS,
         sources: CONTACT_SOURCES,
-      }).pipe(map((response) => response.result.connections ?? [])),
+      }).pipe(map((response) => response.connections ?? [])),
       this.otherContactListApi({
         readMask: PERSON_FIELDS,
-      }).pipe(map((response) => response.result.otherContacts ?? [])),
+      }).pipe(map((response) => response.otherContacts ?? [])),
       this.dirListApi({
         readMask: PERSON_FIELDS,
         sources: DIR_SOURCES,
       }).pipe(
-        map((response) => response.result.people ?? []),
+        map((response) => response.people ?? []),
         catchError(() => of([])),
       ),
     ]).pipe(
@@ -76,10 +76,7 @@ export class GoogleContactBackend implements ContactBackend {
     return this.peopleGetApi({
       resourceName: `people/${id}`,
       personFields: PERSON_FIELDS,
-    }).pipe(
-      map((response) => access(response, 'result')),
-      map((person) => this.personResolver.resolveFullPerson(person)),
-    );
+    }).pipe(map((person) => this.personResolver.resolveFullPerson(person)));
   }
 
   loadUser(): Observable<Contact> {
@@ -93,14 +90,14 @@ export class GoogleContactBackend implements ContactBackend {
         readMask: PERSON_FIELDS,
         sources: CONTACT_SOURCES,
       }).pipe(
-        map((response) => response.result.results ?? []),
+        map((response) => response.results ?? []),
         map((results) => results.flatMap((r) => (r.person ? [r.person] : []))),
       ),
       this.otherContactSearchApi({
         query: email,
         readMask: PERSON_FIELDS,
       }).pipe(
-        map((response) => response.result.results ?? []),
+        map((response) => response.results ?? []),
         map((results) => results.flatMap((r) => (r.person ? [r.person] : []))),
       ),
       this.dirSearchApi({
@@ -108,7 +105,7 @@ export class GoogleContactBackend implements ContactBackend {
         readMask: PERSON_FIELDS,
         sources: DIR_SOURCES,
       }).pipe(
-        map((response) => response.result.people ?? []),
+        map((response) => response.people ?? []),
         catchError(() => of([])),
       ),
     ]).pipe(
@@ -141,7 +138,7 @@ export class GoogleContactBackend implements ContactBackend {
       pageToken,
       fields: 'nextPageToken,nextSyncToken',
     }).pipe(
-      switchMap(({ result: { nextPageToken, nextSyncToken } }) => {
+      switchMap(({ nextPageToken, nextSyncToken }) => {
         if (nextSyncToken) return of(nextSyncToken);
         if (nextPageToken) return this.obtainContactSyncToken(nextPageToken);
         throw new ContactBackendException('Invalid response');
@@ -155,7 +152,7 @@ export class GoogleContactBackend implements ContactBackend {
       pageToken,
       fields: 'nextPageToken,nextSyncToken',
     }).pipe(
-      switchMap(({ result: { nextPageToken, nextSyncToken } }) => {
+      switchMap(({ nextPageToken, nextSyncToken }) => {
         if (nextSyncToken) return of(nextSyncToken);
         if (nextPageToken)
           return this.obtainOtherContactSyncToken(nextPageToken);
@@ -171,7 +168,7 @@ export class GoogleContactBackend implements ContactBackend {
       pageSize: 10, // The `nextSyncToken` returned will be invalid if `pageSize` is too small
       fields: 'nextSyncToken',
     }).pipe(
-      map((response) => access(response.result, 'nextSyncToken')),
+      map((response) => access(response, 'nextSyncToken')),
       catchError(() => of(null)),
     );
   }
@@ -186,22 +183,19 @@ export class GoogleContactBackend implements ContactBackend {
         sources: CONTACT_SOURCES,
         syncToken: syncTokens.contactSyncToken,
         requestSyncToken: true,
-      }).pipe(map((r) => r.result)),
+      }),
       this.otherContactListApi({
         readMask: personFields,
         syncToken: syncTokens.otherContactSyncToken,
         requestSyncToken: true,
-      }).pipe(map((r) => r.result)),
+      }),
       syncTokens.directorySyncToken
         ? this.dirListApi({
             readMask: personFields,
             sources: DIR_SOURCES,
             syncToken: syncTokens.directorySyncToken,
             requestSyncToken: true,
-          }).pipe(
-            map((r) => r.result),
-            catchError(() => of(null)),
-          )
+          }).pipe(catchError(() => of(null)))
         : of(null),
     ]).pipe(
       map(([contactResponse, otherContactResponse, directoryResponse]) => ({

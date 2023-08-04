@@ -15,7 +15,7 @@ export class GoogleMailboxBackend implements MailboxBackend {
 
   loadMailboxes(): Observable<Mailbox[]> {
     return this.labelListApi({ userId: 'me' }).pipe(
-      map((response) => access(response.result, 'labels')),
+      map((response) => access(response, 'labels')),
       map((labels) => this.parseLabels(labels)),
       map((mailboxes) => [...this.systemMailboxes, ...mailboxes]),
     );

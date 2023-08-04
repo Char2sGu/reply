@@ -33,7 +33,7 @@ export class GoogleMailBackend implements MailBackend {
       includeSpamTrash: true,
     }).pipe(
       switchMap((response) => {
-        const messages = response.result.messages ?? [];
+        const messages = response.messages ?? [];
         const mails$ = combineLatest(
           messages.map((m) => this.loadMail(access(m, 'id'))),
         );
@@ -41,7 +41,7 @@ export class GoogleMailBackend implements MailBackend {
           map(
             (mails): Page<Mail> => ({
               results: mails,
-              nextPageToken: response.result.nextPageToken,
+              nextPageToken: response.nextPageToken,
             }),
           ),
         );
@@ -51,7 +51,6 @@ export class GoogleMailBackend implements MailBackend {
 
   loadMail(id: Mail['id']): Observable<Mail> {
     return this.messageGetApi({ userId: 'me', id }).pipe(
-      map((response) => response.result),
       map((msg) => this.messageResolver.resolveFullMessage(msg)),
     );
   }
@@ -62,12 +61,12 @@ export class GoogleMailBackend implements MailBackend {
       maxResults: 1,
       includeSpamTrash: true,
     }).pipe(
-      map((response) => response.result.messages ?? []),
+      map((response) => response.messages ?? []),
       map((m) => access(m[0], 'id')),
       switchMap((id) =>
         this.messageGetApi({ userId: 'me', id, fields: 'historyId' }),
       ),
-      map((response) => access(response.result, 'historyId')),
+      map((response) => access(response, 'historyId')),
     );
   }
 
@@ -107,7 +106,6 @@ export class GoogleMailBackend implements MailBackend {
     body: gapi.client.gmail.ModifyMessageRequest,
   ): Observable<Mail> {
     return this.messageModifyApi({ userId: 'me', id: mail.id }, body).pipe(
-      map((response) => response.result),
       map((msg) => this.messageResolver.resolveMessage(msg)),
       map((updates) => Object.assign(mail, updates)),
     );
@@ -123,17 +121,17 @@ export class GoogleMailBackend implements MailBackend {
       pageToken: startPageToken,
     }).pipe(
       switchMap((response) => {
-        const histories = response.result.history ?? [];
+        const histories = response.history ?? [];
         const changes = histories.map((h) => this.resolveHistory(h));
-        const syncToken = access(response.result, 'historyId');
+        const syncToken = access(response, 'historyId');
         const result$ = changes.length
           ? combineLatest(changes).pipe(
               map((changes) => ({ changes: changes.flat(), syncToken })),
               switchMap((result) => {
-                if (!response.result.nextPageToken) return of(result);
+                if (!response.nextPageToken) return of(result);
                 return this.loadHistoryPages(
                   startHistoryId,
-                  response.result.nextPageToken,
+                  response.nextPageToken,
                 ).pipe(
                   map((nextPagesResult) => ({
                     changes: [...result.changes, ...nextPagesResult.changes],
