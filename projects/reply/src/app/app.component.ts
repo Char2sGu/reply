@@ -110,9 +110,8 @@ export class AppComponent {
   );
 
   constructor() {
-    this.authService.authorization$
+    this.authService.authorized$
       .pipe(
-        map(Boolean),
         pairwise(),
         map((pair) => pair[0] !== pair[1]),
       )

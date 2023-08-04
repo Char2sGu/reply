@@ -11,7 +11,7 @@ import {
 } from 'rxjs';
 
 import { AuthenticationBackend } from '../core/auth/authentication.backend';
-import { Authorization } from '../core/auth/authorization.model';
+import { Authorization } from '../core/auth/authorization.service';
 import { includeThenableInZone } from '../core/zone.utils';
 import { GOOGLE_APIS } from './core/google-apis.object';
 import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';

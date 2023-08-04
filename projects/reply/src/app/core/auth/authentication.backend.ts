@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Authorization } from './authorization.model';
+import { Authorization } from './authorization.service';
 
 @Injectable()
 export abstract class AuthenticationBackend {

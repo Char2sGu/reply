@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { useUser } from '@/app/core/session.utils';
+import { useUser } from '@/app/core/auth/authentication.utils';
 
 @Component({
   selector: 'rpl-nav-avatar-button',

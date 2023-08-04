@@ -12,9 +12,9 @@ import { map } from 'rxjs';
 import { AuthenticationService } from './core/auth/authentication.service';
 
 const authorized: CanMatchFn = () =>
-  inject(AuthenticationService).authorization$.pipe(map((a) => !!a));
+  inject(AuthenticationService).authorized$.pipe(map((a) => !!a));
 const unauthorized: CanMatchFn = () =>
-  inject(AuthenticationService).authorization$.pipe(map((a) => !a));
+  inject(AuthenticationService).authorized$.pipe(map((a) => !a));
 
 const routes: Routes = [
   {
