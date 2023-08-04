@@ -83,39 +83,6 @@ export class GoogleContactBackend implements ContactBackend {
     return this.loadContact('me');
   }
 
-  searchContactsByEmail(email: string): Observable<Contact[]> {
-    return combineLatest([
-      this.contactSearchApi({
-        query: email,
-        readMask: PERSON_FIELDS,
-        sources: CONTACT_SOURCES,
-      }).pipe(
-        map((response) => response.results ?? []),
-        map((results) => results.flatMap((r) => (r.person ? [r.person] : []))),
-      ),
-      this.otherContactSearchApi({
-        query: email,
-        readMask: PERSON_FIELDS,
-      }).pipe(
-        map((response) => response.results ?? []),
-        map((results) => results.flatMap((r) => (r.person ? [r.person] : []))),
-      ),
-      this.dirSearchApi({
-        query: email,
-        readMask: PERSON_FIELDS,
-        sources: DIR_SOURCES,
-      }).pipe(
-        map((response) => response.people ?? []),
-        catchError(() => of([])),
-      ),
-    ]).pipe(
-      map((results) => results.flat()),
-      map((results) =>
-        results.map((p) => this.personResolver.resolveFullPerson(p)),
-      ),
-    );
-  }
-
   obtainSyncToken(): Observable<string> {
     return combineLatest([
       this.obtainContactSyncToken(),

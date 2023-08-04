@@ -9,7 +9,7 @@ import { MailboxRepository } from './mailbox.repository';
 @Injectable({
   providedIn: 'root',
 })
-export class MailboxService {
+export class MailboxConductor {
   private backend = inject(MailboxBackend);
   private repo = inject(MailboxRepository);
 

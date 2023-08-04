@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of, shareReplay, switchMap } from 'rxjs';
 
-import { ContactService } from '@/app/data/contact/contact.service';
+import { ContactConductor } from '@/app/data/contact/contact.conductor';
 
 import { AuthenticationBackend } from './authentication.backend';
 import { AuthorizationService } from './authorization.service';
@@ -12,12 +12,12 @@ import { AuthorizationService } from './authorization.service';
 export abstract class AuthenticationService {
   private backend = inject(AuthenticationBackend);
   private authService = inject(AuthorizationService);
-  private contactService = inject(ContactService);
+  private contactConductor = inject(ContactConductor);
 
   readonly authorized$ = this.authService.authorization$.pipe(map(Boolean));
 
   readonly user$ = this.authService.authorization$.pipe(
-    switchMap((auth) => (auth ? this.contactService.loadUser() : of(null))),
+    switchMap((auth) => (auth ? this.contactConductor.loadUser() : of(null))),
     shareReplay(1),
   );
 

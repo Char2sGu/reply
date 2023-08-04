@@ -2,9 +2,9 @@ import { DOCUMENT } from '@angular/common';
 import { APP_INITIALIZER, inject, NgModule } from '@angular/core';
 
 import { AuthenticationService } from '../core/auth/authentication.service';
-import { ContactService } from '../data/contact/contact.service';
-import { MailService } from '../data/mail/mail.service';
-import { MailboxService } from '../data/mailbox/mailbox.service';
+import { ContactConductor } from '../data/contact/contact.conductor';
+import { MailConductor } from '../data/mail/mail.conductor';
+import { MailboxConductor } from '../data/mailbox/mailbox.conductor';
 import { DemoAuthenticationService } from './demo-authentication.service';
 import { DemoContactService } from './demo-contact.service';
 import { DemoMailService } from './demo-mail.service';
@@ -38,15 +38,15 @@ import { DemoMailboxService } from './demo-mailbox.service';
       useClass: DemoAuthenticationService,
     },
     {
-      provide: ContactService,
+      provide: ContactConductor,
       useClass: DemoContactService,
     },
     {
-      provide: MailboxService,
+      provide: MailboxConductor,
       useClass: DemoMailboxService,
     },
     {
-      provide: MailService,
+      provide: MailConductor,
       useClass: DemoMailService,
     },
   ],

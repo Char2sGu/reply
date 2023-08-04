@@ -3,27 +3,27 @@ import { CanActivateFn, RouterModule, Routes } from '@angular/router';
 import { combineLatest, filter, firstValueFrom } from 'rxjs';
 
 import { AuthenticationService } from '../core/auth/authentication.service';
-import { ContactService } from '../data/contact/contact.service';
-import { MailService } from '../data/mail/mail.service';
-import { MailboxService } from '../data/mailbox/mailbox.service';
+import { ContactConductor } from '../data/contact/contact.conductor';
+import { MailConductor } from '../data/mail/mail.conductor';
+import { MailboxConductor } from '../data/mailbox/mailbox.conductor';
 import { BaseFoundationComponent } from './base-foundation/base-foundation.component';
 import { MainComponent } from './main.component';
 import { UpperFoundationComponent } from './upper-foundation/upper-foundation.component';
 
 const dataInitializer: CanActivateFn = async () => {
   const authService = inject(AuthenticationService);
-  const contactService = inject(ContactService);
-  const mailboxService = inject(MailboxService);
-  const mailService = inject(MailService);
+  const contactConductor = inject(ContactConductor);
+  const mailboxConductor = inject(MailboxConductor);
+  const mailConductor = inject(MailConductor);
 
   await firstValueFrom(authService.user$.pipe(filter(Boolean)));
   await firstValueFrom(
     combineLatest([
-      mailboxService.loadMailboxes(),
-      contactService.loadContacts(),
+      mailboxConductor.loadMailboxes(),
+      contactConductor.loadContacts(),
     ]),
   );
-  await firstValueFrom(mailService.loadMails());
+  await firstValueFrom(mailConductor.loadMails());
 
   return true;
 };

@@ -25,7 +25,7 @@ import { MailRepository } from './mail.repository';
 @Injectable({
   providedIn: 'root',
 })
-export class MailService {
+export class MailConductor {
   private backend = inject(MailBackend);
   private repo = inject(MailRepository);
   private syncApplier = inject(BackendSyncApplier);

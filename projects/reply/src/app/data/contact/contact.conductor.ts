@@ -23,7 +23,7 @@ import { ContactRepository } from './contact.repository';
 @Injectable({
   providedIn: 'root',
 })
-export class ContactService {
+export class ContactConductor {
   private backend = inject(ContactBackend);
   private repo = inject(ContactRepository);
   private syncApplier = inject(BackendSyncApplier);
@@ -47,12 +47,6 @@ export class ContactService {
 
   loadUser(): Observable<Contact> {
     return this.backend.loadUser().pipe(switchMapToRecorded(this.repo));
-  }
-
-  searchContactsByEmail(email: string): Observable<Contact[]> {
-    return this.backend
-      .searchContactsByEmail(email)
-      .pipe(switchMapToAllRecorded(this.repo));
   }
 
   syncContacts(): Observable<void> {

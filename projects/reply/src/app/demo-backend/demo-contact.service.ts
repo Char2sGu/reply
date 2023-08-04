@@ -1,16 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { combineLatest, from, Observable, throwError } from 'rxjs';
 
+import {
+  ContactConductor,
+  ContactServiceException,
+} from '../data/contact/contact.conductor';
 import { Contact } from '../data/contact/contact.model';
 import { ContactRepository } from '../data/contact/contact.repository';
-import {
-  ContactService,
-  ContactServiceException,
-} from '../data/contact/contact.service';
 import { DEMO_CONTACTS } from './core/contact/demo-contacts.object';
 
 @Injectable()
-export class DemoContactService implements ContactService {
+export class DemoContactService implements ContactConductor {
   private contacts = inject(DEMO_CONTACTS);
   private contactRepo = inject(ContactRepository);
 

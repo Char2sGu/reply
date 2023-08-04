@@ -15,9 +15,9 @@ import {
 import { ActionFlow, useActionFlow } from '@/app/core/action-flow';
 import { NotificationService } from '@/app/core/notification/notification.service';
 import { PopupService } from '@/app/core/popup/popup.service';
+import { MailConductor } from '@/app/data/mail/mail.conductor';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';
-import { MailService } from '@/app/data/mail/mail.service';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';
 import { MailboxRepository } from '@/app/data/mailbox/mailbox.repository';
 
@@ -27,13 +27,13 @@ import { MailboxSelectionPopupComponent } from './mailbox-selection-popup/mailbo
   providedIn: 'root',
 })
 export class ToggleMailStarredStatusActionFlow implements ActionFlow {
-  private mailService = inject(MailService);
+  private mailConductor = inject(MailConductor);
   private notifier = inject(NotificationService);
 
   execute(payload: { mail: Mail }): Observable<void> {
     const action$ = payload.mail.isStarred
-      ? this.mailService.markMailAsNotStarred(payload.mail)
-      : this.mailService.markMailAsStarred(payload.mail);
+      ? this.mailConductor.markMailAsNotStarred(payload.mail)
+      : this.mailConductor.markMailAsStarred(payload.mail);
     return action$.pipe(
       catchError((err, caught) =>
         this.notifier
@@ -51,7 +51,7 @@ export class ToggleMailStarredStatusActionFlow implements ActionFlow {
   providedIn: 'root',
 })
 export class ToggleMailReadStatusActionFlow implements ActionFlow {
-  private mailService = inject(MailService);
+  private mailConductor = inject(MailConductor);
   private notifier = inject(NotificationService);
 
   execute(payload: { mail: Mail; to?: 'read' | 'unread' }): Observable<void> {
@@ -59,8 +59,8 @@ export class ToggleMailReadStatusActionFlow implements ActionFlow {
       payload.to ?? (payload.mail.isRead ? 'unread' : 'read');
     const action$ =
       targetStatus === 'read'
-        ? this.mailService.markMailAsRead(payload.mail)
-        : this.mailService.markMailAsUnread(payload.mail);
+        ? this.mailConductor.markMailAsRead(payload.mail)
+        : this.mailConductor.markMailAsUnread(payload.mail);
     return action$.pipe(
       catchError((err, caught) =>
         this.notifier
@@ -102,7 +102,7 @@ export class MoveMailActionFlow implements ActionFlow {
 export class MoveMailToMailboxActionFlow implements ActionFlow {
   private mailRepo = inject(MailRepository);
   private mailboxRepo = inject(MailboxRepository);
-  private mailService = inject(MailService);
+  private mailConductor = inject(MailConductor);
   private notifier = inject(NotificationService);
 
   execute(payload: { mail: Mail; mailbox: Mailbox | null }): Observable<void> {
@@ -117,7 +117,7 @@ export class MoveMailToMailboxActionFlow implements ActionFlow {
       filter((e) => e.type === 'action'),
     );
     return merge(
-      this.mailService.moveMail(payload.mail, payload.mailbox).pipe(
+      this.mailConductor.moveMail(payload.mail, payload.mailbox).pipe(
         catchError((err, caught) =>
           currentMailbox$.pipe(
             map((m) => this.generateErrorMessage(m, payload.mailbox)),
@@ -161,12 +161,12 @@ export class MoveMailToMailboxActionFlow implements ActionFlow {
   providedIn: 'root',
 })
 export class DeleteMailActionFlow implements ActionFlow {
-  private mailService = inject(MailService);
+  private mailConductor = inject(MailConductor);
   private notifier = inject(NotificationService);
 
   execute(payload: { mail: Mail }): Observable<void> {
     this.notifier.notify('Mail deleted permanently');
-    return this.mailService.deleteMail(payload.mail).pipe(
+    return this.mailConductor.deleteMail(payload.mail).pipe(
       catchError((err, caught) =>
         this.notifier.notify('Failed to delete mail', 'Retry').event$.pipe(
           filter((e) => e.type === 'action'),
