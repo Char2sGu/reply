@@ -19,6 +19,7 @@ export class DemoContactFactory implements DemoEntityFactory {
       name: payload.name,
       email: payload.email ?? this.generateEmail(payload.name),
       avatarUrl: payload.avatarUrl,
+      type: 'user',
     };
   }
 

@@ -1,14 +1,14 @@
 import { DOCUMENT } from '@angular/common';
 import { APP_INITIALIZER, inject, NgModule } from '@angular/core';
 
-import { AuthenticationService } from '../core/auth/authentication.service';
-import { ContactConductor } from '../data/contact/contact.conductor';
-import { MailConductor } from '../data/mail/mail.conductor';
-import { MailboxConductor } from '../data/mailbox/mailbox.conductor';
-import { DemoAuthenticationService } from './demo-authentication.service';
-import { DemoContactService } from './demo-contact.service';
-import { DemoMailService } from './demo-mail.service';
-import { DemoMailboxService } from './demo-mailbox.service';
+import { AuthenticationBackend } from '../core/auth/authentication.backend';
+import { ContactBackend } from '../data/contact/contact.backend';
+import { MailBackend } from '../data/mail/mail.backend';
+import { MailboxBackend } from '../data/mailbox/mailbox.backend';
+import { DemoAuthenticationBackend } from './demo-authentication.backend';
+import { DemoContactBackend } from './demo-contact.backend';
+import { DemoMailBackend } from './demo-mail.backend';
+import { DemoMailboxBackend } from './demo-mailbox.backend';
 
 @NgModule({
   providers: [
@@ -34,20 +34,20 @@ import { DemoMailboxService } from './demo-mailbox.service';
       multi: true,
     },
     {
-      provide: AuthenticationService,
-      useClass: DemoAuthenticationService,
+      provide: AuthenticationBackend,
+      useClass: DemoAuthenticationBackend,
     },
     {
-      provide: ContactConductor,
-      useClass: DemoContactService,
+      provide: ContactBackend,
+      useClass: DemoContactBackend,
     },
     {
-      provide: MailboxConductor,
-      useClass: DemoMailboxService,
+      provide: MailboxBackend,
+      useClass: DemoMailboxBackend,
     },
     {
-      provide: MailConductor,
-      useClass: DemoMailService,
+      provide: MailBackend,
+      useClass: DemoMailBackend,
     },
   ],
 })
