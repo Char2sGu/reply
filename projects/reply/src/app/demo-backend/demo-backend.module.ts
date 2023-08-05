@@ -5,10 +5,10 @@ import { AuthenticationBackend } from '../core/auth/authentication.backend';
 import { ContactBackend } from '../data/contact/contact.backend';
 import { MailBackend } from '../data/mail/mail.backend';
 import { MailboxBackend } from '../data/mailbox/mailbox.backend';
-import { DemoAuthenticationBackend } from './demo-authentication.backend';
-import { DemoContactBackend } from './demo-contact.backend';
-import { DemoMailBackend } from './demo-mail.backend';
-import { DemoMailboxBackend } from './demo-mailbox.backend';
+import { DemoAuthenticationBackend } from './auth/demo-authentication.backend';
+import { DemoContactBackend } from './contact/demo-contact.backend';
+import { DemoMailBackend } from './mail/demo-mail.backend';
+import { DemoMailboxBackend } from './mailbox/demo-mailbox.backend';
 
 @NgModule({
   providers: [

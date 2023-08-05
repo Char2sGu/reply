@@ -1,11 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 
-import { Page, SyncResult } from '../data/core/backend.models';
-import { MailBackend, MailBackendException } from '../data/mail/mail.backend';
-import { Mail } from '../data/mail/mail.model';
-import { Mailbox } from '../data/mailbox/mailbox.model';
-import { DEMO_MAILS } from './core/mail/demo-mails.object';
+import { Page, SyncResult } from '@/app/data/core/backend.models';
+import {
+  MailBackend,
+  MailBackendException,
+} from '@/app/data/mail/mail.backend';
+import { Mail } from '@/app/data/mail/mail.model';
+import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+
+import { DEMO_MAILS } from './demo-mails.object';
 
 const SYNC_TOKEN = '<mail-sync-token>';
 

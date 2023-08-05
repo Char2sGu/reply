@@ -4,10 +4,11 @@ import { map, Observable, of } from 'rxjs';
 import {
   ContactBackend,
   ContactBackendException,
-} from '../data/contact/contact.backend';
-import { Contact } from '../data/contact/contact.model';
-import { SyncResult } from '../data/core/backend.models';
-import { DEMO_CONTACTS } from './core/contact/demo-contacts.object';
+} from '@/app/data/contact/contact.backend';
+import { Contact } from '@/app/data/contact/contact.model';
+import { SyncResult } from '@/app/data/core/backend.models';
+
+import { DEMO_CONTACTS } from './demo-contacts.object';
 
 const SYNC_TOKEN = '<contact-sync-token>';
 

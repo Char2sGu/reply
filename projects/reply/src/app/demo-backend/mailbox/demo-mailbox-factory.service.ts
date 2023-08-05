@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';
 
-import { DemoEntityFactory } from '../demo-entity-factory';
+import { DemoEntityFactory } from '../core/demo-entity-factory';
 
 @Injectable({
   providedIn: 'root',
