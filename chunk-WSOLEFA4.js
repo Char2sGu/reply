@@ -1,0 +1,1 @@
+import{S as o,gd as s}from"./chunk-GLFUZ6DN.js";var a=(()=>{let e=class{},r=e;return(()=>{e.\u0275fac=function(n){return new(n||e)}})(),(()=>{e.\u0275prov=o({token:e,factory:e.\u0275fac})})(),r})(),t=class extends s{},f=class extends t{};export{a,f as b};
