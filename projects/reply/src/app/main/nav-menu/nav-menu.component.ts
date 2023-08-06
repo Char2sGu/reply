@@ -1,11 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   HostBinding,
   inject,
   Input,
 } from '@angular/core';
-import { map } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { NavigationService } from '@/app/core/navigation.service';
 
@@ -20,12 +21,13 @@ export class NavMenuComponent {
 
   @Input() @HostBinding('class.expanded') expanded = true;
 
-  items$ = this.navService.items$;
+  items = toSignal(this.navService.items$, { requireSync: true });
+  activeItem = toSignal(this.navService.activeItem$, { requireSync: true });
 
-  itemsWithIcons$ = this.navService.items$.pipe(
-    map((items) => items.flatMap((i) => (i.icon ? i : []))),
+  itemsWithIcons = computed(() =>
+    this.items().flatMap((i) => (i.icon ? i : [])),
   );
-  itemsWithoutIcons$ = this.navService.items$.pipe(
-    map((items) => items.flatMap((i) => (i.icon ? [] : i))),
+  itemsWithoutIcons = computed(() =>
+    this.items().flatMap((i) => (i.icon ? [] : i)),
   );
 }

@@ -57,7 +57,7 @@ export class NavigationService {
 
   readonly activeItem$ = this.activeItemIndex$.pipe(
     switchMap((i) => {
-      if (!i) return of(null);
+      if (i === null) return of(null);
       return this.items$.pipe(map((items) => items[i]));
     }),
     shareReplay(1),
