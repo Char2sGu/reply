@@ -4,5 +4,5 @@ export interface Account {
   id: string;
   profile: Contact['id'];
   authorizedAt: Date;
-  // TODO: field `revokedAt`
+  revokedAt?: Date;
 }

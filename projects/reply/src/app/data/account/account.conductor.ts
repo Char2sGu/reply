@@ -40,6 +40,14 @@ export class AccountConductor {
     );
   }
 
+  revokeAccount(account: Account): Observable<Account> {
+    return of(null).pipe(
+      map((): Account => ({ ...account, revokedAt: new Date() })),
+      tap((account) => this.resource.patch(account.id, account)),
+      switchMapToRecorded(this.repo),
+    );
+  }
+
   deleteAccount(account: Account): Observable<void> {
     return of(null).pipe(
       tap(() => {
