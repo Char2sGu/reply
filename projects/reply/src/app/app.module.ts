@@ -26,6 +26,7 @@ import { BreakpointService } from './core/breakpoint.service';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { LOCAL_STORAGE } from './core/native-api.tokens';
 import { APP_PREPARER, AppPreparer } from './core/preparation';
+import { AccountConductor } from './data/account/account.conductor';
 import { LogoComponent } from './shared/logo/logo.component';
 
 // TODO: attachment
@@ -105,6 +106,7 @@ import { LogoComponent } from './shared/logo/logo.component';
     },
     {
       provide: APP_PREPARER,
+      multi: true,
       useFactory: (): AppPreparer => {
         const iconRegistry = inject(MatIconRegistry);
         return () => {
@@ -113,7 +115,14 @@ import { LogoComponent } from './shared/logo/logo.component';
           return loadAllSvgIconSets();
         };
       },
+    },
+    {
+      provide: APP_PREPARER,
       multi: true,
+      useFactory: (): AppPreparer => {
+        const accountConductor = inject(AccountConductor);
+        return () => accountConductor.loadAccounts();
+      },
     },
   ],
   bootstrap: [AppComponent],

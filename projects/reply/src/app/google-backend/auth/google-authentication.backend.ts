@@ -39,6 +39,7 @@ export class GoogleAuthenticationBackend implements AuthenticationBackend {
       apis.oauth2.initTokenClient({
         ['client_id']: this.clientId,
         ['scope']: SCOPES.join(' '),
+        ['prompt']: '',
         ['callback']: (response) => this.tokenClientRespond.next(response),
         ['error_callback']: (error) => this.tokenClientError.next(error),
       }),

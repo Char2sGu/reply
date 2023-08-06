@@ -33,7 +33,7 @@
         mat-flat-button
         color="accent"
         [disabled]="!checked || (loading$ | async)"
-        (click)="onButtonClick()"
+        (click)="buttonClick.emit()"
       >
         Continue
       </button>
