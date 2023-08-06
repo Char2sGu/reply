@@ -16,7 +16,12 @@ const dataInitializer: CanActivateFn = async () => {
   const mailboxConductor = inject(MailboxConductor);
   const mailConductor = inject(MailConductor);
 
-  await firstValueFrom(authService.user$.pipe(filter(Boolean)));
+  await firstValueFrom(
+    combineLatest([
+      authService.user$.pipe(filter(Boolean)),
+      authService.account$.pipe(filter(Boolean)),
+    ]),
+  );
   await firstValueFrom(
     combineLatest([
       mailboxConductor.loadMailboxes(),
