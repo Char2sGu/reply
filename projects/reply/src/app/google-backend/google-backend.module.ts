@@ -5,12 +5,12 @@ import { APP_PREPARER, AppPreparer } from '../core/preparation';
 import { ContactBackend } from '../data/contact/contact.backend';
 import { MailBackend } from '../data/mail/mail.backend';
 import { MailboxBackend } from '../data/mailbox/mailbox.backend';
+import { GoogleAuthenticationBackend } from './auth/google-authentication.backend';
+import { GoogleContactBackend } from './contact/google-contact.backend';
 import { GOOGLE_APIS } from './core/google-apis.object';
 import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';
-import { GoogleAuthenticationBackend } from './google-authentication.backend';
-import { GoogleContactBackend } from './google-contact.backend';
-import { GoogleMailBackend } from './google-mail.backend';
-import { GoogleMailboxBackend } from './google-mailbox.backend';
+import { GoogleMailBackend } from './mail/google-mail.backend';
+import { GoogleMailboxBackend } from './mailbox/google-mailbox.backend';
 
 @NgModule({
   providers: [

@@ -8,13 +8,13 @@ import {
   switchMap,
 } from 'rxjs';
 
-import { access } from '../core/property-path.utils';
-import { Page, SyncChange, SyncResult } from '../data/core/backend.models';
-import { MailBackend } from '../data/mail/mail.backend';
-import { Mail } from '../data/mail/mail.model';
-import { Mailbox } from '../data/mailbox/mailbox.model';
-import { GmailMessageResolver } from './core/gmail-message-resolver.service';
-import { useGoogleApi } from './core/google-apis.utils';
+import { access } from '../../core/property-path.utils';
+import { Page, SyncChange, SyncResult } from '../../data/core/backend.models';
+import { MailBackend } from '../../data/mail/mail.backend';
+import { Mail } from '../../data/mail/mail.model';
+import { Mailbox } from '../../data/mailbox/mailbox.model';
+import { useGoogleApi } from '../core/google-apis.utils';
+import { GmailMessageResolver } from './gmail-message-resolver.service';
 
 @Injectable()
 export class GoogleMailBackend implements MailBackend {
