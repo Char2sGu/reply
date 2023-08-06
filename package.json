@@ -35,6 +35,7 @@
     "js-base64": "^3.7.5",
     "rxjs": "^7.8.1",
     "symbol-observable": "^4.0.0",
+    "three-dots": "^0.3.2",
     "timeago.js": "^4.0.2",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.1"

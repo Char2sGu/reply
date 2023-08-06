@@ -1,6 +1,8 @@
 @use 'sass:map' as map;
-@use '@angular/material' as mat;
 @use 'styles/theming' as theming;
+@use 'three-dots' with (
+  $dot-color: map.get(theming.$theme, 'color', 'primary', 'default-contrast')
+);
 
 :host {
   grid-row: 1;
@@ -9,17 +11,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
   padding-bottom: 8vh;
   color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
   background-color: map.get(theming.$theme, 'color', 'primary', 'default');
 }
 
 .logo {
-  width: 120px;
-}
-
-.text {
-  @include mat.typography-level(theming.$typography-config, 'headline');
-  text-transform: uppercase;
+  width: 96px;
 }
