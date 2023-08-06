@@ -13,6 +13,7 @@ import { LogoComponent } from '../shared/logo/logo.component';
 import { ReattachOnChangeDirective } from '../shared/reattach-on-change.directive';
 import { SearchButtonComponent } from '../shared/search-button/search-button.component';
 import { SettingsButtonComponent } from '../shared/settings-button/settings-button.component';
+import { TextLogoComponent } from '../shared/text-logo/text-logo.component';
 import { BaseFoundationComponent } from './base-foundation/base-foundation.component';
 import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
 import { MainComponent } from './main.component';
@@ -51,6 +52,7 @@ import { UpperFoundationComponent } from './upper-foundation/upper-foundation.co
     SearchButtonComponent,
     SettingsButtonComponent,
     LogoComponent,
+    TextLogoComponent,
     AvatarComponent,
   ],
 })

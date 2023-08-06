@@ -29,7 +29,7 @@ timeago.register(
   standalone: true,
 })
 export class DateDistancePipe implements PipeTransform {
-  transform(date: Date, ...args: unknown[]): string {
+  transform(date: Date): string {
     return timeago.format(date, LOCALE_NAME);
   }
 }

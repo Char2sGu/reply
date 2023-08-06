@@ -40,7 +40,7 @@ export class AccountResource {
     const accounts = this.list();
     const account = accounts.find((a) => a.id === payload.id);
     if (!account) return this.create(payload);
-    return this.patch(account.id, account);
+    return this.patch(account.id, payload);
   }
 
   delete(id: Account['id']): void {
@@ -60,4 +60,13 @@ export class TargetAccountNotFoundException extends AccountResourceException {}
 })
 class AccountsAccessor extends PersistentValueAccessor<Account[]> {
   readonly key = 'accounts';
+
+  protected override parse(raw: string): Account[] {
+    const items: Record<keyof Account, unknown>[] = JSON.parse(raw);
+    return items.map((item) => ({
+      id: item.id as Account['id'],
+      profile: item.profile as Account['profile'],
+      authorizedAt: new Date(item.authorizedAt as string),
+    }));
+  }
 }

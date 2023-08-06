@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  width: 288px;
+  height: 392px;
+  flex-direction: column;
+  padding: 16px 0;
+}
+
+.text {
+  flex: 1;
+  color: var(--color-on-primary-1);
+  a {
+    text-decoration: underline;
+  }
+}
+
+.action {
+  text-transform: uppercase;
+}

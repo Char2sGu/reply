@@ -7,82 +7,65 @@
   display: contents;
 }
 
-.background {
+.positioner {
   grid-row: 1;
-  grid-column: margin-left / margin-right;
-  background-color: map.get(theming.$theme, 'color', 'primary', 'default');
-}
-
-.container {
-  grid-row: 1;
-  grid-column: col-1 / col-4;
-  :host-context(.tablet-portrait) & {
-    grid-column: col-2 / col-7;
-  }
-  :host-context(.tablet-landscape) & {
-    grid-column: col-4 / col-9;
-  }
+  // grid-column: col-1 / col-4;
+  // :host-context(.tablet-portrait) & {
+  //   grid-column: col-2 / col-7;
+  // }
+  // :host-context(.tablet-landscape) & {
+  //   grid-column: col-4 / col-9;
+  // }
   :host-context(.laptop) & {
-    grid-column: col-5 / col-8;
+    grid-column: col-3 / col-10;
+  }
+  :host-context(.desktop) & {
+    grid-column: col-4 / col-9;
   }
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.content {
+.container {
   display: flex;
-  width: calc(100% - 2 * 8px);
+  height: 540px;
+  align-items: stretch;
+  background: var(--color-surface);
+}
+
+.main {
+  display: flex;
+  width: 384px;
   flex-direction: column;
   align-items: stretch;
-  gap: 16px;
-  padding: 0 8px;
-  color: map.get(theming.$theme, 'color', 'primary', 'default-contrast');
-}
+  background: var(--color-primary);
 
-.heading {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  .logo {
-    width: 48px;
-  }
-  .text {
-    margin-bottom: 8px;
-    @include mat.typography-level(theming.$typography-config, 'headline');
-    text-transform: uppercase;
-  }
-}
-
-.body {
-  a {
-    text-decoration: underline;
-  }
-  mat-checkbox:not(.mat-checkbox-disabled) ::ng-deep {
-    .mat-checkbox-frame {
-      border-color: map.get(
-        theming.$theme,
-        'color',
-        'primary',
-        'default-contrast'
-      );
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 24px;
+    color: var(--color-on-primary);
+    .logo {
+      height: 32px;
     }
   }
-  mat-checkbox.mat-checkbox-disabled ::ng-deep {
-    .mat-checkbox-label {
-      color: color.change(
-        map.get(theming.$theme, 'color', 'primary', 'default-contrast'),
-        $alpha: map.get(theming.$theme, 'opacity', 'text', 'disabled')
-      );
-    }
+
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 8px 16px;
+    overflow: hidden;
   }
 }
 
-.actions {
-  display: flex;
-  gap: 16px;
-  button {
-    text-transform: uppercase;
-  }
+.decoration {
+  flex: 1;
+  gap: 10px;
+  background-image: url(../../assets/reply-overview.png);
+  background-size: auto 100%;
+  background-repeat: no-repeat;
 }

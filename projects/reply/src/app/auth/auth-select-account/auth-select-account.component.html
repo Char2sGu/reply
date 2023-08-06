@@ -1,0 +1,31 @@
+<rpl-scrollable-area class="account-list">
+  <mat-action-list>
+    <button
+      mat-list-item
+      *ngFor="let account of accounts(); let index = index; let last = last"
+      (click)="itemButtonClick.emit(account)"
+    >
+      <mat-icon
+        matListIcon
+        fontSet="filled"
+        fontIcon="mail_outlined"
+      ></mat-icon>
+      <div matLine>{{ account.id }}</div>
+      <div matLine>
+        {{
+          index === 0
+            ? 'Last used account'
+            : (account.authorizedAt | dateDistance)
+        }}
+      </div>
+      <mat-divider class="divider" *ngIf="!last" inset></mat-divider>
+    </button>
+  </mat-action-list>
+</rpl-scrollable-area>
+<mat-action-list class="action-list">
+  <button mat-list-item (click)="addButtonClick.emit()">
+    <mat-icon matListIcon fontSet="filled" fontIcon="add"></mat-icon>
+    <div matLine>Add account</div>
+    <div matLine>Grant access to your data to Reply</div>
+  </button>
+</mat-action-list>

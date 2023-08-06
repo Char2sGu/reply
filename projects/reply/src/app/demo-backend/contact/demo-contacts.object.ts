@@ -12,8 +12,8 @@ export const DEMO_CONTACTS = new InjectionToken<Contact[]>('DEMO_CONTACTS', {
     return [
       $({
         id: '<user>',
-        name: 'Charles Gu',
-        email: 'Char2s@outlook.com',
+        name: 'Demo User',
+        email: 'demo@reply.io',
         avatarUrl: 'assets/demo/avatar-1.jpg',
       }),
       $({

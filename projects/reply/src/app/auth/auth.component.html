@@ -1,48 +1,14 @@
-<div class="background" data-route-animation-target></div>
-<div class="container" data-route-animation-target>
-  <div class="content">
-    <div class="heading">
-      <rpl-logo class="logo"></rpl-logo>
-      <span class="text">Reply</span>
+<div class="positioner">
+  <div class="container" data-route-animation-target>
+    <div class="main">
+      <div class="header">
+        <rpl-logo class="logo"></rpl-logo>
+        <rpl-text-logo></rpl-text-logo>
+      </div>
+      <div class="body">
+        <router-outlet></router-outlet>
+      </div>
     </div>
-    <div class="body">
-      <p>
-        <a href="https://github.com/TheNightmareX/reply">Reply</a> is an open
-        source Gmail web client inspired by the
-        <a href="https://m2.material.io/design/material-studies/reply.html"
-          >"Reply"</a
-        >
-        Material Design example by Google.
-      </p>
-      <p>
-        This application is completely client-side, which means that there
-        doesn't exist a "backend" and the data will be fetched directly from
-        Google and stored in your local browser.
-      </p>
-      <p>
-        To continue, permission of <b>full control</b> of your Gmail data needs
-        to be authorized. The developer is not responsible for any data damage
-        caused by the use of this application.
-      </p>
-      <mat-checkbox [disabled]="!!(loading$ | async)" [(ngModel)]="checked">
-        I have read and agree to the above text.
-      </mat-checkbox>
-    </div>
-    <div class="actions">
-      <button
-        mat-flat-button
-        color="accent"
-        [disabled]="!checked || (loading$ | async)"
-        (click)="buttonClick.emit()"
-      >
-        Continue
-      </button>
-      <mat-progress-spinner
-        *ngIf="loading$ | async"
-        mode="indeterminate"
-        diameter="32"
-        color="accent"
-      ></mat-progress-spinner>
-    </div>
+    <div class="decoration"></div>
   </div>
 </div>

@@ -18,14 +18,14 @@ export abstract class PersistentValueAccessor<T>
   abstract readonly key: string;
 
   set(value: T): void {
-    this.storage.setItem(this.key, JSON.stringify(value));
+    this.storage.setItem(this.key, this.stringify(value));
     this.value$.next(value);
   }
 
   get(): T | null {
     if (this.value$.value !== undefined) return this.value$.value;
     const raw = this.storage.getItem(this.key);
-    const value = raw ? JSON.parse(raw) : null;
+    const value = raw ? this.parse(raw) : null;
     this.value$.next(value);
     return value;
   }
@@ -33,6 +33,14 @@ export abstract class PersistentValueAccessor<T>
   clear(): void {
     this.storage.removeItem(this.key);
     this.value$.next(null);
+  }
+
+  protected parse(raw: string): T {
+    return JSON.parse(raw);
+  }
+
+  protected stringify(value: T): string {
+    return JSON.stringify(value);
   }
 
   [Symbol.observable] = (): Subscribable<T | null> =>

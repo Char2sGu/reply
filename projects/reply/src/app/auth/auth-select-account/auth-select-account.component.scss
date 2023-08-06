@@ -1,0 +1,24 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.account-list {
+  flex: 1;
+  overflow: auto;
+}
+
+mat-action-list {
+  padding: initial;
+  [mat-list-item] {
+    color: var(--color-on-primary-1);
+    [matLine]:nth-child(2) {
+      color: var(--color-on-primary-2);
+    }
+    mat-divider {
+      border-top-color: var(--color-on-primary-9);
+    }
+  }
+}

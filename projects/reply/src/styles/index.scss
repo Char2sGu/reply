@@ -17,6 +17,26 @@
 @include mat.legacy-core();
 @include mat.all-legacy-component-themes(theming.$theme);
 
+// TODO: migrate to CSS-variable-based theming
+:root {
+  --color-background: #edf0f2;
+  --color-surface: #ffffff;
+  --color-on-surface: #000000;
+  --color-on-surface-1: #000000de;
+  --color-on-surface-2: #00000099;
+  --color-on-surface-9: #0000001f;
+  --color-primary: #344955;
+  --color-on-primary: #ffffff;
+  --color-on-primary-1: #ffffffde;
+  --color-on-primary-2: #ffffff99;
+  --color-on-primary-9: #ffffff1f;
+  --color-accent: #f9aa33;
+  --color-on-accent: #000000;
+  --color-on-accent-1: #000000de;
+  --color-on-accent-2: #00000099;
+  --color-on-accent-9: #0000001f;
+}
+
 html,
 body {
   height: 100%;
