@@ -3,7 +3,10 @@
   width: 288px;
   height: 392px;
   flex-direction: column;
-  padding: 16px 0;
+  padding: 48px 0;
+  :host-context(.tablet-portrait) & {
+    padding: 16px 0;
+  }
 }
 
 .text {
