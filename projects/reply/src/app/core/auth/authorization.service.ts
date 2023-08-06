@@ -12,7 +12,12 @@ export class AuthorizationService {
     shareReplay(1),
   );
 
-  setAuthorization(auth: Authorization): boolean {
+  setAuthorization(auth: Authorization | null): boolean {
+    if (!auth) {
+      this.authorizationChange.emit(null);
+      return true;
+    }
+
     const issueDate = dayjs(auth.issuedAt);
     const expireDate = issueDate.add(auth.lifespan, 'seconds');
     const isAboutToExpire = () => dayjs().add(1, 'minute').isAfter(expireDate);

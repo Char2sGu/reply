@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
+import { AuthenticationConductor } from '../core/auth/authentication.conductor';
 import { AuthenticationService } from '../core/auth/authentication.service';
 
 @Component({
@@ -10,11 +11,12 @@ import { AuthenticationService } from '../core/auth/authentication.service';
 })
 export class AuthComponent {
   private authService = inject(AuthenticationService);
+  private authConductor = inject(AuthenticationConductor);
 
   checked = false;
   loading$ = this.authService.authorized$;
 
   onButtonClick(): void {
-    this.authService.requestAuthorization().subscribe();
+    this.authConductor.requestAuthorization().subscribe();
   }
 }

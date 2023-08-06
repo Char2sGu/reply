@@ -10,7 +10,10 @@ import {
   throwError,
 } from 'rxjs';
 
-import { AuthenticationBackend } from '../../core/auth/authentication.backend';
+import {
+  AuthenticationBackend,
+  AuthorizationRequestCancelledException,
+} from '../../core/auth/authentication.backend';
 import { Authorization } from '../../core/auth/authorization.service';
 import { includeThenableInZone } from '../../core/zone.utils';
 import { GOOGLE_APIS } from '../core/google-apis.object';
@@ -60,7 +63,14 @@ export class GoogleAuthenticationBackend implements AuthenticationBackend {
               lifespan: +resp['expires_in'],
             })),
           ),
-          this.tokenClientError.pipe(switchMap((err) => throwError(() => err))),
+          this.tokenClientError.pipe(
+            switchMap((err) => {
+              const msg = `[${err.type}]: ${err.message}`;
+              const exception = () =>
+                new AuthorizationRequestCancelledException(msg);
+              return throwError(exception);
+            }),
+          ),
         ).pipe(first()),
       ),
     );
