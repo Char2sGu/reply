@@ -2,7 +2,7 @@ import { inject, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface ActionFlow {
-  execute(payload: object): Observable<void>;
+  execute(payload: object): Observable<unknown>;
 }
 
 export function useActionFlow<T extends ActionFlow>(

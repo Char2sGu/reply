@@ -9,12 +9,12 @@ import {
 } from '@angular/router';
 import { map } from 'rxjs';
 
-import { AuthenticationService } from './core/auth/authentication.service';
+import { SessionService } from './core/session.service';
 
 const authorized: CanMatchFn = () =>
-  inject(AuthenticationService).authorized$.pipe(map((a) => !!a));
+  inject(SessionService).authorized$.pipe(map((a) => !!a));
 const unauthorized: CanMatchFn = () =>
-  inject(AuthenticationService).authorized$.pipe(map((a) => !a));
+  inject(SessionService).authorized$.pipe(map((a) => !a));
 
 const routes: Routes = [
   {

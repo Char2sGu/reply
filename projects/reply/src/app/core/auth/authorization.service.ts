@@ -1,20 +1,17 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import dayjs from 'dayjs/esm';
-import { filter, shareReplay, startWith, takeUntil, timer } from 'rxjs';
+import { BehaviorSubject, filter, takeUntil, timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthorizationService {
-  private authorizationChange = new EventEmitter<Authorization | null>();
-  readonly authorization$ = this.authorizationChange.pipe(
-    startWith(null),
-    shareReplay(1),
-  );
+  #authorization$ = new BehaviorSubject<Authorization | null>(null);
+  readonly authorization$ = this.#authorization$.pipe();
 
   setAuthorization(auth: Authorization | null): boolean {
     if (!auth) {
-      this.authorizationChange.emit(null);
+      this.#authorization$.next(null);
       return true;
     }
 
@@ -24,14 +21,14 @@ export class AuthorizationService {
 
     if (isAboutToExpire()) return false;
 
-    this.authorizationChange.emit(auth);
+    this.#authorization$.next(auth);
     timer(0, 30 * 1000)
       .pipe(
-        takeUntil(this.authorizationChange),
+        takeUntil(this.#authorization$),
         filter(() => isAboutToExpire()),
       )
       .subscribe(() => {
-        this.authorizationChange.emit(null);
+        this.#authorization$.next(null);
       });
 
     return true;

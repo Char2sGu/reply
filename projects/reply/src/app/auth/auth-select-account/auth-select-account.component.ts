@@ -18,10 +18,12 @@ import {
   withLatestFrom,
 } from 'rxjs';
 
-import { AuthenticationConductor } from '@/app/core/auth/authentication.conductor';
-import { AuthenticationService } from '@/app/core/auth/authentication.service';
+import { useActionFlow } from '@/app/core/action-flow';
+import { SessionService } from '@/app/core/session.service';
 import { Account } from '@/app/data/account/account.model';
 import { AccountRepository } from '@/app/data/account/account.repository';
+
+import { AuthenticateActionFlow } from '../core/auth.action-flows';
 
 @Component({
   selector: 'rpl-auth-select-account',
@@ -30,21 +32,22 @@ import { AccountRepository } from '@/app/data/account/account.repository';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthSelectAccountComponent {
+  private sessionService = inject(SessionService);
   private accountRepo = inject(AccountRepository);
-  private authService = inject(AuthenticationService);
-  private authConductor = inject(AuthenticationConductor);
+
+  private authenticate = useActionFlow(AuthenticateActionFlow);
 
   itemButtonClick = new EventEmitter<Account>();
   addButtonClick = new EventEmitter();
-  requestAuthorization = new EventEmitter<string | undefined>();
-  requestAuthorizationResult = new EventEmitter<boolean>();
+  authenticateStart = new EventEmitter<string | undefined>();
+  authenticateComplete = new EventEmitter<boolean>();
 
-  busy$ = this.authService.authorized$.pipe(
+  busy$ = this.sessionService.authorized$.pipe(
     switchMap((authorized) => {
       if (authorized) return of(true); // route resolving
       return merge(
-        this.requestAuthorization.pipe(map(() => true)),
-        this.requestAuthorizationResult.pipe(map(() => false)),
+        this.authenticateStart.pipe(map(() => true)),
+        this.authenticateComplete.pipe(map(() => false)),
       );
     }),
     startWith(false),
@@ -58,20 +61,20 @@ export class AuthSelectAccountComponent {
       .pipe(
         withLatestFrom(this.busy$),
         filter(([, busy]) => !busy),
-        tap(([account]) => this.requestAuthorization.emit(account.id)),
+        tap(([account]) => this.authenticateStart.emit(account.id)),
       )
       .subscribe();
     this.addButtonClick
       .pipe(
         withLatestFrom(this.busy$),
         filter(([, busy]) => !busy),
-        tap(() => this.requestAuthorization.emit(undefined)),
+        tap(() => this.authenticateStart.emit(undefined)),
       )
       .subscribe();
-    this.requestAuthorization
+    this.authenticateStart
       .pipe(
-        switchMap((hint) => this.authConductor.requestAuthorization(hint)),
-        tap((result) => this.requestAuthorizationResult.emit(result)),
+        switchMap((hint) => this.authenticate({ hint })),
+        tap((result) => this.authenticateComplete.emit(result)),
       )
       .subscribe();
   }

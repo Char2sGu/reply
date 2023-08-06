@@ -12,8 +12,8 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, delay, first } from 'rxjs';
 
-import { useUser } from '@/app/core/auth/authentication.utils';
 import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
+import { useUser } from '@/app/core/session.utils';
 import { ContactRepository } from '@/app/data/contact/contact.repository';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';

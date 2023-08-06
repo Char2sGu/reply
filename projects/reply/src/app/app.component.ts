@@ -29,10 +29,10 @@ import {
 } from 'rxjs';
 
 import { usePrimaryChildRouteAnimationId } from './core/animations';
-import { AuthenticationService } from './core/auth/authentication.service';
 import { BreakpointMap } from './core/breakpoint.service';
 import { useBreakpoints } from './core/breakpoint.utils';
 import { APP_PREPARER } from './core/preparation';
+import { SessionService } from './core/session.service';
 
 @Component({
   selector: 'rpl-root',
@@ -84,7 +84,7 @@ import { APP_PREPARER } from './core/preparation';
 })
 export class AppComponent {
   private router = inject(Router);
-  private authService = inject(AuthenticationService);
+  private sessionService = inject(SessionService);
   private preparers = [
     ...inject(APP_PREPARER),
     () =>
@@ -110,7 +110,7 @@ export class AppComponent {
   );
 
   constructor() {
-    this.authService.authorized$
+    this.sessionService.authorized$
       .pipe(
         pairwise(),
         map((pair) => pair[0] !== pair[1]),

@@ -6,8 +6,10 @@ import {
 } from '@angular/core';
 import { map, merge, of, shareReplay, startWith, switchMap, tap } from 'rxjs';
 
-import { AuthenticationConductor } from '@/app/core/auth/authentication.conductor';
-import { AuthenticationService } from '@/app/core/auth/authentication.service';
+import { useActionFlow } from '@/app/core/action-flow';
+import { SessionService } from '@/app/core/session.service';
+
+import { AuthenticateActionFlow } from '../core/auth.action-flows';
 
 @Component({
   selector: 'rpl-auth-no-account',
@@ -16,19 +18,20 @@ import { AuthenticationService } from '@/app/core/auth/authentication.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthNoAccountComponent {
-  private authService = inject(AuthenticationService);
-  private authConductor = inject(AuthenticationConductor);
+  private sessionService = inject(SessionService);
+
+  private authenticate = useActionFlow(AuthenticateActionFlow);
 
   buttonClick = new EventEmitter();
-  requestAuthorization = new EventEmitter();
-  requestAuthorizationResult = new EventEmitter<boolean>();
+  authenticateStart = new EventEmitter();
+  authenticateComplete = new EventEmitter<boolean>();
 
-  busy$ = this.authService.authorized$.pipe(
+  busy$ = this.sessionService.authorized$.pipe(
     switchMap((authorized) => {
       if (authorized) return of(true); // route resolving
       return merge(
-        this.requestAuthorization.pipe(map(() => true)),
-        this.requestAuthorizationResult.pipe(map(() => false)),
+        this.authenticateStart.pipe(map(() => true)),
+        this.authenticateComplete.pipe(map(() => false)),
       );
     }),
     startWith(false),
@@ -36,13 +39,11 @@ export class AuthNoAccountComponent {
   );
 
   constructor() {
-    this.buttonClick
-      .pipe(tap(() => this.requestAuthorization.emit()))
-      .subscribe();
-    this.requestAuthorization
+    this.buttonClick.pipe(tap(() => this.authenticateStart.emit())).subscribe();
+    this.authenticateStart
       .pipe(
-        switchMap(() => this.authConductor.requestAuthorization()),
-        tap((result) => this.requestAuthorizationResult.emit(result)),
+        switchMap(() => this.authenticate()),
+        tap((result) => this.authenticateComplete.emit(result)),
       )
       .subscribe();
   }
