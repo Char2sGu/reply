@@ -17,16 +17,17 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AnimationCurves } from '@angular/material/core';
+import { Store } from '@ngrx/store';
 import { map, Observable, ReplaySubject, shareReplay, switchMap } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
-import { useBreakpoints } from '@/app/core/breakpoint.utils';
 import {
   SystemMailboxName,
   VirtualMailboxName,
 } from '@/app/core/mailbox-name.enums';
 import { useSystemMailboxNameMapping } from '@/app/core/mailbox-name.utils';
 import { NavigationService } from '@/app/core/navigation.service';
+import { CORE_STATE } from '@/app/core/state/core.state-entry';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';
@@ -76,11 +77,12 @@ const mailCardsAnimation = animation([
   },
 })
 export class MailListLayoutComponent {
+  private store = inject(Store);
   private mailRepo = inject(MailRepository);
   private navService = inject(NavigationService);
-
-  breakpoints = useBreakpoints();
   private systemMailboxes$ = useSystemMailboxNameMapping();
+
+  breakpoints = this.store.selectSignal(CORE_STATE.selectBreakpoints);
 
   activeNavItemIndex = toSignal(
     this.navService.activeItemIndex$, //

@@ -31,7 +31,6 @@ import {
 
 import { usePrimaryChildRouteAnimationId } from './core/animations';
 import { BreakpointMap } from './core/breakpoint.service';
-import { useBreakpoints } from './core/breakpoint.utils';
 import { APP_PREPARER } from './core/preparation';
 import { CORE_STATE } from './core/state/core.state-entry';
 
@@ -84,6 +83,7 @@ import { CORE_STATE } from './core/state/core.state-entry';
   },
 })
 export class AppComponent {
+  animationId = usePrimaryChildRouteAnimationId();
   private router = inject(Router);
   private store = inject(Store);
   private preparers = [
@@ -96,9 +96,7 @@ export class AppComponent {
     () => timer(500),
   ];
 
-  animationId = usePrimaryChildRouteAnimationId();
-  private breakpoints = useBreakpoints();
-
+  breakpoints = this.store.selectSignal(CORE_STATE.selectBreakpoints);
   @HostBinding('class') get breakpointsClassBindings(): BreakpointMap {
     return this.breakpoints();
   }

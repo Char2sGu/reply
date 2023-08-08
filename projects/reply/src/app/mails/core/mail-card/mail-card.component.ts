@@ -8,8 +8,9 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
+import { Store } from '@ngrx/store';
 
-import { useBreakpoints } from '@/app/core/breakpoint.utils';
+import { CORE_STATE } from '@/app/core/state/core.state-entry';
 import { ContactRepository } from '@/app/data/contact/contact.repository';
 import { Mail } from '@/app/data/mail/mail.model';
 import { Mailbox } from '@/app/data/mailbox/mailbox.model';
@@ -21,8 +22,10 @@ import { Mailbox } from '@/app/data/mailbox/mailbox.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailCardComponent {
+  private store = inject(Store);
   contactRepo = inject(ContactRepository);
-  breakpoints = useBreakpoints();
+
+  breakpoints = this.store.selectSignal(CORE_STATE.selectBreakpoints);
 
   @Input({ required: true }) mail!: Mail;
   @Input() currentMailbox?: Mailbox;

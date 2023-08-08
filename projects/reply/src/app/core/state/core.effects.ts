@@ -7,6 +7,7 @@ import { AccountConductor } from '@/app/data/account/account.conductor';
 import { ContactConductor } from '@/app/data/contact/contact.conductor';
 
 import { AuthenticationService } from '../auth/authentication.service';
+import { BreakpointService } from '../breakpoint.service';
 import { CORE_ACTIONS } from './core.actions';
 import { CORE_STATE } from './core.state-entry';
 
@@ -14,9 +15,21 @@ import { CORE_STATE } from './core.state-entry';
 export class CoreEffects {
   private actions$ = inject(Actions);
   private store = inject(Store);
+  private breakpointService = inject(BreakpointService);
   private authService = inject(AuthenticationService);
   private contactService = inject(ContactConductor);
   private accountService = inject(AccountConductor);
+
+  updateBreakpoints = createEffect(() =>
+    this.breakpointService
+      .observeBreakpoints({
+        ['tablet-portrait']: '(min-width: 600px)',
+        ['tablet-landscape']: '(min-width: 905px)',
+        ['laptop']: '(min-width: 1240px)',
+        ['desktop']: '(min-width: 1440px)',
+      })
+      .pipe(map((to) => CORE_ACTIONS.breakpointsChanged({ to }))),
+  );
 
   authenticate = createEffect(() =>
     this.actions$.pipe(

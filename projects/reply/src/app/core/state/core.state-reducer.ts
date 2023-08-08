@@ -10,10 +10,20 @@ const coreInitialState: CoreState = {
   userLoading: false,
   account: null,
   accountLoading: false,
+  breakpoints: {
+    ['tablet-portrait']: false,
+    ['tablet-landscape']: false,
+    ['laptop']: false,
+    ['desktop']: false,
+  },
 };
 
 export const coreStateReducer = createReducer(
   coreInitialState,
+  on(CORE_ACTIONS.breakpointsChanged, (s, p) => ({
+    ...s,
+    breakpoints: p.to,
+  })),
   on(CORE_ACTIONS.authenticate, (s) => ({
     ...s,
     authenticating: true,

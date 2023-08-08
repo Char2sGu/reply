@@ -25,7 +25,6 @@ import { catchError, of } from 'rxjs';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { BreakpointService } from './core/breakpoint.service';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { LOCAL_STORAGE } from './core/native-api.tokens';
 import { APP_PREPARER, AppPreparer } from './core/preparation';
@@ -83,21 +82,6 @@ import { LogoComponent } from './shared/logo/logo.component';
     {
       provide: LOCAL_STORAGE,
       useValue: window.localStorage,
-    },
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      useFactory: () => {
-        const breakpointService = inject(BreakpointService);
-        return () => {
-          breakpointService.applyConfig({
-            ['tablet-portrait']: '(min-width: 600px)',
-            ['tablet-landscape']: '(min-width: 905px)',
-            ['laptop']: '(min-width: 1240px)',
-            ['desktop']: '(min-width: 1440px)',
-          });
-        };
-      },
     },
     {
       provide: APP_INITIALIZER,

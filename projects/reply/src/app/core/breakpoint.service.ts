@@ -1,25 +1,14 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, ReplaySubject, switchMap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BreakpointService {
   private observer = inject(BreakpointObserver);
-  private config$ = new ReplaySubject<BreakpointConfig>(1);
 
-  readonly breakpoints$ = this.config$.pipe(
-    switchMap((config) => this.observeBreakpoints(config)),
-  );
-
-  applyConfig(config: BreakpointConfig): void {
-    this.config$.next(config);
-  }
-
-  private observeBreakpoints(
-    config: BreakpointConfig,
-  ): Observable<BreakpointMap> {
+  observeBreakpoints(config: BreakpointConfig): Observable<BreakpointMap> {
     return this.observer
       .observe(Object.values(config))
       .pipe(map((state) => this.parseState(config, state)));
