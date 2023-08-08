@@ -16,8 +16,8 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { LayoutProjectionModule } from '@layout-projection/angular';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
+import { Actions, EffectsModule, ofType } from '@ngrx/effects';
+import { Store, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ScrollingModule } from '@reply/scrolling';
 import { catchError, of } from 'rxjs';
@@ -28,9 +28,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { LOCAL_STORAGE } from './core/native-api.tokens';
 import { APP_PREPARER, AppPreparer } from './core/preparation';
+import { CORE_ACTIONS } from './core/state/core.actions';
 import { CoreEffects } from './core/state/core.effects';
 import { CORE_STATE } from './core/state/core.state-entry';
-import { AccountConductor } from './data/account/account.conductor';
 import { LogoComponent } from './shared/logo/logo.component';
 
 // TODO: attachment
@@ -117,8 +117,10 @@ import { LogoComponent } from './shared/logo/logo.component';
       provide: APP_PREPARER,
       multi: true,
       useFactory: (): AppPreparer => {
-        const accountConductor = inject(AccountConductor);
-        return () => accountConductor.loadAccounts();
+        const store = inject(Store);
+        const actions$ = inject(Actions);
+        store.dispatch(CORE_ACTIONS.loadAccounts());
+        return () => actions$.pipe(ofType(CORE_ACTIONS.loadAccountCompleted));
       },
     },
   ],

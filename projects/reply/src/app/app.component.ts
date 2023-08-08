@@ -26,6 +26,7 @@ import {
   pairwise,
   shareReplay,
   startWith,
+  take,
   timer,
 } from 'rxjs';
 
@@ -104,6 +105,7 @@ export class AppComponent {
   prepared$ = merge(...this.preparers.map((i) => i() ?? of(null))).pipe(
     bufferCount(this.preparers.length),
     map(() => true),
+    take(1),
     startWith(false),
     shareReplay(1),
   );

@@ -3,8 +3,10 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { catchError, filter, map, of, switchMap } from 'rxjs';
 
-import { AccountConductor } from '@/app/data/account/account.conductor';
-import { ContactConductor } from '@/app/data/contact/contact.conductor';
+import { AccountService } from '@/app/data/account/account.service';
+import { ContactBackend } from '@/app/data/contact/contact.backend';
+import { MailBackend } from '@/app/data/mail/mail.backend';
+import { MailboxBackend } from '@/app/data/mailbox/mailbox.backend';
 
 import { AuthenticationService } from '../auth/authentication.service';
 import { BreakpointService } from '../breakpoint.service';
@@ -17,8 +19,10 @@ export class CoreEffects {
   private store = inject(Store);
   private breakpointService = inject(BreakpointService);
   private authService = inject(AuthenticationService);
-  private contactService = inject(ContactConductor);
-  private accountService = inject(AccountConductor);
+  private accountService = inject(AccountService);
+  private contactService = inject(ContactBackend);
+  private mailService = inject(MailBackend);
+  private mailboxService = inject(MailboxBackend);
 
   updateBreakpoints = createEffect(() =>
     this.breakpointService
@@ -28,7 +32,7 @@ export class CoreEffects {
         ['laptop']: '(min-width: 1240px)',
         ['desktop']: '(min-width: 1440px)',
       })
-      .pipe(map((to) => CORE_ACTIONS.breakpointsChanged({ to }))),
+      .pipe(map((to) => CORE_ACTIONS.breakpointsUpdated({ to }))),
   );
 
   authenticate = createEffect(() =>
@@ -61,6 +65,43 @@ export class CoreEffects {
       switchMap((user) => this.accountService.saveAccount(user)),
       map((result) => CORE_ACTIONS.loadAccountCompleted({ result })),
       catchError((error) => of(CORE_ACTIONS.loadAccountFailed({ error }))),
+    ),
+  );
+
+  loadAccounts = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CORE_ACTIONS.loadAccounts),
+      switchMap(() => this.accountService.loadAccounts()),
+      map((result) => CORE_ACTIONS.loadAccountsCompleted({ result })),
+      catchError((error) => of(CORE_ACTIONS.loadAccountsFailed({ error }))),
+    ),
+  );
+
+  loadContacts = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CORE_ACTIONS.loadContacts),
+      switchMap(() => this.contactService.loadContacts()),
+      map((result) => CORE_ACTIONS.loadContactsCompleted({ result })),
+      catchError((error) => of(CORE_ACTIONS.loadContactsFailed({ error }))),
+    ),
+  );
+
+  loadMails = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CORE_ACTIONS.loadMails),
+      switchMap(() => this.mailService.loadMailPage()),
+      map((r) => r.results),
+      map((result) => CORE_ACTIONS.loadMailsCompleted({ result })),
+      catchError((error) => of(CORE_ACTIONS.loadMailsFailed({ error }))),
+    ),
+  );
+
+  loadMailboxes = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CORE_ACTIONS.loadMailboxes),
+      switchMap(() => this.mailboxService.loadMailboxes()),
+      map((result) => CORE_ACTIONS.loadMailboxesCompleted({ result })),
+      catchError((error) => of(CORE_ACTIONS.loadMailboxesFailed({ error }))),
     ),
   );
 }
