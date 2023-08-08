@@ -1,8 +1,9 @@
 import { inject, NgModule } from '@angular/core';
 import { CanActivateFn, RouterModule, Routes } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { combineLatest, filter, firstValueFrom } from 'rxjs';
 
-import { SessionService } from '../core/session.service';
+import { CORE_STATE } from '../core/state/core.state-entry';
 import { ContactConductor } from '../data/contact/contact.conductor';
 import { MailConductor } from '../data/mail/mail.conductor';
 import { MailboxConductor } from '../data/mailbox/mailbox.conductor';
@@ -11,15 +12,15 @@ import { MainComponent } from './main.component';
 import { UpperFoundationComponent } from './upper-foundation/upper-foundation.component';
 
 const dataInitializer: CanActivateFn = async () => {
-  const sessionService = inject(SessionService);
+  const store = inject(Store);
   const contactConductor = inject(ContactConductor);
   const mailboxConductor = inject(MailboxConductor);
   const mailConductor = inject(MailConductor);
 
   await firstValueFrom(
     combineLatest([
-      sessionService.user$.pipe(filter(Boolean)),
-      sessionService.account$.pipe(filter(Boolean)),
+      store.select(CORE_STATE.selectUser).pipe(filter(Boolean)),
+      store.select(CORE_STATE.selectAccount).pipe(filter(Boolean)),
     ]),
   );
   await firstValueFrom(

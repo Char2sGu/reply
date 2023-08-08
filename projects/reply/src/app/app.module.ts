@@ -16,6 +16,9 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { LayoutProjectionModule } from '@layout-projection/angular';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ScrollingModule } from '@reply/scrolling';
 import { catchError, of } from 'rxjs';
 
@@ -26,6 +29,8 @@ import { BreakpointService } from './core/breakpoint.service';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { LOCAL_STORAGE } from './core/native-api.tokens';
 import { APP_PREPARER, AppPreparer } from './core/preparation';
+import { CoreEffects } from './core/state/core.effects';
+import { CORE_STATE } from './core/state/core.state-entry';
 import { AccountConductor } from './data/account/account.conductor';
 import { LogoComponent } from './shared/logo/logo.component';
 
@@ -57,6 +62,14 @@ import { LogoComponent } from './shared/logo/logo.component';
     HttpClientModule,
     LayoutProjectionModule.forRoot(),
     ScrollingModule.forRoot(),
+    StoreModule.forRoot(),
+    StoreModule.forFeature(CORE_STATE),
+    EffectsModule.forRoot(),
+    EffectsModule.forFeature(CoreEffects),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production,
+    }),
     environment.backend,
     MatIconModule,
     MatSnackBarModule,

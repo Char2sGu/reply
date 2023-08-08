@@ -7,13 +7,9 @@ import {
   shareReplay,
   switchMap,
   tap,
-  throwError,
 } from 'rxjs';
 
-import {
-  AuthenticationBackend,
-  AuthorizationRequestCancelledException,
-} from '../../core/auth/authentication.backend';
+import { AuthenticationBackend } from '../../core/auth/authentication.backend';
 import { Authorization } from '../../core/auth/authorization.service';
 import { includeThenableInZone } from '../../core/zone.utils';
 import { GOOGLE_APIS } from '../core/google-apis.object';
@@ -52,7 +48,7 @@ export class GoogleAuthenticationBackend implements AuthenticationBackend {
   private tokenClientError =
     new EventEmitter<google.accounts.oauth2.ClientConfigError>();
 
-  requestAuthorization(hint?: string): Observable<Authorization> {
+  requestAuthorization(hint?: string): Observable<Authorization | null> {
     return this.tokenClient$.pipe(
       tap((client) => client.requestAccessToken({ hint })),
       switchMap(() =>
@@ -64,14 +60,7 @@ export class GoogleAuthenticationBackend implements AuthenticationBackend {
               lifespan: +resp['expires_in'],
             })),
           ),
-          this.tokenClientError.pipe(
-            switchMap((err) => {
-              const msg = `[${err.type}]: ${err.message}`;
-              const exception = () =>
-                new AuthorizationRequestCancelledException(msg);
-              return throwError(exception);
-            }),
-          ),
+          this.tokenClientError.pipe(map(() => null)),
         ).pipe(first()),
       ),
     );

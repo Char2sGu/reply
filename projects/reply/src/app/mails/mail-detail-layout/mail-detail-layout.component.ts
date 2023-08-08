@@ -10,10 +10,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { combineLatest, delay, first } from 'rxjs';
 
 import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
-import { useUser } from '@/app/core/session.utils';
+import { CORE_STATE } from '@/app/core/state/core.state-entry';
 import { ContactRepository } from '@/app/data/contact/contact.repository';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';
@@ -28,12 +29,15 @@ import { NavFabService } from '@/app/main/nav-fab/nav-fab.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailDetailLayoutComponent implements AfterViewInit, OnDestroy {
+  private store = inject(Store);
+
   mailRepo = inject(MailRepository);
   contactRepo = inject(ContactRepository);
-  user = useUser();
   private route = inject(ActivatedRoute);
   private bottomNavService = inject(BottomNavService);
   private navFabService = inject(NavFabService);
+
+  user = this.store.selectSignal(CORE_STATE.selectUser);
 
   private viewInit = new EventEmitter();
   ngAfterViewInit(): void {

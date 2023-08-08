@@ -7,14 +7,19 @@ import {
   Routes,
   TitleStrategy,
 } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 
-import { SessionService } from './core/session.service';
+import { CORE_STATE } from './core/state/core.state-entry';
 
 const authorized: CanMatchFn = () =>
-  inject(SessionService).authorized$.pipe(map((a) => !!a));
+  inject(Store)
+    .select(CORE_STATE.selectAuthorized)
+    .pipe(map((a) => !!a));
 const unauthorized: CanMatchFn = () =>
-  inject(SessionService).authorized$.pipe(map((a) => !a));
+  inject(Store)
+    .select(CORE_STATE.selectAuthorized)
+    .pipe(map((a) => !a));
 
 const routes: Routes = [
   {

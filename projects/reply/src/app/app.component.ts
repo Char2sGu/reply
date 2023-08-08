@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import {
   bufferCount,
   filter,
@@ -32,7 +33,7 @@ import { usePrimaryChildRouteAnimationId } from './core/animations';
 import { BreakpointMap } from './core/breakpoint.service';
 import { useBreakpoints } from './core/breakpoint.utils';
 import { APP_PREPARER } from './core/preparation';
-import { SessionService } from './core/session.service';
+import { CORE_STATE } from './core/state/core.state-entry';
 
 @Component({
   selector: 'rpl-root',
@@ -84,7 +85,7 @@ import { SessionService } from './core/session.service';
 })
 export class AppComponent {
   private router = inject(Router);
-  private sessionService = inject(SessionService);
+  private store = inject(Store);
   private preparers = [
     ...inject(APP_PREPARER),
     () =>
@@ -110,7 +111,8 @@ export class AppComponent {
   );
 
   constructor() {
-    this.sessionService.authorized$
+    this.store
+      .select(CORE_STATE.selectAuthorized)
       .pipe(
         pairwise(),
         map((pair) => pair[0] !== pair[1]),

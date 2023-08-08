@@ -5,25 +5,13 @@ import {
   inject,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import {
-  filter,
-  map,
-  merge,
-  Observable,
-  of,
-  shareReplay,
-  startWith,
-  switchMap,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
+import { Store } from '@ngrx/store';
+import { filter, map, Observable, tap, withLatestFrom } from 'rxjs';
 
-import { useActionFlow } from '@/app/core/action-flow';
-import { SessionService } from '@/app/core/session.service';
+import { CORE_ACTIONS } from '@/app/core/state/core.actions';
+import { CORE_STATE } from '@/app/core/state/core.state-entry';
 import { Account } from '@/app/data/account/account.model';
 import { AccountRepository } from '@/app/data/account/account.repository';
-
-import { AuthenticateActionFlow } from '../core/auth.action-flows';
 
 @Component({
   selector: 'rpl-auth-select-account',
@@ -32,27 +20,13 @@ import { AuthenticateActionFlow } from '../core/auth.action-flows';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthSelectAccountComponent {
-  private sessionService = inject(SessionService);
   private accountRepo = inject(AccountRepository);
-
-  private authenticate = useActionFlow(AuthenticateActionFlow);
+  private store = inject(Store);
 
   itemButtonClick = new EventEmitter<Account>();
   addButtonClick = new EventEmitter();
-  authenticateStart = new EventEmitter<string | undefined>();
-  authenticateComplete = new EventEmitter<boolean>();
 
-  busy$ = this.sessionService.authorized$.pipe(
-    switchMap((authorized) => {
-      if (authorized) return of(true); // route resolving
-      return merge(
-        this.authenticateStart.pipe(map(() => true)),
-        this.authenticateComplete.pipe(map(() => false)),
-      );
-    }),
-    startWith(false),
-    shareReplay(1),
-  );
+  busy$ = this.store.select(CORE_STATE.selectAuthenticating);
 
   accounts = toSignal(this.queryAccountsAndSort(), { requireSync: true });
 
@@ -61,20 +35,9 @@ export class AuthSelectAccountComponent {
       .pipe(
         withLatestFrom(this.busy$),
         filter(([, busy]) => !busy),
-        tap(([account]) => this.authenticateStart.emit(account.id)),
-      )
-      .subscribe();
-    this.addButtonClick
-      .pipe(
-        withLatestFrom(this.busy$),
-        filter(([, busy]) => !busy),
-        tap(() => this.authenticateStart.emit(undefined)),
-      )
-      .subscribe();
-    this.authenticateStart
-      .pipe(
-        switchMap((hint) => this.authenticate({ hint })),
-        tap((result) => this.authenticateComplete.emit(result)),
+        tap(([account]) =>
+          this.store.dispatch(CORE_ACTIONS.authenticate({ hint: account.id })),
+        ),
       )
       .subscribe();
   }
