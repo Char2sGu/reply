@@ -1,7 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 
 import { CORE_ACTIONS } from '../core.actions';
-import { status } from '../core/action-status';
 import { ACCOUNT_ACTIONS } from './account.actions';
 import { AccountState } from './account.state-model';
 
@@ -20,15 +19,15 @@ export const accountStateReducer = createReducer(
   })),
   on(ACCOUNT_ACTIONS.loadAccounts, (s) => ({
     ...s,
-    accountsLoadingStatus: status({ type: 'pending' }),
+    accountsLoadingStatus: { type: 'pending' } as const,
   })),
   on(ACCOUNT_ACTIONS.loadAccountsCompleted, (s, p) => ({
     ...s,
     accounts: p.result,
-    accountsLoadingStatus: status({ type: 'completed' }),
+    accountsLoadingStatus: { type: 'completed' } as const,
   })),
   on(ACCOUNT_ACTIONS.loadAccountsFailed, (s, p) => ({
     ...s,
-    accountsLoadingStatus: status({ type: 'failed', error: p.error }),
+    accountsLoadingStatus: { type: 'failed', error: p.error } as const,
   })),
 );

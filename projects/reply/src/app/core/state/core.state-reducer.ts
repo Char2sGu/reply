@@ -2,7 +2,6 @@ import { createReducer, on } from '@ngrx/store';
 
 import { CORE_ACTIONS } from './core.actions';
 import { CoreState } from './core.state-model';
-import { status } from './core/action-status';
 
 const coreInitialState: CoreState = {
   breakpoints: {
@@ -13,7 +12,7 @@ const coreInitialState: CoreState = {
   },
 
   authorization: null,
-  authenticationStatus: status({ type: 'idle' }),
+  authenticationStatus: { type: 'idle' } as const,
 };
 
 export const coreStateReducer = createReducer(
@@ -26,19 +25,19 @@ export const coreStateReducer = createReducer(
 
   on(CORE_ACTIONS.authenticate, (s) => ({
     ...s,
-    authenticationStatus: status({ type: 'pending' }),
+    authenticationStatus: { type: 'pending' } as const,
   })),
   on(CORE_ACTIONS.authenticateCompleted, (s, p) => ({
     ...s,
     authorization: p.result.authorization,
-    authenticationStatus: status({ type: 'completed' }),
+    authenticationStatus: { type: 'completed' } as const,
   })),
   on(CORE_ACTIONS.authenticateCancelled, (s) => ({
     ...s,
-    authenticationStatus: status({ type: 'idle' }),
+    authenticationStatus: { type: 'idle' } as const,
   })),
   on(CORE_ACTIONS.authenticateFailed, (s, p) => ({
     ...s,
-    authenticationStatus: status({ type: 'failed', error: p.error }),
+    authenticationStatus: { type: 'failed', error: p.error } as const,
   })),
 );

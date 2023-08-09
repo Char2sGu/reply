@@ -1,7 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 
 import { CORE_ACTIONS } from '../core.actions';
-import { status } from '../core/action-status';
 import { CONTACT_ACTIONS } from './contact.actions';
 import { ContactState } from './contact.state-model';
 
@@ -21,15 +20,15 @@ export const contactStateReducer = createReducer(
 
   on(CONTACT_ACTIONS.loadContacts, (s) => ({
     ...s,
-    contactsLoadingStatus: status({ type: 'pending' }),
+    contactsLoadingStatus: { type: 'pending' } as const,
   })),
   on(CONTACT_ACTIONS.loadContactsCompleted, (s, p) => ({
     ...s,
     contacts: p.result,
-    contactsLoadingStatus: status({ type: 'completed' }),
+    contactsLoadingStatus: { type: 'completed' } as const,
   })),
   on(CONTACT_ACTIONS.loadContactsFailed, (s, p) => ({
     ...s,
-    contactsLoadingStatus: status({ type: 'failed', error: p.error }),
+    contactsLoadingStatus: { type: 'failed', error: p.error } as const,
   })),
 );

@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
 
-import { status } from '../core/action-status';
 import { MAILBOX_ACTIONS } from './mailbox.actions';
 import { MailboxState } from './mailbox.state-model';
 
@@ -13,15 +12,15 @@ export const mailboxStateReducer = createReducer(
   mailboxInitialState,
   on(MAILBOX_ACTIONS.loadMailboxes, (s) => ({
     ...s,
-    mailboxesLoadingStatus: status({ type: 'pending' }),
+    mailboxesLoadingStatus: { type: 'pending' } as const,
   })),
   on(MAILBOX_ACTIONS.loadMailboxesCompleted, (s, p) => ({
     ...s,
     mailboxes: p.result,
-    mailboxesLoadingStatus: status({ type: 'completed' }),
+    mailboxesLoadingStatus: { type: 'completed' } as const,
   })),
   on(MAILBOX_ACTIONS.loadMailboxesFailed, (s, p) => ({
     ...s,
-    mailboxesLoadingStatus: status({ type: 'failed', error: p.error }),
+    mailboxesLoadingStatus: { type: 'failed', error: p.error } as const,
   })),
 );
