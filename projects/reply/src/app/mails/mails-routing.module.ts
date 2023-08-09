@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 
 import { VirtualMailboxName } from '../core/mailbox-name.enums';
-import { CORE_STATE } from '../core/state/core.state-entry';
+import { MAILBOX_STATE } from '../core/state/mailbox/mailbox.state-entry';
 import { MailsComponent } from './mails.component';
 
 const mailboxNameValid: CanActivateFn = (route) => {
@@ -18,7 +18,7 @@ const mailboxNameValid: CanActivateFn = (route) => {
   const virtualMailboxNames = Object.values(VirtualMailboxName) as string[];
   if (virtualMailboxNames.includes(mailboxName)) return true;
   return store
-    .select(CORE_STATE.selectMailboxes)
+    .select(MAILBOX_STATE.selectMailboxes)
     .pipe(map((mailboxes) => !!mailboxes.find((e) => e.name === mailboxName)));
 };
 

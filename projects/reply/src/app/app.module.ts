@@ -28,9 +28,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { LOCAL_STORAGE } from './core/native-api.tokens';
 import { APP_PREPARER, AppPreparer } from './core/preparation';
-import { CORE_ACTIONS } from './core/state/core.actions';
+import { ACCOUNT_ACTIONS } from './core/state/account/account.actions';
+import { AccountEffects } from './core/state/account/account.effects';
+import { ACCOUNT_STATE } from './core/state/account/account.state-entry';
+import { ContactEffects } from './core/state/contact/contact.effects';
+import { CONTACT_STATE } from './core/state/contact/contact.state-entry';
 import { CoreEffects } from './core/state/core.effects';
 import { CORE_STATE } from './core/state/core.state-entry';
+import { MailEffects } from './core/state/mail/mail.effects';
+import { MAIL_STATE } from './core/state/mail/mail.state-entry';
+import { MailboxEffects } from './core/state/mailbox/mailbox.effects';
+import { MAILBOX_STATE } from './core/state/mailbox/mailbox.state-entry';
 import { LogoComponent } from './shared/logo/logo.component';
 
 // TODO: attachment
@@ -62,9 +70,17 @@ import { LogoComponent } from './shared/logo/logo.component';
     LayoutProjectionModule.forRoot(),
     ScrollingModule.forRoot(),
     StoreModule.forRoot(),
-    StoreModule.forFeature(CORE_STATE),
     EffectsModule.forRoot(),
+    StoreModule.forFeature(CORE_STATE),
     EffectsModule.forFeature(CoreEffects),
+    StoreModule.forFeature(ACCOUNT_STATE),
+    EffectsModule.forFeature(AccountEffects),
+    StoreModule.forFeature(CONTACT_STATE),
+    EffectsModule.forFeature(ContactEffects),
+    StoreModule.forFeature(MAIL_STATE),
+    EffectsModule.forFeature(MailEffects),
+    StoreModule.forFeature(MAILBOX_STATE),
+    EffectsModule.forFeature(MailboxEffects),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
@@ -118,10 +134,10 @@ import { LogoComponent } from './shared/logo/logo.component';
       multi: true,
       useFactory: (): AppPreparer => {
         const store = inject(Store);
-        store.dispatch(CORE_ACTIONS.loadAccounts());
+        store.dispatch(ACCOUNT_ACTIONS.loadAccounts());
         return () =>
           store
-            .select(CORE_STATE.selectAccountsLoadingStatus)
+            .select(ACCOUNT_STATE.selectAccountsLoadingStatus)
             .pipe(map((s) => s.type === 'completed'));
       },
     },

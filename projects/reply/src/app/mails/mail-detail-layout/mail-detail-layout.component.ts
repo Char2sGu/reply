@@ -14,7 +14,7 @@ import { Store } from '@ngrx/store';
 import { combineLatest, delay, first } from 'rxjs';
 
 import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
-import { CORE_STATE } from '@/app/core/state/core.state-entry';
+import { CONTACT_STATE } from '@/app/core/state/contact/contact.state-entry';
 import { ContactRepository } from '@/app/data/contact/contact.repository';
 import { Mail } from '@/app/data/mail/mail.model';
 import { MailRepository } from '@/app/data/mail/mail.repository';
@@ -37,7 +37,7 @@ export class MailDetailLayoutComponent implements AfterViewInit, OnDestroy {
   private bottomNavService = inject(BottomNavService);
   private navFabService = inject(NavFabService);
 
-  user = this.store.selectSignal(CORE_STATE.selectUser);
+  user = this.store.selectSignal(CONTACT_STATE.selectCurrent);
 
   private viewInit = new EventEmitter();
   ngAfterViewInit(): void {

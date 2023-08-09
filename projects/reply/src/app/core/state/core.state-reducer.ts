@@ -13,21 +13,7 @@ const coreInitialState: CoreState = {
   },
 
   authorization: null,
-  userId: null,
-  accountId: null,
   authenticationStatus: status({ type: 'idle' }),
-
-  accounts: [],
-  accountsLoadingStatus: status({ type: 'idle' }),
-
-  contacts: [],
-  contactsLoadingStatus: status({ type: 'idle' }),
-
-  mails: [],
-  mailsLoadingStatus: status({ type: 'idle' }),
-
-  mailboxes: [],
-  mailboxesLoadingStatus: status({ type: 'idle' }),
 };
 
 export const coreStateReducer = createReducer(
@@ -45,10 +31,6 @@ export const coreStateReducer = createReducer(
   on(CORE_ACTIONS.authenticateCompleted, (s, p) => ({
     ...s,
     authorization: p.result.authorization,
-    userId: p.result.user.id,
-    accountId: p.result.account.id,
-    contacts: s.contacts.concat(p.result.user),
-    accounts: s.accounts.concat(p.result.account),
     authenticationStatus: status({ type: 'completed' }),
   })),
   on(CORE_ACTIONS.authenticateCancelled, (s) => ({
@@ -58,61 +40,5 @@ export const coreStateReducer = createReducer(
   on(CORE_ACTIONS.authenticateFailed, (s, p) => ({
     ...s,
     authenticationStatus: status({ type: 'failed', error: p.error }),
-  })),
-
-  on(CORE_ACTIONS.loadAccounts, (s) => ({
-    ...s,
-    accountsLoadingStatus: status({ type: 'pending' }),
-  })),
-  on(CORE_ACTIONS.loadAccountsCompleted, (s, p) => ({
-    ...s,
-    accounts: p.result,
-    accountsLoadingStatus: status({ type: 'completed' }),
-  })),
-  on(CORE_ACTIONS.loadAccountsFailed, (s, p) => ({
-    ...s,
-    accountsLoadingStatus: status({ type: 'failed', error: p.error }),
-  })),
-
-  on(CORE_ACTIONS.loadContacts, (s) => ({
-    ...s,
-    contactsLoadingStatus: status({ type: 'pending' }),
-  })),
-  on(CORE_ACTIONS.loadContactsCompleted, (s, p) => ({
-    ...s,
-    contacts: p.result,
-    contactsLoadingStatus: status({ type: 'completed' }),
-  })),
-  on(CORE_ACTIONS.loadContactsFailed, (s, p) => ({
-    ...s,
-    contactsLoadingStatus: status({ type: 'failed', error: p.error }),
-  })),
-
-  on(CORE_ACTIONS.loadMails, (s) => ({
-    ...s,
-    mailsLoadingStatus: status({ type: 'pending' }),
-  })),
-  on(CORE_ACTIONS.loadMailsCompleted, (s, p) => ({
-    ...s,
-    mails: p.result,
-    mailsLoadingStatus: status({ type: 'completed' }),
-  })),
-  on(CORE_ACTIONS.loadMailsFailed, (s, p) => ({
-    ...s,
-    mailsLoadingStatus: status({ type: 'failed', error: p.error }),
-  })),
-
-  on(CORE_ACTIONS.loadMailboxes, (s) => ({
-    ...s,
-    mailboxesLoadingStatus: status({ type: 'pending' }),
-  })),
-  on(CORE_ACTIONS.loadMailboxesCompleted, (s, p) => ({
-    ...s,
-    mailboxes: p.result,
-    mailboxesLoadingStatus: status({ type: 'completed' }),
-  })),
-  on(CORE_ACTIONS.loadMailboxesFailed, (s, p) => ({
-    ...s,
-    mailboxesLoadingStatus: status({ type: 'failed', error: p.error }),
   })),
 );

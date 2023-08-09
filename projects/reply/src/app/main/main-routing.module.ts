@@ -3,8 +3,13 @@ import { CanActivateFn, RouterModule, Routes } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { combineLatest, filter, firstValueFrom } from 'rxjs';
 
-import { CORE_ACTIONS } from '../core/state/core.actions';
+import { CONTACT_ACTIONS } from '../core/state/contact/contact.actions';
+import { CONTACT_STATE } from '../core/state/contact/contact.state-entry';
 import { CORE_STATE } from '../core/state/core.state-entry';
+import { MAIL_ACTIONS } from '../core/state/mail/mail.actions';
+import { MAIL_STATE } from '../core/state/mail/mail.state-entry';
+import { MAILBOX_ACTIONS } from '../core/state/mailbox/mailbox.actions';
+import { MAILBOX_STATE } from '../core/state/mailbox/mailbox.state-entry';
 import { BaseFoundationComponent } from './base-foundation/base-foundation.component';
 import { MainComponent } from './main.component';
 import { UpperFoundationComponent } from './upper-foundation/upper-foundation.component';
@@ -17,19 +22,19 @@ const dataInitializer: CanActivateFn = async () => {
     .pipe(filter(Boolean));
   await firstValueFrom(authenticate$);
 
-  store.dispatch(CORE_ACTIONS.loadContacts());
-  store.dispatch(CORE_ACTIONS.loadMailboxes());
-  store.dispatch(CORE_ACTIONS.loadMails());
+  store.dispatch(CONTACT_ACTIONS.loadContacts());
+  store.dispatch(MAILBOX_ACTIONS.loadMailboxes());
+  store.dispatch(MAIL_ACTIONS.loadMails());
 
   const load$ = combineLatest([
     store
-      .select(CORE_STATE.selectContactsLoadingStatus)
+      .select(CONTACT_STATE.selectContactsLoadingStatus)
       .pipe(filter((s) => s.type === 'completed')),
     store
-      .select(CORE_STATE.selectMailboxesLoadingStatus)
+      .select(MAILBOX_STATE.selectMailboxesLoadingStatus)
       .pipe(filter((s) => s.type === 'completed')),
     store
-      .select(CORE_STATE.selectMailsLoadingStatus)
+      .select(MAIL_STATE.selectMailsLoadingStatus)
       .pipe(filter((s) => s.type === 'completed')),
   ]);
   await firstValueFrom(load$);
