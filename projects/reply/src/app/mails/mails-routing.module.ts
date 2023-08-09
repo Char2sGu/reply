@@ -5,19 +5,21 @@ import {
   Routes,
   UrlMatcher,
 } from '@angular/router';
-import { first, map } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
 
 import { VirtualMailboxName } from '../core/mailbox-name.enums';
-import { MailboxRepository } from '../data/mailbox/mailbox.repository';
+import { CORE_STATE } from '../core/state/core.state-entry';
 import { MailsComponent } from './mails.component';
 
 const mailboxNameValid: CanActivateFn = (route) => {
+  const store = inject(Store);
   const mailboxName: string = route.params['mailboxName'];
   const virtualMailboxNames = Object.values(VirtualMailboxName) as string[];
   if (virtualMailboxNames.includes(mailboxName)) return true;
-  return inject(MailboxRepository)
-    .queryOne((e) => e.name === route.params['mailboxName'])
-    .pipe(map(Boolean), first());
+  return store
+    .select(CORE_STATE.selectMailboxes)
+    .pipe(map((mailboxes) => !!mailboxes.find((e) => e.name === mailboxName)));
 };
 
 const routes: Routes = [

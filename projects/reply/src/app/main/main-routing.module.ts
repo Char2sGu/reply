@@ -1,12 +1,40 @@
-import { NgModule } from '@angular/core';
+import { inject, NgModule } from '@angular/core';
 import { CanActivateFn, RouterModule, Routes } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { combineLatest, filter, firstValueFrom } from 'rxjs';
 
+import { CORE_ACTIONS } from '../core/state/core.actions';
+import { CORE_STATE } from '../core/state/core.state-entry';
 import { BaseFoundationComponent } from './base-foundation/base-foundation.component';
 import { MainComponent } from './main.component';
 import { UpperFoundationComponent } from './upper-foundation/upper-foundation.component';
 
 const dataInitializer: CanActivateFn = async () => {
-  throw new Error('Not implemented');
+  const store = inject(Store);
+
+  const authenticate$ = store
+    .select(CORE_STATE.selectAuthenticated)
+    .pipe(filter(Boolean));
+  await firstValueFrom(authenticate$);
+
+  store.dispatch(CORE_ACTIONS.loadContacts());
+  store.dispatch(CORE_ACTIONS.loadMailboxes());
+  store.dispatch(CORE_ACTIONS.loadMails());
+
+  const load$ = combineLatest([
+    store
+      .select(CORE_STATE.selectContactsLoadingStatus)
+      .pipe(filter((s) => s.type === 'completed')),
+    store
+      .select(CORE_STATE.selectMailboxesLoadingStatus)
+      .pipe(filter((s) => s.type === 'completed')),
+    store
+      .select(CORE_STATE.selectMailsLoadingStatus)
+      .pipe(filter((s) => s.type === 'completed')),
+  ]);
+  await firstValueFrom(load$);
+
+  return true;
 };
 
 const routes: Routes = [
