@@ -3,7 +3,7 @@ import parseMessage from 'gmail-api-parse-message';
 
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
-import { Mail } from '../../entity/mail/mail.model';
+import { Mail } from '../../../app/entity/mail/mail.model';
 import { GMAIL_SYSTEM_MAILBOXES } from '../core/gmail-system-mailboxes.object';
 
 export type GmailMessageParseResult = Pick<Mail, 'id'> &

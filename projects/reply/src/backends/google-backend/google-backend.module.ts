@@ -1,10 +1,10 @@
 import { inject, ModuleWithProviders, NgModule } from '@angular/core';
 
-import { AuthenticationBackend } from '../core/auth/authentication.backend';
-import { APP_PREPARER, AppPreparer } from '../core/preparation';
-import { ContactBackend } from '../entity/contact/contact.backend';
-import { MailBackend } from '../entity/mail/mail.backend';
-import { MailboxBackend } from '../entity/mailbox/mailbox.backend';
+import { AuthenticationBackend } from '../../app/core/auth/authentication.backend';
+import { APP_PREPARER, AppPreparer } from '../../app/core/preparation';
+import { ContactBackend } from '../../app/entity/contact/contact.backend';
+import { MailBackend } from '../../app/entity/mail/mail.backend';
+import { MailboxBackend } from '../../app/entity/mailbox/mailbox.backend';
 import { GoogleAuthenticationBackend } from './auth/google-authentication.backend';
 import { GoogleContactBackend } from './contact/google-contact.backend';
 import { GOOGLE_APIS } from './core/google-apis.object';

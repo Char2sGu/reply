@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
-import { access } from '../../core/property-path.utils';
-import { MailboxBackend } from '../../entity/mailbox/mailbox.backend';
-import { Mailbox } from '../../entity/mailbox/mailbox.model';
+import { access } from '../../../app/core/property-path.utils';
+import { MailboxBackend } from '../../../app/entity/mailbox/mailbox.backend';
+import { Mailbox } from '../../../app/entity/mailbox/mailbox.model';
 import { GMAIL_SYSTEM_MAILBOXES } from '../core/gmail-system-mailboxes.object';
 import { useGoogleApi } from '../core/google-apis.utils';
 

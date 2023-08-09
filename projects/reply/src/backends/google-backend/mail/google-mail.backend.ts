@@ -8,11 +8,15 @@ import {
   switchMap,
 } from 'rxjs';
 
-import { access } from '../../core/property-path.utils';
-import { Page, SyncChange, SyncResult } from '../../entity/core/backend.models';
-import { MailBackend } from '../../entity/mail/mail.backend';
-import { Mail } from '../../entity/mail/mail.model';
-import { Mailbox } from '../../entity/mailbox/mailbox.model';
+import { access } from '../../../app/core/property-path.utils';
+import {
+  Page,
+  SyncChange,
+  SyncResult,
+} from '../../../app/entity/core/backend.models';
+import { MailBackend } from '../../../app/entity/mail/mail.backend';
+import { Mail } from '../../../app/entity/mail/mail.model';
+import { Mailbox } from '../../../app/entity/mailbox/mailbox.model';
 import { useGoogleApi } from '../core/google-apis.utils';
 import { GmailMessageResolver } from './gmail-message-resolver.service';
 

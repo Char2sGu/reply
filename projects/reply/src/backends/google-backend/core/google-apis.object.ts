@@ -15,7 +15,7 @@ import {
 
 import { includeThenableInZone } from '@/app/core/zone.utils';
 
-import { ScriptLoader } from '../../core/script-loader.service';
+import { ScriptLoader } from '../../../app/core/script-loader.service';
 
 // TODO: unable to cancel request with the gapi library
 

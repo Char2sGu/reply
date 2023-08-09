@@ -8,13 +8,14 @@ import {
   switchMap,
 } from 'rxjs';
 
-import { access } from '../../core/property-path.utils';
+import { access } from '@/app/core/property-path.utils';
 import {
   ContactBackend,
   ContactBackendException,
-} from '../../data/contact/contact.backend';
-import { Contact } from '../../entity/contact/contact.model';
-import { SyncChange, SyncResult } from '../../entity/core/backend.models';
+} from '@/app/entity/contact/contact.backend';
+import { Contact } from '@/app/entity/contact/contact.model';
+import { SyncChange, SyncResult } from '@/app/entity/core/backend.models';
+
 import { useGoogleApi as useApi } from '../core/google-apis.utils';
 import { GooglePersonResolver } from './google-person-resolver.service';
 
