@@ -15,7 +15,7 @@
           <div matLine>{{ mail.subject }}</div>
           <div
             matLine
-            *ngIf="mail.sender | resolveRef : contactRepo | async as sender"
+            *ngIf="mail.sender | contactFromMailParticipant | async as sender"
           >
             <span>{{ sender.name ?? sender.email }}</span>
             -

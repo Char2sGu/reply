@@ -1,11 +1,10 @@
-import { Contact } from '../contact/contact.model';
 import { Mailbox } from '../mailbox/mailbox.model';
 
 export interface Mail {
   id: string;
   subject?: string;
-  sender: Contact['id'];
-  recipients?: Contact['id'][];
+  sender: MailParticipant;
+  recipients?: MailParticipant[];
   sentAt: Date;
   snippet?: string;
   content: string;
@@ -14,4 +13,9 @@ export interface Mail {
   isRead: boolean;
   type: 'received' | 'sent' | 'draft';
   mailbox?: Mailbox['id'];
+}
+
+export interface MailParticipant {
+  name?: string;
+  email: string;
 }

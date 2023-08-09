@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Dayjs } from 'dayjs';
 import dayjs from 'dayjs/esm';
 
-import { Mail } from '@/app/data/mail/mail.model';
+import { Contact } from '@/app/data/contact/contact.model';
+import { Mail, MailParticipant } from '@/app/data/mail/mail.model';
 
 import { DemoEntityFactory } from '../core/demo-entity-factory';
 
@@ -16,8 +17,8 @@ export class DemoMailFactory implements DemoEntityFactory {
   create(payload: {
     id?: string;
     subject: string;
-    sender: string;
-    recipients: string[];
+    sender: Contact['email'];
+    recipients: Contact['email'][];
     content: string;
     sentAt: (now: Dayjs) => Dayjs;
     isStarred?: boolean;
@@ -28,8 +29,8 @@ export class DemoMailFactory implements DemoEntityFactory {
     return {
       id: payload.id ?? String(this.nextId++),
       subject: payload.subject,
-      sender: payload.sender,
-      recipients: payload.recipients,
+      sender: this.participantFromEmail(payload.sender),
+      recipients: payload.recipients.map(this.participantFromEmail),
       snippet: payload.content.split('\n')[0],
       content: payload.content,
       contentType: 'plain-text',
@@ -44,5 +45,9 @@ export class DemoMailFactory implements DemoEntityFactory {
   private trimContent(raw: string): string {
     const lines = raw.split('\n').map((line) => line.trim());
     return lines.join('\n').trim();
+  }
+
+  private participantFromEmail(email: string): MailParticipant {
+    return { email };
   }
 }

@@ -1,5 +1,5 @@
 <ng-container
-  *ngIf="mail.sender | resolveRef : contactRepo | async as mailSender"
+  *ngIf="mail.sender | contactFromMailParticipant | async as mailSender"
 >
   <div class="overlay"></div>
   <div class="ripple" matRipple></div>

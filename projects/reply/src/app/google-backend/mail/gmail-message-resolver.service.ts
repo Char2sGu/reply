@@ -1,8 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 
 import { asserted } from '@/app/core/property-path.utils';
-import { Contact } from '@/app/data/contact/contact.model';
-import { ContactRepository } from '@/app/data/contact/contact.repository';
 import { Mail } from '@/app/data/mail/mail.model';
 
 import { GmailMessageParser } from './gmail-message-parser.service';
@@ -11,11 +9,6 @@ import { GmailMessageParser } from './gmail-message-parser.service';
   providedIn: 'root',
 })
 export class GmailMessageResolver {
-  // TODO: try not to involve repositories in this service.
-  // It is an exception to involve repositories in this service because we
-  // are unable to get the ids of the involved contacts from a Gmail message,
-  // which shouldn't happen when handling other entities.
-  private contactRepo = inject(ContactRepository);
   private messageParser = inject(GmailMessageParser);
 
   resolveMessage(
@@ -25,14 +18,8 @@ export class GmailMessageResolver {
       this.messageParser.parseMessage(message);
     return {
       ...fields,
-      ...(sender && {
-        sender: this.resolveEmailAndName(sender.email, sender.name).id,
-      }),
-      ...(recipients && {
-        recipients: recipients.map(
-          (r) => this.resolveEmailAndName(r.email, r.name).id,
-        ),
-      }),
+      ...(sender && { sender }),
+      ...(recipients && { recipients }),
     };
   }
 
@@ -47,13 +34,5 @@ export class GmailMessageResolver {
       'isRead',
       'type',
     ]);
-  }
-
-  resolveEmailAndName(email: string, name?: string): Contact {
-    const result =
-      this.contactRepo.queryOne((e) => e.email === email).snapshot ??
-      this.contactRepo.insert({ id: email, name, email, type: 'temporary' })
-        .curr;
-    return result;
   }
 }

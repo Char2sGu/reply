@@ -13,6 +13,7 @@ import { ContactSortPipe } from '../data/contact/contact-sort.pipe';
 import { ContactStringifyPipe } from '../data/contact/contact-stringify.pipe';
 import { MailSnippetPipe } from '../data/mail/mail-snippet.pipe';
 import { ResolveRefPipe } from '../data/resolve-ref.pipe';
+import { ContactFromMailParticipantPipe } from '../data/shared/contact-from-mail-participant.pipe';
 import { AvatarComponent } from '../shared/avatar/avatar.component';
 import { HtmlRendererComponent } from '../shared/html-renderer/html-renderer.component';
 import { LayoutContentDirective } from '../shared/layout-content.directive';
@@ -73,6 +74,7 @@ import { MailsRoutingModule } from './mails-routing.module';
     ReattachOnChangeDirective,
     AvatarComponent,
     HtmlRendererComponent,
+    ContactFromMailParticipantPipe,
   ],
 })
 export class MailsModule {}

@@ -10,7 +10,7 @@ import { Contact } from '@/app/data/contact/contact.model';
 export class GooglePersonResolver {
   resolvePerson(
     person: gapi.client.people.Person,
-  ): Pick<Contact, 'id' | 'type'> & Partial<Contact> {
+  ): Pick<Contact, 'id'> & Partial<Contact> {
     const { resourceName, names, photos, emailAddresses } = person;
     const id = resourceName?.split('/').pop();
     if (!id) {
@@ -25,7 +25,6 @@ export class GooglePersonResolver {
       ...(name && { name }),
       ...(email && { email }),
       ...(photo && { avatarUrl: photo.url }),
-      type: 'user',
     };
   }
 

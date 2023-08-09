@@ -1,10 +1,10 @@
 <ng-container *ngIf="user() as user">
   <ng-container
-    *ngIf="mail.sender | resolveRef : contactRepo | async as sender"
+    *ngIf="mail.sender | contactFromMailParticipant | async as sender"
   >
     <ng-container
       *ngIf="
-        mail.recipients ?? [] | resolveRef : contactRepo | async as recipients
+        mail.recipients ?? [] | contactFromMailParticipant | async as recipients
       "
     >
       <rpl-mail
