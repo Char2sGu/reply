@@ -30,17 +30,20 @@ export class CoreEffects {
   authenticate = createEffect(() =>
     this.actions$.pipe(
       ofType(CORE_ACTIONS.authenticate),
-      concatMap((a) => this.authService.requestAuthorization(a.hint)),
-      switchMap((authorization) => {
-        if (!authorization) return of(CORE_ACTIONS.authenticateCancelled());
-        return of(null).pipe(
-          concatMap(() => this.contactService.loadUser()),
-          concatLatestFrom((user) => this.accountService.saveAccount(user)),
-          map(([user, account]) => ({ authorization, user, account })),
-          map((result) => CORE_ACTIONS.authenticateCompleted({ result })),
-        );
-      }),
-      catchError((error) => of(CORE_ACTIONS.authenticateFailed({ error }))),
+      concatMap(({ hint }) =>
+        this.authService.requestAuthorization(hint).pipe(
+          switchMap((authorization) => {
+            if (!authorization) return of(CORE_ACTIONS.authenticateCancelled());
+            return of(null).pipe(
+              concatMap(() => this.contactService.loadUser()),
+              concatLatestFrom((user) => this.accountService.saveAccount(user)),
+              map(([user, account]) => ({ authorization, user, account })),
+              map((result) => CORE_ACTIONS.authenticateCompleted({ result })),
+            );
+          }),
+          catchError((error) => of(CORE_ACTIONS.authenticateFailed({ error }))),
+        ),
+      ),
     ),
   );
 }

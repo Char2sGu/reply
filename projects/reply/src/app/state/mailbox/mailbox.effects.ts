@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, concatMap, map, of } from 'rxjs';
+import { catchError, exhaustMap, map, of } from 'rxjs';
 
 import { MailboxBackend } from '@/app/entity/mailbox/mailbox.backend';
 
@@ -14,9 +14,14 @@ export class MailboxEffects {
   loadMailboxes = createEffect(() =>
     this.actions$.pipe(
       ofType(MAILBOX_ACTIONS.loadMailboxes),
-      concatMap(() => this.mailboxService.loadMailboxes()),
-      map((result) => MAILBOX_ACTIONS.loadMailboxesCompleted({ result })),
-      catchError((error) => of(MAILBOX_ACTIONS.loadMailboxesFailed({ error }))),
+      exhaustMap(() =>
+        this.mailboxService.loadMailboxes().pipe(
+          map((result) => MAILBOX_ACTIONS.loadMailboxesCompleted({ result })),
+          catchError((error) =>
+            of(MAILBOX_ACTIONS.loadMailboxesFailed({ error })),
+          ),
+        ),
+      ),
     ),
   );
 }

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, concatMap, map, of } from 'rxjs';
+import { catchError, exhaustMap, map, of } from 'rxjs';
 
 import { AccountService } from '@/app/entity/account/account.service';
 
@@ -14,9 +14,14 @@ export class AccountEffects {
   loadAccounts = createEffect(() =>
     this.actions$.pipe(
       ofType(ACCOUNT_ACTIONS.loadAccounts),
-      concatMap(() => this.accountService.loadAccounts()),
-      map((result) => ACCOUNT_ACTIONS.loadAccountsCompleted({ result })),
-      catchError((error) => of(ACCOUNT_ACTIONS.loadAccountsFailed({ error }))),
+      exhaustMap(() =>
+        this.accountService.loadAccounts().pipe(
+          map((result) => ACCOUNT_ACTIONS.loadAccountsCompleted({ result })),
+          catchError((error) =>
+            of(ACCOUNT_ACTIONS.loadAccountsFailed({ error })),
+          ),
+        ),
+      ),
     ),
   );
 }
