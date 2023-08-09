@@ -17,7 +17,7 @@ export class AccountResource {
       accounts = [];
       this.accounts.set(accounts);
     }
-    return accounts;
+    return [...accounts];
   }
 
   create(payload: Account): void {
