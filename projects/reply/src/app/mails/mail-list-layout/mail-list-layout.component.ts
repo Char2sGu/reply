@@ -18,19 +18,26 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AnimationCurves } from '@angular/material/core';
 import { Store } from '@ngrx/store';
-import { map, Observable, ReplaySubject, shareReplay, switchMap } from 'rxjs';
+import {
+  combineLatest,
+  map,
+  Observable,
+  ReplaySubject,
+  shareReplay,
+  switchMap,
+} from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
 import {
   SystemMailboxName,
   VirtualMailboxName,
 } from '@/app/core/mailbox-name.enums';
-import { useSystemMailboxNameMapping } from '@/app/core/mailbox-name.utils';
 import { NavigationService } from '@/app/core/navigation.service';
 import { Mail } from '@/app/entity/mail/mail.model';
-import { MailRepository } from '@/app/entity/mail/mail.repository';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 import { CORE_STATE } from '@/app/state/core.state-entry';
+import { MAIL_STATE } from '@/app/state/mail/mail.state-entry';
+import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 
 const mailCardsAnimation = animation([
   query(
@@ -78,9 +85,7 @@ const mailCardsAnimation = animation([
 })
 export class MailListLayoutComponent {
   private store = inject(Store);
-  private mailRepo = inject(MailRepository);
   private navService = inject(NavigationService);
-  private systemMailboxes$ = useSystemMailboxNameMapping();
 
   breakpoints = this.store.selectSignal(CORE_STATE.selectBreakpoints);
 
@@ -114,10 +119,14 @@ export class MailListLayoutComponent {
   );
 
   queryVirtualMailboxMails(mailbox: VirtualMailboxName): Observable<Mail[]> {
+    const mails$ = this.store.select(MAIL_STATE.selectMails);
     if (mailbox === VirtualMailboxName.Starred)
-      return this.systemMailboxes$.pipe(
-        switchMap((systemMailboxes) =>
-          this.mailRepo.query(
+      return combineLatest([
+        mails$,
+        this.store.select(MAILBOX_STATE.selectSystemMailboxesIndexedByName),
+      ]).pipe(
+        map(([mails, systemMailboxes]) =>
+          mails.filter(
             (e) =>
               e.isStarred &&
               e.mailbox !== systemMailboxes[SystemMailboxName.Trash].id &&
@@ -126,13 +135,15 @@ export class MailListLayoutComponent {
         ),
       );
     if (mailbox === VirtualMailboxName.Sent)
-      return this.mailRepo.query((e) => e.type === 'sent');
+      return mails$.pipe(map((m) => m.filter((e) => e.type === 'sent')));
     if (mailbox === VirtualMailboxName.Drafts)
-      return this.mailRepo.query((e) => e.type === 'draft');
+      return mails$.pipe(map((m) => m.filter((e) => e.type === 'draft')));
     throw new Error(`Invalid virtual mailbox: ${mailbox}`);
   }
 
   queryRegularMailboxMails(mailbox: Mailbox): Observable<Mail[]> {
-    return this.mailRepo.query((e) => e.mailbox === mailbox.id);
+    return this.store
+      .select(MAIL_STATE.selectMails)
+      .pipe(map((m) => m.filter((e) => e.mailbox === mailbox.id)));
   }
 }

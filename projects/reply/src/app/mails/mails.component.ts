@@ -17,8 +17,10 @@ import {
   ProjectionNodeSnapper,
   ProjectionNodeSnapshotMap,
 } from '@layout-projection/core';
+import { Store } from '@ngrx/store';
 import {
   animationFrames,
+  combineLatest,
   filter,
   first,
   firstValueFrom,
@@ -33,8 +35,8 @@ import {
 import { useActionFlow } from '../core/action-flow';
 import { VirtualMailboxName } from '../core/mailbox-name.enums';
 import { Mail } from '../entity/mail/mail.model';
-import { MailRepository } from '../entity/mail/mail.repository';
-import { MailboxRepository } from '../entity/mailbox/mailbox.repository';
+import { MAIL_STATE } from '../state/mail/mail.state-entry';
+import { MAILBOX_STATE } from '../state/mailbox/mailbox.state-entry';
 import { ToggleMailReadStatusActionFlow } from './core/mail.action-flows';
 import { MailCardAnimationPresenceComponent } from './core/mail-card-animation-presence/mail-card-animation-presence.component';
 
@@ -46,10 +48,9 @@ import { MailCardAnimationPresenceComponent } from './core/mail-card-animation-p
   hostDirectives: [ProjectionNodeDirective],
 })
 export class MailsComponent implements AfterViewInit, OnDestroy {
+  private store = inject(Store);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  private mailRepo = inject(MailRepository);
-  private mailboxRepo = inject(MailboxRepository);
   private hostNode = inject(ProjectionNode);
   private layoutSnapper = inject(ProjectionNodeSnapper);
   private layoutAnimator = inject(LayoutAnimator);
@@ -58,8 +59,16 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
   private toggleMailReadStatus = useActionFlow(ToggleMailReadStatusActionFlow);
 
   mailId$ = this.route.params.pipe(map((p) => p['mailId']));
-  mail$ = this.mailId$.pipe(
-    switchMap((id) => (id ? this.mailRepo.retrieve(id) : of(null))),
+  mail$ = combineLatest([
+    this.mailId$,
+    this.store.select(MAIL_STATE.selectMails),
+  ]).pipe(
+    map(([id, mails]) => {
+      if (!id) return null;
+      const result = mails.find((m) => m.id === id);
+      if (!result) throw new Error(`Missing mail ${id}`);
+      return result;
+    }),
     shareReplay(1),
   );
 
@@ -68,9 +77,13 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
     switchMap((mailboxName) =>
       Object.values(VirtualMailboxName).includes(mailboxName as any)
         ? of(mailboxName as VirtualMailboxName)
-        : this.mailboxRepo
-            .queryOne((e) => e.name === mailboxName)
-            .pipe(filter(Boolean)),
+        : this.store.select(MAILBOX_STATE.selectMailboxes).pipe(
+            map((mailboxes) => {
+              const result = mailboxes.find((m) => m.name === mailboxName);
+              if (!result) throw new Error(`Missing mailbox ${mailboxName}`);
+              return result;
+            }),
+          ),
     ),
   );
 

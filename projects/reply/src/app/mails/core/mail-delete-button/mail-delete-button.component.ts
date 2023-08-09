@@ -2,13 +2,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  inject,
   Input,
 } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { first, map, switchMap } from 'rxjs';
 
 import { useActionFlow } from '@/app/core/action-flow';
 import { SystemMailboxName } from '@/app/core/mailbox-name.enums';
-import { useSystemMailboxNameMapping } from '@/app/core/mailbox-name.utils';
+import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 
 import { Mail } from '../../../entity/mail/mail.model';
 import {
@@ -23,13 +25,13 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailDeleteButtonComponent {
+  private store = inject(Store);
   private deleteMail = useActionFlow(DeleteMailActionFlow);
   private moveMail = useActionFlow(MoveMailToMailboxActionFlow);
 
-  private systemMailboxes$ = useSystemMailboxNameMapping();
-  private trashMailbox$ = this.systemMailboxes$.pipe(
-    map((mapping) => mapping[SystemMailboxName.Trash]),
-  );
+  private trashMailbox$ = this.store
+    .select(MAILBOX_STATE.selectSystemMailboxesIndexedByName)
+    .pipe(map((mapping) => mapping[SystemMailboxName.Trash]));
 
   @Input() mail!: Mail;
 
