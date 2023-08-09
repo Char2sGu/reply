@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { catchError, filter, map, of, switchMap } from 'rxjs';
+import { catchError, concatMap, filter, map, of, withLatestFrom } from 'rxjs';
 
 import { AccountService } from '@/app/data/account/account.service';
 import { ContactBackend } from '@/app/data/contact/contact.backend';
@@ -38,7 +38,7 @@ export class CoreEffects {
   authenticate = createEffect(() =>
     this.actions$.pipe(
       ofType(CORE_ACTIONS.authenticate),
-      switchMap((a) => this.authService.requestAuthorization(a.hint)),
+      concatMap((a) => this.authService.requestAuthorization(a.hint)),
       map((result) =>
         result
           ? CORE_ACTIONS.authenticateCompleted({ result })
@@ -51,7 +51,7 @@ export class CoreEffects {
   loadUser = createEffect(() =>
     this.actions$.pipe(
       ofType(CORE_ACTIONS.loadUser, CORE_ACTIONS.authenticateCompleted),
-      switchMap(() => this.contactService.loadUser()),
+      concatMap(() => this.contactService.loadUser()),
       map((result) => CORE_ACTIONS.loadUserCompleted({ result })),
       catchError((error) => of(CORE_ACTIONS.loadUserFailed({ error }))),
     ),
@@ -60,9 +60,10 @@ export class CoreEffects {
   loadAccount = createEffect(() =>
     this.actions$.pipe(
       ofType(CORE_ACTIONS.loadAccount, CORE_ACTIONS.loadUserCompleted),
-      switchMap(() => this.store.select(CORE_STATE.selectUser)),
+      withLatestFrom(this.store.select(CORE_STATE.selectUser)),
+      map(([_, user]) => user),
       filter(Boolean),
-      switchMap((user) => this.accountService.saveAccount(user)),
+      concatMap((user) => this.accountService.saveAccount(user)),
       map((result) => CORE_ACTIONS.loadAccountCompleted({ result })),
       catchError((error) => of(CORE_ACTIONS.loadAccountFailed({ error }))),
     ),
@@ -71,7 +72,7 @@ export class CoreEffects {
   loadAccounts = createEffect(() =>
     this.actions$.pipe(
       ofType(CORE_ACTIONS.loadAccounts),
-      switchMap(() => this.accountService.loadAccounts()),
+      concatMap(() => this.accountService.loadAccounts()),
       map((result) => CORE_ACTIONS.loadAccountsCompleted({ result })),
       catchError((error) => of(CORE_ACTIONS.loadAccountsFailed({ error }))),
     ),
@@ -80,7 +81,7 @@ export class CoreEffects {
   loadContacts = createEffect(() =>
     this.actions$.pipe(
       ofType(CORE_ACTIONS.loadContacts),
-      switchMap(() => this.contactService.loadContacts()),
+      concatMap(() => this.contactService.loadContacts()),
       map((result) => CORE_ACTIONS.loadContactsCompleted({ result })),
       catchError((error) => of(CORE_ACTIONS.loadContactsFailed({ error }))),
     ),
@@ -89,7 +90,7 @@ export class CoreEffects {
   loadMails = createEffect(() =>
     this.actions$.pipe(
       ofType(CORE_ACTIONS.loadMails),
-      switchMap(() => this.mailService.loadMailPage()),
+      concatMap(() => this.mailService.loadMailPage()),
       map((r) => r.results),
       map((result) => CORE_ACTIONS.loadMailsCompleted({ result })),
       catchError((error) => of(CORE_ACTIONS.loadMailsFailed({ error }))),
@@ -99,7 +100,7 @@ export class CoreEffects {
   loadMailboxes = createEffect(() =>
     this.actions$.pipe(
       ofType(CORE_ACTIONS.loadMailboxes),
-      switchMap(() => this.mailboxService.loadMailboxes()),
+      concatMap(() => this.mailboxService.loadMailboxes()),
       map((result) => CORE_ACTIONS.loadMailboxesCompleted({ result })),
       catchError((error) => of(CORE_ACTIONS.loadMailboxesFailed({ error }))),
     ),
