@@ -6,6 +6,9 @@ export const CORE_STATE = createFeature({
   name: 'core',
   reducer: coreStateReducer,
   extraSelectors: (base) => ({
-    selectAuthorized: createSelector(base.selectAuthorization, (a) => !!a),
+    selectAuthenticated: createSelector(
+      base.selectAuthenticationStatus,
+      (s) => s.type === 'completed',
+    ),
   }),
 });

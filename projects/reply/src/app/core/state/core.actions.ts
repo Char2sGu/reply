@@ -14,17 +14,11 @@ export const CORE_ACTIONS = createActionGroup({
     breakpointsUpdated: props<{ to: BreakpointMap }>(),
 
     authenticate: (p: { hint?: string } = {}) => p,
-    authenticateCompleted: props<{ result: Authorization }>(),
+    authenticateCompleted: props<{
+      result: { authorization: Authorization; user: Contact; account: Account };
+    }>(),
     authenticateCancelled: emptyProps(),
     authenticateFailed: props<{ error: Error }>(),
-
-    loadUser: emptyProps(),
-    loadUserCompleted: props<{ result: Contact; update?: boolean }>(),
-    loadUserFailed: props<{ error: Error }>(),
-
-    loadAccount: emptyProps(),
-    loadAccountCompleted: props<{ result: Account }>(),
-    loadAccountFailed: props<{ error: Error }>(),
 
     loadAccounts: emptyProps(),
     loadAccountsCompleted: props<{ result: Account[] }>(),

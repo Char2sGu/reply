@@ -16,11 +16,11 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { LayoutProjectionModule } from '@layout-projection/angular';
-import { Actions, EffectsModule, ofType } from '@ngrx/effects';
+import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ScrollingModule } from '@reply/scrolling';
-import { catchError, of } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -118,9 +118,11 @@ import { LogoComponent } from './shared/logo/logo.component';
       multi: true,
       useFactory: (): AppPreparer => {
         const store = inject(Store);
-        const actions$ = inject(Actions);
         store.dispatch(CORE_ACTIONS.loadAccounts());
-        return () => actions$.pipe(ofType(CORE_ACTIONS.loadAccountCompleted));
+        return () =>
+          store
+            .select(CORE_STATE.selectAccountsStatus)
+            .pipe(map((s) => s.type === 'completed'));
       },
     },
   ],

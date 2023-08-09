@@ -26,7 +26,9 @@ export class AuthSelectAccountComponent {
   itemButtonClick = new EventEmitter<Account>();
   addButtonClick = new EventEmitter();
 
-  busy$ = this.store.select(CORE_STATE.selectAuthenticating);
+  busy$ = this.store
+    .select(CORE_STATE.selectAuthenticationStatus)
+    .pipe(map((s) => s.type === 'loading'));
 
   accounts = toSignal(this.queryAccountsAndSort(), { requireSync: true });
 

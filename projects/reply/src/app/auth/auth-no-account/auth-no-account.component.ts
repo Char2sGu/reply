@@ -5,7 +5,7 @@ import {
   inject,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { filter, tap, withLatestFrom } from 'rxjs';
+import { filter, map, tap, withLatestFrom } from 'rxjs';
 
 import { CORE_ACTIONS } from '@/app/core/state/core.actions';
 import { CORE_STATE } from '@/app/core/state/core.state-entry';
@@ -21,7 +21,9 @@ export class AuthNoAccountComponent {
 
   buttonClick = new EventEmitter();
 
-  busy$ = this.store.select(CORE_STATE.selectAuthenticating);
+  busy$ = this.store
+    .select(CORE_STATE.selectAuthenticationStatus)
+    .pipe(map((s) => s.type === 'completed'));
 
   constructor() {
     this.buttonClick

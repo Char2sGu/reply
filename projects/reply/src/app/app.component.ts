@@ -112,7 +112,7 @@ export class AppComponent {
 
   constructor() {
     this.store
-      .select(CORE_STATE.selectAuthorized)
+      .select(CORE_STATE.selectAuthenticated)
       .pipe(
         pairwise(),
         map((pair) => pair[0] !== pair[1]),

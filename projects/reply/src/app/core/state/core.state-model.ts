@@ -10,23 +10,27 @@ export interface CoreState {
   breakpoints: BreakpointMap;
 
   authorization: Authorization | null;
-  authenticating: boolean | Error;
-
   user: Contact | null;
-  userLoading: boolean | Error;
-
   account: Account | null;
-  accountLoading: boolean | Error;
+  authenticationStatus: Status;
 
   accounts: Account[];
-  accountsLoading: boolean | Error;
+  accountsStatus: Status;
 
   contacts: Contact[];
-  contactsLoading: boolean | Error;
+  contactsStatus: Status;
 
   mails: Mail[];
-  mailsLoading: boolean | Error;
+  mailsStatus: Status;
 
   mailboxes: Mailbox[];
-  mailboxesLoading: boolean | Error;
+  mailboxesStatus: Status;
 }
+
+export const status = (s: Status): Status => s;
+
+export type Status =
+  | { type: 'idle' }
+  | { type: 'loading' }
+  | { type: 'completed' }
+  | { type: 'failed'; error: unknown };

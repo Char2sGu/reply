@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
-import { catchError, concatMap, filter, map, of, withLatestFrom } from 'rxjs';
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
+import { catchError, concatMap, map, of, switchMap } from 'rxjs';
 
 import { AccountService } from '@/app/data/account/account.service';
 import { ContactBackend } from '@/app/data/contact/contact.backend';
@@ -11,12 +10,10 @@ import { MailboxBackend } from '@/app/data/mailbox/mailbox.backend';
 import { AuthenticationService } from '../auth/authentication.service';
 import { BreakpointService } from '../breakpoint.service';
 import { CORE_ACTIONS } from './core.actions';
-import { CORE_STATE } from './core.state-entry';
 
 @Injectable()
 export class CoreEffects {
   private actions$ = inject(Actions);
-  private store = inject(Store);
   private breakpointService = inject(BreakpointService);
   private authService = inject(AuthenticationService);
   private accountService = inject(AccountService);
@@ -39,33 +36,16 @@ export class CoreEffects {
     this.actions$.pipe(
       ofType(CORE_ACTIONS.authenticate),
       concatMap((a) => this.authService.requestAuthorization(a.hint)),
-      map((result) =>
-        result
-          ? CORE_ACTIONS.authenticateCompleted({ result })
-          : CORE_ACTIONS.authenticateCancelled(),
-      ),
+      switchMap((authorization) => {
+        if (!authorization) return of(CORE_ACTIONS.authenticateCancelled());
+        return of(null).pipe(
+          concatMap(() => this.contactService.loadUser()),
+          concatLatestFrom((user) => this.accountService.saveAccount(user)),
+          map(([user, account]) => ({ authorization, user, account })),
+          map((result) => CORE_ACTIONS.authenticateCompleted({ result })),
+        );
+      }),
       catchError((error) => of(CORE_ACTIONS.authenticateFailed({ error }))),
-    ),
-  );
-
-  loadUser = createEffect(() =>
-    this.actions$.pipe(
-      ofType(CORE_ACTIONS.loadUser, CORE_ACTIONS.authenticateCompleted),
-      concatMap(() => this.contactService.loadUser()),
-      map((result) => CORE_ACTIONS.loadUserCompleted({ result })),
-      catchError((error) => of(CORE_ACTIONS.loadUserFailed({ error }))),
-    ),
-  );
-
-  loadAccount = createEffect(() =>
-    this.actions$.pipe(
-      ofType(CORE_ACTIONS.loadAccount, CORE_ACTIONS.loadUserCompleted),
-      withLatestFrom(this.store.select(CORE_STATE.selectUser)),
-      map(([_, user]) => user),
-      filter(Boolean),
-      concatMap((user) => this.accountService.saveAccount(user)),
-      map((result) => CORE_ACTIONS.loadAccountCompleted({ result })),
-      catchError((error) => of(CORE_ACTIONS.loadAccountFailed({ error }))),
     ),
   );
 

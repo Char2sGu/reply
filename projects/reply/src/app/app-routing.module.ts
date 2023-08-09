@@ -12,19 +12,19 @@ import { map } from 'rxjs';
 
 import { CORE_STATE } from './core/state/core.state-entry';
 
-const authorized: CanMatchFn = () =>
+const authenticated: CanMatchFn = () =>
   inject(Store)
-    .select(CORE_STATE.selectAuthorized)
+    .select(CORE_STATE.selectAuthenticated)
     .pipe(map((a) => !!a));
-const unauthorized: CanMatchFn = () =>
+const notAuthenticated: CanMatchFn = () =>
   inject(Store)
-    .select(CORE_STATE.selectAuthorized)
+    .select(CORE_STATE.selectAuthenticated)
     .pipe(map((a) => !a));
 
 const routes: Routes = [
   {
     path: '',
-    canMatch: [unauthorized],
+    canMatch: [notAuthenticated],
     children: [
       {
         path: 'auth',
@@ -40,7 +40,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    canMatch: [authorized],
+    canMatch: [authenticated],
     children: [
       {
         path: '',

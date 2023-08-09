@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 
 import { CORE_ACTIONS } from './core.actions';
-import { CoreState } from './core.state-model';
+import { CoreState, status } from './core.state-model';
 
 const coreInitialState: CoreState = {
   breakpoints: {
@@ -12,25 +12,21 @@ const coreInitialState: CoreState = {
   },
 
   authorization: null,
-  authenticating: false,
-
   user: null,
-  userLoading: false,
-
   account: null,
-  accountLoading: false,
+  authenticationStatus: status({ type: 'idle' }),
 
   accounts: [],
-  accountsLoading: false,
+  accountsStatus: status({ type: 'idle' }),
 
   contacts: [],
-  contactsLoading: false,
+  contactsStatus: status({ type: 'idle' }),
 
   mails: [],
-  mailsLoading: false,
+  mailsStatus: status({ type: 'idle' }),
 
   mailboxes: [],
-  mailboxesLoading: false,
+  mailboxesStatus: status({ type: 'idle' }),
 };
 
 export const coreStateReducer = createReducer(
@@ -47,7 +43,9 @@ export const coreStateReducer = createReducer(
   })),
   on(CORE_ACTIONS.authenticateCompleted, (s, p) => ({
     ...s,
-    authorization: p.result,
+    authorization: p.result.authorization,
+    user: p.result.user,
+    account: p.result.account,
     authenticating: false,
   })),
   on(CORE_ACTIONS.authenticateCancelled, (s) => ({
@@ -59,87 +57,59 @@ export const coreStateReducer = createReducer(
     authenticating: p.error,
   })),
 
-  on(CORE_ACTIONS.loadUser, (s) => ({
-    ...s,
-    userLoading: true,
-  })),
-  on(CORE_ACTIONS.loadUserCompleted, (s, p) => ({
-    ...s,
-    user: p.result,
-    userLoading: false,
-  })),
-  on(CORE_ACTIONS.loadUserFailed, (s, p) => ({
-    ...s,
-    userLoading: p.error,
-  })),
-
-  on(CORE_ACTIONS.loadAccount, (s) => ({
-    ...s,
-    accountLoading: true,
-  })),
-  on(CORE_ACTIONS.loadAccountCompleted, (s, p) => ({
-    ...s,
-    account: p.result,
-    accountLoading: false,
-  })),
-  on(CORE_ACTIONS.loadAccountFailed, (s, p) => ({
-    ...s,
-    accountLoading: p.error,
-  })),
-
   on(CORE_ACTIONS.loadAccounts, (s) => ({
     ...s,
-    accountsLoading: true,
+    accountsStatus: status({ type: 'loading' }),
   })),
   on(CORE_ACTIONS.loadAccountsCompleted, (s, p) => ({
     ...s,
     accounts: p.result,
-    accountsLoading: false,
+    accountsStatus: status({ type: 'completed' }),
   })),
   on(CORE_ACTIONS.loadAccountsFailed, (s, p) => ({
     ...s,
-    accountsLoading: p.error,
+    accountsStatus: status({ type: 'failed', error: p.error }),
   })),
 
   on(CORE_ACTIONS.loadContacts, (s) => ({
     ...s,
-    contactsLoading: true,
+    contactsStatus: status({ type: 'loading' }),
   })),
   on(CORE_ACTIONS.loadContactsCompleted, (s, p) => ({
     ...s,
     contacts: p.result,
-    contactsLoading: false,
+    contactsStatus: status({ type: 'completed' }),
   })),
   on(CORE_ACTIONS.loadContactsFailed, (s, p) => ({
     ...s,
-    contactsLoading: p.error,
+    contactsStatus: status({ type: 'failed', error: p.error }),
   })),
 
   on(CORE_ACTIONS.loadMails, (s) => ({
     ...s,
-    mailsLoading: true,
+    mailsStatus: status({ type: 'loading' }),
   })),
   on(CORE_ACTIONS.loadMailsCompleted, (s, p) => ({
     ...s,
     mails: p.result,
-    mailsLoading: false,
+    mailsStatus: status({ type: 'completed' }),
   })),
   on(CORE_ACTIONS.loadMailsFailed, (s, p) => ({
     ...s,
-    mailsLoading: p.error,
+    mailsStatus: status({ type: 'failed', error: p.error }),
   })),
 
   on(CORE_ACTIONS.loadMailboxes, (s) => ({
     ...s,
-    mailboxesLoading: true,
+    mailboxesStatus: status({ type: 'loading' }),
   })),
   on(CORE_ACTIONS.loadMailboxesCompleted, (s, p) => ({
     ...s,
     mailboxes: p.result,
-    mailboxesLoading: false,
+    mailboxesStatus: status({ type: 'completed' }),
   })),
   on(CORE_ACTIONS.loadMailboxesFailed, (s, p) => ({
     ...s,
-    mailboxesLoading: p.error,
+    mailboxesStatus: status({ type: 'failed', error: p.error }),
   })),
 );
