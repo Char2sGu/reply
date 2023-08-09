@@ -3,27 +3,50 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Mail } from '@/app/entity/mail/mail.model';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
+import { generateActionGroupEvents } from '../core/action-generator';
+
 export const MAIL_ACTIONS = createActionGroup({
   source: 'mail',
   events: {
-    loadMails: emptyProps(),
-    loadMailsCompleted: props<{ result: Mail[] }>(),
-    loadMailsFailed: props<{ error: Error }>(),
-
-    toggleMailStarredStatus: props<{ mail: Mail }>(),
-    toggleMailStarredStatusCompleted: props<{ mail: Mail; result: Mail }>(),
-    toggleMailStarredStatusFailed: props<{ mail: Mail; error: Error }>(),
-
-    toggleMailReadStatus: props<{ mail: Mail; to: 'read' | 'unread' }>(),
-    toggleMailReadStatusCompleted: props<{ mail: Mail; result: Mail }>(),
-    toggleMailReadStatusFailed: props<{ mail: Mail; error: Error }>(),
-
-    moveMailToMailbox: props<{ mail: Mail; mailbox: Mailbox }>(),
-    moveMailToMailboxCompleted: props<{ mail: Mail; result: Mail }>(),
-    moveMailToMailboxFailed: props<{ mail: Mail; error: Error }>(),
-
-    deleteMail: props<{ mail: Mail }>(),
-    deleteMailCompleted: props<{ mail: Mail }>(),
-    deleteMailFailed: props<{ mail: Mail; error: Error }>(),
+    ...generateActionGroupEvents({
+      name: 'loadMails' as const,
+      params: emptyProps(),
+      events: {
+        completed: props<{ result: Mail[] }>(),
+        failed: props<{ error: unknown }>(),
+      },
+    }),
+    ...generateActionGroupEvents({
+      name: 'toggleMailStarredStatus' as const,
+      params: props<{ mail: Mail }>(),
+      events: {
+        completed: props<{ result: Mail }>(),
+        failed: props<{ error: unknown }>(),
+      },
+    }),
+    ...generateActionGroupEvents({
+      name: 'toggleMailReadStatus' as const,
+      params: props<{ mail: Mail; to: 'read' | 'unread' }>(),
+      events: {
+        completed: props<{ result: Mail }>(),
+        failed: props<{ error: unknown }>(),
+      },
+    }),
+    ...generateActionGroupEvents({
+      name: 'moveMailToMailbox' as const,
+      params: props<{ mail: Mail; mailbox: Mailbox }>(),
+      events: {
+        completed: props<{ result: Mail }>(),
+        failed: props<{ error: unknown }>(),
+      },
+    }),
+    ...generateActionGroupEvents({
+      name: 'deleteMail' as const,
+      params: props<{ mail: Mail }>(),
+      events: {
+        completed: props<{ result: Mail }>(),
+        failed: props<{ error: unknown }>(),
+      },
+    }),
   },
 });

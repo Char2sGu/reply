@@ -6,7 +6,7 @@ import { AuthenticationService } from '../core/auth/authentication.service';
 import { BreakpointService } from '../core/breakpoint.service';
 import { AccountService } from '../entity/account/account.service';
 import { ContactBackend } from '../entity/contact/contact.backend';
-import { CORE_ACTIONS } from './core.actions';
+import { CORE_ACTIONS as A } from './core.actions';
 
 @Injectable()
 export class CoreEffects {
@@ -24,24 +24,24 @@ export class CoreEffects {
         ['laptop']: '(min-width: 1240px)',
         ['desktop']: '(min-width: 1440px)',
       })
-      .pipe(map((to) => CORE_ACTIONS.breakpointsUpdated({ to }))),
+      .pipe(map((to) => A.breakpointsUpdated({ to }))),
   );
 
   authenticate = createEffect(() =>
     this.actions$.pipe(
-      ofType(CORE_ACTIONS.authenticate),
-      concatMap(({ hint }) =>
-        this.authService.requestAuthorization(hint).pipe(
+      ofType(A.authenticate),
+      concatMap((params) =>
+        this.authService.requestAuthorization(params.hint).pipe(
           switchMap((authorization) => {
-            if (!authorization) return of(CORE_ACTIONS.authenticateCancelled());
+            if (!authorization) return of(A.authenticateCancelled());
             return of(null).pipe(
               concatMap(() => this.contactService.loadUser()),
               concatLatestFrom((user) => this.accountService.saveAccount(user)),
               map(([user, account]) => ({ authorization, user, account })),
-              map((result) => CORE_ACTIONS.authenticateCompleted({ result })),
+              map((result) => A.authenticateCompleted({ params, result })),
             );
           }),
-          catchError((error) => of(CORE_ACTIONS.authenticateFailed({ error }))),
+          catchError((error) => of(A.authenticateFailed({ params, error }))),
         ),
       ),
     ),

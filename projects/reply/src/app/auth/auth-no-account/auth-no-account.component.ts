@@ -30,7 +30,7 @@ export class AuthNoAccountComponent {
       .pipe(
         withLatestFrom(this.busy$),
         filter(([_, busy]) => !busy),
-        tap(() => this.store.dispatch(CORE_ACTIONS.authenticate())),
+        tap(() => this.store.dispatch(CORE_ACTIONS.authenticate({}))),
       )
       .subscribe();
   }

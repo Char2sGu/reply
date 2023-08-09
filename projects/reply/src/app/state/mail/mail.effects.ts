@@ -37,20 +37,22 @@ export class MailEffects {
   toggleMailStarredStatus = createEffect(() =>
     this.actions$.pipe(
       ofType(A.toggleMailStarredStatus),
-      concatMap(({ mail }) => {
-        const action$ = mail.isStarred
-          ? this.mailService.markMailAsNotStarred(mail)
-          : this.mailService.markMailAsStarred(mail);
+      concatMap((params) => {
+        const action$ = params.mail.isStarred
+          ? this.mailService.markMailAsNotStarred(params.mail)
+          : this.mailService.markMailAsStarred(params.mail);
         return action$.pipe(
           takeUntil(
             this.actions$.pipe(
               ofType(A.toggleMailStarredStatus),
-              filter((a) => a.mail.id === mail.id),
+              filter((a) => a.mail.id === params.mail.id),
             ),
           ),
-          map((result) => A.toggleMailStarredStatusCompleted({ mail, result })),
+          map((result) =>
+            A.toggleMailStarredStatusCompleted({ params, result }),
+          ),
           catchError((error) =>
-            of(A.toggleMailStarredStatusFailed({ mail, error })),
+            of(A.toggleMailStarredStatusFailed({ params, error })),
           ),
         );
       }),
@@ -60,7 +62,7 @@ export class MailEffects {
   toggleMailStarredStatusRetryUi = createEffect(() =>
     this.actions$.pipe(
       ofType(A.toggleMailStarredStatusFailed),
-      switchMap(({ mail }) =>
+      switchMap(({ params: { mail } }) =>
         this.notifier
           .notify('Failed to update starred status', 'Retry')
           .event$.pipe(

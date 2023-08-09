@@ -37,6 +37,6 @@ export const mailStateReducer = createReducer(
   })),
   on(MAIL_ACTIONS.toggleMailStarredStatusFailed, (s, p) => ({
     ...s,
-    mails: s.mails.upsert(p.mail),
+    mails: s.mails.upsert(p.params.mail),
   })),
 );
