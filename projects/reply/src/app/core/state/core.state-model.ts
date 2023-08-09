@@ -12,25 +12,25 @@ export interface CoreState {
   authorization: Authorization | null;
   user: Contact | null;
   account: Account | null;
-  authenticationStatus: Status;
+  authenticationStatus: ActionStatus;
 
   accounts: Account[];
-  accountsStatus: Status;
+  accountsLoadingStatus: ActionStatus;
 
   contacts: Contact[];
-  contactsStatus: Status;
+  contactsLoadingStatus: ActionStatus;
 
   mails: Mail[];
-  mailsStatus: Status;
+  mailsLoadingStatus: ActionStatus;
 
   mailboxes: Mailbox[];
-  mailboxesStatus: Status;
+  mailboxesLoadingStatus: ActionStatus;
 }
 
-export const status = (s: Status): Status => s;
+export const status = (s: ActionStatus): ActionStatus => s;
 
-export type Status =
+export type ActionStatus =
   | { type: 'idle' }
-  | { type: 'loading' }
+  | { type: 'pending' }
   | { type: 'completed' }
   | { type: 'failed'; error: unknown };

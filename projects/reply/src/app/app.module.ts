@@ -121,7 +121,7 @@ import { LogoComponent } from './shared/logo/logo.component';
         store.dispatch(CORE_ACTIONS.loadAccounts());
         return () =>
           store
-            .select(CORE_STATE.selectAccountsStatus)
+            .select(CORE_STATE.selectAccountsLoadingStatus)
             .pipe(map((s) => s.type === 'completed'));
       },
     },

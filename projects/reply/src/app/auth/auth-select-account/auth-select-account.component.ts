@@ -28,7 +28,7 @@ export class AuthSelectAccountComponent {
 
   busy$ = this.store
     .select(CORE_STATE.selectAuthenticationStatus)
-    .pipe(map((s) => s.type === 'loading'));
+    .pipe(map((s) => s.type === 'pending'));
 
   accounts = toSignal(this.queryAccountsAndSort(), { requireSync: true });
 
