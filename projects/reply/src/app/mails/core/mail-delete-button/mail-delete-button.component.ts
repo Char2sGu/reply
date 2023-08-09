@@ -6,15 +6,20 @@ import {
   Input,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { EMPTY, first, map, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  tap,
+  withLatestFrom,
+} from 'rxjs';
 
-import { useActionFlow } from '@/app/core/action-flow';
 import { SystemMailboxName } from '@/app/core/mailbox-name.enums';
 import { MAIL_ACTIONS } from '@/app/state/mail/mail.actions';
 import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 
 import { Mail } from '../../../entity/mail/mail.model';
-import { MoveMailToMailboxActionFlow } from '../mail.action-flows';
 
 @Component({
   selector: 'rpl-mail-delete-button',
@@ -24,34 +29,43 @@ import { MoveMailToMailboxActionFlow } from '../mail.action-flows';
 })
 export class MailDeleteButtonComponent {
   private store = inject(Store);
-  private moveMail = useActionFlow(MoveMailToMailboxActionFlow);
 
   private trashMailbox$ = this.store
     .select(MAILBOX_STATE.selectSystemMailboxesIndexedByName)
     .pipe(map((mapping) => mapping[SystemMailboxName.Trash]));
 
-  @Input() mail!: Mail;
+  // prettier-ignore
+  @Input('mail') set mailInput(v: Mail) { this.mail$.next(v) }
+  mail$ = new BehaviorSubject<Mail | null>(null);
 
   click = new EventEmitter();
 
-  action$ = this.trashMailbox$.pipe(
-    map((trashMailbox) => this.mail.mailbox === trashMailbox.id),
+  actionType$ = combineLatest([
+    this.trashMailbox$,
+    this.mail$.pipe(filter(Boolean)),
+  ]).pipe(
+    map(([trashMailbox, mail]) => mail.mailbox === trashMailbox.id),
     map((inTrash) => (inTrash ? 'delete' : 'move-to-trash')),
   );
 
   constructor() {
     this.click
       .pipe(
-        switchMap(() => this.action$),
-        switchMap((action) => {
-          if (action === 'delete') {
-            this.store.dispatch(MAIL_ACTIONS.deleteMail({ mail: this.mail }));
-            return EMPTY;
+        withLatestFrom(
+          this.mail$.pipe(filter(Boolean)),
+          this.trashMailbox$,
+          this.actionType$,
+        ),
+        tap(([, mail, trashMailbox, actionType]) => {
+          if (actionType === 'delete') {
+            this.store.dispatch(MAIL_ACTIONS.deleteMail({ mail }));
+          } else if (actionType === 'move-to-trash') {
+            const actionCreator = MAIL_ACTIONS.moveMailToMailbox;
+            const a = actionCreator({ mail, mailbox: trashMailbox });
+            this.store.dispatch(a);
+          } else {
+            throw new Error(`Unknown action: ${actionType}`);
           }
-          return this.trashMailbox$.pipe(
-            first(),
-            switchMap((mailbox) => this.moveMail({ mail: this.mail, mailbox })),
-          );
         }),
       )
       .subscribe();

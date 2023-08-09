@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import {
   catchError,
   concatMap,
@@ -9,15 +10,18 @@ import {
   switchMap,
   takeUntil,
   tap,
+  withLatestFrom,
 } from 'rxjs';
 
 import { NotificationService } from '@/app/core/notification/notification.service';
 import { MailBackend } from '@/app/entity/mail/mail.backend';
 
+import { MAILBOX_STATE } from '../mailbox/mailbox.state-entry';
 import { MAIL_ACTIONS as A } from './mail.actions';
 
 @Injectable()
 export class MailEffects {
+  private store = inject(Store);
   private actions$ = inject(Actions);
   private mailService = inject(MailBackend);
   private notifier = inject(NotificationService);
@@ -110,6 +114,74 @@ export class MailEffects {
             filter((e) => e.type === 'action'),
             map(() => A.toggleMailReadStatus(params)),
           );
+      }),
+    ),
+  );
+
+  moveMailToMailbox = createEffect(() =>
+    this.actions$.pipe(
+      ofType(A.moveMailToMailbox),
+      concatMap((params) =>
+        this.mailService.moveMail(params.mail, params.mailbox).pipe(
+          takeUntil(
+            this.actions$.pipe(
+              ofType(A.moveMailToMailbox),
+              filter(({ mail }) => mail.id === params.mail.id),
+            ),
+          ),
+          map((result) => A.moveMailToMailboxCompleted({ params, result })),
+          catchError((error) =>
+            of(A.moveMailToMailboxFailed({ params, error })),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  moveMailToMailboxNotifyUi = createEffect(() =>
+    this.actions$.pipe(
+      ofType(A.moveMailToMailbox),
+      withLatestFrom(this.store.select(MAILBOX_STATE.selectMailboxes)),
+      switchMap(([params, mailboxes]) => {
+        const { mail, mailbox: destMailbox } = params;
+        const currMailbox = mail.mailbox
+          ? mailboxes.retrieve(mail.mailbox)
+          : null;
+        const msg = destMailbox
+          ? `Mail moved into ${destMailbox.name}`
+          : currMailbox
+          ? `Mail moved out from ${currMailbox.name}`
+          : 'Mail moved';
+        return this.notifier.notify(msg, 'Undo').event$.pipe(
+          filter((e) => e.type === 'action'),
+          map(() =>
+            A.moveMailToMailbox({
+              mail: { ...mail, mailbox: destMailbox?.id },
+              mailbox: currMailbox,
+            }),
+          ),
+        );
+      }),
+    ),
+  );
+
+  moveMailToMailboxRetryUi = createEffect(() =>
+    this.actions$.pipe(
+      ofType(A.moveMailToMailboxFailed),
+      withLatestFrom(this.store.select(MAILBOX_STATE.selectMailboxes)),
+      switchMap(([{ params }, mailboxes]) => {
+        const { mail, mailbox: destMailbox } = params;
+        const currMailbox = mail.mailbox
+          ? mailboxes.retrieve(mail.mailbox)
+          : null;
+        const msg = destMailbox
+          ? `Failed to move mail into ${destMailbox.name}`
+          : currMailbox
+          ? `Failed to move mail out from ${currMailbox.name}`
+          : 'Failed to move mail';
+        return this.notifier
+          .notify(msg, 'Retry')
+          .event$.pipe(map(() => A.moveMailToMailbox(params)));
       }),
     ),
   );

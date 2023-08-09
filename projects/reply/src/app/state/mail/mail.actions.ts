@@ -34,7 +34,7 @@ export const MAIL_ACTIONS = createActionGroup({
     }),
     ...generateActionGroupEvents({
       name: 'moveMailToMailbox' as const,
-      params: props<{ mail: Mail; mailbox: Mailbox }>(),
+      params: props<{ mail: Mail; mailbox: Mailbox | null }>(),
       events: {
         completed: props<{ result: Mail }>(),
         failed: props<{ error: unknown }>(),

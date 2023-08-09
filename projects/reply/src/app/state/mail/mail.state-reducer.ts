@@ -53,6 +53,19 @@ export const mailStateReducer = createReducer(
     mails: s.mails.upsert(p.params.mail),
   })),
 
+  on(MAIL_ACTIONS.moveMailToMailbox, (s, p) => ({
+    ...s,
+    mails: s.mails.upsert({ ...p.mail, mailbox: p.mailbox?.id }),
+  })),
+  on(MAIL_ACTIONS.moveMailToMailboxCompleted, (s, p) => ({
+    ...s,
+    mails: s.mails.upsert(p.result),
+  })),
+  on(MAIL_ACTIONS.moveMailToMailboxFailed, (s, p) => ({
+    ...s,
+    mails: s.mails.upsert(p.params.mail),
+  })),
+
   on(MAIL_ACTIONS.deleteMail, (s, p) => ({
     ...s,
     mails: s.mails.delete(p.mail.id),

@@ -19,7 +19,7 @@ const mailboxNameValid: CanActivateFn = (route) => {
   if (virtualMailboxNames.includes(mailboxName)) return true;
   return store
     .select(MAILBOX_STATE.selectMailboxes)
-    .pipe(map((mailboxes) => !!mailboxes.find((e) => e.name === mailboxName)));
+    .pipe(map((m) => !!m.queryOne((e) => e.name === mailboxName)));
 };
 
 const routes: Routes = [

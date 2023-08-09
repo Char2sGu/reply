@@ -73,7 +73,7 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
         ? of(mailboxName as VirtualMailboxName)
         : this.store.select(MAILBOX_STATE.selectMailboxes).pipe(
             map((mailboxes) => {
-              const result = mailboxes.find((m) => m.name === mailboxName);
+              const result = mailboxes.queryOne((m) => m.name === mailboxName);
               if (!result) throw new Error(`Missing mailbox ${mailboxName}`);
               return result;
             }),

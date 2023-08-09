@@ -11,9 +11,9 @@ export const MAILBOX_STATE = createFeature({
   extraSelectors: (base) => ({
     selectSystemMailboxesIndexedByName: createSelector(
       base.selectMailboxes,
-      (mailboxes) => {
+      (collection) => {
         const names: string[] = Object.values(SystemMailboxName);
-        mailboxes = mailboxes.filter((m) => names.includes(m.name));
+        const mailboxes = collection.query((m) => names.includes(m.name));
         const mapping: Partial<Record<SystemMailboxName, Mailbox>> = {};
         for (const name of Object.values(SystemMailboxName)) {
           const mailbox = mailboxes.find((m) => m.name === name);
