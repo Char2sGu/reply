@@ -39,22 +39,22 @@ export const coreStateReducer = createReducer(
 
   on(CORE_ACTIONS.authenticate, (s) => ({
     ...s,
-    authenticating: true,
+    authenticationStatus: status({ type: 'pending' }),
   })),
   on(CORE_ACTIONS.authenticateCompleted, (s, p) => ({
     ...s,
     authorization: p.result.authorization,
     user: p.result.user,
     account: p.result.account,
-    authenticating: false,
+    authenticationStatus: status({ type: 'completed' }),
   })),
   on(CORE_ACTIONS.authenticateCancelled, (s) => ({
     ...s,
-    authenticating: false,
+    authenticationStatus: status({ type: 'idle' }),
   })),
   on(CORE_ACTIONS.authenticateFailed, (s, p) => ({
     ...s,
-    authenticating: p.error,
+    authenticationStatus: status({ type: 'failed', error: p.error }),
   })),
 
   on(CORE_ACTIONS.loadAccounts, (s) => ({
