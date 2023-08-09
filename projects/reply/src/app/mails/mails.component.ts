@@ -65,9 +65,7 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
   ]).pipe(
     map(([id, mails]) => {
       if (!id) return null;
-      const result = mails.find((m) => m.id === id);
-      if (!result) throw new Error(`Missing mail ${id}`);
-      return result;
+      return mails.retrieve(id);
     }),
     shareReplay(1),
   );

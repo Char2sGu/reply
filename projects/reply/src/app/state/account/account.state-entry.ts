@@ -11,9 +11,7 @@ export const ACCOUNT_STATE = createFeature({
       base.selectAccounts,
       (currentId, accounts) => {
         if (!currentId) return null;
-        const result = accounts.find((c) => c.id === currentId);
-        if (!result) throw new Error(`Missing account ${currentId}`);
-        return result;
+        return accounts.retrieve(currentId);
       },
     ),
   }),

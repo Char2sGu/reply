@@ -1,10 +1,13 @@
 import { createReducer, on } from '@ngrx/store';
 
+import { Mail } from '@/app/entity/mail/mail.model';
+
+import { EntityCollection } from '../core/entity-collection';
 import { MAIL_ACTIONS } from './mail.actions';
 import { MailState } from './mail.state-model';
 
 const mailInitialState: MailState = {
-  mails: [],
+  mails: new EntityCollection<Mail>((e) => e.id),
   mailsLoadingStatus: { type: 'idle' },
 };
 
@@ -16,7 +19,7 @@ export const mailStateReducer = createReducer(
   })),
   on(MAIL_ACTIONS.loadMailsCompleted, (s, p) => ({
     ...s,
-    mails: p.result,
+    mails: s.mails.upsert(...p.result),
     mailsLoadingStatus: { type: 'completed' } as const,
   })),
   on(MAIL_ACTIONS.loadMailsFailed, (s, p) => ({

@@ -126,7 +126,7 @@ export class MailListLayoutComponent {
         this.store.select(MAILBOX_STATE.selectSystemMailboxesIndexedByName),
       ]).pipe(
         map(([mails, systemMailboxes]) =>
-          mails.filter(
+          mails.query(
             (e) =>
               e.isStarred &&
               e.mailbox !== systemMailboxes[SystemMailboxName.Trash].id &&
@@ -135,15 +135,15 @@ export class MailListLayoutComponent {
         ),
       );
     if (mailbox === VirtualMailboxName.Sent)
-      return mails$.pipe(map((m) => m.filter((e) => e.type === 'sent')));
+      return mails$.pipe(map((m) => m.query((e) => e.type === 'sent')));
     if (mailbox === VirtualMailboxName.Drafts)
-      return mails$.pipe(map((m) => m.filter((e) => e.type === 'draft')));
+      return mails$.pipe(map((m) => m.query((e) => e.type === 'draft')));
     throw new Error(`Invalid virtual mailbox: ${mailbox}`);
   }
 
   queryRegularMailboxMails(mailbox: Mailbox): Observable<Mail[]> {
     return this.store
       .select(MAIL_STATE.selectMails)
-      .pipe(map((m) => m.filter((e) => e.mailbox === mailbox.id)));
+      .pipe(map((m) => m.query((e) => e.mailbox === mailbox.id)));
   }
 }

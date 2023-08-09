@@ -11,9 +11,7 @@ export const CONTACT_STATE = createFeature({
       base.selectContacts,
       (currentId, contacts) => {
         if (!currentId) return null;
-        const result = contacts.find((c) => c.id === currentId);
-        if (!result) throw new Error(`Missing contact ${currentId}`);
-        return result;
+        return contacts.retrieve(currentId);
       },
     ),
   }),
