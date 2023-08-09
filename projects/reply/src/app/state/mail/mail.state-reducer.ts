@@ -26,4 +26,17 @@ export const mailStateReducer = createReducer(
     ...s,
     mailsLoadingStatus: { type: 'failed', error: p.error } as const,
   })),
+
+  on(MAIL_ACTIONS.toggleMailStarredStatus, (s, p) => ({
+    ...s,
+    mails: s.mails.upsert({ ...p.mail, isStarred: !p.mail.isStarred }),
+  })),
+  on(MAIL_ACTIONS.toggleMailStarredStatusCompleted, (s, p) => ({
+    ...s,
+    mails: s.mails.upsert(p.result),
+  })),
+  on(MAIL_ACTIONS.toggleMailStarredStatusFailed, (s, p) => ({
+    ...s,
+    mails: s.mails.upsert(p.mail),
+  })),
 );

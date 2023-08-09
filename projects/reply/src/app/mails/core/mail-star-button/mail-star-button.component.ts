@@ -2,15 +2,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  inject,
   Input,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { switchMap } from 'rxjs';
+import { Store } from '@ngrx/store';
 
-import { useActionFlow } from '@/app/core/action-flow';
+import { MAIL_ACTIONS } from '@/app/state/mail/mail.actions';
 
 import { Mail } from '../../../entity/mail/mail.model';
-import { ToggleMailStarredStatusActionFlow } from '../mail.action-flows';
 
 @Component({
   selector: 'rpl-mail-star-button',
@@ -19,18 +18,16 @@ import { ToggleMailStarredStatusActionFlow } from '../mail.action-flows';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailStarButtonComponent {
-  private toggleStarred = useActionFlow(ToggleMailStarredStatusActionFlow);
+  private store = inject(Store);
 
   @Input() mail!: Mail;
 
   click = new EventEmitter();
 
   constructor() {
-    this.click
-      .pipe(
-        switchMap(() => this.toggleStarred({ mail: this.mail })),
-        takeUntilDestroyed(),
-      )
-      .subscribe();
+    this.click.subscribe(() => {
+      const action = MAIL_ACTIONS.toggleMailStarredStatus({ mail: this.mail });
+      this.store.dispatch(action);
+    });
   }
 }

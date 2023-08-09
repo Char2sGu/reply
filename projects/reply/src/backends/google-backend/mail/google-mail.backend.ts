@@ -111,7 +111,7 @@ export class GoogleMailBackend implements MailBackend {
   ): Observable<Mail> {
     return this.messageModifyApi({ userId: 'me', id: mail.id }, body).pipe(
       map((msg) => this.messageResolver.resolveMessage(msg)),
-      map((updates) => Object.assign(mail, updates)),
+      map((updates) => ({ ...mail, ...updates })),
     );
   }
 
