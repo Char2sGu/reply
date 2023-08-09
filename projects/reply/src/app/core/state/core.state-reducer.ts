@@ -1,7 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
 
 import { CORE_ACTIONS } from './core.actions';
-import { CoreState, status } from './core.state-model';
+import { CoreState } from './core.state-model';
+import { status } from './core/action-status';
 
 const coreInitialState: CoreState = {
   breakpoints: {
@@ -12,8 +13,8 @@ const coreInitialState: CoreState = {
   },
 
   authorization: null,
-  user: null,
-  account: null,
+  userId: null,
+  accountId: null,
   authenticationStatus: status({ type: 'idle' }),
 
   accounts: [],
@@ -44,8 +45,10 @@ export const coreStateReducer = createReducer(
   on(CORE_ACTIONS.authenticateCompleted, (s, p) => ({
     ...s,
     authorization: p.result.authorization,
-    user: p.result.user,
-    account: p.result.account,
+    userId: p.result.user.id,
+    accountId: p.result.account.id,
+    contacts: s.contacts.concat(p.result.user),
+    accounts: s.accounts.concat(p.result.account),
     authenticationStatus: status({ type: 'completed' }),
   })),
   on(CORE_ACTIONS.authenticateCancelled, (s) => ({
