@@ -26,7 +26,7 @@ export const MAIL_ACTIONS = createActionGroup({
     }),
     ...generateActionGroupEvents({
       name: 'toggleMailReadStatus' as const,
-      params: props<{ mail: Mail; to: 'read' | 'unread' }>(),
+      params: props<{ mail: Mail; to?: 'read' | 'unread' }>(),
       events: {
         completed: props<{ result: Mail }>(),
         failed: props<{ error: unknown }>(),

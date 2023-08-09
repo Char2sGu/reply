@@ -1,11 +1,6 @@
 <mat-menu>
-  <button
-    mat-menu-item
-    (click)="moveMail({ mail, currentMailbox }).subscribe()"
-  >
-    Move to...
-  </button>
-  <button mat-menu-item (click)="toggleMailReadStatus({ mail }).subscribe()">
+  <button mat-menu-item (click)="moveMailButtonClick.emit()">Move to...</button>
+  <button mat-menu-item (click)="toggleMailReadStatusButtonClick.emit()">
     {{ mail.isRead ? 'Mark as unread' : 'Mark as read' }}
   </button>
 </mat-menu>

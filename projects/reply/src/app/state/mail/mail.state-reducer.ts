@@ -39,4 +39,17 @@ export const mailStateReducer = createReducer(
     ...s,
     mails: s.mails.upsert(p.params.mail),
   })),
+
+  on(MAIL_ACTIONS.toggleMailReadStatus, (s, p) => ({
+    ...s,
+    mails: s.mails.upsert({ ...p.mail, isRead: !p.mail.isRead }),
+  })),
+  on(MAIL_ACTIONS.toggleMailReadStatusCompleted, (s, p) => ({
+    ...s,
+    mails: s.mails.upsert(p.result),
+  })),
+  on(MAIL_ACTIONS.toggleMailReadStatusFailed, (s, p) => ({
+    ...s,
+    mails: s.mails.upsert(p.params.mail),
+  })),
 );

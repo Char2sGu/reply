@@ -22,7 +22,6 @@ import {
   animationFrames,
   combineLatest,
   filter,
-  first,
   firstValueFrom,
   map,
   of,
@@ -32,12 +31,11 @@ import {
   takeUntil,
 } from 'rxjs';
 
-import { useActionFlow } from '../core/action-flow';
 import { VirtualMailboxName } from '../core/mailbox-name.enums';
 import { Mail } from '../entity/mail/mail.model';
+import { MAIL_ACTIONS } from '../state/mail/mail.actions';
 import { MAIL_STATE } from '../state/mail/mail.state-entry';
 import { MAILBOX_STATE } from '../state/mailbox/mailbox.state-entry';
-import { ToggleMailReadStatusActionFlow } from './core/mail.action-flows';
 import { MailCardAnimationPresenceComponent } from './core/mail-card-animation-presence/mail-card-animation-presence.component';
 
 @Component({
@@ -55,8 +53,6 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
   private layoutSnapper = inject(ProjectionNodeSnapper);
   private layoutAnimator = inject(LayoutAnimator);
   private viewContainer = inject(ViewContainerRef);
-
-  private toggleMailReadStatus = useActionFlow(ToggleMailReadStatusActionFlow);
 
   mailId$ = this.route.params.pipe(map((p) => p['mailId']));
   mail$ = combineLatest([
@@ -109,18 +105,14 @@ export class MailsComponent implements AfterViewInit, OnDestroy {
     this.mail$
       .pipe(
         pairwise(),
-        filter(([prev, curr]) => !prev && !!curr),
-        switchMap(() => this.initiateListToDetailLayoutAnimation()),
-        switchMap(() =>
-          this.mail$.pipe(
-            first(),
-            filter(Boolean),
-            filter((m) => !m.isRead),
-            switchMap((mail) =>
-              this.toggleMailReadStatus({ mail, to: 'read' }),
-            ),
-          ),
-        ),
+        map(([prev, curr]) => (!prev && !!curr ? curr : null)),
+        filter(Boolean),
+        switchMap(async (mail) => {
+          await this.initiateListToDetailLayoutAnimation();
+          if (mail.isRead) return;
+          const act = MAIL_ACTIONS.toggleMailReadStatus({ mail, to: 'read' });
+          this.store.dispatch(act);
+        }),
       )
       .subscribe();
 

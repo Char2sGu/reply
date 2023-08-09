@@ -72,4 +72,38 @@ export class MailEffects {
       ),
     ),
   );
+
+  toggleMailReadStatus = createEffect(() =>
+    this.actions$.pipe(
+      ofType(A.toggleMailReadStatus),
+      concatMap((params) => {
+        const target = params.mail.isRead ? 'unread' : 'read';
+        const action$ =
+          target === 'read'
+            ? this.mailService.markMailAsRead(params.mail)
+            : this.mailService.markMailAsUnread(params.mail);
+        return action$.pipe(
+          map((result) => A.toggleMailReadStatusCompleted({ params, result })),
+          catchError((error) =>
+            of(A.toggleMailReadStatusFailed({ params, error })),
+          ),
+        );
+      }),
+    ),
+  );
+
+  toggleMailReadStatusRetryUi = createEffect(() =>
+    this.actions$.pipe(
+      ofType(A.toggleMailReadStatusFailed),
+      switchMap(({ params }) => {
+        const target = params.mail.isRead ? 'unread' : 'read';
+        return this.notifier
+          .notify(`Failed to mark mail as ${target}`, 'Retry')
+          .event$.pipe(
+            filter((e) => e.type === 'action'),
+            map(() => A.toggleMailReadStatus(params)),
+          );
+      }),
+    ),
+  );
 }
