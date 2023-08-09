@@ -1,5 +1,5 @@
-import { Authorization } from '../auth/authorization.service';
-import { BreakpointMap } from '../breakpoint.service';
+import { Authorization } from '../core/auth/authorization.service';
+import { BreakpointMap } from '../core/breakpoint.service';
 import { ActionStatus } from './core/action-status';
 
 export interface CoreState {

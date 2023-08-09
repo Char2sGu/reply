@@ -2,11 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { catchError, concatMap, map, of, switchMap } from 'rxjs';
 
-import { AccountService } from '@/app/entity/account/account.service';
-import { ContactBackend } from '@/app/entity/contact/contact.backend';
-
-import { AuthenticationService } from '../auth/authentication.service';
-import { BreakpointService } from '../breakpoint.service';
+import { AuthenticationService } from '../core/auth/authentication.service';
+import { BreakpointService } from '../core/breakpoint.service';
+import { AccountService } from '../entity/account/account.service';
+import { ContactBackend } from '../entity/contact/contact.backend';
 import { CORE_ACTIONS } from './core.actions';
 
 @Injectable()

@@ -28,18 +28,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { LOCAL_STORAGE } from './core/native-api.tokens';
 import { APP_PREPARER, AppPreparer } from './core/preparation';
-import { ACCOUNT_ACTIONS } from './core/state/account/account.actions';
-import { AccountEffects } from './core/state/account/account.effects';
-import { ACCOUNT_STATE } from './core/state/account/account.state-entry';
-import { ContactEffects } from './core/state/contact/contact.effects';
-import { CONTACT_STATE } from './core/state/contact/contact.state-entry';
-import { CoreEffects } from './core/state/core.effects';
-import { CORE_STATE } from './core/state/core.state-entry';
-import { MailEffects } from './core/state/mail/mail.effects';
-import { MAIL_STATE } from './core/state/mail/mail.state-entry';
-import { MailboxEffects } from './core/state/mailbox/mailbox.effects';
-import { MAILBOX_STATE } from './core/state/mailbox/mailbox.state-entry';
 import { LogoComponent } from './shared/logo/logo.component';
+import { ACCOUNT_ACTIONS } from './state/account/account.actions';
+import { AccountEffects } from './state/account/account.effects';
+import { ACCOUNT_STATE } from './state/account/account.state-entry';
+import { ContactEffects } from './state/contact/contact.effects';
+import { CONTACT_STATE } from './state/contact/contact.state-entry';
+import { CoreEffects } from './state/core.effects';
+import { CORE_STATE } from './state/core.state-entry';
+import { MailEffects } from './state/mail/mail.effects';
+import { MAIL_STATE } from './state/mail/mail.state-entry';
+import { MailboxEffects } from './state/mailbox/mailbox.effects';
+import { MAILBOX_STATE } from './state/mailbox/mailbox.state-entry';
 
 // TODO: attachment
 // TODO: image

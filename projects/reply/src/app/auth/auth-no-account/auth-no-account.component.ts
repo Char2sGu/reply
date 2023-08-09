@@ -7,8 +7,8 @@ import {
 import { Store } from '@ngrx/store';
 import { filter, map, tap, withLatestFrom } from 'rxjs';
 
-import { CORE_ACTIONS } from '@/app/core/state/core.actions';
-import { CORE_STATE } from '@/app/core/state/core.state-entry';
+import { CORE_ACTIONS } from '@/app/state/core.actions';
+import { CORE_STATE } from '@/app/state/core.state-entry';
 
 @Component({
   selector: 'rpl-auth-no-account',

@@ -27,10 +27,10 @@ import {
 } from '@/app/core/mailbox-name.enums';
 import { useSystemMailboxNameMapping } from '@/app/core/mailbox-name.utils';
 import { NavigationService } from '@/app/core/navigation.service';
-import { CORE_STATE } from '@/app/core/state/core.state-entry';
 import { Mail } from '@/app/entity/mail/mail.model';
 import { MailRepository } from '@/app/entity/mail/mail.repository';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
+import { CORE_STATE } from '@/app/state/core.state-entry';
 
 const mailCardsAnimation = animation([
   query(

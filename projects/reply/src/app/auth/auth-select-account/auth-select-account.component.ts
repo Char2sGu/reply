@@ -8,10 +8,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { filter, map, Observable, tap, withLatestFrom } from 'rxjs';
 
-import { CORE_ACTIONS } from '@/app/core/state/core.actions';
-import { CORE_STATE } from '@/app/core/state/core.state-entry';
 import { Account } from '@/app/entity/account/account.model';
 import { AccountRepository } from '@/app/entity/account/account.repository';
+import { CORE_ACTIONS } from '@/app/state/core.actions';
+import { CORE_STATE } from '@/app/state/core.state-entry';
 
 @Component({
   selector: 'rpl-auth-select-account',

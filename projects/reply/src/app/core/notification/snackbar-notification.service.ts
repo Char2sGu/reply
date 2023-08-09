@@ -3,7 +3,8 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { Store } from '@ngrx/store';
 import { map, merge } from 'rxjs';
 
-import { CORE_STATE } from '../state/core.state-entry';
+import { CORE_STATE } from '@/app/state/core.state-entry';
+
 import {
   NotificationActionEvent,
   NotificationDismissEvent,

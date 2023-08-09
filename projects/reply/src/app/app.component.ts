@@ -33,7 +33,7 @@ import {
 import { usePrimaryChildRouteAnimationId } from './core/animations';
 import { BreakpointMap } from './core/breakpoint.service';
 import { APP_PREPARER } from './core/preparation';
-import { CORE_STATE } from './core/state/core.state-entry';
+import { CORE_STATE } from './state/core.state-entry';
 
 @Component({
   selector: 'rpl-root',

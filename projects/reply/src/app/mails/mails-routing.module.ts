@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 
 import { VirtualMailboxName } from '../core/mailbox-name.enums';
-import { MAILBOX_STATE } from '../core/state/mailbox/mailbox.state-entry';
+import { MAILBOX_STATE } from '../state/mailbox/mailbox.state-entry';
 import { MailsComponent } from './mails.component';
 
 const mailboxNameValid: CanActivateFn = (route) => {

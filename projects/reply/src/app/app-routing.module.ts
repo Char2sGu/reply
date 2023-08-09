@@ -10,7 +10,7 @@ import {
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 
-import { CORE_STATE } from './core/state/core.state-entry';
+import { CORE_STATE } from './state/core.state-entry';
 
 const authenticated: CanMatchFn = () =>
   inject(Store)

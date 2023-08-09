@@ -10,10 +10,10 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { CORE_STATE } from '@/app/core/state/core.state-entry';
 import { ContactRepository } from '@/app/entity/contact/contact.repository';
 import { Mail } from '@/app/entity/mail/mail.model';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
+import { CORE_STATE } from '@/app/state/core.state-entry';
 
 @Component({
   selector: 'rpl-mail-card',

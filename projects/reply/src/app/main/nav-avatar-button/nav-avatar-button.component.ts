@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { CONTACT_STATE } from '@/app/core/state/contact/contact.state-entry';
+import { CONTACT_STATE } from '@/app/state/contact/contact.state-entry';
 
 @Component({
   selector: 'rpl-nav-avatar-button',

@@ -1,10 +1,9 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { Account } from '@/app/entity/account/account.model';
-import { Contact } from '@/app/entity/contact/contact.model';
-
-import { Authorization } from '../auth/authorization.service';
-import { BreakpointMap } from '../breakpoint.service';
+import { Authorization } from '../core/auth/authorization.service';
+import { BreakpointMap } from '../core/breakpoint.service';
+import { Account } from '../entity/account/account.model';
+import { Contact } from '../entity/contact/contact.model';
 
 export const CORE_ACTIONS = createActionGroup({
   source: 'core',
