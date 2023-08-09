@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Store } from '@ngrx/store';
 import {
   BehaviorSubject,
   concat,
@@ -12,7 +13,7 @@ import {
 
 import { NavigationService } from '../core/navigation.service';
 import { Mail } from '../entity/mail/mail.model';
-import { MailRepository } from '../entity/mail/mail.repository';
+import { MAIL_STATE } from '../state/mail/mail.state-entry';
 
 @Component({
   selector: 'rpl-search',
@@ -21,8 +22,8 @@ import { MailRepository } from '../entity/mail/mail.repository';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent {
+  private store = inject(Store);
   private navService = inject(NavigationService);
-  private mailRepo = inject(MailRepository);
 
   activeNavItem = toSignal(this.navService.activeItem$, { requireSync: true });
 
@@ -34,13 +35,22 @@ export class SearchComponent {
   ).pipe(
     map((text) => text.split(' ')),
     switchMap((keywords) =>
-      this.mailRepo.query(
-        ({ subject }) =>
-          !!subject &&
-          keywords.some((keyword) =>
-            subject.toLowerCase().includes(keyword.toLowerCase()),
+      this.store
+        .select(MAIL_STATE.selectMails)
+        .pipe(
+          map((mails) =>
+            mails.query(
+              ({ subject }) =>
+                !!subject && this.matchKeyword(subject, keywords),
+            ),
           ),
-      ),
+        ),
     ),
   );
+
+  private matchKeyword(target: string, keywords: string[]): boolean {
+    return keywords.some((keyword) =>
+      target.toLowerCase().includes(keyword.toLowerCase()),
+    );
+  }
 }

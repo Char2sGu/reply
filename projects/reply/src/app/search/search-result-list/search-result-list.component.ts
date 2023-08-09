@@ -3,14 +3,13 @@ import {
   Component,
   inject,
   Input,
-  OnInit,
 } from '@angular/core';
+import { Store } from '@ngrx/store';
 import dayjs from 'dayjs/esm';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
-import { ContactRepository } from '@/app/entity/contact/contact.repository';
 import { Mail } from '@/app/entity/mail/mail.model';
-import { MailboxRepository } from '@/app/entity/mailbox/mailbox.repository';
+import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 
 @Component({
   selector: 'rpl-search-result-list',
@@ -18,42 +17,36 @@ import { MailboxRepository } from '@/app/entity/mailbox/mailbox.repository';
   styleUrls: ['./search-result-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchResultListComponent implements OnInit {
-  contactRepo = inject(ContactRepository);
-  mailboxRepo = inject(MailboxRepository);
+export class SearchResultListComponent {
+  private store = inject(Store);
 
-  @Input() set mails(v: Mail[]) {
-    this.mails$.next(v);
-  }
+  mailboxes$ = this.store.select(MAILBOX_STATE.selectMailboxes);
 
+  // prettier-ignore
+  @Input() set mails(v: Mail[]) { this.mails$.next(v) }
   mails$ = new BehaviorSubject<Mail[]>([]);
-  mailsGroups$!: Observable<MailGroup[]>;
 
-  constructor() {}
-
-  ngOnInit(): void {
-    this.mailsGroups$ = this.mails$.pipe(
-      map((mails) => {
-        const grouped: Record<string, Mail[]> = {
-          ['Yesterday']: [],
-          ['This Week']: [],
-          ['Earlier']: [],
-        };
-        mails.forEach((mail) => {
-          if (dayjs().subtract(1, 'day').isBefore(mail.sentAt))
-            grouped['Yesterday'].push(mail);
-          else if (dayjs().subtract(1, 'week').isBefore(mail.sentAt))
-            grouped['This Week'].push(mail);
-          else grouped['Earlier'].push(mail);
-        });
-        return [
-          { name: 'Yesterday', items: grouped['Yesterday'] },
-          { name: 'This Week', items: grouped['This Week'] },
-          { name: 'Earlier', items: grouped['Earlier'] },
-        ];
-      }),
-    );
-  }
+  mailsGroups$: Observable<MailGroup[]> = this.mails$.pipe(
+    map((mails) => {
+      const grouped: Record<string, Mail[]> = {
+        ['Yesterday']: [],
+        ['This Week']: [],
+        ['Earlier']: [],
+      };
+      mails.forEach((mail) => {
+        if (dayjs().subtract(1, 'day').isBefore(mail.sentAt))
+          grouped['Yesterday'].push(mail);
+        else if (dayjs().subtract(1, 'week').isBefore(mail.sentAt))
+          grouped['This Week'].push(mail);
+        else grouped['Earlier'].push(mail);
+      });
+      return [
+        { name: 'Yesterday', items: grouped['Yesterday'] },
+        { name: 'This Week', items: grouped['This Week'] },
+        { name: 'Earlier', items: grouped['Earlier'] },
+      ];
+    }),
+  );
 }
 
 interface MailGroup {

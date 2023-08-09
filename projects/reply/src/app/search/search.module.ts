@@ -9,10 +9,10 @@ import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-l
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
 import { ContactFromMailParticipantPipe } from '../entity/shared/contact-from-mail-participant.pipe';
-import { ResolveRefPipe } from '../entity/shared/resolve-ref.pipe';
 import { HeaderComponent } from '../shared/header/header.component';
 import { LayoutContentDirective } from '../shared/layout-content.directive';
 import { ReadableDatePipe } from '../shared/readable-date.pipe';
+import { ResolveRefPipe } from '../shared/resolve-ref.pipe';
 import { ScrollableAreaComponent } from '../shared/scrollable-area/scrollable-area.component';
 import { SearchComponent } from './search.component';
 import { SearchResultListComponent } from './search-result-list/search-result-list.component';

@@ -1,15 +1,17 @@
 import { inject, NgModule } from '@angular/core';
 import { CanMatchFn, RouterModule, Routes } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
 
-import { AccountRepository } from '../entity/account/account.repository';
+import { ACCOUNT_STATE } from '../state/account/account.state-entry';
 import { AuthComponent } from './auth.component';
 import { AuthNoAccountComponent } from './auth-no-account/auth-no-account.component';
 import { AuthSelectAccountComponent } from './auth-select-account/auth-select-account.component';
 
-const existsAccounts: CanMatchFn = () => {
-  const accountRepo = inject(AccountRepository);
-  return !!accountRepo.query().snapshot.length;
-};
+const existsAccounts: CanMatchFn = () =>
+  inject(Store)
+    .select(ACCOUNT_STATE.selectAccounts)
+    .pipe(map((accounts) => !!accounts.all().length));
 
 const routes: Routes = [
   {

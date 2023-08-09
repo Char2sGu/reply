@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import {
   filter,
   map,
@@ -10,7 +11,7 @@ import {
   switchMap,
 } from 'rxjs';
 
-import { MailboxRepository } from '../entity/mailbox/mailbox.repository';
+import { MAILBOX_STATE } from '../state/mailbox/mailbox.state-entry';
 import { SystemMailboxName, VirtualMailboxName } from './mailbox-name.enums';
 
 const STATIC_ITEMS = [
@@ -26,16 +27,19 @@ const STATIC_ITEMS = [
   providedIn: 'root',
 })
 export class NavigationService {
+  private store = inject(Store);
   private router = inject(Router);
-  private mailboxRepo = inject(MailboxRepository);
 
-  readonly items$: Observable<NavigationItem[]> = this.mailboxRepo
-    .query((e) => {
-      const systemMailboxNames = Object.values(SystemMailboxName);
-      const isSystemMailbox = systemMailboxNames.includes(e.name as any);
-      return !isSystemMailbox;
-    })
+  readonly items$: Observable<NavigationItem[]> = this.store
+    .select(MAILBOX_STATE.selectMailboxes)
     .pipe(
+      map((collection) =>
+        collection.query((e) => {
+          const systemMailboxNames = Object.values(SystemMailboxName);
+          const isSystemMailbox = systemMailboxNames.includes(e.name as any);
+          return !isSystemMailbox;
+        }),
+      ),
       map((mailboxes) => mailboxes.map(({ name }) => ({ name }))),
       map((items) => [...STATIC_ITEMS, ...items]),
       map((items) =>

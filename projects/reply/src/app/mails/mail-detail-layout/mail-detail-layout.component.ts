@@ -14,9 +14,7 @@ import { Store } from '@ngrx/store';
 import { combineLatest, delay, first } from 'rxjs';
 
 import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
-import { ContactRepository } from '@/app/entity/contact/contact.repository';
 import { Mail } from '@/app/entity/mail/mail.model';
-import { MailRepository } from '@/app/entity/mail/mail.repository';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 import { BottomNavService } from '@/app/main/bottom-nav/bottom-nav.service';
 import { NavFabService } from '@/app/main/nav-fab/nav-fab.service';
@@ -31,8 +29,6 @@ import { CONTACT_STATE } from '@/app/state/contact/contact.state-entry';
 export class MailDetailLayoutComponent implements AfterViewInit, OnDestroy {
   private store = inject(Store);
 
-  mailRepo = inject(MailRepository);
-  contactRepo = inject(ContactRepository);
   private route = inject(ActivatedRoute);
   private bottomNavService = inject(BottomNavService);
   private navFabService = inject(NavFabService);

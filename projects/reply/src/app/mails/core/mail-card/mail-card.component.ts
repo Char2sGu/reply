@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { ContactRepository } from '@/app/entity/contact/contact.repository';
 import { Mail } from '@/app/entity/mail/mail.model';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 import { CORE_STATE } from '@/app/state/core.state-entry';
@@ -23,7 +22,6 @@ import { CORE_STATE } from '@/app/state/core.state-entry';
 })
 export class MailCardComponent {
   private store = inject(Store);
-  contactRepo = inject(ContactRepository);
 
   breakpoints = this.store.selectSignal(CORE_STATE.selectBreakpoints);
 

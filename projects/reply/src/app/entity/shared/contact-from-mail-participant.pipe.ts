@@ -1,5 +1,8 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { inject, Pipe, PipeTransform } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { combineLatest, map, Observable } from 'rxjs';
+
+import { CONTACT_STATE } from '@/app/state/contact/contact.state-entry';
 
 import { Contact } from '../contact/contact.model';
 import { MailParticipant } from '../mail/mail.model';
@@ -9,15 +12,24 @@ import { MailParticipant } from '../mail/mail.model';
   standalone: true,
 })
 export class ContactFromMailParticipantPipe implements PipeTransform {
+  private store = inject(Store);
+
   transform(participants: MailParticipant[]): Observable<Contact[]>;
   transform(participant: MailParticipant): Observable<Contact>;
   transform(
     input: MailParticipant | MailParticipant[],
   ): Observable<Contact | Contact[]> {
-    // TODO: implement matching
     return input instanceof Array
-      ? of(input.map((p) => this.generateContact(p)))
-      : of(this.generateContact(input));
+      ? combineLatest(input.map((p) => this.transformOne(p)))
+      : this.transformOne(input);
+  }
+
+  private transformOne(participant: MailParticipant): Observable<Contact> {
+    const { email } = participant;
+    return this.store.select(CONTACT_STATE.selectContacts).pipe(
+      map((contacts) => contacts.queryOne((e) => e.email === email)),
+      map((contact) => contact ?? this.generateContact(participant)),
+    );
   }
 
   private generateContact(participant: MailParticipant): Contact {

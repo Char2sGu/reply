@@ -11,7 +11,7 @@ export class DemoContactFactory implements DemoEntityFactory {
   create(payload: {
     id?: string;
     name: string;
-    email?: string;
+    email: string;
     avatarUrl?: string;
   }): Contact {
     return {

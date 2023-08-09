@@ -1,15 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   EventEmitter,
   inject,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { filter, map, Observable, tap, withLatestFrom } from 'rxjs';
+import { filter, map, tap, withLatestFrom } from 'rxjs';
 
 import { Account } from '@/app/entity/account/account.model';
-import { AccountRepository } from '@/app/entity/account/account.repository';
+import { ACCOUNT_STATE } from '@/app/state/account/account.state-entry';
 import { CORE_ACTIONS } from '@/app/state/core.actions';
 import { CORE_STATE } from '@/app/state/core.state-entry';
 
@@ -20,7 +20,6 @@ import { CORE_STATE } from '@/app/state/core.state-entry';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthSelectAccountComponent {
-  private accountRepo = inject(AccountRepository);
   private store = inject(Store);
 
   itemButtonClick = new EventEmitter<Account>();
@@ -30,7 +29,12 @@ export class AuthSelectAccountComponent {
     .select(CORE_STATE.selectAuthenticationStatus)
     .pipe(map((s) => s.type === 'pending'));
 
-  accounts = toSignal(this.queryAccountsAndSort(), { requireSync: true });
+  accounts = computed(() =>
+    this.store
+      .selectSignal(ACCOUNT_STATE.selectAccounts)()
+      .all()
+      .sort((a, b) => b.authorizedAt.getTime() - a.authorizedAt.getTime()),
+  );
 
   constructor() {
     this.itemButtonClick
@@ -42,17 +46,5 @@ export class AuthSelectAccountComponent {
         ),
       )
       .subscribe();
-  }
-
-  private queryAccountsAndSort(): Observable<Account[]> {
-    return this.accountRepo
-      .query()
-      .pipe(
-        map((accounts) =>
-          accounts.sort(
-            (a, b) => b.authorizedAt.getTime() - a.authorizedAt.getTime(),
-          ),
-        ),
-      );
   }
 }

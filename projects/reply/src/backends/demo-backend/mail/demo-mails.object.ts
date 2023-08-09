@@ -14,8 +14,8 @@ export const DEMO_MAILS = new InjectionToken<Mail[]>('DEMO_MAILS', {
     return [
       $({
         subject: 'Package shipped!',
-        sender: 'Google Express',
-        recipients: ['<user>'],
+        sender: 'express@google.com',
+        recipients: ['demo@reply.io'],
         content: `
           Cucumber Mask Facial has shipped.
           
@@ -28,8 +28,8 @@ export const DEMO_MAILS = new InjectionToken<Mail[]>('DEMO_MAILS', {
 
       $({
         subject: 'Brunch this weekend?',
-        sender: 'Ali Connors',
-        recipients: ['<user>'],
+        sender: 'ali.connors@gmail.com',
+        recipients: ['demo@reply.io'],
         content: `
           I'll be in your neighborhood doing errands and was hoping to catch you for a coffee this Saturday. If you don't have anything scheduled, it would be great to see you! It feels like its been forever.
           
@@ -44,8 +44,8 @@ export const DEMO_MAILS = new InjectionToken<Mail[]>('DEMO_MAILS', {
 
       $({
         subject: 'Bonjour from Paris',
-        sender: 'Sandra Adams',
-        recipients: ['<user>'],
+        sender: 'sandra.adams@gmail.com',
+        recipients: ['demo@reply.io'],
         content: `
           Here are some great shots from my trip...`,
         sentAt: (now) => now.subtract(6, 'hours'),
@@ -54,8 +54,12 @@ export const DEMO_MAILS = new InjectionToken<Mail[]>('DEMO_MAILS', {
 
       $({
         subject: 'High school reunion?',
-        sender: 'Trevor Hansen',
-        recipients: ['<user>', 'Ali Connors', 'Sandra Adams'],
+        sender: 'trevor.hansen@gmail.com',
+        recipients: [
+          'demo@reply.io',
+          'ali.connors@gmail.com',
+          'sandra.adams@gmail.com',
+        ],
         content: `
           Hi friends,
           
@@ -69,8 +73,8 @@ export const DEMO_MAILS = new InjectionToken<Mail[]>('DEMO_MAILS', {
 
       $({
         subject: 'Recipe to try',
-        sender: 'Britta Holt',
-        recipients: ['<user>'],
+        sender: 'britta.holt@gmail.com',
+        recipients: ['demo@reply.io'],
         content: `
           Raspberry Pie: We should make this pie recipe tonight! The filling is very quick to put together.`,
         sentAt: (now) => now.subtract(18, 'hours'),
@@ -80,8 +84,8 @@ export const DEMO_MAILS = new InjectionToken<Mail[]>('DEMO_MAILS', {
 
       $({
         subject: 'Parent Teacher Conference',
-        sender: 'Josh Dillinger',
-        recipients: ['<user>'],
+        sender: 'josh.dillinger@gmail.com',
+        recipients: ['demo@reply.io'],
         content: `
           Dear Parent,
           
@@ -96,8 +100,8 @@ export const DEMO_MAILS = new InjectionToken<Mail[]>('DEMO_MAILS', {
 
       $({
         subject: 'Brazil trip',
-        sender: 'Britta Holt',
-        recipients: ['<user>'],
+        sender: 'britta.holt@gmail.com',
+        recipients: ['demo@reply.io'],
         content: `
           Thought we might be able to go over some details about our upcoming vacation.
           
@@ -111,8 +115,8 @@ export const DEMO_MAILS = new InjectionToken<Mail[]>('DEMO_MAILS', {
 
       $({
         subject: 'Delivered',
-        sender: 'Google Express',
-        recipients: ['<user>'],
+        sender: 'express@google.com',
+        recipients: ['demo@reply.io'],
         content: `
           Your package has been delivered to the target address. For more information, please visit our official website.`,
         sentAt: (now) => now.subtract(15, 'hours'),
@@ -121,8 +125,8 @@ export const DEMO_MAILS = new InjectionToken<Mail[]>('DEMO_MAILS', {
 
       $({
         subject: 'Your update on the Google Play Store is live!',
-        sender: 'Google Play',
-        recipients: ['<user>'],
+        sender: 'play@google.com',
+        recipients: ['demo@reply.io'],
         content: `
           Your update is now live on the Play Store and available for your alpha users to start testing.
           

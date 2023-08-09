@@ -18,30 +18,37 @@ export const DEMO_CONTACTS = new InjectionToken<Contact[]>('DEMO_CONTACTS', {
       }),
       $({
         name: 'Google Express',
+        email: 'express@google.com',
         avatarUrl: 'assets/demo/avatar-express.png',
       }),
       $({
         name: 'Ali Connors',
+        email: 'ali.connors@gmail.com',
         avatarUrl: 'assets/demo/avatar-2.jpg',
       }),
       $({
         name: 'Sandra Adams',
+        email: 'sandra.adams@gmail.com',
         avatarUrl: 'assets/demo/avatar-3.jpg',
       }),
       $({
         name: 'Trevor Hansen',
+        email: 'trevor.hansen@gmail.com',
         avatarUrl: 'assets/demo/avatar-4.jpg',
       }),
       $({
         name: 'Britta Holt',
+        email: 'britta.holt@gmail.com',
         avatarUrl: 'assets/demo/avatar-5.jpg',
       }),
       $({
         name: 'Josh Dillinger',
+        email: 'josh.dillinger@gmail.com',
         avatarUrl: 'assets/demo/avatar-6.jpg',
       }),
       $({
         name: 'Google Play',
+        email: 'play@google.com',
       }),
     ];
   },
