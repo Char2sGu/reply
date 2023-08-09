@@ -15,10 +15,10 @@ import { combineLatest, delay, first } from 'rxjs';
 
 import { VirtualMailboxName } from '@/app/core/mailbox-name.enums';
 import { CONTACT_STATE } from '@/app/core/state/contact/contact.state-entry';
-import { ContactRepository } from '@/app/data/contact/contact.repository';
-import { Mail } from '@/app/data/mail/mail.model';
-import { MailRepository } from '@/app/data/mail/mail.repository';
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+import { ContactRepository } from '@/app/entity/contact/contact.repository';
+import { Mail } from '@/app/entity/mail/mail.model';
+import { MailRepository } from '@/app/entity/mail/mail.repository';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 import { BottomNavService } from '@/app/main/bottom-nav/bottom-nav.service';
 import { NavFabService } from '@/app/main/nav-fab/nav-fab.service';
 

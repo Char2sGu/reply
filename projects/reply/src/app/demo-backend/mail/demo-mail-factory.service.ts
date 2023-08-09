@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Dayjs } from 'dayjs';
 import dayjs from 'dayjs/esm';
 
-import { Contact } from '@/app/data/contact/contact.model';
-import { Mail, MailParticipant } from '@/app/data/mail/mail.model';
+import { Contact } from '@/app/entity/contact/contact.model';
+import { Mail, MailParticipant } from '@/app/entity/mail/mail.model';
 
 import { DemoEntityFactory } from '../core/demo-entity-factory';
 

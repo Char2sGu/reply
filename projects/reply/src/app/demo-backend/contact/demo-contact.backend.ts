@@ -4,9 +4,9 @@ import { map, Observable, of } from 'rxjs';
 import {
   ContactBackend,
   ContactBackendException,
-} from '@/app/data/contact/contact.backend';
-import { Contact } from '@/app/data/contact/contact.model';
-import { SyncResult } from '@/app/data/core/backend.models';
+} from '@/app/entity/contact/contact.backend';
+import { Contact } from '@/app/entity/contact/contact.model';
+import { SyncResult } from '@/app/entity/core/backend.models';
 
 import { DEMO_CONTACTS } from './demo-contacts.object';
 

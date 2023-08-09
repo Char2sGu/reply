@@ -9,10 +9,10 @@ import {
 } from 'rxjs';
 
 import { access } from '../../core/property-path.utils';
-import { Page, SyncChange, SyncResult } from '../../data/core/backend.models';
-import { MailBackend } from '../../data/mail/mail.backend';
-import { Mail } from '../../data/mail/mail.model';
-import { Mailbox } from '../../data/mailbox/mailbox.model';
+import { Page, SyncChange, SyncResult } from '../../entity/core/backend.models';
+import { MailBackend } from '../../entity/mail/mail.backend';
+import { Mail } from '../../entity/mail/mail.model';
+import { Mailbox } from '../../entity/mailbox/mailbox.model';
 import { useGoogleApi } from '../core/google-apis.utils';
 import { GmailMessageResolver } from './gmail-message-resolver.service';
 

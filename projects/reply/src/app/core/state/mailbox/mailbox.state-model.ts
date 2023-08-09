@@ -1,4 +1,4 @@
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
 import { ActionStatus } from '../core/action-status';
 

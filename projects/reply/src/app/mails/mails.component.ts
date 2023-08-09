@@ -32,9 +32,9 @@ import {
 
 import { useActionFlow } from '../core/action-flow';
 import { VirtualMailboxName } from '../core/mailbox-name.enums';
-import { Mail } from '../data/mail/mail.model';
-import { MailRepository } from '../data/mail/mail.repository';
-import { MailboxRepository } from '../data/mailbox/mailbox.repository';
+import { Mail } from '../entity/mail/mail.model';
+import { MailRepository } from '../entity/mail/mail.repository';
+import { MailboxRepository } from '../entity/mailbox/mailbox.repository';
 import { ToggleMailReadStatusActionFlow } from './core/mail.action-flows';
 import { MailCardAnimationPresenceComponent } from './core/mail-card-animation-presence/mail-card-animation-presence.component';
 

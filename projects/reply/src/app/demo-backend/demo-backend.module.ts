@@ -2,9 +2,9 @@ import { DOCUMENT } from '@angular/common';
 import { APP_INITIALIZER, inject, NgModule } from '@angular/core';
 
 import { AuthenticationBackend } from '../core/auth/authentication.backend';
-import { ContactBackend } from '../data/contact/contact.backend';
-import { MailBackend } from '../data/mail/mail.backend';
-import { MailboxBackend } from '../data/mailbox/mailbox.backend';
+import { ContactBackend } from '../entity/contact/contact.backend';
+import { MailBackend } from '../entity/mail/mail.backend';
+import { MailboxBackend } from '../entity/mailbox/mailbox.backend';
 import { DemoAuthenticationBackend } from './auth/demo-authentication.backend';
 import { DemoContactBackend } from './contact/demo-contact.backend';
 import { DemoMailBackend } from './mail/demo-mail.backend';

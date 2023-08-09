@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Exception } from '@/app/core/exceptions';
 import { asserted } from '@/app/core/property-path.utils';
-import { Contact } from '@/app/data/contact/contact.model';
+import { Contact } from '@/app/entity/contact/contact.model';
 
 @Injectable({
   providedIn: 'root',

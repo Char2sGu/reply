@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-import { Contact } from '@/app/data/contact/contact.model';
+import { Contact } from '@/app/entity/contact/contact.model';
 
 import { useDemoEntityFactory } from '../core/demo-entity-factory';
 import { DemoContactFactory } from './demo-contact-factory.service';

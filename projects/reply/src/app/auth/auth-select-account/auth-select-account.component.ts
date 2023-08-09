@@ -10,8 +10,8 @@ import { filter, map, Observable, tap, withLatestFrom } from 'rxjs';
 
 import { CORE_ACTIONS } from '@/app/core/state/core.actions';
 import { CORE_STATE } from '@/app/core/state/core.state-entry';
-import { Account } from '@/app/data/account/account.model';
-import { AccountRepository } from '@/app/data/account/account.repository';
+import { Account } from '@/app/entity/account/account.model';
+import { AccountRepository } from '@/app/entity/account/account.repository';
 
 @Component({
   selector: 'rpl-auth-select-account',

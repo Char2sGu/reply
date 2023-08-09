@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
 import { filter, map, Observable, shareReplay } from 'rxjs';
 
-import { Mailbox } from '../data/mailbox/mailbox.model';
-import { MailboxRepository } from '../data/mailbox/mailbox.repository';
+import { Mailbox } from '../entity/mailbox/mailbox.model';
+import { MailboxRepository } from '../entity/mailbox/mailbox.repository';
 import { SystemMailboxName } from './mailbox-name.enums';
 
 export interface SystemMailboxNameMapping

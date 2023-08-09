@@ -9,7 +9,7 @@ import { switchMap } from 'rxjs';
 
 import { useActionFlow } from '@/app/core/action-flow';
 
-import { Mail } from '../../../data/mail/mail.model';
+import { Mail } from '../../../entity/mail/mail.model';
 import { ToggleMailStarredStatusActionFlow } from '../mail.action-flows';
 
 @Component({

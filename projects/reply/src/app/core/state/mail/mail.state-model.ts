@@ -1,4 +1,4 @@
-import { Mail } from '@/app/data/mail/mail.model';
+import { Mail } from '@/app/entity/mail/mail.model';
 
 import { ActionStatus } from '../core/action-status';
 

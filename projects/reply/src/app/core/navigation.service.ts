@@ -10,7 +10,7 @@ import {
   switchMap,
 } from 'rxjs';
 
-import { MailboxRepository } from '../data/mailbox/mailbox.repository';
+import { MailboxRepository } from '../entity/mailbox/mailbox.repository';
 import { SystemMailboxName, VirtualMailboxName } from './mailbox-name.enums';
 
 const STATIC_ITEMS = [

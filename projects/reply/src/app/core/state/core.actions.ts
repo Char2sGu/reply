@@ -1,7 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { Account } from '@/app/data/account/account.model';
-import { Contact } from '@/app/data/contact/contact.model';
+import { Account } from '@/app/entity/account/account.model';
+import { Contact } from '@/app/entity/contact/contact.model';
 
 import { Authorization } from '../auth/authorization.service';
 import { BreakpointMap } from '../breakpoint.service';

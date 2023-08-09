@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { MailboxBackend } from '@/app/data/mailbox/mailbox.backend';
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+import { MailboxBackend } from '@/app/entity/mailbox/mailbox.backend';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
 import { DEMO_MAILBOXES } from './demo-mailboxes.object';
 

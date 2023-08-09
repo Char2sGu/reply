@@ -13,8 +13,8 @@ import {
   ContactBackend,
   ContactBackendException,
 } from '../../data/contact/contact.backend';
-import { Contact } from '../../data/contact/contact.model';
-import { SyncChange, SyncResult } from '../../data/core/backend.models';
+import { Contact } from '../../entity/contact/contact.model';
+import { SyncChange, SyncResult } from '../../entity/core/backend.models';
 import { useGoogleApi as useApi } from '../core/google-apis.utils';
 import { GooglePersonResolver } from './google-person-resolver.service';
 

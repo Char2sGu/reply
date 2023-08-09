@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { PopupComponent } from '@/app/core/popup/popup.core';
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
-import { MailboxRepository } from '@/app/data/mailbox/mailbox.repository';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
+import { MailboxRepository } from '@/app/entity/mailbox/mailbox.repository';
 
 @Component({
   selector: 'rpl-mailbox-selection-popup',

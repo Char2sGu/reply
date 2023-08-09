@@ -11,8 +11,8 @@ import {
 } from 'rxjs';
 
 import { NavigationService } from '../core/navigation.service';
-import { Mail } from '../data/mail/mail.model';
-import { MailRepository } from '../data/mail/mail.repository';
+import { Mail } from '../entity/mail/mail.model';
+import { MailRepository } from '../entity/mail/mail.repository';
 
 @Component({
   selector: 'rpl-search',

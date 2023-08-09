@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 
 import { SystemMailboxName } from '@/app/core/mailbox-name.enums';
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
 import { useDemoEntityFactory } from '../core/demo-entity-factory';
 import { DemoMailboxFactory } from './demo-mailbox-factory.service';

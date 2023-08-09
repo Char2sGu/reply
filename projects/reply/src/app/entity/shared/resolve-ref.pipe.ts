@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ReactiveRepository } from './core/reactive-repository';
+import { ReactiveRepository } from '../core/reactive-repository';
 
 @Pipe({
   name: 'resolveRef',

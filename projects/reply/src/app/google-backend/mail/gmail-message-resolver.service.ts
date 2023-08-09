@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 
 import { asserted } from '@/app/core/property-path.utils';
-import { Mail } from '@/app/data/mail/mail.model';
+import { Mail } from '@/app/entity/mail/mail.model';
 
 import { GmailMessageParser } from './gmail-message-parser.service';
 

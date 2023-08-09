@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, concatMap, map, of } from 'rxjs';
 
-import { MailboxBackend } from '@/app/data/mailbox/mailbox.backend';
+import { MailboxBackend } from '@/app/entity/mailbox/mailbox.backend';
 
 import { MAILBOX_ACTIONS } from './mailbox.actions';
 

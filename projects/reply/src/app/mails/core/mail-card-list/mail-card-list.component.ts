@@ -6,8 +6,8 @@ import {
 } from '@angular/core';
 import { AnimationCurves } from '@angular/material/core';
 
-import { Mail } from '@/app/data/mail/mail.model';
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+import { Mail } from '@/app/entity/mail/mail.model';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
 @Component({
   selector: 'rpl-mail-card-list',

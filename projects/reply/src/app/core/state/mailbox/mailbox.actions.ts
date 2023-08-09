@@ -1,6 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
 export const MAILBOX_ACTIONS = createActionGroup({
   source: 'mailbox',

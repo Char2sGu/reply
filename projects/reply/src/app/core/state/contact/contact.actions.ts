@@ -1,6 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { Contact } from '@/app/data/contact/contact.model';
+import { Contact } from '@/app/entity/contact/contact.model';
 
 export const CONTACT_ACTIONS = createActionGroup({
   source: 'contact',

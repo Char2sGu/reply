@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, concatMap, map, of } from 'rxjs';
 
-import { ContactBackend } from '@/app/data/contact/contact.backend';
+import { ContactBackend } from '@/app/entity/contact/contact.backend';
 
 import { CONTACT_ACTIONS } from './contact.actions';
 

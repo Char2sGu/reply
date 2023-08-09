@@ -15,11 +15,11 @@ import {
 import { ActionFlow, useActionFlow } from '@/app/core/action-flow';
 import { NotificationService } from '@/app/core/notification/notification.service';
 import { PopupService } from '@/app/core/popup/popup.service';
-import { MailConductor } from '@/app/data/mail/mail.conductor';
-import { Mail } from '@/app/data/mail/mail.model';
-import { MailRepository } from '@/app/data/mail/mail.repository';
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
-import { MailboxRepository } from '@/app/data/mailbox/mailbox.repository';
+import { MailConductor } from '@/app/entity/mail/mail.conductor';
+import { Mail } from '@/app/entity/mail/mail.model';
+import { MailRepository } from '@/app/entity/mail/mail.repository';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
+import { MailboxRepository } from '@/app/entity/mailbox/mailbox.repository';
 
 import { MailboxSelectionPopupComponent } from './mailbox-selection-popup/mailbox-selection-popup.component';
 

@@ -1,7 +1,7 @@
 import { inject, NgModule } from '@angular/core';
 import { CanMatchFn, RouterModule, Routes } from '@angular/router';
 
-import { AccountRepository } from '../data/account/account.repository';
+import { AccountRepository } from '../entity/account/account.repository';
 import { AuthComponent } from './auth.component';
 import { AuthNoAccountComponent } from './auth-no-account/auth-no-account.component';
 import { AuthSelectAccountComponent } from './auth-select-account/auth-select-account.component';

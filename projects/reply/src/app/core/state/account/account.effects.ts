@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, concatMap, map, of } from 'rxjs';
 
-import { AccountService } from '@/app/data/account/account.service';
+import { AccountService } from '@/app/entity/account/account.service';
 
 import { ACCOUNT_ACTIONS } from './account.actions';
 

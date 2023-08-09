@@ -11,9 +11,9 @@ import {
 import { Store } from '@ngrx/store';
 
 import { CORE_STATE } from '@/app/core/state/core.state-entry';
-import { ContactRepository } from '@/app/data/contact/contact.repository';
-import { Mail } from '@/app/data/mail/mail.model';
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+import { ContactRepository } from '@/app/entity/contact/contact.repository';
+import { Mail } from '@/app/entity/mail/mail.model';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
 @Component({
   selector: 'rpl-mail-card',

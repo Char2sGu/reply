@@ -1,4 +1,4 @@
-import { Contact } from '@/app/data/contact/contact.model';
+import { Contact } from '@/app/entity/contact/contact.model';
 
 import { ActionStatus } from '../core/action-status';
 

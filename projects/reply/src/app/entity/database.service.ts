@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import Dexie, { Table } from 'dexie';
 
-import { Contact } from '@/app/data/contact/contact.model';
-import { Mail } from '@/app/data/mail/mail.model';
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+import { Contact } from '@/app/entity/contact/contact.model';
+import { Mail } from '@/app/entity/mail/mail.model';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
 @Injectable({
   providedIn: 'root',

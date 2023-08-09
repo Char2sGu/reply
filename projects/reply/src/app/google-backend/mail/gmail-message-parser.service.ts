@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import parseMessage from 'gmail-api-parse-message';
 
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
-import { Mail } from '../../data/mail/mail.model';
+import { Mail } from '../../entity/mail/mail.model';
 import { GMAIL_SYSTEM_MAILBOXES } from '../core/gmail-system-mailboxes.object';
 
 export type GmailMessageParseResult = Pick<Mail, 'id'> &

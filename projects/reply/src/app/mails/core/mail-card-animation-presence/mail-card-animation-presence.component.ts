@@ -7,7 +7,7 @@ import {
 import { ProjectionNode } from '@layout-projection/core';
 import { ReplaySubject } from 'rxjs';
 
-import { Mail } from '@/app/data/mail/mail.model';
+import { Mail } from '@/app/entity/mail/mail.model';
 
 @Component({
   selector: 'rpl-mail-card-animation-presence',

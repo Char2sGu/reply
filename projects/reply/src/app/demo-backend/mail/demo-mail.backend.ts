@@ -1,13 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 
-import { Page, SyncResult } from '@/app/data/core/backend.models';
+import { Page, SyncResult } from '@/app/entity/core/backend.models';
 import {
   MailBackend,
   MailBackendException,
-} from '@/app/data/mail/mail.backend';
-import { Mail } from '@/app/data/mail/mail.model';
-import { Mailbox } from '@/app/data/mailbox/mailbox.model';
+} from '@/app/entity/mail/mail.backend';
+import { Mail } from '@/app/entity/mail/mail.model';
+import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
 import { DEMO_MAILS } from './demo-mails.object';
 

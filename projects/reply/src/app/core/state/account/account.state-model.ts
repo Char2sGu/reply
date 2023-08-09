@@ -1,4 +1,4 @@
-import { Account } from '@/app/data/account/account.model';
+import { Account } from '@/app/entity/account/account.model';
 
 import { ActionStatus } from '../core/action-status';
 
