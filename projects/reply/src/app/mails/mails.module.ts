@@ -7,6 +7,7 @@ import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-l
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { LayoutProjectionModule } from '@layout-projection/angular';
+import { EffectsModule } from '@ngrx/effects';
 import { ScrollingModule } from '@reply/scrolling';
 
 import { ContactSortPipe } from '../entity/contact/contact-sort.pipe';
@@ -30,6 +31,7 @@ import { MailCardListComponent } from './core/mail-card-list/mail-card-list.comp
 import { MailDeleteButtonComponent } from './core/mail-delete-button/mail-delete-button.component';
 import { MailStarButtonComponent } from './core/mail-star-button/mail-star-button.component';
 import { MailboxSelectionPopupComponent } from './core/mailbox-selection-popup/mailbox-selection-popup.component';
+import { MailsEffects } from './core/mails.effects';
 import { MailDetailLayoutComponent } from './mail-detail-layout/mail-detail-layout.component';
 import { MailListLayoutComponent } from './mail-list-layout/mail-list-layout.component';
 import { MailsComponent } from './mails.component';
@@ -55,6 +57,7 @@ import { MailsRoutingModule } from './mails-routing.module';
   imports: [
     CommonModule,
     MailsRoutingModule,
+    EffectsModule.forFeature(MailsEffects),
     MatButtonModule,
     MatTooltipModule,
     MatMenuModule,

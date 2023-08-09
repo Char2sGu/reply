@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
 
 import { PopupComponent } from '@/app/core/popup/popup.core';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
-import { MailboxRepository } from '@/app/entity/mailbox/mailbox.repository';
+import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 
 @Component({
   selector: 'rpl-mailbox-selection-popup',
@@ -15,13 +16,13 @@ export class MailboxSelectionPopupComponent extends PopupComponent<
   { title?: string; current?: Mailbox },
   Mailbox
 > {
-  private mailboxRepo = inject(MailboxRepository);
-  mailboxes$ = this.queryMailboxes();
+  private store = inject(Store);
 
-  private queryMailboxes(): Observable<Mailbox[]> {
-    const current = this.popupRef.input.current;
-    return current
-      ? this.mailboxRepo.query((e) => e.id !== current.id)
-      : this.mailboxRepo.query();
-  }
+  mailboxes$ = this.store.select(MAILBOX_STATE.selectMailboxes).pipe(
+    map((collection) => {
+      const current = this.popupRef.input.current;
+      if (!current) return collection.all();
+      return collection.query((e) => e.id !== current.id);
+    }),
+  );
 }

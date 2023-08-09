@@ -13,6 +13,8 @@ import { Mail } from '@/app/entity/mail/mail.model';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 import { MAIL_ACTIONS } from '@/app/state/mail/mail.actions';
 
+import { MAILS_ACTIONS } from '../mails.actions';
+
 @Component({
   selector: 'rpl-mail-action-menu-def',
   templateUrl: './mail-action-menu-def.component.html',
@@ -31,12 +33,12 @@ export class MailActionMenuDefComponent {
 
   constructor() {
     this.moveMailButtonClick.subscribe(() => {
-      // TODO: implement
-      throw new Error('Not implemented');
+      const action = MAILS_ACTIONS.openMoveMailDialog;
+      this.store.dispatch(action({ mail: this.mail }));
     });
     this.toggleMailReadStatusButtonClick.subscribe(() => {
-      const action = MAIL_ACTIONS.toggleMailReadStatus({ mail: this.mail });
-      this.store.dispatch(action);
+      const action = MAIL_ACTIONS.toggleMailReadStatus;
+      this.store.dispatch(action({ mail: this.mail }));
     });
   }
 }
