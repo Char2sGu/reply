@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
-import { map, merge, Subject } from 'rxjs';
+import { map, merge, Subject, takeUntil } from 'rxjs';
 
 import {
   PopupCloseEvent,
@@ -20,7 +20,8 @@ export class DialogOrBottomSheetPopupRefFactory {
     context: PopupContext<Input, Output>,
     dialogRef: MatDialogRef<PopupContainerComponent<Input, Output>>,
   ): PopupRef<Input, Output> {
-    const output$ = new Subject<Output>();
+    const output = new EventEmitter<Output>();
+    const output$ = output.pipe(takeUntil(dialogRef.afterClosed()));
     return {
       input: context.input,
       appearance: 'dialog',
@@ -38,10 +39,9 @@ export class DialogOrBottomSheetPopupRefFactory {
         ),
       ),
       output: (payload) => {
-        output$.next(payload);
+        output.emit(payload);
       },
       close: () => {
-        output$.complete();
         dialogRef.close();
       },
     };
