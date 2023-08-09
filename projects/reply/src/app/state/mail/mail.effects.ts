@@ -8,6 +8,7 @@ import {
   of,
   switchMap,
   takeUntil,
+  tap,
 } from 'rxjs';
 
 import { NotificationService } from '@/app/core/notification/notification.service';
@@ -45,7 +46,7 @@ export class MailEffects {
           takeUntil(
             this.actions$.pipe(
               ofType(A.toggleMailStarredStatus),
-              filter((a) => a.mail.id === params.mail.id),
+              filter(({ mail }) => mail.id === params.mail.id),
             ),
           ),
           map((result) =>
@@ -83,6 +84,12 @@ export class MailEffects {
             ? this.mailService.markMailAsRead(params.mail)
             : this.mailService.markMailAsUnread(params.mail);
         return action$.pipe(
+          takeUntil(
+            this.actions$.pipe(
+              ofType(A.toggleMailReadStatus),
+              filter(({ mail }) => mail.id === params.mail.id),
+            ),
+          ),
           map((result) => A.toggleMailReadStatusCompleted({ params, result })),
           catchError((error) =>
             of(A.toggleMailReadStatusFailed({ params, error })),
@@ -104,6 +111,40 @@ export class MailEffects {
             map(() => A.toggleMailReadStatus(params)),
           );
       }),
+    ),
+  );
+
+  deleteMail = createEffect(() =>
+    this.actions$.pipe(
+      ofType(A.deleteMail),
+      concatMap((params) =>
+        this.mailService.deleteMail(params.mail).pipe(
+          map(() => A.deleteMailCompleted({ params })),
+          catchError((error) => of(A.deleteMailFailed({ params, error }))),
+        ),
+      ),
+    ),
+  );
+
+  deleteMailNotifyUi = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(A.deleteMail),
+        tap(() => this.notifier.notify('Mail deleted permanently')),
+        map(() => null),
+      ),
+    { dispatch: false },
+  );
+
+  deleteMailRetryUi = createEffect(() =>
+    this.actions$.pipe(
+      ofType(A.deleteMailFailed),
+      switchMap(({ params }) =>
+        this.notifier.notify('Failed to delete mail', 'Retry').event$.pipe(
+          filter((e) => e.type === 'action'),
+          map(() => A.deleteMail(params)),
+        ),
+      ),
     ),
   );
 }

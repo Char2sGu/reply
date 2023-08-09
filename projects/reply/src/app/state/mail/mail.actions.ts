@@ -44,7 +44,7 @@ export const MAIL_ACTIONS = createActionGroup({
       name: 'deleteMail' as const,
       params: props<{ mail: Mail }>(),
       events: {
-        completed: props<{ result: Mail }>(),
+        completed: emptyProps(),
         failed: props<{ error: unknown }>(),
       },
     }),

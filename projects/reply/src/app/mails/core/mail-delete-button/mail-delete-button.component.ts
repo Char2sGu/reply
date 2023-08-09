@@ -6,17 +6,15 @@ import {
   Input,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { first, map, switchMap } from 'rxjs';
+import { EMPTY, first, map, switchMap } from 'rxjs';
 
 import { useActionFlow } from '@/app/core/action-flow';
 import { SystemMailboxName } from '@/app/core/mailbox-name.enums';
+import { MAIL_ACTIONS } from '@/app/state/mail/mail.actions';
 import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 
 import { Mail } from '../../../entity/mail/mail.model';
-import {
-  DeleteMailActionFlow,
-  MoveMailToMailboxActionFlow,
-} from '../mail.action-flows';
+import { MoveMailToMailboxActionFlow } from '../mail.action-flows';
 
 @Component({
   selector: 'rpl-mail-delete-button',
@@ -26,7 +24,6 @@ import {
 })
 export class MailDeleteButtonComponent {
   private store = inject(Store);
-  private deleteMail = useActionFlow(DeleteMailActionFlow);
   private moveMail = useActionFlow(MoveMailToMailboxActionFlow);
 
   private trashMailbox$ = this.store
@@ -47,7 +44,10 @@ export class MailDeleteButtonComponent {
       .pipe(
         switchMap(() => this.action$),
         switchMap((action) => {
-          if (action === 'delete') return this.deleteMail({ mail: this.mail });
+          if (action === 'delete') {
+            this.store.dispatch(MAIL_ACTIONS.deleteMail({ mail: this.mail }));
+            return EMPTY;
+          }
           return this.trashMailbox$.pipe(
             first(),
             switchMap((mailbox) => this.moveMail({ mail: this.mail, mailbox })),

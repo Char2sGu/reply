@@ -33,7 +33,7 @@ export class CoreEffects {
       concatMap((params) =>
         this.authService.requestAuthorization(params.hint).pipe(
           switchMap((authorization) => {
-            if (!authorization) return of(A.authenticateCancelled());
+            if (!authorization) return of(A.authenticateCancelled({ params }));
             return of(null).pipe(
               concatMap(() => this.contactService.loadUser()),
               concatLatestFrom((user) => this.accountService.saveAccount(user)),

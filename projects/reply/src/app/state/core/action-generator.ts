@@ -15,7 +15,9 @@ export function generateActionGroupEvents<
     keyof Events as `${Name}${Capitalize<EventName>}`]: ActionCreatorProps<
     Events[EventName] extends ActionCreatorProps<infer P>
       ? P extends void
-        ? void
+        ? Params extends void
+          ? void
+          : { params: Params }
         : Params extends void
         ? P
         : P & { params: Params }

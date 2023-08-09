@@ -52,4 +52,13 @@ export const mailStateReducer = createReducer(
     ...s,
     mails: s.mails.upsert(p.params.mail),
   })),
+
+  on(MAIL_ACTIONS.deleteMail, (s, p) => ({
+    ...s,
+    mails: s.mails.delete(p.mail.id),
+  })),
+  on(MAIL_ACTIONS.deleteMailFailed, (s, p) => ({
+    ...s,
+    mails: s.mails.upsert(p.params.mail),
+  })),
 );
