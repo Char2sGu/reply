@@ -6,7 +6,7 @@ import {
   ContactService,
   ContactServiceException,
 } from '@/app/entity/contact/contact.service';
-import { SyncResult } from '@/app/entity/core/backend.models';
+import { SyncResult } from '@/app/entity/core/sync.models';
 
 import { DEMO_CONTACTS } from './demo-contacts.object';
 

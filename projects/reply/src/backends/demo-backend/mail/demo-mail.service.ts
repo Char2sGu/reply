@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 
-import { Page, SyncResult } from '@/app/entity/core/backend.models';
+import { Page } from '@/app/entity/core/page.model';
+import { SyncResult } from '@/app/entity/core/sync.models';
 import { Mail } from '@/app/entity/mail/mail.model';
 import {
   MailService,
