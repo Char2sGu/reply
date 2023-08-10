@@ -14,7 +14,7 @@ import {
   ContactService,
   ContactServiceException,
 } from '@/app/entity/contact/contact.service';
-import { SyncChange, SyncResult } from '@/app/entity/core/backend.models';
+import { SyncChange, SyncResult } from '@/app/entity/core/sync.models';
 
 import { useGoogleApi as useApi } from '../core/google-apis.utils';
 import { GooglePersonResolver } from './google-person-resolver.service';
@@ -188,17 +188,10 @@ export class GoogleContactService implements ContactService {
   ): SyncChange<Contact> {
     if (person.metadata?.deleted) {
       const resolved = this.personResolver.resolvePerson(person);
-      return {
-        type: 'deletion',
-        id: resolved.id,
-      };
+      return { type: 'deletion', id: resolved.id };
     }
     const contact = this.personResolver.resolveFullPerson(person);
-    return {
-      type: 'creation-or-update',
-      id: contact.id,
-      payload: contact,
-    };
+    return { type: 'creation-or-update', id: contact.id, payload: contact };
   }
 
   private createAggregatedSyncToken(

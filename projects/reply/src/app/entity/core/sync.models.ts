@@ -1,8 +1,3 @@
-export interface Page<Entity> {
-  results: Entity[];
-  nextPageToken?: string;
-}
-
 export interface SyncResult<Entity> {
   changes: SyncChange<Entity>[];
   syncToken: string;

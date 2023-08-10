@@ -3,7 +3,8 @@ import { Observable } from 'rxjs';
 
 import { Exception } from '@/app/core/exceptions';
 
-import { Page, SyncResult } from '../core/backend.models';
+import { Page } from '../core/page.model';
+import { SyncResult } from '../core/sync.models';
 import { Mailbox } from '../mailbox/mailbox.model';
 import { Mail } from './mail.model';
 

@@ -8,12 +8,10 @@ import {
   switchMap,
 } from 'rxjs';
 
+import { Page } from '@/app/entity/core/page.model';
+import { SyncChange, SyncResult } from '@/app/entity/core/sync.models';
+
 import { access } from '../../../app/core/property-path.utils';
-import {
-  Page,
-  SyncChange,
-  SyncResult,
-} from '../../../app/entity/core/backend.models';
 import { Mail } from '../../../app/entity/mail/mail.model';
 import { MailService } from '../../../app/entity/mail/mail.service';
 import { Mailbox } from '../../../app/entity/mailbox/mailbox.model';

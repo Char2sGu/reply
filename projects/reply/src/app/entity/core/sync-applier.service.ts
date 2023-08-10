@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { Exception } from '@/app/core/exceptions';
 
-import { SyncChange } from './backend.models';
 import { ReactiveRepository } from './reactive-repository';
 import { EntityNotFoundException } from './reactive-repository.exceptions';
+import { SyncChange } from './sync.models';
 
 @Injectable({
   providedIn: 'root',
