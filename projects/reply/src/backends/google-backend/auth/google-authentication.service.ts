@@ -9,7 +9,7 @@ import {
   tap,
 } from 'rxjs';
 
-import { AuthenticationBackend } from '../../../app/core/auth/authentication.backend';
+import { AuthenticationService } from '../../../app/core/auth/authentication.service';
 import { Authorization } from '../../../app/core/auth/authorization.model';
 import { includeThenableInZone } from '../../../app/core/zone.utils';
 import { GOOGLE_APIS } from '../core/google-apis.object';
@@ -25,7 +25,7 @@ const SCOPES = [
 ] as const;
 
 @Injectable()
-export class GoogleAuthenticationBackend implements AuthenticationBackend {
+export class GoogleAuthenticationService implements AuthenticationService {
   private zone = inject(NgZone);
   private apis$ = inject(GOOGLE_APIS);
   private clientId = inject(GOOGLE_CLIENT_ID);

@@ -1,12 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { APP_INITIALIZER, inject, NgModule } from '@angular/core';
 
-import { AuthenticationBackend } from '@/app/core/auth/authentication.backend';
+import { AuthenticationService } from '@/app/core/auth/authentication.service';
 import { ContactBackend } from '@/app/entity/contact/contact.backend';
 import { MailBackend } from '@/app/entity/mail/mail.backend';
 import { MailboxBackend } from '@/app/entity/mailbox/mailbox.backend';
 
-import { DemoAuthenticationBackend } from './auth/demo-authentication.backend';
+import { DemoAuthenticationService } from './auth/demo-authentication.service';
 import { DemoContactBackend } from './contact/demo-contact.backend';
 import { DemoMailBackend } from './mail/demo-mail.backend';
 import { DemoMailboxBackend } from './mailbox/demo-mailbox.backend';
@@ -35,8 +35,8 @@ import { DemoMailboxBackend } from './mailbox/demo-mailbox.backend';
       multi: true,
     },
     {
-      provide: AuthenticationBackend,
-      useClass: DemoAuthenticationBackend,
+      provide: AuthenticationService,
+      useClass: DemoAuthenticationService,
     },
     {
       provide: ContactBackend,

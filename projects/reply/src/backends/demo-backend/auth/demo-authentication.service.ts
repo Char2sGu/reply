@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { AuthenticationBackend } from '@/app/core/auth/authentication.backend';
+import { AuthenticationService } from '@/app/core/auth/authentication.service';
 import { Authorization } from '@/app/core/auth/authorization.model';
 
 const AUTHORIZATION: Authorization = {
@@ -11,7 +11,7 @@ const AUTHORIZATION: Authorization = {
 };
 
 @Injectable()
-export class DemoAuthenticationBackend implements AuthenticationBackend {
+export class DemoAuthenticationService implements AuthenticationService {
   requestAuthorization(): Observable<Authorization> {
     return of(AUTHORIZATION);
   }

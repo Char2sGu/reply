@@ -1,20 +1,14 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { AuthenticationBackend } from './authentication.backend';
+import { Exception } from '../exceptions';
 import { Authorization } from './authorization.model';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AuthenticationService {
-  private backend = inject(AuthenticationBackend);
-
-  requestAuthorization(hint?: string): Observable<Authorization | null> {
-    return this.backend.requestAuthorization(hint);
-  }
-
-  revokeAuthorization(auth: Authorization): Observable<void> {
-    return this.backend.revokeAuthorization(auth);
-  }
+// prettier-ignore
+@Injectable()
+export abstract class AuthenticationService {
+  abstract requestAuthorization(hint?: string): Observable<Authorization | null>;
+  abstract revokeAuthorization(auth: Authorization): Observable<void>;
 }
+
+export class AuthenticationServiceException extends Exception {}
