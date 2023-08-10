@@ -9,7 +9,7 @@ import { EntityNotFoundException } from './reactive-repository.exceptions';
 @Injectable({
   providedIn: 'root',
 })
-export class BackendSyncApplier {
+export class SyncApplier {
   applyChange<Entity>(
     repo: ReactiveRepository<Entity>,
     change: SyncChange<Entity>,

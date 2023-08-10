@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 
-import {
-  ContactBackend,
-  ContactBackendException,
-} from '@/app/entity/contact/contact.backend';
 import { Contact } from '@/app/entity/contact/contact.model';
+import {
+  ContactService,
+  ContactServiceException,
+} from '@/app/entity/contact/contact.service';
 import { SyncResult } from '@/app/entity/core/backend.models';
 
 import { DEMO_CONTACTS } from './demo-contacts.object';
@@ -13,7 +13,7 @@ import { DEMO_CONTACTS } from './demo-contacts.object';
 const SYNC_TOKEN = '<contact-sync-token>';
 
 @Injectable()
-export class DemoContactBackend implements ContactBackend {
+export class DemoContactService implements ContactService {
   private contacts = inject(DEMO_CONTACTS);
 
   loadContacts(): Observable<Contact[]> {
@@ -25,7 +25,7 @@ export class DemoContactBackend implements ContactBackend {
       map(() => {
         const contact = this.contacts.find((c) => c.id === id);
         if (!contact)
-          throw new ContactBackendException(`Contact ${id} not found`);
+          throw new ContactServiceException(`Contact ${id} not found`);
         return contact;
       }),
     );

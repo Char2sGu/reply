@@ -6,7 +6,7 @@ import { catchError, concatMap, filter, map, of, switchMap, timer } from 'rxjs';
 import { AuthenticationService } from '../core/auth/authentication.service';
 import { BreakpointService } from '../core/breakpoint.service';
 import { AccountService } from '../entity/account/account.service';
-import { ContactBackend } from '../entity/contact/contact.backend';
+import { ContactService } from '../entity/contact/contact.service';
 import { CORE_ACTIONS as A } from './core.actions';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class CoreEffects {
   private breakpointService = inject(BreakpointService);
   private authService = inject(AuthenticationService);
   private accountService = inject(AccountService);
-  private contactService = inject(ContactBackend);
+  private contactService = inject(ContactService);
 
   updateBreakpoints = createEffect(() =>
     this.breakpointService

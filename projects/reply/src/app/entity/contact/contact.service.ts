@@ -7,7 +7,7 @@ import { SyncResult } from '../core/backend.models';
 import { Contact } from './contact.model';
 
 @Injectable()
-export abstract class ContactBackend {
+export abstract class ContactService {
   abstract loadContacts(): Observable<Contact[]>;
   abstract loadContact(id: Contact['id']): Observable<Contact>;
   abstract loadUser(): Observable<Contact>;
@@ -15,4 +15,4 @@ export abstract class ContactBackend {
   abstract syncContacts(syncToken: string): Observable<SyncResult<Contact>>;
 }
 
-export class ContactBackendException extends Exception {}
+export class ContactServiceException extends Exception {}

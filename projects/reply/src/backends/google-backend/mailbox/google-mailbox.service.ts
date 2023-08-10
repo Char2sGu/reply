@@ -2,13 +2,13 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
 import { access } from '../../../app/core/property-path.utils';
-import { MailboxBackend } from '../../../app/entity/mailbox/mailbox.backend';
 import { Mailbox } from '../../../app/entity/mailbox/mailbox.model';
+import { MailboxService } from '../../../app/entity/mailbox/mailbox.service';
 import { GMAIL_SYSTEM_MAILBOXES } from '../core/gmail-system-mailboxes.object';
 import { useGoogleApi } from '../core/google-apis.utils';
 
 @Injectable()
-export class GoogleMailboxBackend implements MailboxBackend {
+export class GoogleMailboxService implements MailboxService {
   private systemMailboxes = inject(GMAIL_SYSTEM_MAILBOXES);
 
   private labelListApi = useGoogleApi((a) => a.gmail.users.labels.list);

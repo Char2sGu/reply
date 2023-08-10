@@ -2,15 +2,15 @@ import { inject, ModuleWithProviders, NgModule } from '@angular/core';
 
 import { AuthenticationService } from '../../app/core/auth/authentication.service';
 import { APP_PREPARER, AppPreparer } from '../../app/core/preparation';
-import { ContactBackend } from '../../app/entity/contact/contact.backend';
-import { MailBackend } from '../../app/entity/mail/mail.backend';
-import { MailboxBackend } from '../../app/entity/mailbox/mailbox.backend';
+import { ContactService } from '../../app/entity/contact/contact.service';
+import { MailService } from '../../app/entity/mail/mail.service';
+import { MailboxService } from '../../app/entity/mailbox/mailbox.service';
 import { GoogleAuthenticationService } from './auth/google-authentication.service';
-import { GoogleContactBackend } from './contact/google-contact.backend';
+import { GoogleContactService } from './contact/google-contact.service';
 import { GOOGLE_APIS } from './core/google-apis.object';
 import { GOOGLE_CLIENT_ID } from './core/google-client-id.token';
-import { GoogleMailBackend } from './mail/google-mail.backend';
-import { GoogleMailboxBackend } from './mailbox/google-mailbox.backend';
+import { GoogleMailService } from './mail/google-mail.service';
+import { GoogleMailboxService } from './mailbox/google-mailbox.service';
 
 @NgModule({
   providers: [
@@ -27,16 +27,16 @@ import { GoogleMailboxBackend } from './mailbox/google-mailbox.backend';
       useClass: GoogleAuthenticationService,
     },
     {
-      provide: ContactBackend,
-      useClass: GoogleContactBackend,
+      provide: ContactService,
+      useClass: GoogleContactService,
     },
     {
-      provide: MailBackend,
-      useClass: GoogleMailBackend,
+      provide: MailService,
+      useClass: GoogleMailService,
     },
     {
-      provide: MailboxBackend,
-      useClass: GoogleMailboxBackend,
+      provide: MailboxService,
+      useClass: GoogleMailboxService,
     },
   ],
 })

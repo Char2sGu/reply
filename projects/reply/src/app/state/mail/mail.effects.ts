@@ -14,7 +14,7 @@ import {
 } from 'rxjs';
 
 import { NotificationService } from '@/app/core/notification/notification.service';
-import { MailBackend } from '@/app/entity/mail/mail.backend';
+import { MailService } from '@/app/entity/mail/mail.service';
 
 import { MAILBOX_STATE } from '../mailbox/mailbox.state-entry';
 import { MAIL_ACTIONS as A } from './mail.actions';
@@ -23,7 +23,7 @@ import { MAIL_ACTIONS as A } from './mail.actions';
 export class MailEffects {
   private store = inject(Store);
   private actions$ = inject(Actions);
-  private mailService = inject(MailBackend);
+  private mailService = inject(MailService);
   private notifier = inject(NotificationService);
 
   loadMails = createEffect(() =>

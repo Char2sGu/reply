@@ -2,11 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 
 import { Page, SyncResult } from '@/app/entity/core/backend.models';
-import {
-  MailBackend,
-  MailBackendException,
-} from '@/app/entity/mail/mail.backend';
 import { Mail } from '@/app/entity/mail/mail.model';
+import {
+  MailService,
+  MailServiceException,
+} from '@/app/entity/mail/mail.service';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
 import { DEMO_MAILS } from './demo-mails.object';
@@ -14,7 +14,7 @@ import { DEMO_MAILS } from './demo-mails.object';
 const SYNC_TOKEN = '<mail-sync-token>';
 
 @Injectable()
-export class DemoMailBackend implements MailBackend {
+export class DemoMailService implements MailService {
   private mails = inject(DEMO_MAILS);
 
   loadMailPage(): Observable<Page<Mail>> {
@@ -25,7 +25,7 @@ export class DemoMailBackend implements MailBackend {
     return of(null).pipe(
       map(() => {
         const mail = this.mails.find((m) => m.id === id);
-        if (!mail) throw new MailBackendException(`Mail ${id} not found`);
+        if (!mail) throw new MailServiceException(`Mail ${id} not found`);
         return mail;
       }),
     );

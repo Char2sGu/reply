@@ -14,14 +14,14 @@ import {
   SyncChange,
   SyncResult,
 } from '../../../app/entity/core/backend.models';
-import { MailBackend } from '../../../app/entity/mail/mail.backend';
 import { Mail } from '../../../app/entity/mail/mail.model';
+import { MailService } from '../../../app/entity/mail/mail.service';
 import { Mailbox } from '../../../app/entity/mailbox/mailbox.model';
 import { useGoogleApi } from '../core/google-apis.utils';
 import { GmailMessageResolver } from './gmail-message-resolver.service';
 
 @Injectable()
-export class GoogleMailBackend implements MailBackend {
+export class GoogleMailService implements MailService {
   private messageResolver = inject(GmailMessageResolver);
 
   private messageListApi = useGoogleApi((a) => a.gmail.users.messages.list);

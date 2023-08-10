@@ -8,7 +8,7 @@ import { Mailbox } from '../mailbox/mailbox.model';
 import { Mail } from './mail.model';
 
 @Injectable()
-export abstract class MailBackend {
+export abstract class MailService {
   abstract loadMailPage(pageToken?: string): Observable<Page<Mail>>;
   abstract loadMail(id: Mail['id']): Observable<Mail>;
   abstract obtainSyncToken(): Observable<string>;
@@ -21,4 +21,4 @@ export abstract class MailBackend {
   abstract deleteMail(mail: Mail): Observable<void>;
 }
 
-export class MailBackendException extends Exception {}
+export class MailServiceException extends Exception {}

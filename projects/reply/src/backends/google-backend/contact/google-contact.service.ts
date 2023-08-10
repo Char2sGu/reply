@@ -9,11 +9,11 @@ import {
 } from 'rxjs';
 
 import { access } from '@/app/core/property-path.utils';
-import {
-  ContactBackend,
-  ContactBackendException,
-} from '@/app/entity/contact/contact.backend';
 import { Contact } from '@/app/entity/contact/contact.model';
+import {
+  ContactService,
+  ContactServiceException,
+} from '@/app/entity/contact/contact.service';
 import { SyncChange, SyncResult } from '@/app/entity/core/backend.models';
 
 import { useGoogleApi as useApi } from '../core/google-apis.utils';
@@ -35,7 +35,7 @@ const DIR_SOURCES = [
 ];
 
 @Injectable()
-export class GoogleContactBackend implements ContactBackend {
+export class GoogleContactService implements ContactService {
   private personResolver = inject(GooglePersonResolver);
 
   private peopleGetApi = useApi((a) => a.people.people.get);
@@ -109,7 +109,7 @@ export class GoogleContactBackend implements ContactBackend {
       switchMap(({ nextPageToken, nextSyncToken }) => {
         if (nextSyncToken) return of(nextSyncToken);
         if (nextPageToken) return this.obtainContactSyncToken(nextPageToken);
-        throw new ContactBackendException('Invalid response');
+        throw new ContactServiceException('Invalid response');
       }),
     );
   }
@@ -124,7 +124,7 @@ export class GoogleContactBackend implements ContactBackend {
         if (nextSyncToken) return of(nextSyncToken);
         if (nextPageToken)
           return this.obtainOtherContactSyncToken(nextPageToken);
-        throw new ContactBackendException('Invalid response');
+        throw new ContactServiceException('Invalid response');
       }),
     );
   }

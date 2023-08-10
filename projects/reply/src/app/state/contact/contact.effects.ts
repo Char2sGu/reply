@@ -2,14 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, exhaustMap, map, of } from 'rxjs';
 
-import { ContactBackend } from '@/app/entity/contact/contact.backend';
+import { ContactService } from '@/app/entity/contact/contact.service';
 
 import { CONTACT_ACTIONS } from './contact.actions';
 
 @Injectable()
 export class ContactEffects {
   private actions$ = inject(Actions);
-  private contactService = inject(ContactBackend);
+  private contactService = inject(ContactService);
 
   loadContacts = createEffect(() =>
     this.actions$.pipe(

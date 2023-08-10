@@ -2,14 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, exhaustMap, map, of } from 'rxjs';
 
-import { MailboxBackend } from '@/app/entity/mailbox/mailbox.backend';
+import { MailboxService } from '@/app/entity/mailbox/mailbox.service';
 
 import { MAILBOX_ACTIONS } from './mailbox.actions';
 
 @Injectable()
 export class MailboxEffects {
   private actions$ = inject(Actions);
-  private mailboxService = inject(MailboxBackend);
+  private mailboxService = inject(MailboxService);
 
   loadMailboxes = createEffect(() =>
     this.actions$.pipe(
