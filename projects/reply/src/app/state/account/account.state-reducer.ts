@@ -20,6 +20,10 @@ export const accountStateReducer = createReducer(
     currentId: p.result.account.id,
     accounts: s.accounts.upsert(p.result.account),
   })),
+  on(CORE_ACTIONS.authenticateExpired, (s) => ({
+    ...s,
+    currentId: null,
+  })),
   on(ACCOUNT_ACTIONS.loadAccounts, (s) => ({
     ...s,
     accountsLoadingStatus: { type: 'pending' } as const,

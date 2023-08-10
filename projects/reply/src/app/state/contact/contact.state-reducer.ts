@@ -20,6 +20,10 @@ export const contactStateReducer = createReducer(
     currentId: p.result.user.id,
     contacts: s.contacts.upsert(p.result.user),
   })),
+  on(CORE_ACTIONS.authenticateExpired, (s) => ({
+    ...s,
+    currentId: null,
+  })),
 
   on(CONTACT_ACTIONS.loadContacts, (s) => ({
     ...s,

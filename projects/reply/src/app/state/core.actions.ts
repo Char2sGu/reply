@@ -23,6 +23,7 @@ export const CORE_ACTIONS = createActionGroup({
         }>(),
         cancelled: emptyProps(),
         failed: props<{ error: Error }>(),
+        expired: emptyProps(),
       },
     }),
   },

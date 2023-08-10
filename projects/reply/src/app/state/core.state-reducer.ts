@@ -40,4 +40,9 @@ export const coreStateReducer = createReducer(
     ...s,
     authenticationStatus: { type: 'failed', error: p.error } as const,
   })),
+  on(CORE_ACTIONS.authenticateExpired, (s) => ({
+    ...s,
+    authorization: null,
+    authenticationStatus: { type: 'idle' } as const,
+  })),
 );
