@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Exception } from '../exceptions';
-import { Authorization } from './authorization.service';
+import { Authorization } from './authorization.model';
 
 // prettier-ignore
 @Injectable()

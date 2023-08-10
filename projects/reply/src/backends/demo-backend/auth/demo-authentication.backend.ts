@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { AuthenticationBackend } from '@/app/core/auth/authentication.backend';
-import { Authorization } from '@/app/core/auth/authorization.service';
+import { Authorization } from '@/app/core/auth/authorization.model';
 
 const AUTHORIZATION: Authorization = {
   token: 'demo',
