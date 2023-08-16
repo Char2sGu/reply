@@ -1,10 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
 
+import { AUTHENTICATION_ACTIONS } from '@/app/core/authentication.actions';
 import { Account } from '@/app/entity/account/account.model';
 
-import { CORE_ACTIONS } from '../core.actions';
-import { EntityCollection } from '../core/entity-collection';
-import { ACCOUNT_ACTIONS } from './account.actions';
+import { ACCOUNT_ACTIONS } from '../../entity/account/account.actions';
+import { EntityCollection } from '../shared/entity-collection';
 import { AccountState } from './account.state-model';
 
 const accountInitialState: AccountState = {
@@ -15,12 +15,12 @@ const accountInitialState: AccountState = {
 
 export const accountStateReducer = createReducer(
   accountInitialState,
-  on(CORE_ACTIONS.authenticateCompleted, (s, p) => ({
+  on(AUTHENTICATION_ACTIONS.authenticateCompleted, (s, p) => ({
     ...s,
     currentId: p.result.account.id,
     accounts: s.accounts.upsert(p.result.account),
   })),
-  on(CORE_ACTIONS.authenticateExpired, (s) => ({
+  on(AUTHENTICATION_ACTIONS.authenticateExpired, (s) => ({
     ...s,
     currentId: null,
   })),

@@ -35,7 +35,7 @@ import {
 import { NavigationService } from '@/app/core/navigation.service';
 import { Mail } from '@/app/entity/mail/mail.model';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
-import { CORE_STATE } from '@/app/state/core.state-entry';
+import { CORE_STATE } from '@/app/state/core/core.state-entry';
 import { MAIL_STATE } from '@/app/state/mail/mail.state-entry';
 import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 

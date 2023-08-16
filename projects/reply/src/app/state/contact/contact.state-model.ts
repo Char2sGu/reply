@@ -1,7 +1,7 @@
 import { Contact } from '@/app/entity/contact/contact.model';
 
-import { ActionStatus } from '../core/action-status';
-import { EntityCollection } from '../core/entity-collection';
+import { ActionStatus } from '../../core/action-status';
+import { EntityCollection } from '../shared/entity-collection';
 
 export interface ContactState {
   currentId: Contact['id'] | null;

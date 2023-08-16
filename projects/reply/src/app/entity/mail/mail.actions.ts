@@ -1,10 +1,10 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { SyncResult } from '@/app/entity/core/sync.models';
-import { Mail } from '@/app/entity/mail/mail.model';
-import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
+import { generateActionGroupEvents } from '@/app/core/action-generator';
 
-import { generateActionGroupEvents } from '../core/action-generator';
+import { SyncResult } from '../core/sync.models';
+import { Mailbox } from '../mailbox/mailbox.model';
+import { Mail } from './mail.model';
 
 export const MAIL_ACTIONS = createActionGroup({
   source: 'mail',

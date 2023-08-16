@@ -1,7 +1,7 @@
 import { createActionGroup, props } from '@ngrx/store';
 
+import { generateActionGroupEvents } from '@/app/core/action-generator';
 import { Mail } from '@/app/entity/mail/mail.model';
-import { generateActionGroupEvents } from '@/app/state/core/action-generator';
 
 export const MAILS_ACTIONS = createActionGroup({
   source: 'feature/mails',

@@ -3,12 +3,12 @@ import { CanActivateFn, RouterModule, Routes } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { combineLatest, filter, firstValueFrom } from 'rxjs';
 
-import { CONTACT_ACTIONS } from '../state/contact/contact.actions';
+import { CONTACT_ACTIONS } from '../entity/contact/contact.actions';
+import { MAIL_ACTIONS } from '../entity/mail/mail.actions';
+import { MAILBOX_ACTIONS } from '../entity/mailbox/mailbox.actions';
 import { CONTACT_STATE } from '../state/contact/contact.state-entry';
-import { CORE_STATE } from '../state/core.state-entry';
-import { MAIL_ACTIONS } from '../state/mail/mail.actions';
+import { CORE_STATE } from '../state/core/core.state-entry';
 import { MAIL_STATE } from '../state/mail/mail.state-entry';
-import { MAILBOX_ACTIONS } from '../state/mailbox/mailbox.actions';
 import { MAILBOX_STATE } from '../state/mailbox/mailbox.state-entry';
 import { BaseFoundationComponent } from './base-foundation/base-foundation.component';
 import { MainComponent } from './main.component';

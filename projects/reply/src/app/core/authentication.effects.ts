@@ -1,32 +1,20 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
-import dayjs from 'dayjs/esm';
+import dayjs from 'dayjs';
 import { catchError, concatMap, filter, map, of, switchMap, timer } from 'rxjs';
 
-import { AuthenticationService } from '../core/auth/authentication.service';
-import { BreakpointService } from '../core/breakpoint.service';
-import { AccountService } from '../entity/account/account.service';
-import { ContactService } from '../entity/contact/contact.service';
-import { CORE_ACTIONS as A } from './core.actions';
+import { AccountService } from '@/app/entity/account/account.service';
+import { ContactService } from '@/app/entity/contact/contact.service';
+
+import { AuthenticationService } from './auth/authentication.service';
+import { AUTHENTICATION_ACTIONS as A } from './authentication.actions';
 
 @Injectable()
-export class CoreEffects {
+export class AuthenticationEffects {
   private actions$ = inject(Actions);
-  private breakpointService = inject(BreakpointService);
   private authService = inject(AuthenticationService);
-  private accountService = inject(AccountService);
   private contactService = inject(ContactService);
-
-  updateBreakpoints = createEffect(() =>
-    this.breakpointService
-      .observeBreakpoints({
-        ['tablet-portrait']: '(min-width: 600px)',
-        ['tablet-landscape']: '(min-width: 905px)',
-        ['laptop']: '(min-width: 1240px)',
-        ['desktop']: '(min-width: 1440px)',
-      })
-      .pipe(map((to) => A.breakpointsUpdated({ to }))),
-  );
+  private accountService = inject(AccountService);
 
   authenticate = createEffect(() =>
     this.actions$.pipe(

@@ -32,8 +32,8 @@ import {
 } from 'rxjs';
 
 import { VirtualMailboxName } from '../core/mailbox-name.enums';
+import { MAIL_ACTIONS } from '../entity/mail/mail.actions';
 import { Mail } from '../entity/mail/mail.model';
-import { MAIL_ACTIONS } from '../state/mail/mail.actions';
 import { MAIL_STATE } from '../state/mail/mail.state-entry';
 import { MAILBOX_STATE } from '../state/mailbox/mailbox.state-entry';
 import { MailCardAnimationPresenceComponent } from './core/mail-card-animation-presence/mail-card-animation-presence.component';

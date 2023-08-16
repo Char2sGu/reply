@@ -1,10 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
 
+import { AUTHENTICATION_ACTIONS } from '@/app/core/authentication.actions';
 import { Contact } from '@/app/entity/contact/contact.model';
 
-import { CORE_ACTIONS } from '../core.actions';
-import { EntityCollection } from '../core/entity-collection';
-import { CONTACT_ACTIONS } from './contact.actions';
+import { CONTACT_ACTIONS } from '../../entity/contact/contact.actions';
+import { EntityCollection } from '../shared/entity-collection';
 import { ContactState } from './contact.state-model';
 
 const contactInitialState: ContactState = {
@@ -15,12 +15,12 @@ const contactInitialState: ContactState = {
 
 export const contactStateReducer = createReducer(
   contactInitialState,
-  on(CORE_ACTIONS.authenticateCompleted, (s, p) => ({
+  on(AUTHENTICATION_ACTIONS.authenticateCompleted, (s, p) => ({
     ...s,
     currentId: p.result.user.id,
     contacts: s.contacts.upsert(p.result.user),
   })),
-  on(CORE_ACTIONS.authenticateExpired, (s) => ({
+  on(AUTHENTICATION_ACTIONS.authenticateExpired, (s) => ({
     ...s,
     currentId: null,
   })),

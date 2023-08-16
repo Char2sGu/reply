@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Exception } from '../exceptions';
 import { Authorization } from './authorization.model';
 
+// TODO: rename to authorization service
 // prettier-ignore
 @Injectable()
 export abstract class AuthenticationService {

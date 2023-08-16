@@ -9,9 +9,9 @@ import {
 import { MatLegacyMenu as MatMenu } from '@angular/material/legacy-menu';
 import { Store } from '@ngrx/store';
 
+import { MAIL_ACTIONS } from '@/app/entity/mail/mail.actions';
 import { Mail } from '@/app/entity/mail/mail.model';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
-import { MAIL_ACTIONS } from '@/app/state/mail/mail.actions';
 
 import { MAILS_ACTIONS } from '../mails.actions';
 

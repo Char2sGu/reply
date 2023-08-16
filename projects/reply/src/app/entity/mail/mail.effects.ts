@@ -18,11 +18,11 @@ import {
 } from 'rxjs';
 
 import { NotificationService } from '@/app/core/notification/notification.service';
-import { MailService } from '@/app/entity/mail/mail.service';
+import { MAIL_STATE } from '@/app/state/mail/mail.state-entry';
+import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 
-import { MAILBOX_STATE } from '../mailbox/mailbox.state-entry';
 import { MAIL_ACTIONS as A } from './mail.actions';
-import { MAIL_STATE } from './mail.state-entry';
+import { MailService } from './mail.service';
 
 @Injectable()
 export class MailEffects {

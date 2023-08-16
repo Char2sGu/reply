@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { MAIL_ACTIONS } from '@/app/state/mail/mail.actions';
+import { MAIL_ACTIONS } from '@/app/entity/mail/mail.actions';
 
 import { Mail } from '../../../entity/mail/mail.model';
 

@@ -7,8 +7,8 @@ import {
 import { Store } from '@ngrx/store';
 import { filter, map, tap, withLatestFrom } from 'rxjs';
 
-import { CORE_ACTIONS } from '@/app/state/core.actions';
-import { CORE_STATE } from '@/app/state/core.state-entry';
+import { AUTHENTICATION_ACTIONS } from '@/app/core/authentication.actions';
+import { CORE_STATE } from '@/app/state/core/core.state-entry';
 
 @Component({
   selector: 'rpl-auth-no-account',
@@ -30,7 +30,7 @@ export class AuthNoAccountComponent {
       .pipe(
         withLatestFrom(this.busy$),
         filter(([_, busy]) => !busy),
-        tap(() => this.store.dispatch(CORE_ACTIONS.authenticate({}))),
+        tap(() => this.store.dispatch(AUTHENTICATION_ACTIONS.authenticate({}))),
       )
       .subscribe();
   }

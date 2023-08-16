@@ -2,7 +2,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { Contact } from '@/app/entity/contact/contact.model';
 
-import { generateActionGroupEvents } from '../core/action-generator';
+import { generateActionGroupEvents } from '../../core/action-generator';
 
 export const CONTACT_ACTIONS = createActionGroup({
   source: 'contact',

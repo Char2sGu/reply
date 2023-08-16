@@ -12,7 +12,7 @@ import { Store } from '@ngrx/store';
 
 import { Mail } from '@/app/entity/mail/mail.model';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
-import { CORE_STATE } from '@/app/state/core.state-entry';
+import { CORE_STATE } from '@/app/state/core/core.state-entry';
 
 @Component({
   selector: 'rpl-mail-card',

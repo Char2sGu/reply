@@ -2,8 +2,8 @@ import { createReducer, on } from '@ngrx/store';
 
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
-import { EntityCollection } from '../core/entity-collection';
-import { MAILBOX_ACTIONS } from './mailbox.actions';
+import { MAILBOX_ACTIONS } from '../../entity/mailbox/mailbox.actions';
+import { EntityCollection } from '../shared/entity-collection';
 import { MailboxState } from './mailbox.state-model';
 
 const mailboxInitialState: MailboxState = {

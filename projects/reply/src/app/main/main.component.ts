@@ -12,7 +12,7 @@ import {
   SharedAxisAnimation,
   usePrimaryChildRouteAnimationId,
 } from '../core/animations';
-import { CORE_STATE } from '../state/core.state-entry';
+import { CORE_STATE } from '../state/core/core.state-entry';
 
 @Component({
   selector: 'rpl-main',

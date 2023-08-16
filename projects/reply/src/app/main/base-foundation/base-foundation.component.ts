@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { CORE_STATE } from '@/app/state/core.state-entry';
+import { CORE_STATE } from '@/app/state/core/core.state-entry';
 
 @Component({
   selector: 'rpl-base-foundation',

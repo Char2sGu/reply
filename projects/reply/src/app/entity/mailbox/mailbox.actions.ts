@@ -2,7 +2,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
-import { generateActionGroupEvents } from '../core/action-generator';
+import { generateActionGroupEvents } from '../../core/action-generator';
 
 export const MAILBOX_ACTIONS = createActionGroup({
   source: 'mailbox',

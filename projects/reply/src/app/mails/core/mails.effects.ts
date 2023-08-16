@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { concatMap, filter, map, withLatestFrom } from 'rxjs';
 
 import { PopupService } from '@/app/core/popup/popup.service';
-import { MAIL_ACTIONS } from '@/app/state/mail/mail.actions';
+import { MAIL_ACTIONS } from '@/app/entity/mail/mail.actions';
 import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 
 import { MailboxSelectionPopupComponent } from './mailbox-selection-popup/mailbox-selection-popup.component';

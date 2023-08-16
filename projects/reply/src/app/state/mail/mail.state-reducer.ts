@@ -2,9 +2,9 @@ import { createReducer, on } from '@ngrx/store';
 
 import { Mail } from '@/app/entity/mail/mail.model';
 
-import { EntityCollection } from '../core/entity-collection';
-import { applySyncChanges } from '../core/sync-apply';
-import { MAIL_ACTIONS } from './mail.actions';
+import { MAIL_ACTIONS } from '../../entity/mail/mail.actions';
+import { EntityCollection } from '../shared/entity-collection';
+import { applySyncChanges } from '../shared/sync-apply';
 import { MailState } from './mail.state-model';
 
 const mailInitialState: MailState = {

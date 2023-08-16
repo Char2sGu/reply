@@ -3,7 +3,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Store } from '@ngrx/store';
 
-import { CORE_STATE } from '@/app/state/core.state-entry';
+import { CORE_STATE } from '@/app/state/core/core.state-entry';
 
 import { POPUP_REF, PopupComponent, PopupRef } from './popup.core';
 import { PopupContainerComponent } from './popup-container.component';

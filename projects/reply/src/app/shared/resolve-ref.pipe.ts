@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { EntityCollection } from '../state/core/entity-collection';
+import { EntityCollection } from '../state/shared/entity-collection';
 
 @Pipe({
   name: 'resolveRef',

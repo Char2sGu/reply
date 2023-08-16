@@ -1,15 +1,14 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import { Authorization } from '../core/auth/authorization.model';
-import { BreakpointMap } from '../core/breakpoint.service';
-import { Account } from '../entity/account/account.model';
-import { Contact } from '../entity/contact/contact.model';
-import { generateActionGroupEvents } from './core/action-generator';
+import { Account } from '@/app/entity/account/account.model';
+import { Contact } from '@/app/entity/contact/contact.model';
 
-export const CORE_ACTIONS = createActionGroup({
-  source: 'core',
+import { generateActionGroupEvents } from './action-generator';
+import { Authorization } from './auth/authorization.model';
+
+export const AUTHENTICATION_ACTIONS = createActionGroup({
+  source: 'authentication',
   events: {
-    breakpointsUpdated: props<{ to: BreakpointMap }>(),
     ...generateActionGroupEvents({
       name: 'authenticate' as const,
       params: props<{ hint?: string }>(),

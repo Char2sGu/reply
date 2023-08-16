@@ -25,20 +25,21 @@ import { catchError, map, of } from 'rxjs';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AuthenticationEffects } from './core/authentication.effects';
+import { BreakpointEffects } from './core/breakpoint.effects';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { LOCAL_STORAGE } from './core/native-api.tokens';
 import { APP_PREPARER, AppPreparer } from './core/preparation';
+import { ACCOUNT_ACTIONS } from './entity/account/account.actions';
+import { AccountEffects } from './entity/account/account.effects';
+import { ContactEffects } from './entity/contact/contact.effects';
+import { MailEffects } from './entity/mail/mail.effects';
+import { MailboxEffects } from './entity/mailbox/mailbox.effects';
 import { LogoComponent } from './shared/logo/logo.component';
-import { ACCOUNT_ACTIONS } from './state/account/account.actions';
-import { AccountEffects } from './state/account/account.effects';
 import { ACCOUNT_STATE } from './state/account/account.state-entry';
-import { ContactEffects } from './state/contact/contact.effects';
 import { CONTACT_STATE } from './state/contact/contact.state-entry';
-import { CoreEffects } from './state/core.effects';
-import { CORE_STATE } from './state/core.state-entry';
-import { MailEffects } from './state/mail/mail.effects';
+import { CORE_STATE } from './state/core/core.state-entry';
 import { MAIL_STATE } from './state/mail/mail.state-entry';
-import { MailboxEffects } from './state/mailbox/mailbox.effects';
 import { MAILBOX_STATE } from './state/mailbox/mailbox.state-entry';
 
 // TODO: attachment
@@ -70,17 +71,19 @@ import { MAILBOX_STATE } from './state/mailbox/mailbox.state-entry';
     LayoutProjectionModule.forRoot(),
     ScrollingModule.forRoot(),
     StoreModule.forRoot(),
-    EffectsModule.forRoot(),
     StoreModule.forFeature(CORE_STATE),
-    EffectsModule.forFeature(CoreEffects),
     StoreModule.forFeature(ACCOUNT_STATE),
-    EffectsModule.forFeature(AccountEffects),
     StoreModule.forFeature(CONTACT_STATE),
-    EffectsModule.forFeature(ContactEffects),
     StoreModule.forFeature(MAIL_STATE),
-    EffectsModule.forFeature(MailEffects),
     StoreModule.forFeature(MAILBOX_STATE),
-    EffectsModule.forFeature(MailboxEffects),
+    EffectsModule.forRoot(
+      AuthenticationEffects,
+      BreakpointEffects,
+      AccountEffects,
+      ContactEffects,
+      MailEffects,
+      MailboxEffects,
+    ),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
