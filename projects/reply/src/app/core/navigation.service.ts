@@ -6,6 +6,7 @@ import {
   map,
   Observable,
   of,
+  pairwise,
   shareReplay,
   startWith,
   switchMap,
@@ -59,13 +60,18 @@ export class NavigationService {
     shareReplay(1),
   );
 
-  readonly activeItem$ = this.activeItemIndex$.pipe(
+  private activeItemPair$ = this.activeItemIndex$.pipe(
     switchMap((i) => {
       if (i === null) return of(null);
       return this.items$.pipe(map((items) => items[i]));
     }),
+    startWith(null),
+    pairwise(),
     shareReplay(1),
   );
+
+  readonly currActiveItem$ = this.activeItemPair$.pipe(map(([, curr]) => curr));
+  readonly lastActiveItem$ = this.activeItemPair$.pipe(map(([prev]) => prev));
 
   private findActiveItemIndex(items: NavigationItem[]): number | null {
     const result = items.findIndex((i) =>

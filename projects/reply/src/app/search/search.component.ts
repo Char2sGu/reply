@@ -25,7 +25,10 @@ export class SearchComponent {
   private store = inject(Store);
   private navService = inject(NavigationService);
 
-  activeNavItem = toSignal(this.navService.activeItem$, { requireSync: true });
+  lastActiveNavItem = toSignal(
+    this.navService.lastActiveItem$, //
+    { requireSync: true },
+  );
 
   searchText$ = new BehaviorSubject('');
 

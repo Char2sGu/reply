@@ -25,7 +25,7 @@ export class ComposeComponent {
   // TODO: refactor to decouple from nav item details
   backUrl$ = combineLatest([
     this.mailId$,
-    this.navService.activeItem$.pipe(map((i) => i?.url)),
+    this.navService.currActiveItem$.pipe(map((i) => i?.url)),
   ]).pipe(
     map(([mailId, mailboxUrl]) => {
       if (!mailboxUrl) return '/';

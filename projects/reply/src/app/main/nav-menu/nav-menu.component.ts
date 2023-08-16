@@ -22,7 +22,7 @@ export class NavMenuComponent {
   @Input() @HostBinding('class.expanded') expanded = true;
 
   items = toSignal(this.navService.items$, { requireSync: true });
-  activeItem = toSignal(this.navService.activeItem$, { requireSync: true });
+  activeItem = toSignal(this.navService.currActiveItem$, { requireSync: true });
 
   itemsWithIcons = computed(() =>
     this.items().flatMap((i) => (i.icon ? i : [])),
