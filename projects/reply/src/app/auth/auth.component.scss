@@ -18,22 +18,31 @@
 
   .container {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     height: 100%;
-    align-items: stretch;
     background: var(--color-surface);
   }
 
   .main {
-    order: 2;
-    flex: 1;
     display: flex;
+    width: calc(100% - 2 * 8px);
+    max-width: 384px;
+    height: 556px;
     flex-direction: column;
     align-items: stretch;
     background: var(--color-primary);
+    z-index: 1;
 
     .header {
-      display: none;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px;
+      color: var(--color-on-primary);
+      .logo {
+        height: 40px;
+      }
     }
 
     .body {
@@ -47,37 +56,22 @@
   }
 
   .decoration {
-    order: 1;
-    height: 240px;
+    position: absolute;
+    inset: 0;
     background-image: url(../../assets/reply-overview.png);
-    background-size: 100% auto;
+    background-size: auto 100%;
     background-repeat: no-repeat;
+    z-index: 0;
   }
 }
 
 :host-context(.tablet-portrait) {
-  .container {
-    flex-direction: row;
-  }
-
   .main {
-    order: 1;
-    flex: none;
-    width: 384px;
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 24px;
-      color: var(--color-on-primary);
-      .logo {
-        height: 32px;
-      }
-    }
+    height: 100%;
   }
 
   .decoration {
-    order: 2;
+    position: unset;
     flex: 1;
     height: 100%;
     background-size: auto 100%;

@@ -95,6 +95,12 @@ textarea {
   padding: initial !important;
 }
 
+// Fix material list icon size
+.mat-list-base .mat-list-item .mat-list-icon,
+.mat-list-base .mat-list-option .mat-list-icon {
+  padding: 8px !important;
+}
+
 .snackbar-notification-panel {
   &.centered {
     margin-bottom: 88px !important; // TODO: computed value
