@@ -1,6 +1,7 @@
-import { EventEmitter, inject, Injectable, TemplateRef } from '@angular/core';
+import { inject, Injectable, TemplateRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
+  BehaviorSubject,
   distinctUntilChanged,
   filter,
   map,
@@ -16,12 +17,12 @@ import {
 export class BottomNavService {
   private router = inject(Router);
 
-  private actionsChange = new EventEmitter<TemplateRef<never> | null>();
-  actions$ = this.actionsChange.pipe(shareReplay(1), startWith(null));
+  #actions$ = new BehaviorSubject<TemplateRef<never> | null>(null);
+  readonly actions$ = this.#actions$.pipe();
 
-  private statusChange = new EventEmitter<BottomNavStatus>();
-  status$: Observable<BottomNavStatus> = merge(
-    this.statusChange,
+  #status$ = new BehaviorSubject<BottomNavStatus>('expanded');
+  readonly status$: Observable<BottomNavStatus> = merge(
+    this.#status$,
     this.router.events.pipe(
       filter((e) => e instanceof NavigationEnd),
       map(() => 'expanded' as const),
@@ -33,11 +34,11 @@ export class BottomNavService {
   );
 
   useActions(actions: TemplateRef<never> | null): void {
-    this.actionsChange.emit(actions);
+    this.#actions$.next(actions);
   }
 
   setStatus(status: BottomNavStatus): void {
-    this.statusChange.emit(status);
+    this.#status$.next(status);
   }
 }
 

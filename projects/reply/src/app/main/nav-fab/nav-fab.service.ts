@@ -1,16 +1,16 @@
-import { EventEmitter, Injectable, TemplateRef } from '@angular/core';
+import { Injectable, TemplateRef } from '@angular/core';
 import { Params } from '@angular/router';
-import { shareReplay, startWith } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NavFabService {
-  private configChange = new EventEmitter<NavFabConfig | null>();
-  readonly config$ = this.configChange.pipe(shareReplay(1), startWith(null));
+  #config = new BehaviorSubject<NavFabConfig | null>(null);
+  readonly config$ = this.#config.pipe();
 
   useConfig(config: NavFabConfig | null): void {
-    this.configChange.emit(config);
+    this.#config.next(config);
   }
 }
 
