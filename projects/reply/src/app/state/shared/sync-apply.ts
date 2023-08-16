@@ -1,4 +1,4 @@
-import { SyncChange } from '@/app/entity/core/sync.models';
+import { SyncChange } from '@/app/entity/core/synchronization';
 
 import { EntityCollection, EntityNotFoundException } from './entity-collection';
 

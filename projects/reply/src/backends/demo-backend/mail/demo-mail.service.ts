@@ -2,12 +2,13 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 
 import { Page } from '@/app/entity/core/page.model';
-import { SyncResult } from '@/app/entity/core/sync.models';
+import { SyncResult } from '@/app/entity/core/synchronization';
 import { Mail } from '@/app/entity/mail/mail.model';
 import {
   MailService,
   MailServiceException,
 } from '@/app/entity/mail/mail.service';
+import { MailSyncService } from '@/app/entity/mail/mail-sync.service';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
 import { DEMO_MAILS } from './demo-mails.object';
@@ -15,7 +16,7 @@ import { DEMO_MAILS } from './demo-mails.object';
 const SYNC_TOKEN = '<mail-sync-token>';
 
 @Injectable()
-export class DemoMailService implements MailService {
+export class DemoMailService implements MailService, MailSyncService {
   private mails = inject(DEMO_MAILS);
 
   loadMailPage(): Observable<Page<Mail>> {
@@ -36,7 +37,7 @@ export class DemoMailService implements MailService {
     return of(SYNC_TOKEN);
   }
 
-  syncMails(): Observable<SyncResult<Mail>> {
+  syncChanges(): Observable<SyncResult<Mail>> {
     return of({ changes: [], syncToken: SYNC_TOKEN });
   }
 

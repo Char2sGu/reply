@@ -1,3 +1,12 @@
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export abstract class SyncService<Entity> {
+  abstract obtainSyncToken(): Observable<string>;
+  abstract syncChanges(syncToken: string): Observable<SyncResult<Entity>>;
+}
+
 export interface SyncResult<Entity> {
   changes: SyncChange<Entity>[];
   syncToken: string;

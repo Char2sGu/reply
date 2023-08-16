@@ -2,7 +2,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { generateActionGroupEvents } from '@/app/core/action-generator';
 
-import { SyncResult } from '../core/sync.models';
+import { SyncResult } from '../core/synchronization';
 import { Mailbox } from '../mailbox/mailbox.model';
 import { Mail } from './mail.model';
 

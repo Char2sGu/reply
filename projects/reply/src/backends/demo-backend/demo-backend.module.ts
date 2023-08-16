@@ -3,7 +3,9 @@ import { APP_INITIALIZER, inject, NgModule } from '@angular/core';
 
 import { AuthenticationService } from '@/app/core/authorization.service';
 import { ContactService } from '@/app/entity/contact/contact.service';
+import { ContactSyncService } from '@/app/entity/contact/contact-sync.service';
 import { MailService } from '@/app/entity/mail/mail.service';
+import { MailSyncService } from '@/app/entity/mail/mail-sync.service';
 import { MailboxService } from '@/app/entity/mailbox/mailbox.service';
 
 import { DemoAuthenticationService } from './auth/demo-authentication.service';
@@ -43,12 +45,20 @@ import { DemoMailboxService } from './mailbox/demo-mailbox.service';
       useClass: DemoContactService,
     },
     {
+      provide: ContactSyncService,
+      useExisting: ContactService,
+    },
+    {
       provide: MailboxService,
       useClass: DemoMailboxService,
     },
     {
       provide: MailService,
       useClass: DemoMailService,
+    },
+    {
+      provide: MailSyncService,
+      useExisting: MailService,
     },
   ],
 })

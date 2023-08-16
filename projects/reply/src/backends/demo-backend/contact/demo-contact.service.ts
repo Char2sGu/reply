@@ -6,14 +6,15 @@ import {
   ContactService,
   ContactServiceException,
 } from '@/app/entity/contact/contact.service';
-import { SyncResult } from '@/app/entity/core/sync.models';
+import { ContactSyncService } from '@/app/entity/contact/contact-sync.service';
+import { SyncResult } from '@/app/entity/core/synchronization';
 
 import { DEMO_CONTACTS } from './demo-contacts.object';
 
 const SYNC_TOKEN = '<contact-sync-token>';
 
 @Injectable()
-export class DemoContactService implements ContactService {
+export class DemoContactService implements ContactService, ContactSyncService {
   private contacts = inject(DEMO_CONTACTS);
 
   loadContacts(): Observable<Contact[]> {
@@ -39,7 +40,7 @@ export class DemoContactService implements ContactService {
     return of(SYNC_TOKEN);
   }
 
-  syncContacts(): Observable<SyncResult<Contact>> {
+  syncChanges(): Observable<SyncResult<Contact>> {
     return of({ changes: [], syncToken: SYNC_TOKEN });
   }
 }

@@ -1,15 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import {
-  catchError,
-  combineLatest,
-  map,
-  Observable,
-  of,
-  switchMap,
-} from 'rxjs';
+import { combineLatest, map, Observable, switchMap } from 'rxjs';
 
 import { Page } from '@/app/entity/core/page.model';
-import { SyncChange, SyncResult } from '@/app/entity/core/sync.models';
 
 import { access } from '../../../app/core/property-path.utils';
 import { Mail } from '../../../app/entity/mail/mail.model';
@@ -26,7 +18,6 @@ export class GoogleMailService implements MailService {
   private messageGetApi = useGoogleApi((a) => a.gmail.users.messages.get);
   private messageModifyApi = useGoogleApi((a) => a.gmail.users.messages.modify);
   private messageDeleteApi = useGoogleApi((a) => a.gmail.users.messages.delete);
-  private historyListApi = useGoogleApi((a) => a.gmail.users.history.list);
 
   loadMailPage(pageToken?: string): Observable<Page<Mail>> {
     return this.messageListApi({
@@ -55,25 +46,6 @@ export class GoogleMailService implements MailService {
     return this.messageGetApi({ userId: 'me', id }).pipe(
       map((msg) => this.messageResolver.resolveFullMessage(msg)),
     );
-  }
-
-  obtainSyncToken(): Observable<string> {
-    return this.messageListApi({
-      userId: 'me',
-      maxResults: 1,
-      includeSpamTrash: true,
-    }).pipe(
-      map((response) => response.messages ?? []),
-      map((m) => access(m[0], 'id')),
-      switchMap((id) =>
-        this.messageGetApi({ userId: 'me', id, fields: 'historyId' }),
-      ),
-      map((response) => access(response, 'historyId')),
-    );
-  }
-
-  syncMails(syncToken: string): Observable<SyncResult<Mail>> {
-    return this.loadHistoryPages(syncToken);
   }
 
   markMailAsStarred(mail: Mail): Observable<Mail> {
@@ -111,91 +83,5 @@ export class GoogleMailService implements MailService {
       map((msg) => this.messageResolver.resolveMessage(msg)),
       map((updates) => ({ ...mail, ...updates })),
     );
-  }
-
-  private loadHistoryPages(
-    startHistoryId: string,
-    startPageToken?: string,
-  ): Observable<SyncResult<Mail>> {
-    return this.historyListApi({
-      userId: 'me',
-      startHistoryId,
-      pageToken: startPageToken,
-    }).pipe(
-      switchMap((response) => {
-        const histories = response.history ?? [];
-        const changes = histories.map((h) => this.resolveHistory(h));
-        const syncToken = access(response, 'historyId');
-        const result$ = changes.length
-          ? combineLatest(changes).pipe(
-              map((changes) => ({ changes: changes.flat(), syncToken })),
-              switchMap((result) => {
-                if (!response.nextPageToken) return of(result);
-                return this.loadHistoryPages(
-                  startHistoryId,
-                  response.nextPageToken,
-                ).pipe(
-                  map((nextPagesResult) => ({
-                    changes: [...result.changes, ...nextPagesResult.changes],
-                    syncToken: result.syncToken,
-                  })),
-                );
-              }),
-            )
-          : of({ changes: [], syncToken });
-        return result$;
-      }),
-    );
-  }
-
-  private resolveHistory(
-    history: gapi.client.gmail.History,
-  ): Observable<SyncChange<Mail>[]> {
-    const syncChanges: Observable<SyncChange<Mail> | null>[] = [];
-    [...(history.labelsAdded ?? []), ...(history.labelsRemoved ?? [])].forEach(
-      (entry) => {
-        const message = access(entry, 'message');
-        const mail = this.messageResolver.resolveMessage(message);
-        syncChanges.push(
-          of({
-            type: 'update',
-            id: mail.id,
-            payload: mail,
-          }),
-        );
-      },
-    );
-    history.messagesAdded?.forEach((entry) => {
-      const message = access(entry, 'message');
-      const mail$ = this.loadMail(access(message, 'id'));
-      syncChanges.push(
-        mail$.pipe(
-          map(
-            (mail): SyncChange<Mail> => ({
-              type: 'creation',
-              id: mail.id,
-              payload: mail,
-            }),
-          ),
-          catchError(() => of(null)), // `messagesAdded` sometimes includes ids that cannot be retrieved
-        ),
-      );
-    });
-    history.messagesDeleted?.forEach((entry) => {
-      const message = access(entry, 'message');
-      syncChanges.push(
-        of({
-          type: 'deletion',
-          id: access(message, 'id'),
-        }),
-      );
-    });
-    return syncChanges.length
-      ? combineLatest(syncChanges).pipe(
-          map((changes) =>
-            changes.filter((c): c is NonNullable<typeof c> => !!c),
-          ),
-        )
-      : of([]);
   }
 }

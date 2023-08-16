@@ -52,8 +52,6 @@ import { MAILBOX_STATE } from './state/mailbox/mailbox.state-entry';
 // TODO: settings page with mailbox management
 
 // TODO: contact database
-// TODO: list all accounts in auth page and use non-prompt authentication process
-// TODO: extract sync logics from services to some "synchronizers"
 
 @NgModule({
   declarations: [AppComponent, LaunchScreenComponent],

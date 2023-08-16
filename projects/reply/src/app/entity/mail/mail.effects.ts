@@ -23,12 +23,14 @@ import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 
 import { MAIL_ACTIONS as A } from './mail.actions';
 import { MailService } from './mail.service';
+import { MailSyncService } from './mail-sync.service';
 
 @Injectable()
 export class MailEffects {
   private store = inject(Store);
   private actions$ = inject(Actions);
   private mailService = inject(MailService);
+  private mailSyncService = inject(MailSyncService);
   private notifier = inject(NotificationService);
 
   loadMails = createEffect(() =>
@@ -36,7 +38,7 @@ export class MailEffects {
       ofType(A.loadMails),
       exhaustMap(async () => {
         try {
-          const syncToken$ = this.mailService.obtainSyncToken();
+          const syncToken$ = this.mailSyncService.obtainSyncToken();
           const syncToken = await firstValueFrom(syncToken$);
           const mailPage$ = this.mailService.loadMailPage();
           const mailPage = await firstValueFrom(mailPage$);
@@ -236,7 +238,7 @@ export class MailEffects {
       withLatestFrom(this.store.select(MAIL_STATE.selectSyncToken)),
       exhaustMap(([, syncToken]) => {
         if (!syncToken) return EMPTY;
-        return this.mailService.syncMails(syncToken).pipe(
+        return this.mailSyncService.syncChanges(syncToken).pipe(
           map((result) => A.syncMailChangesCompleted({ result })),
           catchError((error) => of(A.syncMailChangesFailed({ error }))),
         );
