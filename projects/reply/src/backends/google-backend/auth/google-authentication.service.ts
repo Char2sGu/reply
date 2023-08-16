@@ -9,8 +9,8 @@ import {
   tap,
 } from 'rxjs';
 
-import { AuthenticationService } from '../../../app/core/auth/authentication.service';
-import { Authorization } from '../../../app/core/auth/authorization.model';
+import { Authorization } from '../../../app/core/authorization.model';
+import { AuthenticationService } from '../../../app/core/authorization.service';
 import { includeThenableInZone } from '../../../app/core/zone.utils';
 import { GOOGLE_APIS } from '../core/google-apis.object';
 import { GOOGLE_CLIENT_ID } from '../core/google-client-id.token';

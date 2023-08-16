@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { APP_INITIALIZER, inject, NgModule } from '@angular/core';
 
-import { AuthenticationService } from '@/app/core/auth/authentication.service';
+import { AuthenticationService } from '@/app/core/authorization.service';
 import { ContactService } from '@/app/entity/contact/contact.service';
 import { MailService } from '@/app/entity/mail/mail.service';
 import { MailboxService } from '@/app/entity/mailbox/mailbox.service';

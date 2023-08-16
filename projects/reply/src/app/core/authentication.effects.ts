@@ -6,8 +6,8 @@ import { catchError, concatMap, filter, map, of, switchMap, timer } from 'rxjs';
 import { AccountService } from '@/app/entity/account/account.service';
 import { ContactService } from '@/app/entity/contact/contact.service';
 
-import { AuthenticationService } from './auth/authentication.service';
 import { AUTHENTICATION_ACTIONS as A } from './authentication.actions';
+import { AuthenticationService } from './authorization.service';
 
 @Injectable()
 export class AuthenticationEffects {

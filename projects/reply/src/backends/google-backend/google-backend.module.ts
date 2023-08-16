@@ -1,6 +1,6 @@
 import { inject, ModuleWithProviders, NgModule } from '@angular/core';
 
-import { AuthenticationService } from '../../app/core/auth/authentication.service';
+import { AuthenticationService } from '../../app/core/authorization.service';
 import { APP_PREPARER, AppPreparer } from '../../app/core/preparation';
 import { ContactService } from '../../app/entity/contact/contact.service';
 import { MailService } from '../../app/entity/mail/mail.service';

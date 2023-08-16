@@ -4,7 +4,7 @@ import { Account } from '@/app/entity/account/account.model';
 import { Contact } from '@/app/entity/contact/contact.model';
 
 import { generateActionGroupEvents } from './action-generator';
-import { Authorization } from './auth/authorization.model';
+import { Authorization } from './authorization.model';
 
 export const AUTHENTICATION_ACTIONS = createActionGroup({
   source: 'authentication',

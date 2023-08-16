@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Exception } from '../exceptions';
 import { Authorization } from './authorization.model';
+import { Exception } from './exceptions';
 
 // TODO: rename to authorization service
 // prettier-ignore
