@@ -4,15 +4,13 @@ import {
   ElementRef,
   HostBinding,
   HostListener,
-  inject,
   Input,
   ViewChild,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
 
+import { useBreakpoints } from '@/app/core/breakpoint.utils';
 import { Mail } from '@/app/entity/mail/mail.model';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
-import { CORE_STATE } from '@/app/state/core/core.state-entry';
 
 @Component({
   selector: 'rpl-mail-card',
@@ -21,9 +19,7 @@ import { CORE_STATE } from '@/app/state/core/core.state-entry';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MailCardComponent {
-  private store = inject(Store);
-
-  breakpoints = this.store.selectSignal(CORE_STATE.selectBreakpoints);
+  breakpoints = useBreakpoints();
 
   @Input({ required: true }) mail!: Mail;
   @Input() currentMailbox?: Mailbox;

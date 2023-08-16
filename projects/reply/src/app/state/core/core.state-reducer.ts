@@ -1,29 +1,15 @@
 import { createReducer, on } from '@ngrx/store';
 
 import { AUTHENTICATION_ACTIONS } from '../../core/authentication.actions';
-import { BREAKPOINT_ACTIONS } from '../../core/breakpoint.actions';
 import { CoreState } from './core.state-model';
 
 const coreInitialState: CoreState = {
-  breakpoints: {
-    ['tablet-portrait']: false,
-    ['tablet-landscape']: false,
-    ['laptop']: false,
-    ['desktop']: false,
-  },
-
   authorization: null,
   authenticationStatus: { type: 'idle' } as const,
 };
 
 export const coreStateReducer = createReducer(
   coreInitialState,
-
-  on(BREAKPOINT_ACTIONS.breakpointsUpdated, (s, p) => ({
-    ...s,
-    breakpoints: p.to,
-  })),
-
   on(AUTHENTICATION_ACTIONS.authenticate, (s) => ({
     ...s,
     authenticationStatus: { type: 'pending' } as const,

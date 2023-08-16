@@ -28,6 +28,7 @@ import {
 } from 'rxjs';
 
 import { SharedAxisAnimation } from '@/app/core/animations';
+import { useBreakpoints } from '@/app/core/breakpoint.utils';
 import {
   SystemMailboxName,
   VirtualMailboxName,
@@ -35,7 +36,6 @@ import {
 import { NavigationService } from '@/app/core/navigation.service';
 import { Mail } from '@/app/entity/mail/mail.model';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
-import { CORE_STATE } from '@/app/state/core/core.state-entry';
 import { MAIL_STATE } from '@/app/state/mail/mail.state-entry';
 import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 
@@ -87,7 +87,7 @@ export class MailListLayoutComponent {
   private store = inject(Store);
   private navService = inject(NavigationService);
 
-  breakpoints = this.store.selectSignal(CORE_STATE.selectBreakpoints);
+  breakpoints = useBreakpoints();
 
   activeNavItemIndex = toSignal(
     this.navService.activeItemIndex$, //

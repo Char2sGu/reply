@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { CORE_STATE } from '@/app/state/core/core.state-entry';
+import { useBreakpoints } from '@/app/core/breakpoint.utils';
 
 @Component({
   selector: 'rpl-base-foundation',
@@ -10,6 +9,5 @@ import { CORE_STATE } from '@/app/state/core/core.state-entry';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaseFoundationComponent {
-  private store = inject(Store);
-  breakpoints = this.store.selectSignal(CORE_STATE.selectBreakpoints);
+  breakpoints = useBreakpoints();
 }

@@ -26,7 +26,7 @@ import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthenticationEffects } from './core/authentication.effects';
-import { BreakpointEffects } from './core/breakpoint.effects';
+import { BreakpointService } from './core/breakpoint.service';
 import { LaunchScreenComponent } from './core/launch-screen/launch-screen.component';
 import { LOCAL_STORAGE } from './core/native-api.tokens';
 import { APP_PREPARER, AppPreparer } from './core/preparation';
@@ -77,7 +77,6 @@ import { MAILBOX_STATE } from './state/mailbox/mailbox.state-entry';
     StoreModule.forFeature(MAILBOX_STATE),
     EffectsModule.forRoot(
       AuthenticationEffects,
-      BreakpointEffects,
       AccountEffects,
       ContactEffects,
       MailEffects,
@@ -101,6 +100,19 @@ import { MAILBOX_STATE } from './state/mailbox/mailbox.state-entry';
     {
       provide: LOCAL_STORAGE,
       useValue: window.localStorage,
+    },
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      useFactory:
+        (breakpointService = inject(BreakpointService)) =>
+        () =>
+          breakpointService.applyConfig({
+            ['tablet-portrait']: '(min-width: 600px)',
+            ['tablet-landscape']: '(min-width: 905px)',
+            ['laptop']: '(min-width: 1240px)',
+            ['desktop']: '(min-width: 1440px)',
+          }),
     },
     {
       provide: APP_INITIALIZER,

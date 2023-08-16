@@ -1,10 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { Store } from '@ngrx/store';
 import { map, merge } from 'rxjs';
 
-import { CORE_STATE } from '@/app/state/core/core.state-entry';
-
+import { useBreakpoints } from '../breakpoint.utils';
 import {
   NotificationActionEvent,
   NotificationDismissEvent,
@@ -21,10 +19,8 @@ import {
   providedIn: 'root',
 })
 export class SnackbarNotificationService implements NotificationService {
-  private store = inject(Store);
   private snackbarService = inject(MatSnackBar);
-
-  private breakpoints = this.store.selectSignal(CORE_STATE.selectBreakpoints);
+  private breakpoints = useBreakpoints();
 
   notify(message: string, action?: string | undefined): NotificationRef {
     const snackbarRef = this.snackbarService.openFromComponent(

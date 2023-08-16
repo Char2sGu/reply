@@ -3,16 +3,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  inject,
   signal,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
 
 import {
   SharedAxisAnimation,
   usePrimaryChildRouteAnimationId,
 } from '../core/animations';
-import { CORE_STATE } from '../state/core/core.state-entry';
+import { useBreakpoints } from '../core/breakpoint.utils';
 
 @Component({
   selector: 'rpl-main',
@@ -38,11 +36,9 @@ import { CORE_STATE } from '../state/core/core.state-entry';
   ],
 })
 export class MainComponent {
-  private store = inject(Store);
-
   animationId = usePrimaryChildRouteAnimationId();
+  private breakpoints = useBreakpoints();
 
-  private breakpoints = this.store.selectSignal(CORE_STATE.selectBreakpoints);
   navShouldRender = computed(() => this.breakpoints()['tablet-portrait']);
   navShouldExpand = computed(() => this.breakpoints()['laptop']);
 
