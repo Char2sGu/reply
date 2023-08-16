@@ -46,5 +46,12 @@ export class AuthSelectAccountComponent {
         ),
       )
       .subscribe();
+    this.addButtonClick
+      .pipe(
+        withLatestFrom(this.busy$),
+        filter(([, busy]) => !busy),
+        tap(() => this.store.dispatch(CORE_ACTIONS.authenticate({}))),
+      )
+      .subscribe();
   }
 }
