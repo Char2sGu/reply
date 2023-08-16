@@ -4,12 +4,16 @@ import { Store } from '@ngrx/store';
 import {
   catchError,
   concatMap,
+  EMPTY,
+  exhaustMap,
   filter,
+  firstValueFrom,
   map,
   of,
   switchMap,
   takeUntil,
   tap,
+  timer,
   withLatestFrom,
 } from 'rxjs';
 
@@ -18,6 +22,7 @@ import { MailService } from '@/app/entity/mail/mail.service';
 
 import { MAILBOX_STATE } from '../mailbox/mailbox.state-entry';
 import { MAIL_ACTIONS as A } from './mail.actions';
+import { MAIL_STATE } from './mail.state-entry';
 
 @Injectable()
 export class MailEffects {
@@ -29,13 +34,18 @@ export class MailEffects {
   loadMails = createEffect(() =>
     this.actions$.pipe(
       ofType(A.loadMails),
-      concatMap(() =>
-        this.mailService.loadMailPage().pipe(
-          map((r) => r.results),
-          map((result) => A.loadMailsCompleted({ result })),
-          catchError((error) => of(A.loadMailsFailed({ error }))),
-        ),
-      ),
+      exhaustMap(async () => {
+        try {
+          const syncToken$ = this.mailService.obtainSyncToken();
+          const syncToken = await firstValueFrom(syncToken$);
+          const mailPage$ = this.mailService.loadMailPage();
+          const mailPage = await firstValueFrom(mailPage$);
+          const mails = mailPage.results;
+          return A.loadMailsCompleted({ result: { mails, syncToken } });
+        } catch (error) {
+          return A.loadMailsFailed({ error });
+        }
+      }),
     ),
   );
 
@@ -216,6 +226,29 @@ export class MailEffects {
           filter((e) => e.type === 'action'),
           map(() => A.deleteMail(params)),
         ),
+      ),
+    ),
+  );
+
+  syncMailChanges = createEffect(() =>
+    this.actions$.pipe(
+      ofType(A.syncMailChanges),
+      withLatestFrom(this.store.select(MAIL_STATE.selectSyncToken)),
+      exhaustMap(([, syncToken]) => {
+        if (!syncToken) return EMPTY;
+        return this.mailService.syncMails(syncToken).pipe(
+          map((result) => A.syncMailChangesCompleted({ result })),
+          catchError((error) => of(A.syncMailChangesFailed({ error }))),
+        );
+      }),
+    ),
+  );
+
+  syncMailChangesAtIntervalsAfterLoad = createEffect(() =>
+    this.actions$.pipe(
+      ofType(A.loadMailsCompleted),
+      switchMap(() =>
+        timer(1000 * 60, 1000 * 60).pipe(map(() => A.syncMailChanges())),
       ),
     ),
   );

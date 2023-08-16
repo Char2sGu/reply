@@ -22,9 +22,10 @@ export function useGoogleApi<API extends GoogleApi>(
   const api$ = apis$.pipe(map((apis) => factory(apis)));
   const wrapped = (...args: Parameters<API>) =>
     api$.pipe(
-      concatMap((api) => {
+      concatMap(async (api) => {
         const promise = api(...args);
-        return includeThenableInZone(zone, promise).then((r) => r.result);
+        const response = await includeThenableInZone(zone, promise);
+        return response.result;
       }),
       catchError((response: gapi.client.Response<any>) => {
         const err = () => new GoogleAPiErrorResponseException(response);

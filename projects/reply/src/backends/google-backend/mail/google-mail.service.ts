@@ -151,12 +151,12 @@ export class GoogleMailService implements MailService {
   private resolveHistory(
     history: gapi.client.gmail.History,
   ): Observable<SyncChange<Mail>[]> {
-    const syncChangeStreams: Observable<SyncChange<Mail> | null>[] = [];
+    const syncChanges: Observable<SyncChange<Mail> | null>[] = [];
     [...(history.labelsAdded ?? []), ...(history.labelsRemoved ?? [])].forEach(
       (entry) => {
         const message = access(entry, 'message');
         const mail = this.messageResolver.resolveMessage(message);
-        syncChangeStreams.push(
+        syncChanges.push(
           of({
             type: 'update',
             id: mail.id,
@@ -168,7 +168,7 @@ export class GoogleMailService implements MailService {
     history.messagesAdded?.forEach((entry) => {
       const message = access(entry, 'message');
       const mail$ = this.loadMail(access(message, 'id'));
-      syncChangeStreams.push(
+      syncChanges.push(
         mail$.pipe(
           map(
             (mail): SyncChange<Mail> => ({
@@ -183,17 +183,19 @@ export class GoogleMailService implements MailService {
     });
     history.messagesDeleted?.forEach((entry) => {
       const message = access(entry, 'message');
-      syncChangeStreams.push(
+      syncChanges.push(
         of({
           type: 'deletion',
           id: access(message, 'id'),
         }),
       );
     });
-    return combineLatest(syncChangeStreams).pipe(
-      map((syncChanges) =>
-        syncChanges.filter((c): c is NonNullable<typeof c> => !!c),
-      ),
-    );
+    return syncChanges.length
+      ? combineLatest(syncChanges).pipe(
+          map((changes) =>
+            changes.filter((c): c is NonNullable<typeof c> => !!c),
+          ),
+        )
+      : of([]);
   }
 }

@@ -1,5 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
+import { SyncResult } from '@/app/entity/core/sync.models';
 import { Mail } from '@/app/entity/mail/mail.model';
 import { Mailbox } from '@/app/entity/mailbox/mailbox.model';
 
@@ -12,7 +13,7 @@ export const MAIL_ACTIONS = createActionGroup({
       name: 'loadMails' as const,
       params: emptyProps(),
       events: {
-        completed: props<{ result: Mail[] }>(),
+        completed: props<{ result: { mails: Mail[]; syncToken?: string } }>(),
         failed: props<{ error: unknown }>(),
       },
     }),
@@ -45,6 +46,14 @@ export const MAIL_ACTIONS = createActionGroup({
       params: props<{ mail: Mail }>(),
       events: {
         completed: emptyProps(),
+        failed: props<{ error: unknown }>(),
+      },
+    }),
+    ...generateActionGroupEvents({
+      name: 'syncMailChanges' as const,
+      params: emptyProps(),
+      events: {
+        completed: props<{ result: SyncResult<Mail> }>(),
         failed: props<{ error: unknown }>(),
       },
     }),

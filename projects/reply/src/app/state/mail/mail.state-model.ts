@@ -6,4 +6,5 @@ import { EntityCollection } from '../core/entity-collection';
 export interface MailState {
   mails: EntityCollection<Mail>;
   mailsLoadingStatus: ActionStatus;
+  syncToken: string | null;
 }

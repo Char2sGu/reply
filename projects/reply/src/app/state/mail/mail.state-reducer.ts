@@ -3,12 +3,14 @@ import { createReducer, on } from '@ngrx/store';
 import { Mail } from '@/app/entity/mail/mail.model';
 
 import { EntityCollection } from '../core/entity-collection';
+import { applySyncChanges } from '../core/sync-apply';
 import { MAIL_ACTIONS } from './mail.actions';
 import { MailState } from './mail.state-model';
 
 const mailInitialState: MailState = {
   mails: new EntityCollection<Mail>((e) => e.id),
   mailsLoadingStatus: { type: 'idle' },
+  syncToken: null,
 };
 
 export const mailStateReducer = createReducer(
@@ -19,8 +21,9 @@ export const mailStateReducer = createReducer(
   })),
   on(MAIL_ACTIONS.loadMailsCompleted, (s, p) => ({
     ...s,
-    mails: s.mails.upsert(...p.result),
+    mails: s.mails.upsert(...p.result.mails),
     mailsLoadingStatus: { type: 'completed' } as const,
+    ...(p.result.syncToken ? { syncToken: p.result.syncToken } : {}),
   })),
   on(MAIL_ACTIONS.loadMailsFailed, (s, p) => ({
     ...s,
@@ -73,5 +76,11 @@ export const mailStateReducer = createReducer(
   on(MAIL_ACTIONS.deleteMailFailed, (s, p) => ({
     ...s,
     mails: s.mails.upsert(p.params.mail),
+  })),
+
+  on(MAIL_ACTIONS.syncMailChangesCompleted, (s, p) => ({
+    ...s,
+    mails: applySyncChanges(p.result.changes, s.mails),
+    syncToken: p.result.syncToken,
   })),
 );
