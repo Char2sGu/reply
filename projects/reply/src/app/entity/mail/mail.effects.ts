@@ -12,14 +12,11 @@ import {
   of,
   switchMap,
   takeUntil,
-  tap,
   timer,
   withLatestFrom,
 } from 'rxjs';
 
-import { NotificationService } from '@/app/core/notification/notification.service';
 import { MAIL_STATE } from '@/app/state/mail/mail.state-entry';
-import { MAILBOX_STATE } from '@/app/state/mailbox/mailbox.state-entry';
 
 import { MAIL_ACTIONS as A } from './mail.actions';
 import { MailService } from './mail.service';
@@ -31,9 +28,8 @@ export class MailEffects {
   private actions$ = inject(Actions);
   private mailService = inject(MailService);
   private mailSyncService = inject(MailSyncService);
-  private notifier = inject(NotificationService);
 
-  loadMails = createEffect(() =>
+  [A.loadMails.type] = createEffect(() =>
     this.actions$.pipe(
       ofType(A.loadMails),
       exhaustMap(async () => {
@@ -51,7 +47,7 @@ export class MailEffects {
     ),
   );
 
-  toggleMailStarredStatus = createEffect(() =>
+  [A.toggleMailStarredStatus.type] = createEffect(() =>
     this.actions$.pipe(
       ofType(A.toggleMailStarredStatus),
       concatMap((params) => {
@@ -76,21 +72,7 @@ export class MailEffects {
     ),
   );
 
-  toggleMailStarredStatusRetryUi = createEffect(() =>
-    this.actions$.pipe(
-      ofType(A.toggleMailStarredStatusFailed),
-      switchMap(({ params: { mail } }) =>
-        this.notifier
-          .notify('Failed to update starred status', 'Retry')
-          .event$.pipe(
-            filter((e) => e.type === 'action'),
-            map(() => A.toggleMailStarredStatus({ mail })),
-          ),
-      ),
-    ),
-  );
-
-  toggleMailReadStatus = createEffect(() =>
+  [A.toggleMailReadStatus.type] = createEffect(() =>
     this.actions$.pipe(
       ofType(A.toggleMailReadStatus),
       concatMap((params) => {
@@ -115,22 +97,7 @@ export class MailEffects {
     ),
   );
 
-  toggleMailReadStatusRetryUi = createEffect(() =>
-    this.actions$.pipe(
-      ofType(A.toggleMailReadStatusFailed),
-      switchMap(({ params }) => {
-        const target = params.mail.isRead ? 'unread' : 'read';
-        return this.notifier
-          .notify(`Failed to mark mail as ${target}`, 'Retry')
-          .event$.pipe(
-            filter((e) => e.type === 'action'),
-            map(() => A.toggleMailReadStatus(params)),
-          );
-      }),
-    ),
-  );
-
-  moveMailToMailbox = createEffect(() =>
+  [A.moveMailToMailbox.type] = createEffect(() =>
     this.actions$.pipe(
       ofType(A.moveMailToMailbox),
       concatMap((params) =>
@@ -150,55 +117,7 @@ export class MailEffects {
     ),
   );
 
-  moveMailToMailboxNotifyUi = createEffect(() =>
-    this.actions$.pipe(
-      ofType(A.moveMailToMailbox),
-      withLatestFrom(this.store.select(MAILBOX_STATE.selectMailboxes)),
-      switchMap(([params, mailboxes]) => {
-        const { mail, mailbox: destMailbox } = params;
-        const currMailbox = mail.mailbox
-          ? mailboxes.retrieve(mail.mailbox)
-          : null;
-        const msg = destMailbox
-          ? `Mail moved into ${destMailbox.name}`
-          : currMailbox
-          ? `Mail moved out from ${currMailbox.name}`
-          : 'Mail moved';
-        return this.notifier.notify(msg, 'Undo').event$.pipe(
-          filter((e) => e.type === 'action'),
-          map(() =>
-            A.moveMailToMailbox({
-              mail: { ...mail, mailbox: destMailbox?.id },
-              mailbox: currMailbox,
-            }),
-          ),
-        );
-      }),
-    ),
-  );
-
-  moveMailToMailboxRetryUi = createEffect(() =>
-    this.actions$.pipe(
-      ofType(A.moveMailToMailboxFailed),
-      withLatestFrom(this.store.select(MAILBOX_STATE.selectMailboxes)),
-      switchMap(([{ params }, mailboxes]) => {
-        const { mail, mailbox: destMailbox } = params;
-        const currMailbox = mail.mailbox
-          ? mailboxes.retrieve(mail.mailbox)
-          : null;
-        const msg = destMailbox
-          ? `Failed to move mail into ${destMailbox.name}`
-          : currMailbox
-          ? `Failed to move mail out from ${currMailbox.name}`
-          : 'Failed to move mail';
-        return this.notifier
-          .notify(msg, 'Retry')
-          .event$.pipe(map(() => A.moveMailToMailbox(params)));
-      }),
-    ),
-  );
-
-  deleteMail = createEffect(() =>
+  [A.deleteMail.type] = createEffect(() =>
     this.actions$.pipe(
       ofType(A.deleteMail),
       concatMap((params) =>
@@ -210,29 +129,7 @@ export class MailEffects {
     ),
   );
 
-  deleteMailNotifyUi = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(A.deleteMail),
-        tap(() => this.notifier.notify('Mail deleted permanently')),
-        map(() => null),
-      ),
-    { dispatch: false },
-  );
-
-  deleteMailRetryUi = createEffect(() =>
-    this.actions$.pipe(
-      ofType(A.deleteMailFailed),
-      switchMap(({ params }) =>
-        this.notifier.notify('Failed to delete mail', 'Retry').event$.pipe(
-          filter((e) => e.type === 'action'),
-          map(() => A.deleteMail(params)),
-        ),
-      ),
-    ),
-  );
-
-  syncMailChanges = createEffect(() =>
+  [A.syncMailChanges.type] = createEffect(() =>
     this.actions$.pipe(
       ofType(A.syncMailChanges),
       withLatestFrom(this.store.select(MAIL_STATE.selectSyncToken)),
@@ -246,7 +143,7 @@ export class MailEffects {
     ),
   );
 
-  syncMailChangesAtIntervalsAfterLoad = createEffect(() =>
+  syncMailChangesAtIntervalsAfterMailsLoaded = createEffect(() =>
     this.actions$.pipe(
       ofType(A.loadMailsCompleted),
       switchMap(() =>

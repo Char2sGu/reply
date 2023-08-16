@@ -34,6 +34,7 @@ import { ACCOUNT_ACTIONS } from './entity/account/account.actions';
 import { AccountEffects } from './entity/account/account.effects';
 import { ContactEffects } from './entity/contact/contact.effects';
 import { MailEffects } from './entity/mail/mail.effects';
+import { MailNotificationEffects } from './entity/mail/mail-notification.effects';
 import { MailboxEffects } from './entity/mailbox/mailbox.effects';
 import { LogoComponent } from './shared/logo/logo.component';
 import { ACCOUNT_STATE } from './state/account/account.state-entry';
@@ -80,6 +81,7 @@ import { MAILBOX_STATE } from './state/mailbox/mailbox.state-entry';
       AccountEffects,
       ContactEffects,
       MailEffects,
+      MailNotificationEffects,
       MailboxEffects,
     ),
     StoreDevtoolsModule.instrument({
