@@ -23,7 +23,6 @@ import {
   map,
   merge,
   of,
-  pairwise,
   shareReplay,
   startWith,
   take,
@@ -34,7 +33,6 @@ import { usePrimaryChildRouteAnimationId } from './core/animations';
 import { BreakpointMap } from './core/breakpoint.service';
 import { useBreakpoints } from './core/breakpoint.utils';
 import { APP_PREPARER } from './core/preparation';
-import { CORE_STATE } from './state/core/core.state-entry';
 
 @Component({
   selector: 'rpl-root',
@@ -110,16 +108,4 @@ export class AppComponent {
     startWith(false),
     shareReplay(1),
   );
-
-  constructor() {
-    this.store
-      .select(CORE_STATE.selectAuthenticated)
-      .pipe(
-        pairwise(),
-        map((pair) => pair[0] !== pair[1]),
-      )
-      .subscribe(() => {
-        this.router.navigateByUrl('/');
-      });
-  }
 }

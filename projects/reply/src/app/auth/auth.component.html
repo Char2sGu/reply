@@ -1,13 +1,20 @@
 <div class="positioner">
   <div class="container" data-route-animation-target>
-    <div class="main">
-      <div class="header">
-        <rpl-logo class="logo"></rpl-logo>
-        <rpl-text-logo></rpl-text-logo>
-      </div>
-      <div class="body">
-        <router-outlet></router-outlet>
-      </div>
+    <div class="main" [@main]="showLoading() ? 'loading' : 'default'">
+      <ng-container *ngIf="!showLoading()">
+        <div class="header">
+          <rpl-logo class="logo"></rpl-logo>
+          <rpl-text-logo></rpl-text-logo>
+        </div>
+        <div class="body">
+          <router-outlet></router-outlet>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="showLoading()">
+        <div class="loading">
+          <div class="dot-pulse"></div>
+        </div>
+      </ng-container>
     </div>
     <div class="decoration"></div>
   </div>
