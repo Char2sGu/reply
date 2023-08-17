@@ -7,4 +7,5 @@ export interface ContactState {
   currentId: Contact['id'] | null;
   contacts: EntityCollection<Contact>;
   contactsLoadingStatus: ActionStatus;
+  syncToken: string | null;
 }
