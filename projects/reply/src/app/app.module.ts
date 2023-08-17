@@ -52,8 +52,6 @@ import { MAILBOX_STATE } from './state/mailbox/mailbox.state-entry';
 // TODO: better mail html render
 // TODO: settings page with mailbox management
 
-// TODO: contact database
-
 @NgModule({
   declarations: [AppComponent, LaunchScreenComponent],
   imports: [
