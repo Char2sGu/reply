@@ -3,11 +3,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  inject,
   Input,
-  OnChanges,
+  ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { combineLatest, ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'rpl-html-renderer',
@@ -18,13 +18,22 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.ShadowDom,
 })
-export class HtmlRendererComponent implements OnChanges {
-  private element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-  @Input({ required: true }) content!: string;
+export class HtmlRendererComponent {
+  // prettier-ignore
+  @Input({ alias: 'content', required: true })
+  set contentInput(v: string) { this.content$.next(v) }
+  content$ = new ReplaySubject<string>(1);
 
-  ngOnChanges(): void {
-    const shadowRoot = this.element.shadowRoot;
-    if (!shadowRoot) throw new Error('Missing ShadowRoot');
-    shadowRoot.innerHTML = this.content;
+  // prettier-ignore
+  @ViewChild('container')
+  set containerInput(v: ElementRef<HTMLElement>) { this.container$.next(v) }
+  container$ = new ReplaySubject<ElementRef<HTMLElement>>(1);
+
+  constructor() {
+    combineLatest([this.content$, this.container$]).subscribe(
+      ([content, container]) => {
+        container.nativeElement.innerHTML = content;
+      },
+    );
   }
 }

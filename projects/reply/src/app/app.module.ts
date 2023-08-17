@@ -49,7 +49,6 @@ import { MAILBOX_STATE } from './state/mailbox/mailbox.state-entry';
 // TODO: gestures on cards
 // TODO: mail list lazy loading
 // TODO: mail total displaying
-// TODO: better mail html render
 // TODO: settings page with mailbox management
 
 @NgModule({

@@ -34,10 +34,13 @@
 
     <div class="content" lpjNode>
       <ng-container *ngIf="mail.contentType === 'plain-text'">
-        {{ mail.content }}
+        <div class="text">{{ mail.content }}</div>
       </ng-container>
       <ng-container *ngIf="mail.contentType === 'html'">
-        <rpl-html-renderer [content]="mail.content"></rpl-html-renderer>
+        <rpl-html-renderer
+          class="html"
+          [content]="mail.content"
+        ></rpl-html-renderer>
       </ng-container>
     </div>
   </div>

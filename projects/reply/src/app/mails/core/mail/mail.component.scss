@@ -39,5 +39,7 @@ rpl-scrollable-area {
 
 .content {
   margin-top: 16px;
-  white-space: pre-line;
+  .text {
+    white-space: pre-line;
+  }
 }
