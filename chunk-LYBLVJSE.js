@@ -1,1 +1,0 @@
-import{S as n}from"./chunk-GLFUZ6DN.js";var c=(()=>{let t=class{},e=t;return(()=>{t.\u0275fac=function(o){return new(o||t)}})(),(()=>{t.\u0275prov=n({token:t,factory:t.\u0275fac})})(),e})();export{c as a};
