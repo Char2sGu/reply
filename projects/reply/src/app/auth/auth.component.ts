@@ -29,7 +29,7 @@ import { CORE_STATE } from '../state/core/core.state-entry';
   animations: [
     trigger('main', [
       state(
-        'loading',
+        'loading, void',
         style({ width: '100%', height: '100%', maxWidth: '100%' }),
       ),
       transition('default <=> loading', [
