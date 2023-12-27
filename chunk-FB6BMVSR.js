@@ -1,1 +1,0 @@
-import{Yd as n,ud as e,vd as r,wd as t}from"./chunk-VGXZBCX5.js";import{a as o}from"./chunk-OROYKVKJ.js";var c=r({source:"authentication",events:o({},n({name:"authenticate",params:e(),events:{completed:e(),cancelled:t(),failed:e(),expired:t()}}))});export{c as a};
