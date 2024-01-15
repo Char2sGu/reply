@@ -1,2 +1,0 @@
-import{Qb as a,cb as i,ga as o,jb as r}from"./chunk-KBDKS3MK.js";var f=(()=>{let e=class{},t=e;return(()=>{e.\u0275fac=function(n){return new(n||e)}})(),(()=>{e.\u0275cmp=o({type:e,selectors:[["rpl-text-logo"]],standalone:!0,features:[r],decls:1,vars:0,template:function(n,p){n&1&&i(0,`Reply
-`)},dependencies:[a],styles:["[_nghost-%COMP%]{display:inline;font-size:18px;font-weight:500;letter-spacing:.05em;text-transform:uppercase}"],changeDetection:0})})(),t})();export{f as a};
